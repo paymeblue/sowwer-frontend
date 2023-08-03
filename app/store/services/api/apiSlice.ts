@@ -5,7 +5,7 @@ import { RootState } from "@store/store";
 // initialize an empty api service that we'll inject endpoints into later as needed
 const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.API_URL,
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
     prepareHeaders: (headers, { getState }) => {
       // By default, if we have a token in the store, let's use that for authenticated requests
       const token = (getState() as RootState).auth.token;

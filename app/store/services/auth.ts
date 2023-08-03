@@ -82,14 +82,14 @@ const auth = api.injectEndpoints({
   endpoints: (build) => ({
     signup: build.mutation<SignupResponse, SignupRequest>({
       query: (credentials) => ({
-        url: process.env.NEXT_PUBLIC_API_URL + "users/register",
+        url: "users/register",
         method: "POST",
         body: credentials,
       }),
     }),
     login: build.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
-        url: process.env.NEXT_PUBLIC_API_URL + "users/login",
+        url: "users/login",
         method: "POST",
         body: credentials,
       }),
@@ -111,7 +111,7 @@ const auth = api.injectEndpoints({
     }),
     logout: build.mutation<SignupResponse, SignupRequest>({
       query: (credentials) => ({
-        url: process.env.NEXT_PUBLIC_API_URL + "users/register",
+        url: "users/register",
         method: "POST",
         body: credentials,
       }),
