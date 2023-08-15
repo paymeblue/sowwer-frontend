@@ -1,7 +1,7 @@
 import { MenuOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/useAuth";
 import { useAppDispatch } from "@hooks/useStore";
-import { setCredentials } from "@store/reducers/authSlice";
+import { logout } from "@store/reducers/authSlice";
 import {
   Avatar,
   Button,
@@ -72,7 +72,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
   );
 
   const handleLogout = useCallback(async () => {
-    dispatch(setCredentials({ user: null, token: null }));
+    dispatch(logout());
     setAuth(false);
   }, [dispatch]);
 

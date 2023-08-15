@@ -1,5 +1,7 @@
 import { CheckCircleIcon } from "@components/assets/icons";
+import { useAuth } from "@hooks/useAuth";
 import states from "@lib/NigeriaStates";
+import { useUpdateMinistryProfileMutation } from "@store/services/ministries";
 import {
   Button,
   Card,
@@ -13,32 +15,56 @@ import {
   Typography,
   message,
 } from "antd";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import UploadLogo from "./upload-logo";
 
 const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
 const { TextArea } = Input;
 
+type State = {
+  addressLine: string;
+  ministryMsg: string;
+  name: string;
+  postalCode: string;
+  state: string;
+};
+
 const ProfileInfo = () => {
   const [form] = useForm();
-  const [isLoading, setIsLoading] = useState(false);
+  const [updateMinistryProfile, { isLoading }] =
+    useUpdateMinistryProfileMutation();
   const [messageApi, contextHolder] = message.useMessage();
+  const user = useAuth();
   const options = [
     { value: "", label: "-- Select --", disabled: true },
     ...states.map((state) => ({ value: state, label: state })),
   ];
-  const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
-    console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    form.resetFields();
-    setIsLoading(false);
-    messageApi.open({
-      content: "Form submission successful",
-      className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-      icon: <CheckCircleIcon />,
-    });
+  const onFinish = async (values: State): Promise<void> => {
+    const { addressLine, ministryMsg, name, postalCode, state } = values;
+    const credentials = {
+      id: user?.ministry?.id,
+      name,
+      address: addressLine,
+      postalCode: postalCode,
+      state,
+      about: ministryMsg,
+    };
+    try {
+      const res = await updateMinistryProfile(credentials).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+    } catch (error: any) {
+      messageApi.open({
+        content: `${error}`,
+        className: `[&>div]:bg-red-800 [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -100,7 +126,7 @@ const ProfileInfo = () => {
                 />
               </Item>
               <Item
-                name="address_line"
+                name="addressLine"
                 label="Address Line"
                 className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                 hasFeedback
@@ -141,7 +167,7 @@ const ProfileInfo = () => {
                   />
                 </Item>
                 <Item
-                  name="postal_code"
+                  name="postalCode"
                   label="Postal Code"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                 >

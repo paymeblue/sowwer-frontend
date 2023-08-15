@@ -1,8 +1,10 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
+import capitalizeFirstLetters from "@lib/capitalize";
 import { setCredentials } from "@store/reducers/authSlice";
 import { useLoginMutation } from "@store/services/auth";
+import { LoginRequest } from "@store/types";
 import { Button, Card, Form, Input, Space, Typography, message } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,7 +16,7 @@ type State = {
 };
 
 type Props = {
-  title: string;
+  title: "donor" | "ministry";
   link: string;
   page: string;
   donorSignin?: boolean;
@@ -31,28 +33,28 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
   const dispatch = useAppDispatch();
 
   const onFinish = async (values: State): Promise<void> => {
-    const credentials = {
+    const credentials: LoginRequest = {
       identifier: values.email,
       password: values.password,
+      type: title,
     };
     try {
-      const res: any = await login(credentials);
-      console.log(res.data.data);
+      const res = await login(credentials).unwrap();
       const payload = {
-        user: res.data.data.user,
-        token: res.data.data.token.accessToken,
+        user: res.data.user,
+        token: res.data.token.accessToken,
       };
       dispatch(setCredentials(payload));
       form.resetFields();
       messageApi.open({
-        content: res.data.message,
+        content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
       router.push(`/${page}`);
     } catch (error: any) {
       messageApi.open({
-        content: error.message,
+        content: `${error.message}`,
         className: "[&>div]:bg-red-800 [&>div]:text-white",
       });
     }
@@ -75,14 +77,14 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
             level={4}
             className="my-12 text-center font-title text-[26px] leading-[29.75px] laptop:text-[30px] laptop:leading-[34.32px]"
           >
-            Sign up as a {title}
+            Sign up as a {capitalizeFirstLetters(title)}
           </Title>
         ) : (
           <Title
             level={4}
             className="my-12 text-center font-title text-[26px] leading-[29.75px] laptop:text-[30px] laptop:leading-[34.32px]"
           >
-            {title} Sign In
+            {capitalizeFirstLetters(title)} Sign In
           </Title>
         )}
 

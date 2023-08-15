@@ -1,6 +1,9 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 import { CheckCircleIcon } from "@components/assets/icons";
+import { useAppDispatch } from "@hooks/useStore";
+import { setProjectId } from "@store/reducers/utilSlice";
+import { useCreateProjectMutation } from "@store/services/projects";
 import {
   Button,
   Divider,
@@ -14,27 +17,39 @@ import {
 
 const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
+
+type State = { amount: string; category: string; title: string };
+
 const MainDetails = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
-    console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    form.resetFields();
-    setIsLoading(false);
-    messageApi.open({
-      content: "Form submission successful",
-      className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-      icon: <CheckCircleIcon />,
-    });
+  const dispatch = useAppDispatch();
+  const [createProject, { isLoading }] = useCreateProjectMutation();
+  const onFinish = async (values: State): Promise<void> => {
+    const credentials = {
+      amount: +values.amount,
+      category: values.category,
+      title: values.title,
+    };
+    try {
+      const res = await createProject(credentials).unwrap();
+      console.log(res);
+      dispatch(setProjectId({ projectId: res.data.id }));
+      form.resetFields();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+    } catch (error: any) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
     messageApi.open({
       content: "Form submission failed!",
       className: "[&>div]:bg-red-800 [&>div]:text-white",
@@ -109,7 +124,7 @@ const MainDetails = () => {
                 />
               </Item>
               <Item
-                name="goal"
+                name="amount"
                 label="Goal"
                 className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                 rules={[

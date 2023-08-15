@@ -11,6 +11,7 @@ import {
   persistStore,
 } from "redux-persist";
 import authReducer from "./reducers/authSlice";
+import utilReducer from "./reducers/utilSlice";
 import api from "./services/api/apiSlice";
 import storage from "./sync_storage";
 
@@ -23,6 +24,7 @@ const combinedReducer = combineReducers({
   // Add the generated reducer as a specific top-level slice
   [api.reducerPath]: api.reducer,
   auth: authReducer,
+  util: utilReducer,
 });
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
 const store = configureStore({

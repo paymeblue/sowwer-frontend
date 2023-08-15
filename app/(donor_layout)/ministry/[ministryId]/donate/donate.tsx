@@ -111,6 +111,7 @@ const DonateToMinistryPage = () => {
       amount: Number(amount) || 100,
       customer,
       desc: "family worship ministry",
+      txnRef: Date.now().toString(),
     }),
     [currency, amount, customer]
   );

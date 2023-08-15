@@ -2,7 +2,7 @@
 import { DonorsIcon, ProjectsIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import userDetails from "@lib/user-details";
-import { User } from "@store/services/auth";
+import { User } from "@store/types";
 import { Layout, Menu, MenuProps, Tooltip, theme as antdtheme } from "antd";
 import AuthUser from "app/(donor_layout)/layout/auth-user";
 import Image from "next/image";
@@ -132,7 +132,7 @@ const AdminSidebar = ({ children }: Props) => {
           onClick={onClick}
           selectedKeys={[current]}
           mode="vertical"
-          className="bg-inherit text-[#ffffff] [&>li.ant-menu-item-selected]:bg-[#ffffff10] [&>li.ant-menu-item-selected]:text-white hover:[&>li.ant-menu-item]:bg-[#ffffff10]"
+          className="bg-inherit text-[#ffffff] [&>li.ant-menu-item-selected]:bg-[#ffffff10] [&>li.ant-menu-item-selected]:text-white hover:[&>li.ant-menu-item]:bg-[#ffffff10] [&>li]:flex [&>li]:items-center"
           theme="dark"
         />
       </Sider>

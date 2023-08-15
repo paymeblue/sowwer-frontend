@@ -1,11 +1,13 @@
 "use client";
 import { CheckOutlined, CopyOutlined, EyeFilled } from "@ant-design/icons";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
+import { useUtil } from "@hooks/useUtil";
 import Container from "@shared/Container";
 import TabList from "@shared/TabList";
+import { useGetProjectQuery } from "@store/services/projects";
 import { Button, Divider, Space, TabsProps, Typography } from "antd";
 import { useRouter } from "next/navigation";
-import { useState } from "react"; // , { useEffect, useRef }
+import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft } from "react-iconly";
 import Details from "./components/details";
 import Overview from "./components/overview";
@@ -13,8 +15,19 @@ import Overview from "./components/overview";
 const { Title, Text } = Typography;
 
 const NewProjectPage = () => {
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState<string>(
+    "https://soower.com/title-of-project"
+  );
   const router = useRouter();
+  const projectId = useUtil();
+  const { data } = useGetProjectQuery(projectId);
+  const updateLink = useCallback(() => {
+    if (data?.data?.link) setLink(data.data.link);
+  }, [data?.data?.link]);
+
+  useEffect(() => {
+    updateLink();
+  }, [updateLink]);
 
   const items: TabsProps["items"] = [
     {
@@ -25,12 +38,10 @@ const NewProjectPage = () => {
     {
       key: "details",
       label: "Sharing Details",
-      children: <Details link={link} setLink={setLink} />,
+      children: <Details link={link} />,
     },
   ];
-  const { copied, copyToClipboard } = useCopyToClipboard(
-    `https://soower.com/${link}`
-  );
+  const { copied, copyToClipboard } = useCopyToClipboard(`${link}`);
 
   return (
     <Container className="bg-[#F7F8FA] tablet:px-4">
@@ -48,9 +59,7 @@ const NewProjectPage = () => {
           New Project Name
         </Title>
         <Typography className="flex flex-col items-center justify-center gap-2 rounded-full bg-[#EBEFFF] p-1 text-[13px] font-semibold leading-[16.38px] text-accent tablet:flex-row">
-          <div className="mx-2 text-[11px] laptop:text-[13px]">
-            {`https://soower.com/${link !== "" ? link : "title-of-project"}`}
-          </div>
+          <div className="mx-2 text-[11px] laptop:text-[13px]">{`${link}`}</div>
           <Space className="gap-0 rounded-full bg-white p-1 tablet:flex-row">
             {copied ? (
               <Text className="m-0 cursor-pointer rounded-full rounded-r-none px-2 py-1 text-[12px] leading-[15.12px] text-accent hover:bg-slate-100">

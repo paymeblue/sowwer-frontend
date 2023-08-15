@@ -1,34 +1,41 @@
-import React, { Fragment, ReactNode, useRef, useState } from "react";
 import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
+import { CheckCircleIcon } from "@components/assets/icons";
+import capitalizeFirstLetters from "@lib/capitalize";
+import currencyFormat from "@lib/useCurrencyFormat";
+import { useGetMinistryProjectsQuery } from "@store/services/ministries";
+import { ProjectData } from "@store/types";
+import type { TableProps } from "antd";
 import {
   Avatar,
   Badge,
+  Button,
   Dropdown,
+  Input,
   InputRef,
   List,
   MenuProps,
   Modal,
+  Pagination,
   Result,
-  Typography,
-  message,
-  Button,
-  Input,
   Space,
   Table,
+  Typography,
+  message,
 } from "antd";
-import type { TableProps } from "antd";
-import type { ColumnsType, ColumnType } from "antd/es/table";
-import type { FilterValue } from "antd/es/table/interface";
-import type { FilterConfirmProps } from "antd/es/table/interface";
+import type { ColumnType, ColumnsType } from "antd/es/table";
+import type {
+  FilterConfirmProps,
+  FilterValue,
+  TablePaginationConfig,
+} from "antd/es/table/interface";
+import { Fragment, ReactNode, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-import currencyFormat from "@lib/useCurrencyFormat";
 import { InfoCircle } from "react-iconly";
-import { CheckCircleIcon } from "@components/assets/icons";
 
 const priceFormat = currencyFormat();
 
@@ -44,99 +51,99 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-const data: DataType[] = [
-  {
-    key: "1",
-    title: "The Widows Project",
-    goal: 500000,
-    category: "Widows",
-    no_of_donors: 53,
-    amount_raised: 135000,
-    status: (
-      <Badge
-        color="blue"
-        className="[&>.ant-badge-status-text]:text-[12px]"
-        text="Active"
-      />
-    ),
-  },
-  {
-    key: "2",
-    title: "The Missions Project",
-    goal: 750000,
-    category: "Missions",
-    no_of_donors: 45,
-    amount_raised: 550000,
-    status: (
-      <Badge
-        color="blue"
-        className="[&>.ant-badge-status-text]:text-[12px]"
-        text="Active"
-      />
-    ),
-  },
-  {
-    key: "3",
-    title: "The Widows Project",
-    goal: 200000,
-    category: "Widows",
-    no_of_donors: 32,
-    amount_raised: 157000,
-    status: (
-      <Badge
-        color="yellow"
-        className="[&>.ant-badge-status-text]:text-[12px]"
-        text="Drafted"
-      />
-    ),
-  },
-  {
-    key: "4",
-    title: "The Orphans Project",
-    goal: 500000,
-    category: "Orphans",
-    no_of_donors: 35,
-    amount_raised: 500000,
-    status: (
-      <Badge
-        color="green"
-        className="[&>.ant-badge-status-text]:text-[12px]"
-        text="Completed"
-      />
-    ),
-  },
-  {
-    key: "5",
-    title: "The Missions Project",
-    goal: 800000,
-    category: "Missions",
-    no_of_donors: 40,
-    amount_raised: 600000,
-    status: (
-      <Badge
-        color="yellow"
-        className="[&>.ant-badge-status-text]:text-[12px]"
-        text="Drafted"
-      />
-    ),
-  },
-  {
-    key: "6",
-    title: "The Orphans Project",
-    goal: 300000,
-    category: "Orphans",
-    no_of_donors: 20,
-    amount_raised: 300000,
-    status: (
-      <Badge
-        key="20"
-        color="green"
-        className="[&>.ant-badge-status-text]:text-[12px]"
-        text="Completed"
-      />
-    ),
-  },
-];
+// const data: DataType[] = [
+//   {
+//     key: "1",
+//     title: "The Widows Project",
+//     goal: 500000,
+//     category: "Widows",
+//     no_of_donors: 53,
+//     amount_raised: 135000,
+//     status: (
+//       <Badge
+//         color="blue"
+//         className="[&>.ant-badge-status-text]:text-[12px]"
+//         text="Active"
+//       />
+//     ),
+//   },
+//   {
+//     key: "2",
+//     title: "The Missions Project",
+//     goal: 750000,
+//     category: "Missions",
+//     no_of_donors: 45,
+//     amount_raised: 550000,
+//     status: (
+//       <Badge
+//         color="blue"
+//         className="[&>.ant-badge-status-text]:text-[12px]"
+//         text="Active"
+//       />
+//     ),
+//   },
+//   {
+//     key: "3",
+//     title: "The Widows Project",
+//     goal: 200000,
+//     category: "Widows",
+//     no_of_donors: 32,
+//     amount_raised: 157000,
+//     status: (
+//       <Badge
+//         color="yellow"
+//         className="[&>.ant-badge-status-text]:text-[12px]"
+//         text="Drafted"
+//       />
+//     ),
+//   },
+//   {
+//     key: "4",
+//     title: "The Orphans Project",
+//     goal: 500000,
+//     category: "Orphans",
+//     no_of_donors: 35,
+//     amount_raised: 500000,
+//     status: (
+//       <Badge
+//         color="green"
+//         className="[&>.ant-badge-status-text]:text-[12px]"
+//         text="Completed"
+//       />
+//     ),
+//   },
+//   {
+//     key: "5",
+//     title: "The Missions Project",
+//     goal: 800000,
+//     category: "Missions",
+//     no_of_donors: 40,
+//     amount_raised: 600000,
+//     status: (
+//       <Badge
+//         color="yellow"
+//         className="[&>.ant-badge-status-text]:text-[12px]"
+//         text="Drafted"
+//       />
+//     ),
+//   },
+//   {
+//     key: "6",
+//     title: "The Orphans Project",
+//     goal: 300000,
+//     category: "Orphans",
+//     no_of_donors: 20,
+//     amount_raised: 300000,
+//     status: (
+//       <Badge
+//         key="20"
+//         color="green"
+//         className="[&>.ant-badge-status-text]:text-[12px]"
+//         text="Completed"
+//       />
+//     ),
+//   },
+// ];
 
 const dataSource = [
   {
@@ -158,8 +165,15 @@ const dataSource = [
     avatar: "SY",
   },
 ];
+
 const { Title, Text, Paragraph } = Typography;
-const ProjectsTable: React.FC = () => {
+
+const ProjectsTable = ({ id }: { id: string | undefined }) => {
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+  });
+  const [messageApi, contextHolder] = message.useMessage();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
@@ -168,7 +182,38 @@ const ProjectsTable: React.FC = () => {
   >({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDonorModalOpen, setIsDonorModalOpen] = useState(false);
-  const [messageApi, contextHolder] = message.useMessage();
+
+  const { data, isLoading, isFetching } = useGetMinistryProjectsQuery({
+    id,
+    page: pagination.current,
+  });
+  console.log(data, "hi");
+
+  const getColorForStatus = (status: ProjectData["status"]) => {
+    return status === "drafted"
+      ? "yellow"
+      : status === "active"
+      ? "blue"
+      : status === "completed"
+      ? "green"
+      : "gray";
+  };
+
+  const newDataSource = data?.data.map((item) => ({
+    key: item.id,
+    title: capitalizeFirstLetters(item.title),
+    goal: Number(item.targetAmount),
+    category: capitalizeFirstLetters(item.category),
+    no_of_donors: item.donors,
+    amount_raised: +item.amountRaised,
+    status: (
+      <Badge
+        color={getColorForStatus(item.status)}
+        className="[&>.ant-badge-status-text]:text-[12px]"
+        text={capitalizeFirstLetters(item.status)}
+      />
+    ),
+  }));
 
   const showModal = () => {
     setIsDeleteModalOpen(true);
@@ -240,7 +285,17 @@ const ProjectsTable: React.FC = () => {
     sorter
   ) => {
     console.log("Various parameters", pagination, filters, sorter);
+
     setFilteredInfo(filters);
+  };
+
+  const paginationHandler = () => {
+    return setPagination((prev) => ({
+      ...prev,
+      current: data?.paginationInfo?.currentPage,
+      total: data?.paginationInfo?.totalItems,
+      pageSize: data?.paginationInfo?.limit,
+    }));
   };
 
   const handleSearch = (
@@ -546,11 +601,22 @@ const ProjectsTable: React.FC = () => {
       </Modal>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={newDataSource}
         onChange={handleChange}
         scroll={{ x: 896 }}
+        loading={isLoading || isFetching}
+        pagination={false}
         sticky
       />
+      <Space className="my-4 flex w-full justify-end">
+        <Pagination
+          simple
+          defaultCurrent={pagination.current}
+          pageSize={pagination.pageSize}
+          total={pagination.total || 2}
+          onChange={paginationHandler}
+        />
+      </Space>
     </Fragment>
   );
 };

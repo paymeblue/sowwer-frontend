@@ -1,6 +1,7 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
-import { SignupRequest, useSignupMutation } from "@store/services/auth";
+import { useMinistrySignupMutation } from "@store/services/auth";
+import { MinistrySignupRequest } from "@store/types";
 import { Button, Form, Space, Steps, Typography, message, theme } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -68,7 +69,7 @@ const SignupStep = () => {
     next();
   }
   const [messageApi, contextHolder] = message.useMessage();
-  const [signup, { isLoading }] = useSignupMutation();
+  const [ministrySignup, { isLoading }] = useMinistrySignupMutation();
   const onFormFinish = async (): Promise<void> => {
     const values = form.getFieldsValue(true);
     const {
@@ -88,7 +89,7 @@ const SignupStep = () => {
       state,
     } = values;
     try {
-      const credentials: SignupRequest = {
+      const credentials: MinistrySignupRequest = {
         ministryType,
         ministryPhone: ministryPhoneNumber,
         ministryEmail,
@@ -105,7 +106,7 @@ const SignupStep = () => {
         role: adminRole,
         password: adminPassword,
       };
-      const res = await signup(credentials).unwrap();
+      const res = await ministrySignup(credentials).unwrap();
       messageApi.open({
         content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
@@ -115,8 +116,9 @@ const SignupStep = () => {
       form.resetFields();
       router.push("/auth/signup/ministry?step=registration-complete");
     } catch (error: any) {
+      console.log(error);
       messageApi.open({
-        content: `${error.status} - ${error.data.message}`,
+        content: `${error.message}`,
         className: "[&>div]:bg-red-800 [&>div]:text-white",
       });
     }

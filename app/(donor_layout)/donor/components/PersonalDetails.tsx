@@ -1,4 +1,5 @@
 import { CheckCircleIcon } from "@components/assets/icons";
+import { useUpdateUserProfileMutation } from "@store/services/user";
 import {
   Button,
   Card,
@@ -10,10 +11,13 @@ import {
   Typography,
   message,
 } from "antd";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 type State = {
+  firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
   password: string;
 };
 const { Title, Paragraph } = Typography;
@@ -23,20 +27,24 @@ const { Password } = Input;
 const PersonalDetails = () => {
   const [form] = useForm();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
 
   const onFinish = async (values: State): Promise<void> => {
-    setIsLoading(true);
-    console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    form.resetFields();
-    setIsLoading(false);
-    messageApi.open({
-      content: "Form submission successful",
-      className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-      icon: <CheckCircleIcon />,
-    });
+    try {
+      const res = await updateUserProfile(values).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472]-800 [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -74,7 +82,7 @@ const PersonalDetails = () => {
             >
               <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">
                 <Item
-                  name="firstname"
+                  name="firstName"
                   label="First Name"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
@@ -93,7 +101,7 @@ const PersonalDetails = () => {
                   />
                 </Item>
                 <Item
-                  name="lastname"
+                  name="lastName"
                   label="Last Name"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
@@ -136,7 +144,7 @@ const PersonalDetails = () => {
                   />
                 </Item>
                 <Item
-                  name="number"
+                  name="phone"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   label="Phone Number"
                   rules={[

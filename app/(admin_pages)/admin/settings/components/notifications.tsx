@@ -1,6 +1,7 @@
-import React, { Fragment, ReactNode, useId } from "react";
-import ToggleSwitch from "./toggle-switch";
+import { useGetNotificationQuery } from "@store/services/notifications";
 import { Card, Space, Typography } from "antd";
+import { Fragment, ReactNode } from "react";
+import ToggleSwitch from "./toggle-switch";
 
 const { Title, Text } = Typography;
 
@@ -12,46 +13,66 @@ type Data = {
 };
 
 const Notifications = () => {
+  const { data: toggle } = useGetNotificationQuery();
+  if (!toggle) {
+    return null;
+  }
+
+  const {
+    projectDonation,
+    projectTarget,
+    ongoingRecuringDonation,
+    recuringDonation,
+    payout,
+    generalDonation,
+  } = toggle;
   const data: Data[] = [
     {
-      id: useId(),
+      id: "1",
       title: "New Project Donation",
       subTitle: "Sent when a new donation is made to a project.",
-      switch: <ToggleSwitch toggle={true} />,
+      switch: <ToggleSwitch toggle={projectDonation} label="projectDonation" />,
     },
     {
-      id: useId(),
+      id: "2",
       title: "Project Goal Achieved",
       subTitle: "Sent when a project's funding goal is achieved.",
-      switch: <ToggleSwitch toggle={true} />,
+      switch: <ToggleSwitch toggle={projectTarget} label="projectTarget" />,
     },
     {
-      id: useId(),
+      id: "3",
       title: "General Donation",
       subTitle:
         "Sent when new general donations are made (one-time or recurring).",
-      switch: <ToggleSwitch toggle={true} />,
+      switch: <ToggleSwitch toggle={generalDonation} label="generalDonation" />,
     },
     {
-      id: useId(),
+      id: "4",
       title: "Ongoing Recurring Donation",
       subTitle:
         "Sent when a recurring donation is automatically processed after the initial charge.",
-      switch: <ToggleSwitch toggle={false} />,
+      switch: (
+        <ToggleSwitch
+          toggle={ongoingRecuringDonation}
+          label="ongoingRecuringDonation"
+        />
+      ),
     },
     {
-      id: useId(),
+      id: "5",
       title: "Recurring Donation Events",
       subTitle:
         "Sent when a recurring donation is canceled, paused, resumed, updated, or fails to process.",
-      switch: <ToggleSwitch toggle={false} />,
+      switch: (
+        <ToggleSwitch toggle={recuringDonation} label="recuringDonation" />
+      ),
     },
     {
-      id: useId(),
+      id: "6",
       title: "New Payout Transaction",
       subTitle:
         "Sent when a payout request is approved and payment is processed.",
-      switch: <ToggleSwitch toggle={true} />,
+      switch: <ToggleSwitch toggle={payout} label="payout" />,
     },
   ];
   return (

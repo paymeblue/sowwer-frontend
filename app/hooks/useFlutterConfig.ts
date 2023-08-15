@@ -15,6 +15,7 @@ interface IProps {
   amount: number;
   currency: string;
   desc: string;
+  txnRef: string;
 }
 
 interface IConfig {
@@ -32,10 +33,11 @@ const useFlutterConfig = ({
   amount,
   currency,
   desc,
+  txnRef,
 }: IProps): IConfig => {
   const config: IConfig = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
-    tx_ref: Date.now().toString(),
+    tx_ref: txnRef,
     amount,
     currency,
     payment_options: "card,mobilemoney,ussd",

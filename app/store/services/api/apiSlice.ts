@@ -1,6 +1,7 @@
 // Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "@store/store";
+import { cacher } from "./rtkQueryCacheUtils";
 
 // initialize an empty api service that we'll inject endpoints into later as needed
 const api = createApi({
@@ -15,7 +16,14 @@ const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Post", "UNAUTHORIZED", "UNKNOWN_ERROR"],
+  tagTypes: [
+    ...cacher.defaultTags,
+    "Projects",
+    "Ministry",
+    "Notifications",
+    "User",
+    "Social-links",
+  ],
   endpoints: () => ({}),
 });
 

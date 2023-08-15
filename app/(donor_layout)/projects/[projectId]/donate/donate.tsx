@@ -1,5 +1,6 @@
 "use client";
 import useFlutterConfig from "@hooks/useFlutterConfig";
+import { useDonorSignupMutation } from "@store/services/auth";
 import {
   Button,
   Card,
@@ -15,7 +16,14 @@ import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, useCallback, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Heart2 } from "react-iconly";
 
 type FormValues = {
@@ -30,7 +38,17 @@ type FormValues = {
   phoneNumber: string;
   displayIdentity: boolean;
 };
-
+// {
+//     "phone": "08076358025",
+//     "email": "another@sample.com",
+//     "firstName": "John",
+//     "lastName": "Doe",
+//     "password": "12345678a.",
+//     "anonymous": false,
+//     "createAccount": false,
+//     "confirm_password": "12345678a.",
+//     "amount": 100.01
+// }
 const { Title, Text } = Typography;
 const { Password } = Input;
 const { Item, useForm } = Form;
@@ -40,6 +58,7 @@ const DonateToProjectPage = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
+  const [tnxRef, setTnxRef] = useState<string>("");
   const [{ showPassword, formData }, setState] = useState<{
     showPassword: boolean;
     formData: FormValues;
@@ -85,8 +104,18 @@ const DonateToProjectPage = () => {
     }));
   };
 
-  const { currency, amount, firstname, lastname, email, phoneNumber } =
-    formData;
+  const {
+    currency,
+    amount,
+    firstname,
+    lastname,
+    email,
+    phoneNumber,
+    password,
+    cPassword,
+    signup,
+    displayIdentity,
+  } = formData;
 
   const customer = useMemo(
     () => ({
@@ -96,18 +125,27 @@ const DonateToProjectPage = () => {
     }),
     [email, firstname, lastname, phoneNumber]
   );
-
+  const [donorSignup, { data }] = useDonorSignupMutation();
+  const updateTnxRef = useCallback(() => {
+    if (data?.data?.txn_reference) {
+      setTnxRef(data.data.txn_reference);
+    }
+  }, [data?.data?.txn_reference]);
+  useEffect(() => {
+    updateTnxRef();
+  }, [updateTnxRef]);
   const obj = useMemo(
     () => ({
       currency,
       amount: Number(amount),
       customer,
       desc: "widows project",
+      txnRef: tnxRef,
     }),
-    [currency, amount, customer]
+    [tnxRef, currency, amount, customer]
   );
-
   const config = useFlutterConfig(obj);
+  console.log(config);
   const handleFlutterPayment = useFlutterwave(config);
 
   const selectBefore = useMemo(
@@ -126,15 +164,36 @@ const DonateToProjectPage = () => {
     [formData.currency]
   );
 
-  const onFinish = () => {
-    handleFlutterPayment({
-      callback: (response) => {
-        console.log(response);
-        closePaymentModal(); // this will close the modal programmatically
-        router.push("/projects/donation-successful");
-      },
-      onClose: () => {},
-    });
+  const onFinish = async () => {
+    try {
+      const data = {
+        id: "172d1a79-4640-4948-af89-a420e460ce99",
+        phone: phoneNumber,
+        email,
+        firstName: firstname,
+        lastName: lastname,
+        password,
+        anonymous: displayIdentity,
+        createAccount: signup,
+        confirm_password: cPassword,
+        amount: +amount,
+      };
+      await donorSignup(data).unwrap();
+      console.log("waiting");
+      handleFlutterPayment({
+        callback: (response) => {
+          console.log(response);
+          closePaymentModal(); // this will close the modal programmatically
+          router.push("/projects/donation-successful");
+        },
+        onClose: () => {},
+      });
+    } catch (error: any) {
+      messageApi.open({
+        content: `${error.message}`,
+        className: "[&>div]:bg-red-500 [&>div]:text-white",
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {

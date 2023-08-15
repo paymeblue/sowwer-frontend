@@ -88,7 +88,7 @@ const UploadLogo = () => {
       {contextHolder}
       <Form
         form={form}
-        name="admin_profile_info_form"
+        name="admin_profile_info_logo_upload"
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}

@@ -254,7 +254,7 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
                 <Select
                   placeholder="-- Select --"
                   options={options}
-                  className="[&>.ant-select-selector]:h-auto  [&>.ant-select-selector]:border-none [&>.ant-select-selector]:bg-[#f9f9f9]  [&>.ant-select-selector]:py-2 [&>.ant-select-selector]:outline-none"
+                  className="[&>.ant-select-selector]:block [&>.ant-select-selector]:h-auto [&>.ant-select-selector]:border-none  [&>.ant-select-selector]:bg-[#f9f9f9] [&>.ant-select-selector]:py-2  [&>.ant-select-selector]:text-start [&>.ant-select-selector]:outline-none"
                 />
               </Item>
               <Item

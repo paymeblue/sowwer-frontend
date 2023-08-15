@@ -1,91 +1,47 @@
+import {
+  DonorSignupRequest,
+  DonorSignupResponse,
+  ErrorResponse,
+  LoginRequest,
+  LoginResponse,
+  MinistrySignupRequest,
+  SignupResponse,
+} from "@store/types";
 import api from "./api/apiSlice";
-
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  verificationStatus: boolean;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-  church: {
-    id: string;
-    userId: string;
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    cac_document: boolean | string;
-    createdAt: string;
-    state: string;
-    updatedAt: string;
-    website: string;
-  };
-}
-export interface Token {
-  accessToken: string;
-  expiresIn: string;
-  refreshToken: string;
-  refreshTokenexpiresIn: string;
-  type: string;
-}
-export interface LoginData {
-  message: string;
-  data: {
-    user: User;
-    token: Token;
-  };
-}
-export interface LoginResponse {
-  success: boolean;
-  message: string;
-  data: {
-    user: User;
-    token: Token;
-  };
-  paginationInfo: null | string;
-}
-export interface SignupResponse {
-  data: {
-    user: User;
-  };
-  success: boolean;
-  message: string;
-  paginationInfo: null | string;
-}
-
-export interface LoginRequest {
-  identifier: string;
-  password: string;
-}
-export interface SignupRequest {
-  ministryType: string;
-  ministryPhone: string;
-  ministryEmail: string;
-  ministryName: string;
-  projectDescription: string;
-  ministryState: string;
-  ministrySocialLink: string;
-  ministryAddress: string;
-  cacDocument: string;
-  phone: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  password: string;
-}
+import { cacher } from "./api/rtkQueryCacheUtils";
 
 const auth = api.injectEndpoints({
   endpoints: (build) => ({
-    signup: build.mutation<SignupResponse, SignupRequest>({
+    ministrySignup: build.mutation<SignupResponse, MinistrySignupRequest>({
       query: (credentials) => ({
         url: "users/register",
         method: "POST",
         body: credentials,
       }),
+      transformResponse: (response: SignupResponse, meta, arg): any => {
+        const { message, data } = response;
+        return { message, data };
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
+    }),
+    donorSignup: build.mutation<DonorSignupResponse, DonorSignupRequest>({
+      query: (credentials) => {
+        const { id, ...rest } = credentials;
+        return {
+          url: `projects/${id}/p-initiate`,
+          method: "POST",
+          body: rest,
+        };
+      },
+      transformResponse: (response: DonorSignupResponse, meta, arg): any => {
+        const { message, data } = response;
+        return { message, data };
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
     }),
     login: build.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
@@ -95,7 +51,9 @@ const auth = api.injectEndpoints({
       }),
       // on successful login, will refetch all currently
       // 'UNAUTHORIZED' queries
-      invalidatesTags: (result) => (result ? ["UNAUTHORIZED"] : []),
+      invalidatesTags: cacher.invalidatesUnauthorized(),
+      // invalidatesTags: (result) =>
+      //   result ? cacher.invalidatesUnauthorized() : [],
 
       // Pick out data and prevent nested properties in a hook or selector
       transformResponse: (response: LoginResponse, meta, arg): any => {
@@ -103,13 +61,10 @@ const auth = api.injectEndpoints({
         return { message, data };
       },
       // Pick out errors and prevent nested properties in a hook or selector
-      transformErrorResponse: (
-        response: { status: string | number },
-        meta,
-        arg
-      ) => response.status,
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
     }),
-    logout: build.mutation<SignupResponse, SignupRequest>({
+    logout: build.mutation<SignupResponse, MinistrySignupRequest>({
       query: (credentials) => ({
         url: "users/register",
         method: "POST",
@@ -118,9 +73,14 @@ const auth = api.injectEndpoints({
     }),
     refetchErroredQueries: build.mutation<null, void>({
       queryFn: () => ({ data: null }),
-      invalidatesTags: ["UNKNOWN_ERROR"],
+      invalidatesTags: cacher.invalidatesUnknownErrors(),
     }),
   }),
+  overrideExisting: true,
 });
 
-export const { useSignupMutation, useLoginMutation } = auth;
+export const {
+  useMinistrySignupMutation,
+  useLoginMutation,
+  useDonorSignupMutation,
+} = auth;

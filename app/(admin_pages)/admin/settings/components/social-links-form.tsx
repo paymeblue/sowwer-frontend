@@ -7,27 +7,33 @@ import {
   TwitterColorIcon,
   YoutubeColorIcon,
 } from "@components/assets/icons";
+import { useUpdateSocialLinksMutation } from "@store/services/ministries";
+import { UpdateSocialLinksRequest } from "@store/types";
 import { Button, Form, Input, Space, message } from "antd";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 const { Item, useForm } = Form;
 
 const SocialLinksForm = () => {
   const [form] = useForm();
-  const [isLoading, setIsLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-
-  const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
+  const [updateSocialLinks, { isLoading }] = useUpdateSocialLinksMutation();
+  const onFinish = async (values: UpdateSocialLinksRequest): Promise<void> => {
     console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    form.resetFields();
-    setIsLoading(false);
-    messageApi.open({
-      content: "Form submission successful",
-      className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-      icon: <CheckCircleIcon />,
-    });
+    try {
+      const res = await updateSocialLinks(values).unwrap();
+      form.resetFields();
+      messageApi.open({
+        content: `${res.message}`,
+        className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: `[&>div]:bg-red [&>div]:text-white`,
+      });
+    }
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -66,7 +72,7 @@ const SocialLinksForm = () => {
           />
         </Item>
         <Item
-          name="fb_link"
+          name="facebook"
           label="Facebook"
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           rules={[
@@ -83,7 +89,7 @@ const SocialLinksForm = () => {
           />
         </Item>
         <Item
-          name="ig_link"
+          name="instagram"
           label="Instagram"
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           rules={[
@@ -100,7 +106,7 @@ const SocialLinksForm = () => {
           />
         </Item>
         <Item
-          name="twitter_link"
+          name="twitter"
           label="Twitter"
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           rules={[

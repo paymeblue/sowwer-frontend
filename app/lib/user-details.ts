@@ -1,4 +1,5 @@
-import { User } from "@store/services/auth";
+import capitalizeFirstLetters from "@lib/capitalize";
+import { User } from "@store/types";
 
 const generateAvatar = (name: string) => {
   const avatarChars = name
@@ -8,7 +9,8 @@ const generateAvatar = (name: string) => {
 };
 
 const userDetails = (user: User | null) => {
-  const name = user?.firstName + " " + user?.lastName;
+  const formattedName = user?.firstName + " " + user?.lastName;
+  const name = capitalizeFirstLetters(formattedName);
   const email = user?.email;
   const avatar = generateAvatar(name);
   return { name, email, avatar };

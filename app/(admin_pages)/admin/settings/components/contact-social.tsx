@@ -1,4 +1,6 @@
 import { CheckCircleIcon } from "@components/assets/icons";
+import { useAuth } from "@hooks/useAuth";
+import { useUpdateMinistryProfileMutation } from "@store/services/ministries";
 import {
   Button,
   Card,
@@ -11,30 +13,42 @@ import {
   Typography,
   message,
 } from "antd";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import SocialLinksForm from "./social-links-form";
 
 const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
-
+type State = { email: string; phone: string };
 const ContactSocial = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [isLoading, setIsLoading] = useState(false);
+  const user = useAuth();
+  const [updateMinistryProfile, { isLoading }] =
+    useUpdateMinistryProfileMutation();
 
-  const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    console.log("Received values of form: ", values);
-    form.resetFields();
-    setIsLoading(false);
-    messageApi.open({
-      content: "Form submission successful",
-      className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-      icon: <CheckCircleIcon />,
-    });
+  const onFinish = async (values: State): Promise<void> => {
+    const { email, phone } = values;
+    const credentials = {
+      id: user?.ministry?.id,
+      email,
+      phone,
+    };
+    try {
+      const res = await updateMinistryProfile(credentials).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+    } catch (error: any) {
+      messageApi.open({
+        content: `${error}`,
+        className: `[&>div]:bg-red-800 [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+    }
   };
-
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
     messageApi.open({
@@ -95,7 +109,7 @@ const ContactSocial = () => {
                   />
                 </Item>
                 <Item
-                  name="number"
+                  name="phone"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   label="Phone Number"
                   rules={[

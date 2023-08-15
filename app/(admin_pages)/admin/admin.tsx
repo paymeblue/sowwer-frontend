@@ -1,6 +1,7 @@
 "use client";
 import { BankIcon, SpeakerIcon, UserIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
+import capitalizeFirstLetters from "@lib/capitalize";
 import Container from "@shared/Container";
 import { Button, Card, List, Typography } from "antd";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,7 @@ const AdminPage = () => {
   const header = (
     <Typography>
       <Title level={3} className="mb-0 text-[24px] font-bold leading-[30.24px]">
-        Welcome, {user?.firstName}!
+        Welcome, {capitalizeFirstLetters(user!.firstName)}!
       </Title>
       <Paragraph className="text-[14px] leading-[17.64px] text-body-2">
         Let&apos;s get you set up to start using Soower!
