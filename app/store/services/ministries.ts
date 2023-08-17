@@ -1,9 +1,9 @@
 import {
   ErrorResponse,
+  GetMinistryDetailsResponse,
+  GetSocialLinksResponse,
   MinistryProfileRequest,
   MinistryProfileResponse,
-  MinistryProjectsRequest,
-  MinistryProjectsResponse,
   UpdateSocialLinksRequest,
   UpdateSocialLinksResponse,
 } from "@store/types";
@@ -36,6 +36,7 @@ const ministry = api.injectEndpoints({
         return { url: `ministries/${id}/profile`, method: "PATCH", body: rest };
       },
       // Invalidate 'Ministry' cache tags on successful creation
+      // invalidatesTags: cacher.cacheByIdArgProperty("Ministry") as any,
       invalidatesTags: cacher.providesProperty("Ministry"),
       // Transform response and error
       transformResponse: (response, meta, arg): any => {
@@ -44,33 +45,15 @@ const ministry = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getMinistryProjects: build.query<
-      MinistryProjectsResponse,
-      MinistryProjectsRequest
-    >({
-      query: (body) =>
-        `ministries/${body.id}/projects?page=${body.page}&limit=10`,
-      // Invalidate cache tags specific to ministry projects
-      // providesTags: cacher.invalidatesList("Projects"),
-      providesTags: (result, error, page) => {
-        return result
-          ? [
-              // Provides a tag for each project in the current page,
-              // as well as the 'PARTIAL-LIST' tag.
-              ...result.data.map(({ id }) => ({
-                type: "Projects" as const,
-                id,
-              })),
-              { type: "Projects", id: "PARTIAL-LIST" },
-            ]
-          : [{ type: "Projects", id: "PARTIAL-LIST" }];
+    getMinistryDetails: build.query<GetMinistryDetailsResponse, string>({
+      query: (id) => `ministries/${id}`,
+      providesTags: cacher.cacheByIdArg("Ministry"),
+      transformResponse: (reponse: GetMinistryDetailsResponse, meta, arg) => {
+        return reponse;
       },
-      // Transform response and error
-      transformResponse: (response, meta, arg): any => {
-        return response;
+      transformErrorResponse: (reponse: ErrorResponse, meta, arg) => {
+        return reponse.data.message;
       },
-      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
-        response.data.message,
     }),
     updateSocialLinks: build.mutation<
       UpdateSocialLinksResponse,
@@ -88,23 +71,19 @@ const ministry = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    deleteMinistryProject: build.mutation<any, string>({
-      query: (id) => `projects/${id}/delete`,
-      // Invalidates the tag for this Project `id`, as well as the `PARTIAL-LIST` tag,
-      // causing the `listProjects` query to re-fetch if a component is subscribed to the query.
-      invalidatesTags: (result, error, id) => [
-        { type: "Projects", id },
-        { type: "Projects", id: "PARTIAL-LIST" },
-      ],
-      transformResponse: (response, meta, arg): any => {
-        return response;
+    getSocialLinks: build.query<GetSocialLinksResponse, void>({
+      query: () => `social-links`,
+      providesTags: cacher.providesProperty("Social-links"),
+      transformResponse: (reponse: GetSocialLinksResponse, meta, arg) => {
+        return reponse;
       },
-      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
-        response.data.message,
+      transformErrorResponse: (reponse: ErrorResponse, meta, arg) => {
+        return reponse.data.message;
+      },
     }),
     refetchErroredQueries: build.mutation<null, void>({
       queryFn: () => ({ data: null }),
-      invalidatesTags: ["UNKNOWN_ERROR"],
+      invalidatesTags: cacher.invalidatesUnknownErrors(),
     }),
   }),
   overrideExisting: true,
@@ -112,8 +91,8 @@ const ministry = api.injectEndpoints({
 
 export const {
   useCreateMinistryMutation,
+  useGetMinistryDetailsQuery,
   useUpdateMinistryProfileMutation,
-  useGetMinistryProjectsQuery,
   useUpdateSocialLinksMutation,
-  useDeleteMinistryProjectMutation,
+  useGetSocialLinksQuery,
 } = ministry;

@@ -6,6 +6,10 @@ import {
   YoutubeColorIcon,
 } from "@components/assets/icons";
 import FbColorIcon from "@components/assets/icons/fbColor";
+import {
+  useGetMinistryDetailsQuery,
+  useGetSocialLinksQuery,
+} from "@store/services/ministries";
 import { Alert, Button, Card, Col, Row, Space, Typography } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,6 +18,11 @@ import { Heart2, InfoCircle } from "react-iconly";
 const { Title, Text, Paragraph } = Typography;
 
 const Profile = ({ ministryId }: { ministryId: string }) => {
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(ministryId);
+  const data = ministryDetails?.data;
+
+  const { data: socialLinks } = useGetSocialLinksQuery();
+
   const router = useRouter();
   const onClick = (id?: string) => {
     router.prefetch(`/ministries/${id}/donate`);
@@ -30,7 +39,8 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             About
           </Title>
           <Paragraph className="text-[13px] leading-[23px] laptop:text-[14px] laptop:leading-[26px]">
-            Lorem ipsum dolor sit amet consectetur. Sed sit consequat quis
+            {data?.description ??
+              `Lorem ipsum dolor sit amet consectetur. Sed sit consequat quis
             habitant massa. Commodo turpis tempor ipsum libero ut semper dapibus
             dolor. Viverra cras consequat tincidunt nibh ut vitae maecenas quis.
             Blandit molestie est semper nunc id curabitur a amet. At aliquet
@@ -39,7 +49,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             nulla. Risus nam in donec iaculis suspendisse nunc arcu. Mattis
             vitae massa tincidunt feugiat nisi ante nulla blandit. Sed nulla
             neque turpis tellus lorem vitae venenatis. Nunc nisi nibh massa
-            elementum. In risus semper dapibus tristique massa eu tempor.
+            elementum. In risus semper dapibus tristique massa eu tempor.`}
           </Paragraph>
         </Typography>
       </Col>
@@ -49,7 +59,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             <Space>
               <EnvironmentOutlined style={{ fontSize: "16px" }} />
               <Text className="text-[13px] leading-[16.78px] text-body-1 laptop:text-[14px] laptop:leading-[18px]">
-                Abuja, Nigeria
+                {data?.state}, Nigeria.
               </Text>
             </Space>
           </Paragraph>
@@ -57,31 +67,31 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             <Space>
               <GlobalOutlined style={{ fontSize: "16px" }} />
               <Link
-                href="https://www.fwcabuja.org"
+                href={`${data?.website}`}
                 target="_blank"
                 className="text-[13.32px] leading-[16.78px] text-body-1 laptop:text-[14px] laptop:leading-[18px]"
               >
-                https://www.fwcabuja.org
+                {data?.website}
               </Link>
             </Space>
           </Paragraph>
           <Space className="my-6 gap-6 tablet:gap-9">
-            <Link
-              href="https://web.facebook.com/fwcnigeria?_rdc=1&_rdr"
-              target="_blank"
-            >
+            <Link href={`${socialLinks?.data.facebook ?? "#"}`} target="_blank">
               <FbColorIcon />
             </Link>
-            <Link href="https://www.instagram.com/fwcabuja/" target="_blank">
+            <Link
+              href={`${socialLinks?.data.instagram ?? "#"}`}
+              target="_blank"
+            >
               <InstaColorIcon />
             </Link>
-            <Link href="https://twitter.com/FWCAbuja" target="_blank">
+            <Link href={`${socialLinks?.data.twitter ?? "#"}`} target="_blank">
               <TwitterColorIcon />
             </Link>
-            <Link href="#" target="_blank">
+            <Link href={`${socialLinks?.data.linkedin ?? "#"}`} target="_blank">
               <LinkedInColorIcon />
             </Link>
-            <Link href="#" target="_blank">
+            <Link href={`${socialLinks?.data.youtube ?? "#"}`} target="_blank">
               <YoutubeColorIcon />
             </Link>
           </Space>

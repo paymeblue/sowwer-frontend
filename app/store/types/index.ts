@@ -75,11 +75,24 @@ export type LoginData = {
   };
 };
 
-export type PublishOrDraft = {
+export type PublishOrDraftRequest = {
   id: string | null;
   query: string;
 };
-
+export type PublishOrDraftResponse = Response<{
+  id: string;
+  title: string;
+  targetAmount: string;
+  category: string;
+  link: string;
+  cover_photo: string | null;
+  description: string;
+  status: string;
+  deletedAt: string | null;
+  createdAt: string;
+}> & {
+  paginationInfo: null;
+};
 export type MinistryProjectsRequest = {
   id?: string;
   page?: number;
@@ -119,19 +132,6 @@ export type MinistryProfileRequest =
   | MinistryProfileRequest1
   | MinistryProfileRequest2;
 
-// id: string;
-// user_id: string;
-// name: string;
-// email: string;
-// phone: string;
-// address: string;
-// description: string;
-// state: string;
-// website: string;
-// postal_code: string;
-// cac_document: string;
-// ministryType: string;
-// createdAt: string;
 export type MinistryProfileResponse = Response<{
   id: string;
   title: string;
@@ -211,7 +211,7 @@ export type MinistryProjectsResponse = TResponse<{
   title: string;
   targetAmount: string;
   createdAt: string;
-  category: string;
+  category: "widows" | "orphans" | "missions";
   amountRaised: string;
   status: string;
   donors: number;
@@ -313,4 +313,157 @@ export type UpdateSocialLinksRequest = {
 export type UpdateSocialLinksResponse = {
   success: boolean;
   message: string;
+};
+
+export type MinistryProjectDonorsResponse = TResponse<{}>;
+export type ExploreCardData = {
+  id: string;
+  title: string;
+  targetAmount: string;
+  image: string | null;
+  description: string | null;
+  createdAt: string;
+  category: "widows" | "orphans" | "missions";
+  amountRaised: string;
+  organisedBy: string;
+  donors: number;
+};
+export type ExploreCardsResponse = ExploreCardData[] | undefined;
+export type ExploreProjectsRequest = { page: number; query: string | null };
+export type ExploreProjectsResponse = TResponse<{
+  id: string;
+  title: string;
+  targetAmount: string;
+  image: string | null;
+  description: string | null;
+  createdAt: string;
+  category: "widows" | "orphans" | "missions";
+  amountRaised: string;
+  organisedBy: string;
+  donors: number;
+}>;
+
+export type RegisterDonorRequest = {
+  phone: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  confirm_password: string;
+};
+
+export type GetProjectDetailsResponse = Response<{
+  title: string;
+  targetAmount: string;
+  category: string;
+  image: string | null;
+  description: string | null;
+  link: string;
+  organisedById: string;
+  organisedBy: string;
+  amountRaised: string;
+  donors: string;
+}>;
+
+export type GetMinistryDetailsResponse = Response<
+  {
+    id: string;
+    user_id: string;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    description: string;
+    state: string;
+    website: string;
+    postal_code: string | null;
+    cac_document: string;
+    ministryType: string;
+    createdAt: string;
+  } & {
+    paginationInfo: number;
+  }
+>;
+export type SocialLinks = {
+  id: string;
+  website: string | null;
+  facebook: string | null;
+  instagram: string | null;
+  twitter: string | null;
+  linkedin: string | null;
+  youtube: string | null;
+  createdAt: string;
+};
+export type GetSocialLinksResponse = Response<{
+  id: string;
+  website: string | null;
+  facebook: string | null;
+  instagram: string | null;
+  twitter: string | null;
+  linkedin: string | null;
+  youtube: string | null;
+  createdAt: string;
+}>;
+
+export type WidowJoinSoowerRequest = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  christianity: boolean;
+  declaration: boolean;
+  duration: number;
+  timestamp: string;
+  registrar_name: string;
+  registrar_email: string;
+  registrar_phone: string;
+  age: number;
+  kids: boolean;
+};
+export type WidowJoinSoowerResponse = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  christianity: boolean;
+  declaration: boolean;
+  duration: number;
+  timestamp: string;
+  registrar_name: string;
+  registrar_email: string;
+  registrar_phone: string;
+  age: number;
+  kids: boolean;
+};
+
+export type MissionaryJoinSoowerRequest = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  christianity: boolean;
+  declaration: boolean;
+  duration: number;
+  timestamp: string;
+  registrar_name: string;
+  registrar_email: string;
+  registrar_phone: string;
+  age: number;
+  kids: boolean;
+};
+
+export type MissionaryJoinSoowerResponse = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  christianity: boolean;
+  declaration: boolean;
+  duration: number;
+  timestamp: string;
+  registrar_name: string;
+  registrar_email: string;
+  registrar_phone: string;
+  age: number;
+  kids: boolean;
 };

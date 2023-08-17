@@ -34,7 +34,7 @@ const Navbar = () => {
           {
             label: "Settings",
             key: "settings",
-            path: "/donor/settings",
+            path: "donor/settings",
             icon: <Setting set="light" />,
           },
         ]}

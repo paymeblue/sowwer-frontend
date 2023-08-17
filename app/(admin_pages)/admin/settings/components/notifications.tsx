@@ -1,5 +1,6 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { useGetNotificationQuery } from "@store/services/notifications";
-import { Card, Space, Typography } from "antd";
+import { Card, Space, Spin, Typography } from "antd";
 import { Fragment, ReactNode } from "react";
 import ToggleSwitch from "./toggle-switch";
 
@@ -13,11 +14,23 @@ type Data = {
 };
 
 const Notifications = () => {
-  const { data: toggle } = useGetNotificationQuery();
+  const { data: toggle, isLoading } = useGetNotificationQuery();
   if (!toggle) {
     return null;
   }
 
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 64,
+        display: "flex",
+        alignItems: "center",
+        minHeight: "10rem",
+        color: "#FFC629",
+      }}
+      spin
+    />
+  );
   const {
     projectDonation,
     projectTarget,
@@ -77,27 +90,31 @@ const Notifications = () => {
   ];
   return (
     <Fragment>
-      <Card bordered={false}>
-        {data.map((item) => (
-          <Space
-            key={item.id}
-            className="mb-4 flex w-full items-center justify-between"
-          >
-            <Typography>
-              <Title
-                level={5}
-                className="m-0 text-[15px] font-bold leading-[18.9px]"
-              >
-                {item.title}
-              </Title>
-              <Text className="text-[14px] leading-[17.64px] text-body-2">
-                {item.subTitle}
-              </Text>
-            </Typography>
-            {item.switch}
-          </Space>
-        ))}
-      </Card>
+      {isLoading ? (
+        <Spin size="large" indicator={antIcon} />
+      ) : (
+        <Card bordered={false}>
+          {data.map((item) => (
+            <Space
+              key={item.id}
+              className="mb-4 flex w-full items-center justify-between"
+            >
+              <Typography>
+                <Title
+                  level={5}
+                  className="m-0 text-[15px] font-bold leading-[18.9px]"
+                >
+                  {item.title}
+                </Title>
+                <Text className="text-[14px] leading-[17.64px] text-body-2">
+                  {item.subTitle}
+                </Text>
+              </Typography>
+              {item.switch}
+            </Space>
+          ))}
+        </Card>
+      )}
     </Fragment>
   );
 };

@@ -161,7 +161,7 @@ export const cacheByIdArgProperty =
     [{ type, id: arg.id }] as const;
 
 //
-// HOF to invalidate the 'UNAUTHORIZED' type cache item.
+// HOF to invalidate the Tag type cache item.
 //
 export const providesProperty =
   <T extends string>(type: T) =>

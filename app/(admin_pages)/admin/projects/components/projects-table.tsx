@@ -2,12 +2,17 @@ import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
+  MoreOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import { CheckCircleIcon } from "@components/assets/icons";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
-import { useGetMinistryProjectsQuery } from "@store/services/ministries";
+import {
+  useDeleteMinistryProjectMutation,
+  useGetMinistryProjectDonorsQuery,
+  useGetMinistryProjectsQuery,
+} from "@store/services/projects";
 import { ProjectData } from "@store/types";
 import type { TableProps } from "antd";
 import {
@@ -15,12 +20,12 @@ import {
   Badge,
   Button,
   Dropdown,
+  Empty,
   Input,
   InputRef,
   List,
   MenuProps,
   Modal,
-  Pagination,
   Result,
   Space,
   Table,
@@ -165,6 +170,25 @@ const dataSource = [
     avatar: "SY",
   },
 ];
+type RecordState = {
+  amount_raised: number;
+  category: string;
+  goal: number;
+  key: string | undefined;
+  no_of_donors: number;
+  status: any;
+  title: string;
+};
+type IProps = {
+  id: string;
+  title: string;
+  targetAmount: string;
+  createdAt: string;
+  category: "widows" | "orphans" | "missions";
+  amountRaised: string;
+  status: string;
+  donors: number;
+};
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -176,19 +200,22 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [rowId, setRowId] = useState<string | undefined>();
+  const [rowTitle, setRowTitle] = useState<string>("");
   const searchInput = useRef<InputRef>(null);
   const [filteredInfo, setFilteredInfo] = useState<
     Record<string, FilterValue | null>
   >({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDonorModalOpen, setIsDonorModalOpen] = useState(false);
-
+  const { data: donors } = useGetMinistryProjectDonorsQuery(rowId);
   const { data, isLoading, isFetching } = useGetMinistryProjectsQuery({
     id,
     page: pagination.current,
   });
-  console.log(data, "hi");
 
+  const [deleteMinistryProject, { isLoading: deleteLoading }] =
+    useDeleteMinistryProjectMutation();
   const getColorForStatus = (status: ProjectData["status"]) => {
     return status === "drafted"
       ? "yellow"
@@ -199,7 +226,7 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
       : "gray";
   };
 
-  const newDataSource = data?.data.map((item) => ({
+  const newDataSource = data?.data.map((item: IProps) => ({
     key: item.id,
     title: capitalizeFirstLetters(item.title),
     goal: Number(item.targetAmount),
@@ -238,47 +265,62 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
   const handleDonorCancel = () => {
     setIsDonorModalOpen(false);
   };
+  const item1 = {
+    key: "1",
+    label: (
+      <Button
+        icon={<EditOutlined />}
+        type="text"
+        className="flex items-center justify-center text-[12px] hover:bg-transparent"
+      >
+        Edit
+      </Button>
+    ),
+  };
+  const item2 = {
+    key: "2",
+    label: (
+      <Button
+        type="text"
+        icon={<DeleteOutlined />}
+        className="flex items-center justify-center text-[12px] hover:bg-transparent"
+        onClick={showModal}
+      >
+        Delete
+      </Button>
+    ),
+  };
+  const item3 = {
+    key: "3",
+    label: (
+      <Button
+        type="text"
+        icon={<EyeOutlined />}
+        className="flex items-center justify-center text-[12px] hover:bg-transparent"
+        onClick={showDonorModal}
+      >
+        View Donors
+      </Button>
+    ),
+  };
+  const items: MenuProps["items"] = [];
+  const dropdownHandler = (record: RecordState) => {
+    const { text } = record.status.props;
+    if (
+      text.toLowerCase() === "drafted" ||
+      text.toLowerCase() === "in-progress"
+    ) {
+      items.length = 0; // Clear the array
+      items.push(item1, item2);
+    } else if (
+      text.toLowerCase() === "active" ||
+      text.toLowerCase() === "completed"
+    ) {
+      items.length = 0; // Clear the array
+      items.push(item3);
+    }
+  };
 
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: (
-        <Button
-          icon={<EditOutlined />}
-          type="text"
-          className="flex items-center justify-center text-[12px] hover:bg-transparent"
-        >
-          Edit
-        </Button>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <Button
-          type="text"
-          icon={<DeleteOutlined />}
-          className="flex items-center justify-center text-[12px] hover:bg-transparent"
-          onClick={showModal}
-        >
-          Delete
-        </Button>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <Button
-          type="text"
-          icon={<EyeOutlined />}
-          className="flex items-center justify-center text-[12px] hover:bg-transparent"
-          onClick={showDonorModal}
-        >
-          View Donors
-        </Button>
-      ),
-    },
-  ];
   const handleChange: TableProps<DataType>["onChange"] = (
     pagination,
     filters,
@@ -289,7 +331,8 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
     setFilteredInfo(filters);
   };
 
-  const paginationHandler = () => {
+  const paginationHandler = (page: number, pageSize: number) => {
+    console.log("Pagination", page, pageSize);
     return setPagination((prev) => ({
       ...prev,
       current: data?.paginationInfo?.currentPage,
@@ -297,7 +340,6 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
       pageSize: data?.paginationInfo?.limit,
     }));
   };
-
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
@@ -351,7 +393,6 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
           </Button>
           <Button
             type="link"
-            // size="small"
             onClick={() => {
               confirm({ closeDropdown: false });
               setSearchText((selectedKeys as string[])[0]);
@@ -362,7 +403,6 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
           </Button>
           <Button
             type="link"
-            // size="small"
             onClick={() => {
               close();
             }}
@@ -459,7 +499,6 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
       width: "13%",
       render: (value) => <Text className="text-[13px]">{value}</Text>,
       filteredValue: filteredInfo.no_of_donors || null,
-
       sorter: (a, b) => a.no_of_donors - b.no_of_donors,
     },
     {
@@ -493,28 +532,51 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
       title: "",
       key: "action",
       width: "5%",
-      render: (_, record) => (
-        <Dropdown
-          menu={{ items }}
-          trigger={["click"]}
-          placement="bottomLeft"
-          arrow
-        >
-          <Button size="small" type="text" className="flex items-end font-bold">
-            <div>...</div>
-          </Button>
-        </Dropdown>
-      ),
+      render: (_, record: RecordState, i) => {
+        return (
+          <Dropdown
+            menu={{
+              items,
+              onClick: () => {
+                if (record?.key) {
+                  setRowId(record.key);
+                  setRowTitle(record.title);
+                }
+              },
+            }}
+            trigger={["click"]}
+            placement="bottomLeft"
+            arrow
+            onOpenChange={() => dropdownHandler(record)}
+          >
+            <Button
+              size="small"
+              type="text"
+              className="flex items-center justify-center"
+            >
+              <MoreOutlined rotate={90} />
+            </Button>
+          </Dropdown>
+        );
+      },
     },
   ];
 
-  const handleDeleteBtn = () => {
+  const handleDeleteBtn = async () => {
+    try {
+      const res = await deleteMinistryProject(rowId).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: `[&>div]:bg-red-800 [&>div]:text-white`,
+      });
+    }
     handleDeleteCancel();
-    messageApi.open({
-      content: "New project “The Widows Project” added",
-      className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-      icon: <CheckCircleIcon />,
-    });
   };
 
   return (
@@ -535,8 +597,8 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
           }
           subTitle={
             <Paragraph className="text-[13px] leading-[20px] text-body-1">
-              Are you sure you want to delete “The Widows Project”? Please note
-              that this action cannot be undone.
+              Are you sure you want to delete “{rowTitle}”? Please note that
+              this action cannot be undone.
             </Paragraph>
           }
           icon={
@@ -552,6 +614,7 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
               type="primary"
               key="console"
               onClick={handleDeleteBtn}
+              loading={deleteLoading}
               className={
                 "mt-0 bg-[#EB5757] text-[13px] leading-[16px] text-white"
               }
@@ -568,36 +631,48 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
         onCancel={handleDonorCancel}
         footer={null}
       >
-        <Title level={4} className="my-3 font-title">
-          The Widows Project Donors
-        </Title>
-        <List
-          itemLayout="horizontal"
-          dataSource={dataSource}
-          renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                avatar={
-                  <Avatar
-                    size={56}
-                    className="bg-[#fff8e2] align-middle font-semibold text-body-1"
-                  >
-                    {item.avatar}
-                  </Avatar>
-                }
-                title={
-                  <Paragraph className="mb-0 font-medium">
-                    {item.user} made a <strong>{item.amount}</strong>
-                    &nbsp;donation
-                  </Paragraph>
-                }
-                description={
-                  <Text className="text-xs text-body-2">{item.time}</Text>
-                }
-              />
-            </List.Item>
-          )}
-        />
+        {donors?.data?.length === 0 ? (
+          <Empty
+            description={
+              <Paragraph className="text-sm text-body-2">
+                No donation for {rowTitle} yet!
+              </Paragraph>
+            }
+          />
+        ) : (
+          <Fragment>
+            <Title level={4} className="my-3 font-title">
+              {rowTitle} Project Donors
+            </Title>
+            <List
+              itemLayout="horizontal"
+              dataSource={dataSource}
+              renderItem={(item) => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <Avatar
+                        size={56}
+                        className="bg-[#fff8e2] align-middle font-semibold text-body-1"
+                      >
+                        {item.avatar}
+                      </Avatar>
+                    }
+                    title={
+                      <Paragraph className="mb-0 font-medium">
+                        {item.user} made a <strong>{item.amount}</strong>
+                        &nbsp;donation
+                      </Paragraph>
+                    }
+                    description={
+                      <Text className="text-xs text-body-2">{item.time}</Text>
+                    }
+                  />
+                </List.Item>
+              )}
+            />
+          </Fragment>
+        )}
       </Modal>
       <Table
         columns={columns}
@@ -605,18 +680,15 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
         onChange={handleChange}
         scroll={{ x: 896 }}
         loading={isLoading || isFetching}
-        pagination={false}
+        pagination={{
+          defaultCurrent: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          onChange: (page: number, pageSize: number) =>
+            paginationHandler(page, pageSize),
+        }}
         sticky
       />
-      <Space className="my-4 flex w-full justify-end">
-        <Pagination
-          simple
-          defaultCurrent={pagination.current}
-          pageSize={pagination.pageSize}
-          total={pagination.total || 2}
-          onChange={paginationHandler}
-        />
-      </Space>
     </Fragment>
   );
 };

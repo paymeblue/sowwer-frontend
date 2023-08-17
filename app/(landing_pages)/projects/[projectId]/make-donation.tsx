@@ -2,8 +2,9 @@
 import { LinkOutlined } from "@ant-design/icons";
 import { HeartOrganIcon } from "@components/assets/icons";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
-import { cardData } from "@lib/data";
+import currencyFormat from "@lib/useCurrencyFormat";
 import Container from "@shared/Container";
+import { useGetProjectDetailsQuery } from "@store/services/projects";
 import {
   Avatar,
   Button,
@@ -19,13 +20,12 @@ import {
 } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import happyWoman from "public/assets/images/happy_woman.svg";
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment } from "react";
 import { Heart2 } from "react-iconly";
 
 const { Title, Text, Paragraph } = Typography;
-const data = [
+const DonorList = [
   {
     user: "Anonymous",
     amount: " ₦20,000",
@@ -47,19 +47,11 @@ const data = [
 ];
 
 const MakeDonation = ({ projectId }: { projectId: string }) => {
-  const pathname = usePathname();
-  const pathRef = useRef<string | null>(null);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      pathRef.current = window.location.origin;
-    }
-  }, [pathRef]);
+  const { data: projectDetails } = useGetProjectDetailsQuery(projectId);
+  const data = projectDetails?.data;
+  const priceFormat = currencyFormat();
 
-  const fullPath = `${pathRef.current}${pathname}`;
-
-  const { copied, copyToClipboard } = useCopyToClipboard(fullPath);
-
-  const index = Number(projectId) - 1;
+  const { copied, copyToClipboard } = useCopyToClipboard(data?.link);
 
   return (
     <Fragment>
@@ -71,7 +63,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
         >
           <Col>
             <Image
-              src={happyWoman}
+              src={data?.image ?? happyWoman}
               alt="widow"
               className="hidden w-full rounded-md tablet:block"
               priority
@@ -83,14 +75,14 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
               color="purple"
               className="rounded-full px-3 py-1 text-[10.87px] text-xs uppercase leading-[13.7px] laptop:text-[11.87px] laptop:leading-[14.96px]"
             >
-              widow
+              {data?.category}
             </Tag>
             <Typography>
               <Title
                 level={2}
                 className="my-3 font-title text-[30px] leading-[34px] laptop:text-[50px] laptop:leading-[57px]"
               >
-                The Widows&nbsp; Project
+                {data?.title}
               </Title>
               <Text className="block text-[13px] leading-[23px] tablet:hidden">
                 Lorem ipsum dolor sit amet consectetur. Faucibus risus risus
@@ -102,23 +94,19 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 <Paragraph className="hidden text-[12.89px] leading-[20px] text-body-2 mobile-lg:text-sm tablet:block laptop:text-[15px] laptop:leading-[18.9px]">
                   Organized by
                   <Link
-                    href={`/ministries/${cardData[index]?.subTitle
-                      .toLowerCase()
-                      .replaceAll(" ", "-")}`}
-                    className="text-[12.89px] leading-[20px] text-accent laptop:text-[15px] laptop:leading-[18.9px]"
+                    href={`/ministries/${data?.organisedById}`}
+                    className="text-[12.89px] uppercase leading-[20px] text-accent laptop:text-[15px] laptop:leading-[18.9px]"
                   >
-                    &nbsp;FAMILY WORSHIP CENTER
+                    &nbsp;{data?.organisedBy}
                   </Link>
                 </Paragraph>
                 <Paragraph className="mt-6 text-[12.89px] leading-[20px] text-body-2 mobile-lg:text-sm tablet:hidden laptop:text-[15px] laptop:leading-[18.9px]">
                   Organized by <br />
                   <Link
-                    href={`/ministries/${cardData[index]?.subTitle
-                      .toLowerCase()
-                      .replaceAll(" ", "-")}`}
-                    className="text-[12.89px] leading-[20px] text-accent laptop:text-[15px] laptop:leading-[18.9px]"
+                    href={`/ministries/${data?.organisedById}`}
+                    className="text-[12.89px] uppercase leading-[20px] text-accent laptop:text-[15px] laptop:leading-[18.9px]"
                   >
-                    &nbsp;FAMILY WORSHIP CENTER
+                    &nbsp;{data?.organisedBy}
                   </Link>
                 </Paragraph>
               </Space>
@@ -128,7 +116,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 <Typography>
                   <Text className="font-body text-body-2">
                     <strong className="font-sub-title text-[14px] font-bold leading-[17.85px] text-black laptop:text-[18px] laptop:leading-[22px]">
-                      ₦135,000
+                      {priceFormat(Number(data?.amountRaised))}
                     </strong>
                     &nbsp;
                     <small className="text-[11.52px] leading-[14.51px] text-body-2 laptop:text-[14px] laptop:leading-[18px]">
@@ -137,7 +125,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                   </Text>
                 </Typography>
                 <Text className="font-sub-title text-[14.4px] leading-[17.85px] text-body-1 laptop:text-[18px] laptop:leading-[22px]">
-                  ₦500,000
+                  {priceFormat(Number(data?.targetAmount))}
                 </Text>
               </Space>
               <Progress
@@ -148,7 +136,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 className="mb-0"
               />
               <Text className="text-[11.78px] leading-[14.84px] text-body-1 laptop:text-[14px] laptop:leading-[18px]">
-                <strong>75 &nbsp;</strong>
+                <strong>{data?.donors} &nbsp;</strong>
                 DONORS
               </Text>
             </div>
@@ -197,7 +185,8 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 Story
               </Title>
               <Paragraph className="text-[13px] leading-[23px] text-body-1 laptop:text-[14px] laptop:leading-[26px]">
-                Lorem ipsum dolor sit amet consectetur. Sed sit consequat quis
+                {data?.description ??
+                  `Lorem ipsum dolor sit amet consectetur. Sed sit consequat quis
                 habitant massa. Commodo turpis tempor ipsum libero ut semper
                 dapibus dolor. Viverra cras consequat tincidunt nibh ut vitae
                 maecenas quis. Blandit molestie est semper nunc id curabitur a
@@ -207,25 +196,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 suspendisse nunc arcu. Mattis vitae massa tincidunt feugiat nisi
                 ante nulla blandit. Sed nulla neque turpis tellus lorem vitae
                 venenatis. Nunc nisi nibh massa elementum. In risus semper
-                dapibus tristique massa eu tempor.
-              </Paragraph>
-              <Paragraph className="my-4 text-[13px] leading-[23px] text-body-1 laptop:text-[14px] laptop:leading-[26px]">
-                Volutpat tincidunt amet pellentesque varius. Nam aliquam duis
-                urna id. Accumsan quis sapien habitant dui egestas facilisis
-                purus. Quis quis egestas aliquet sollicitudin. Tellus cras urna
-                habitant imperdiet id ut arcu commodo elementum. Cras ultricies
-                ultrices eget dignissim pellentesque tortor. Faucibus velit
-                luctus odio nibh nulla. Bibendum sagittis massa praesent tortor
-                lobortis porttitor tellus. Volutpat integer ipsum dolor mattis
-                viverra dui tempus. Tortor habitasse facilisis sapien ornare a
-                semper orci. Non mauris eget lacus mauris eu nunc in vestibulum.
-                Nunc egestas tristique volutpat viverra nibh..
-              </Paragraph>
-              <Paragraph className="text-[13px] leading-[23px] text-body-1 laptop:text-[14px] laptop:leading-[26px]">
-                Mattis vitae massa tincidunt feugiat nisi ante nulla blandit.
-                Sed nulla neque turpis tellus lorem vitae venenatis. Nunc nisi
-                nibh massa elementum. In risus semper dapibus tristique massa eu
-                tempor.
+                dapibus tristique massa eu tempor.`}
               </Paragraph>
             </Typography>
           </Col>
@@ -239,7 +210,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
               </Title>
               <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={DonorList}
                 renderItem={(item) => (
                   <List.Item>
                     <List.Item.Meta

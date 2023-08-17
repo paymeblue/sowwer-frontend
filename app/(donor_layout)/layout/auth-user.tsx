@@ -62,7 +62,6 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
       avatar,
     },
   ];
-
   const handleItemClick = useCallback(
     (itemPath: string) => {
       router.push(`/${itemPath}`);

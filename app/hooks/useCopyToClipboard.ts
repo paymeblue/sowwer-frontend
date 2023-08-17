@@ -5,24 +5,26 @@ type UseCopyToClipboardHook = {
   copyToClipboard: () => void;
 };
 
-const useCopyToClipboard = (text: string): UseCopyToClipboardHook => {
+const useCopyToClipboard = (text?: string): UseCopyToClipboardHook => {
   const [copied, setCopied] = useState<boolean>(false);
 
   const copyToClipboard = () => {
-    const handleCopySuccess = () => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 3000);
-    };
+    if (text) {
+      const handleCopySuccess = () => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+      };
 
-    const handleCopyError = () => {
-      console.log("Error copying to clipboard");
-    };
+      const handleCopyError = (error: Error) => {
+        console.error("Error copying to clipboard:", error);
+      };
 
-    const type = "text/plain";
-    const blob = new Blob([text], { type });
-    const data = [new ClipboardItem({ [type]: blob })];
+      const type = "text/plain";
+      const blob = new Blob([text], { type });
+      const data = [new ClipboardItem({ [type]: blob })];
 
-    navigator.clipboard.write(data).then(handleCopySuccess, handleCopyError);
+      navigator.clipboard.write(data).then(handleCopySuccess, handleCopyError);
+    }
   };
 
   return {

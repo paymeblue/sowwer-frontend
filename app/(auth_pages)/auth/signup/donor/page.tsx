@@ -5,7 +5,13 @@ export const metadata: Metadata = {
   title: "Donor - Signup | Soower",
 };
 const DonorSignup = () => (
-  <AuthForm title="donor" link="auth/signin/donor" page="donor" donorSignin />
+  <AuthForm
+    title="donor"
+    link="auth/signin/donor"
+    type="signup"
+    page="donor"
+    donorSignin
+  />
 );
 
 export default DonorSignup;

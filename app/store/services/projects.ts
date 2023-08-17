@@ -2,7 +2,14 @@ import {
   CreateProjectRequest,
   CreateProjectResponse,
   ErrorResponse,
-  PublishOrDraft,
+  ExploreProjectsRequest,
+  ExploreProjectsResponse,
+  GetProjectDetailsResponse,
+  MinistryProjectDonorsResponse,
+  MinistryProjectsRequest,
+  MinistryProjectsResponse,
+  PublishOrDraftRequest,
+  PublishOrDraftResponse,
   ResultResponse,
 } from "@store/types";
 import api from "./api/apiSlice";
@@ -26,7 +33,7 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getProject: build.query<ResultResponse, string | null>({
+    getProject: build.query<ResultResponse, string | undefined>({
       query: (id) => `projects/${id}`,
       // Cache tags for individual project retrieval
       providesTags: cacher.cacheByIdArg("Projects") as any,
@@ -38,22 +45,116 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    publishOrDraftProject: build.mutation<any, PublishOrDraft>({
+    exploreProjects: build.query<
+      ExploreProjectsResponse,
+      ExploreProjectsRequest
+    >({
+      query: (body) =>
+        `projects?page=${body.page}&limit=3&q=${body.query}&status=active`,
+      providesTags: cacher.providesProperty("Projects"),
+      transformResponse: (
+        response: ExploreProjectsResponse,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getProjectDetails: build.query<GetProjectDetailsResponse, string>({
+      query: (id) => `projects/${id}/details`,
+      providesTags: cacher.cacheByIdArg("Projects"),
+      transformResponse: (reponse: GetProjectDetailsResponse, meta, arg) => {
+        return reponse;
+      },
+      transformErrorResponse: (reponse: ErrorResponse, meta, arg) => {
+        return reponse.data.message;
+      },
+    }),
+    publishOrDraftProject: build.mutation<
+      PublishOrDraftResponse,
+      PublishOrDraftRequest
+    >({
       query: ({ id, query }) => `projects/${id}/toggle?q=${query}`,
       // Invalidate cache tags for specific project on publish/draft action
       invalidatesTags: cacher.cacheByIdArgProperty("Projects") as any,
       // Pick out data and prevent nested properties in a hook or selector
-      transformResponse: (response, meta, arg) => {
+      transformResponse: (response: PublishOrDraftResponse, meta, arg) => {
         return response;
       },
       // Pick out errors and prevent nested properties in a hook or selector
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    getMinistryProjects: build.query<
+      MinistryProjectsResponse,
+      MinistryProjectsRequest
+    >({
+      query: (body) =>
+        `ministries/${body.id}/projects?page=${body.page}&limit=10`,
+      // Invalidate cache tags specific to ministry projects
+      providesTags: cacher.providesNestedList("Projects") as any,
+      transformResponse: (response, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getMinistryProjectDonors: build.query<
+      MinistryProjectDonorsResponse,
+      string | undefined
+    >({
+      query: (id) => `projects/${id}/donors?page=1&limit=10`,
+      // Invalidate cache tags specific to ministry projects
+      providesTags: cacher.cacheByIdArg("Projects") as any,
+      // Transform response and error
+      transformResponse: (
+        response: MinistryProjectDonorsResponse,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getDonationsForDonorUser: build.query<
+      MinistryProjectDonorsResponse,
+      { page: number; type: "project" | "ministry" }
+    >({
+      query: ({ page, type }) =>
+        `donors/donations?limit=6&page=${page}&type=${type}`,
+      providesTags: cacher.cacheByIdArg("Projects") as any,
+      transformResponse: (
+        response: MinistryProjectDonorsResponse,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    deleteMinistryProject: build.mutation<any, string | undefined>({
+      query: (id) => `projects/${id}/delete`,
+      // Invalidates the tag for this Project `id`, as well as the `LIST` tag,
+      // causing the `Projects list` query to re-fetch if a component is subscribed to the query.
+      invalidatesTags: cacher.providesProperty("Projects"),
+      // invalidatesTags: (result, error, id) => [
+      //   { type: "Projects", id },
+      //   { type: "Projects", id: "PARTIAL-LIST" },
+      // ],
+      transformResponse: (response: any, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
 
     refetchErroredQueries: build.mutation<null, void>({
       queryFn: () => ({ data: null }),
-      invalidatesTags: ["UNKNOWN_ERROR"],
+      invalidatesTags: cacher.invalidatesUnknownErrors(),
     }),
   }),
   overrideExisting: true,
@@ -62,5 +163,11 @@ const projects = api.injectEndpoints({
 export const {
   useCreateProjectMutation,
   useGetProjectQuery,
+  useGetProjectDetailsQuery,
+  useGetDonationsForDonorUserQuery,
+  useExploreProjectsQuery,
   usePublishOrDraftProjectMutation,
+  useGetMinistryProjectsQuery,
+  useGetMinistryProjectDonorsQuery,
+  useDeleteMinistryProjectMutation,
 } = projects;

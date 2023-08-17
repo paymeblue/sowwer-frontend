@@ -3,16 +3,27 @@ import { CheckCircleIcon } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
 import capitalizeFirstLetters from "@lib/capitalize";
 import { setCredentials } from "@store/reducers/authSlice";
-import { useLoginMutation } from "@store/services/auth";
+import {
+  useDonorRegisterMutation,
+  useLoginMutation,
+} from "@store/services/auth";
 import { LoginRequest } from "@store/types";
 import { Button, Card, Form, Input, Space, Typography, message } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, memo } from "react";
 
-type State = {
+type LoginState = {
   email: string;
   password: string;
+};
+type RegisterState = {
+  phone: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  cPassword: string;
 };
 
 type Props = {
@@ -20,9 +31,10 @@ type Props = {
   link: string;
   page: string;
   donorSignin?: boolean;
+  type: "login" | "signup";
 };
 
-const AuthForm = ({ title, link, page, donorSignin }: Props) => {
+const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
   const { Item, useForm } = Form;
   const { Password } = Input;
   const { Title, Paragraph } = Typography;
@@ -30,9 +42,10 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
   const router = useRouter();
   const [messageApi, contextHolder] = message.useMessage();
   const [login, { isLoading }] = useLoginMutation();
+  const [donorRegister, { isLoading: registerLoading }] =
+    useDonorRegisterMutation();
   const dispatch = useAppDispatch();
-
-  const onFinish = async (values: State): Promise<void> => {
+  const LoginSubmit = async (values: LoginState): Promise<void> => {
     const credentials: LoginRequest = {
       identifier: values.email,
       password: values.password,
@@ -59,7 +72,32 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
       });
     }
   };
-
+  const SignupSubmit = async (values: RegisterState): Promise<void> => {
+    const credentials = {
+      phone: values.phone,
+      email: values.email,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      password: values.password,
+      confirm_password: values.cPassword,
+    };
+    try {
+      const res = await donorRegister(credentials).unwrap();
+      form.resetFields();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+      router.push(`/${page}`);
+    } catch (error: any) {
+      messageApi.open({
+        content: `${error.message}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
+  };
+  const onFinish = type === "login" ? LoginSubmit : SignupSubmit;
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
     messageApi.open({
@@ -90,7 +128,7 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
 
         <Form
           form={form}
-          name={`${title.toLowerCase()}_login_form`}
+          name={`${title.toLowerCase()}_${type}_form`}
           layout="vertical"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -100,7 +138,7 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
             <Fragment>
               <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">
                 <Item
-                  name="firstname"
+                  name="firstName"
                   label="Firstname"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
@@ -119,7 +157,7 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
                   />
                 </Item>
                 <Item
-                  name="lastname"
+                  name="lastName"
                   label="Lastname"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
@@ -138,28 +176,57 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
                   />
                 </Item>
               </Space>
-              <Item
-                name="email"
-                label="Email Address"
-                className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
-                rules={[
-                  {
-                    type: "email",
-                    message: "Email is not valid!",
-                  },
-                  {
-                    required: true,
-                    message: "Please enter your email!",
-                  },
-                ]}
-                hasFeedback
-              >
-                <Input
-                  placeholder="john@gmail.com"
-                  type="email"
-                  className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
-                />
-              </Item>
+              <Space className="flex w-full flex-col items-start tablet:flex-row [&>div.ant-space-item]:w-full">
+                <Item
+                  name="email"
+                  label="Email Address"
+                  className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+                  rules={[
+                    {
+                      type: "email",
+                      message: "Email is not valid!",
+                    },
+                    {
+                      required: true,
+                      message: "Please enter your email!",
+                    },
+                  ]}
+                  hasFeedback
+                >
+                  <Input
+                    placeholder="john@gmail.com"
+                    type="email"
+                    className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
+                  />
+                </Item>
+                <Item
+                  name="phone"
+                  label="Phone Number"
+                  className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your phone number!",
+                    },
+                    {
+                      min: 11,
+                      message: "A minimum of 11 digits",
+                    },
+                    {
+                      max: 14,
+                      message: "Phone number should not exceed 14 digits",
+                    },
+                  ]}
+                  hasFeedback
+                >
+                  <Input
+                    type="tel"
+                    placeholder="+234 123 456 7890"
+                    pattern="^\+\d{13}|\d{11}$"
+                    className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
+                  />
+                </Item>
+              </Space>
               <Space className="flex w-full flex-col items-start tablet:flex-row [&>div.ant-space-item]:w-full">
                 <Item
                   name="password"
@@ -189,7 +256,7 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
                   />
                 </Item>
                 <Item
-                  name="c_password"
+                  name="cPassword"
                   label="Confirm Password"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
@@ -289,7 +356,7 @@ const AuthForm = ({ title, link, page, donorSignin }: Props) => {
               loading={isLoading}
             >
               {donorSignin
-                ? isLoading
+                ? registerLoading
                   ? "Submitting"
                   : "Signup"
                 : isLoading

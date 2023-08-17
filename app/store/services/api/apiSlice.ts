@@ -16,6 +16,7 @@ const api = createApi({
       return headers;
     },
   }),
+  refetchOnReconnect: true,
   tagTypes: [
     ...cacher.defaultTags,
     "Projects",

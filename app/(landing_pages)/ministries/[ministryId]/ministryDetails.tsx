@@ -1,15 +1,17 @@
 "use client";
 import { HeartOrganIcon } from "@components/assets/icons";
-import { cardData } from "@lib/data";
+import capitalizeFirstLetters from "@lib/capitalize";
 import Container from "@shared/Container";
-import ExploreCards from "@shared/ExploreCards";
 import TabList from "@shared/TabList";
+import { useGetMinistryDetailsQuery } from "@store/services/ministries";
 import { Space, Typography } from "antd";
+import MinistryProjects from "./components/ministry-projects";
 import Profile from "./components/profile";
 
 const MinistryDetailsPage = ({ ministryId }: { ministryId: string }) => {
   const { Title } = Typography;
-
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(ministryId);
+  const data = ministryDetails?.data;
   const items = [
     {
       label: "Ministry Profile",
@@ -19,7 +21,7 @@ const MinistryDetailsPage = ({ ministryId }: { ministryId: string }) => {
     {
       label: "Projects",
       key: "2",
-      children: <ExploreCards cardData={cardData.slice(0, 3)} />,
+      children: <MinistryProjects id={ministryId} createdBy={data?.name} />,
     },
   ];
   return (
@@ -30,7 +32,7 @@ const MinistryDetailsPage = ({ ministryId }: { ministryId: string }) => {
           level={2}
           className="mb-0 font-title text-[30px] leading-[34px] laptop:text-[35px] laptop:leading-[40px]"
         >
-          Family Worship Center
+          {capitalizeFirstLetters(data?.name)}
         </Title>
       </Space>
       <TabList items={items} className="items-center tablet:items-start" />

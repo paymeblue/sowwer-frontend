@@ -40,7 +40,7 @@ const notifications = api.injectEndpoints({
     }),
     refetchErroredQueries: build.mutation<null, void>({
       queryFn: () => ({ data: null }),
-      invalidatesTags: ["UNKNOWN_ERROR"],
+      invalidatesTags: cacher.invalidatesUnknownErrors(),
     }),
   }),
   overrideExisting: true,
