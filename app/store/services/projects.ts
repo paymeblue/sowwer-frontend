@@ -49,8 +49,18 @@ const projects = api.injectEndpoints({
       ExploreProjectsResponse,
       ExploreProjectsRequest
     >({
-      query: (body) =>
-        `projects?page=${body.page}&limit=3&q=${body.query}&status=active`,
+      query: (body) => {
+        let url;
+        if (body.query === "all") {
+          url = `projects?page=${body.page}&limit=6&status=active`;
+        } else {
+          url = `projects?page=${body.page}&limit=6&q=${body.query}&status=active`;
+        }
+        return {
+          url,
+          method: "GET",
+        };
+      },
       providesTags: cacher.providesProperty("Projects"),
       transformResponse: (
         response: ExploreProjectsResponse,

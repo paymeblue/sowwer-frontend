@@ -4,19 +4,20 @@ import capitalizeFirstLetters, {
 } from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import { ExploreCardData } from "@store/types";
-import {
-  Button,
-  Card,
-  Col,
-  Empty,
-  Pagination,
-  Progress,
-  Row,
-  Space,
-  Spin,
-  Tag,
-  Typography,
-} from "antd";
+import
+  {
+    Button,
+    Card,
+    Col,
+    Empty,
+    Pagination,
+    Progress,
+    Row,
+    Space,
+    Spin,
+    Tag,
+    Typography,
+  } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
