@@ -8,6 +8,7 @@ import {
 import { CheckCircleIcon } from "@components/assets/icons";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
+import { generateAvatar } from "@lib/user-details";
 import {
   useDeleteMinistryProjectMutation,
   useGetMinistryProjectDonorsQuery,
@@ -38,6 +39,7 @@ import type {
   FilterValue,
   TablePaginationConfig,
 } from "antd/es/table/interface";
+import moment from "moment";
 import { Fragment, ReactNode, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { InfoCircle } from "react-iconly";
@@ -56,120 +58,26 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-// const data: DataType[] = [
+// const donorDataSource = [
 //   {
-//     key: "1",
-//     title: "The Widows Project",
-//     goal: 500000,
-//     category: "Widows",
-//     no_of_donors: 53,
-//     amount_raised: 135000,
-//     status: (
-//       <Badge
-//         color="blue"
-//         className="[&>.ant-badge-status-text]:text-[12px]"
-//         text="Active"
-//       />
-//     ),
+//     user: "Anonymous",
+//     amount: " ₦20,000",
+//     time: "2 hours ago",
+//     avatar: "A",
 //   },
 //   {
-//     key: "2",
-//     title: "The Missions Project",
-//     goal: 750000,
-//     category: "Missions",
-//     no_of_donors: 45,
-//     amount_raised: 550000,
-//     status: (
-//       <Badge
-//         color="blue"
-//         className="[&>.ant-badge-status-text]:text-[12px]"
-//         text="Active"
-//       />
-//     ),
+//     user: "Semira Yesufu",
+//     amount: "₦35,000",
+//     time: "2 hours ago",
+//     avatar: "SY",
 //   },
 //   {
-//     key: "3",
-//     title: "The Widows Project",
-//     goal: 200000,
-//     category: "Widows",
-//     no_of_donors: 32,
-//     amount_raised: 157000,
-//     status: (
-//       <Badge
-//         color="yellow"
-//         className="[&>.ant-badge-status-text]:text-[12px]"
-//         text="Drafted"
-//       />
-//     ),
-//   },
-//   {
-//     key: "4",
-//     title: "The Orphans Project",
-//     goal: 500000,
-//     category: "Orphans",
-//     no_of_donors: 35,
-//     amount_raised: 500000,
-//     status: (
-//       <Badge
-//         color="green"
-//         className="[&>.ant-badge-status-text]:text-[12px]"
-//         text="Completed"
-//       />
-//     ),
-//   },
-//   {
-//     key: "5",
-//     title: "The Missions Project",
-//     goal: 800000,
-//     category: "Missions",
-//     no_of_donors: 40,
-//     amount_raised: 600000,
-//     status: (
-//       <Badge
-//         color="yellow"
-//         className="[&>.ant-badge-status-text]:text-[12px]"
-//         text="Drafted"
-//       />
-//     ),
-//   },
-//   {
-//     key: "6",
-//     title: "The Orphans Project",
-//     goal: 300000,
-//     category: "Orphans",
-//     no_of_donors: 20,
-//     amount_raised: 300000,
-//     status: (
-//       <Badge
-//         key="20"
-//         color="green"
-//         className="[&>.ant-badge-status-text]:text-[12px]"
-//         text="Completed"
-//       />
-//     ),
+//     user: "Semira Yesufu",
+//     amount: "₦35,000",
+//     time: "2 hours ago",
+//     avatar: "SY",
 //   },
 // ];
-
-const dataSource = [
-  {
-    user: "Anonymous",
-    amount: " ₦20,000",
-    time: "2 hours ago",
-    avatar: "A",
-  },
-  {
-    user: "Semira Yesufu",
-    amount: "₦35,000",
-    time: "2 hours ago",
-    avatar: "SY",
-  },
-  {
-    user: "Semira Yesufu",
-    amount: "₦35,000",
-    time: "2 hours ago",
-    avatar: "SY",
-  },
-];
 type RecordState = {
   amount_raised: number;
   category: string;
@@ -226,21 +134,23 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
       : "gray";
   };
 
-  const newDataSource = data?.data.map((item: IProps) => ({
-    key: item.id,
-    title: capitalizeFirstLetters(item.title),
-    goal: Number(item.targetAmount),
-    category: capitalizeFirstLetters(item.category),
-    no_of_donors: item.donors,
-    amount_raised: +item.amountRaised,
-    status: (
-      <Badge
-        color={getColorForStatus(item.status)}
-        className="[&>.ant-badge-status-text]:text-[12px]"
-        text={capitalizeFirstLetters(item.status)}
-      />
-    ),
-  }));
+  const projectDataSource: DataType[] | undefined = data?.data.map(
+    (item: IProps) => ({
+      key: item.id,
+      title: capitalizeFirstLetters(item.title),
+      goal: Number(item.targetAmount),
+      category: capitalizeFirstLetters(item.category),
+      no_of_donors: item.donors,
+      amount_raised: +item.amountRaised,
+      status: (
+        <Badge
+          color={getColorForStatus(item.status)}
+          className="[&>.ant-badge-status-text]:text-[12px]"
+          text={capitalizeFirstLetters(item.status)}
+        />
+      ),
+    })
+  );
 
   const showModal = () => {
     setIsDeleteModalOpen(true);
@@ -646,7 +556,7 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
             </Title>
             <List
               itemLayout="horizontal"
-              dataSource={dataSource}
+              dataSource={donors?.data}
               renderItem={(item) => (
                 <List.Item>
                   <List.Item.Meta
@@ -655,17 +565,24 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
                         size={56}
                         className="bg-[#fff8e2] align-middle font-semibold text-body-1"
                       >
-                        {item.avatar}
+                        {generateAvatar(item.name)}
                       </Avatar>
                     }
                     title={
                       <Paragraph className="mb-0 font-medium">
-                        {item.user} made a <strong>{item.amount}</strong>
+                        {capitalizeFirstLetters(item.name)} made a
+                        <strong>
+                          &nbsp;{priceFormat(Number(item.amount))}
+                        </strong>
                         &nbsp;donation
                       </Paragraph>
                     }
                     description={
-                      <Text className="text-xs text-body-2">{item.time}</Text>
+                      <Text className="text-xs text-body-2">
+                        {moment(item.createdAt).format(
+                          "Do MMMM YYYY; h:mm:ss a"
+                        )}
+                      </Text>
                     }
                   />
                 </List.Item>
@@ -676,7 +593,7 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
       </Modal>
       <Table
         columns={columns}
-        dataSource={newDataSource}
+        dataSource={projectDataSource}
         onChange={handleChange}
         scroll={{ x: 896 }}
         loading={isLoading || isFetching}

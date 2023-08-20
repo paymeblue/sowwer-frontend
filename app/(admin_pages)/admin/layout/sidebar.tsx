@@ -80,7 +80,7 @@ const items: MenuProps["items"] = [
 const AdminSidebar = ({ children }: Props) => {
   const { Header, Content, Sider } = Layout;
   const pathname = usePathname();
-  const user: User | null = useAuth();
+  const { user }: { user: User | null } = useAuth();
 
   const [current, setCurrent] = useState(
     pathname === "/admin" ? "/admin" : pathname

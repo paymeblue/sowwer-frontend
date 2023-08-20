@@ -4,20 +4,19 @@ import capitalizeFirstLetters, {
 } from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import { ExploreCardData } from "@store/types";
-import
-  {
-    Button,
-    Card,
-    Col,
-    Empty,
-    Pagination,
-    Progress,
-    Row,
-    Space,
-    Spin,
-    Tag,
-    Typography,
-  } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Empty,
+  Pagination,
+  Progress,
+  Row,
+  Space,
+  Spin,
+  Tag,
+  Typography,
+} from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
@@ -34,6 +33,7 @@ type IProps = {
   amountRaised: string;
   targetAmount: string;
   organisedBy?: string;
+  donationPercent?: string;
 };
 
 const ReuseableCards = ({
@@ -63,11 +63,12 @@ const ReuseableCards = ({
 
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 3,
-    total: 0,
+    pageSize: 6,
+    total: 6,
   });
   const { data, isLoading, isFetching, isError, error, refetch } = rtkHook({
     page: pagination.current,
+    pageSize: pagination.pageSize,
     ...prop,
   });
   const priceFormat = currencyFormat();
@@ -133,6 +134,7 @@ const ReuseableCards = ({
               amountRaised,
               targetAmount,
               organisedBy,
+              donationPercent,
             }: IProps) => (
               <Col className="gutter-row" key={id}>
                 <Card
@@ -193,10 +195,14 @@ const ReuseableCards = ({
                           </Text>
                         </Space>
                         <Progress
-                          percent={50}
+                          percent={Number(donationPercent) ?? 50}
                           showInfo={false}
                           strokeColor="#3466ff"
-                          status="active"
+                          status={
+                            Number(amountRaised) === Number(targetAmount)
+                              ? "normal"
+                              : "active"
+                          }
                         />
                       </div>
                       <Button

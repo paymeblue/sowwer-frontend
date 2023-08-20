@@ -1,8 +1,7 @@
 import { usePathname, useSearchParams } from "next/navigation";
-import React from "react";
 import MissionaryForm from "./MissionaryForm";
-import WidowForm from "./WidowForm";
 import RegistrationSuccess from "./RegistrationSuccess";
+import WidowForm from "./WidowForm";
 
 const PersonalInfo = () => {
   const pathname = usePathname();

@@ -47,7 +47,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
   { name, email, avatar, signIn, itemList = [] }: Props,
   ref: ForwardedRef<AuthUserRef>
 ) => {
-  const user = useAuth();
+  const { user } = useAuth();
   const dispatch = useAppDispatch();
   const [auth, setAuth] = useState(!!user);
   const router = useRouter();

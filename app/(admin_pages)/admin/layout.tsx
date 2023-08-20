@@ -5,9 +5,9 @@ import { ReactNode } from "react";
 import AdminSidebar from "./layout/sidebar";
 
 const AdminLayout = ({ children }: { children: ReactNode }) => {
-  const user = useAuth();
+  const { userToken } = useAuth();
   const router = useRouter();
-  if (user === null) router.push("/auth/signin/ministry");
+  if (userToken === null) router.push("/auth/signin/ministry");
   return <AdminSidebar>{children}</AdminSidebar>;
 };
 

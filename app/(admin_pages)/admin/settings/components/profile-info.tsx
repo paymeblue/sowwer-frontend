@@ -35,7 +35,7 @@ const ProfileInfo = () => {
   const [updateMinistryProfile, { isLoading }] =
     useUpdateMinistryProfileMutation();
   const [messageApi, contextHolder] = message.useMessage();
-  const user = useAuth();
+  const { user } = useAuth();
   const options = [
     { value: "", label: "-- Select --", disabled: true },
     ...states.map((state) => ({ value: state, label: state })),

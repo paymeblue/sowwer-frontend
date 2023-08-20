@@ -1,5 +1,8 @@
 "use client";
+import { useAuth } from "@hooks/useAuth";
 import useNavBg from "@hooks/useNavBg";
+import userDetails from "@lib/user-details";
+import { User } from "@store/types";
 import { Layout } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +15,7 @@ const Navbar = () => {
   const { Header } = Layout;
   const pathname = usePathname();
   const backgroundTransparent = useNavBg();
+  const { user }: { user: User | null } = useAuth();
 
   return (
     <Header
@@ -25,11 +29,6 @@ const Navbar = () => {
         <Image src={logo} alt="soower logo" className="w-auto" priority />
       </Link>
       <AuthUser
-        name="Semira Yesufu "
-        email="ysemiraefe@gmail.com"
-        avatar="SY"
-        signIn="donor"
-        // isAuth={/^\/donor(\/.*)?$/.test(pathname) ? true : false}
         itemList={[
           {
             label: "Settings",
@@ -38,6 +37,8 @@ const Navbar = () => {
             icon: <Setting set="light" />,
           },
         ]}
+        {...userDetails(user)}
+        signIn="donor"
       />
     </Header>
   );

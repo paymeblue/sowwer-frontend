@@ -1,11 +1,11 @@
 "use client";
-import { Typography } from "antd";
-import React, { Fragment } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useStep } from "../context/registry-context";
-import WidowForm from "./WidowForm";
-import MissionaryForm from "./MissionaryForm";
 import FrameIcon from "@components/assets/icons/Frame";
+import { Typography } from "antd";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Fragment } from "react";
+import { useStep } from "../context/registry-context";
+import MissionaryForm from "./MissionaryForm";
+import WidowForm from "./WidowForm";
 
 const { Title, Paragraph } = Typography;
 
@@ -14,7 +14,6 @@ const SelectCategory = () => {
   const pathname = usePathname();
   const searchparams = useSearchParams();
   const path = `${pathname}?${searchparams}`;
-  console.log(path);
   const router = useRouter();
   const widowHandler = () => {
     router.push("join-registry?category=widow");

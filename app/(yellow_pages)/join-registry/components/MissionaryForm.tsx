@@ -1,6 +1,7 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
 import FrameIcon from "@components/assets/icons/Frame";
+import { useMissionaryMutation } from "@store/services/join-soower";
 import {
   Button,
   Checkbox,
@@ -18,6 +19,25 @@ import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 import { ArrowRight } from "react-iconly";
 import { useStep } from "../context/registry-context";
+type State1 = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  christianity: boolean;
+  declaration: boolean;
+  bornAgain: boolean;
+  church: string;
+  occupation: string;
+  reasonAbout: string;
+};
+type Request = {
+  duration: string;
+  timestamp: "month" | "year";
+  serviceArea: string;
+  affiliatedToChurch: boolean;
+};
+type State2 = State1 & Request;
 
 const { Item, useForm } = Form;
 const { Text } = Typography;
@@ -25,38 +45,120 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const suffixSelector = (
-  <Item name="suffix" noStyle>
+  <Item name="timestamp" noStyle>
     <Select style={{ width: 100 }}>
-      <Option value="months">Months</Option>
-      <Option value="years">Years</Option>
+      <Option value="month">Months</Option>
+      <Option value="year">Years</Option>
     </Select>
   </Item>
 );
 
 const MissionaryForm = () => {
   const [form] = useForm();
-  const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
   const { prev } = useStep();
-
   const router = useRouter();
   const handleChange = (value: string) => {
     setValue(value);
   };
-
-  const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
-    console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    setIsLoading(false);
-    messageApi.open({
-      content: `Subimssion successful!`,
-      className: "[&>div]:bg-[#17B472] [&>div]:text-white",
-      icon: <CheckCircleIcon />,
-    });
-    router.push("/join-registry?status=registration-success");
+  const [missionary, { isLoading }] = useMissionaryMutation();
+  const onFinish1 = async (values: State1): Promise<void> => {
+    const {
+      name,
+      email,
+      phone,
+      address,
+      christianity,
+      declaration,
+      bornAgain,
+      church,
+      occupation,
+      reasonAbout,
+    } = values;
+    const credentials = {
+      status: "new" as "new",
+      name,
+      email,
+      phone,
+      address,
+      christianity,
+      declaration,
+      born_again: bornAgain,
+      church,
+      occupation,
+      reason_about: reasonAbout,
+    };
+    try {
+      const res = await missionary(credentials).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+      router.push("/join-registry?status=registration-success");
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+    }
   };
+  const onFinish2 = async (values: State2): Promise<void> => {
+    const {
+      name,
+      email,
+      phone,
+      address,
+      christianity,
+      declaration,
+      bornAgain,
+      church,
+      occupation,
+      reasonAbout,
+      duration,
+      timestamp,
+      serviceArea,
+      affiliatedToChurch,
+    } = values;
+    const credentials = {
+      status: "existing" as "existing",
+      name,
+      email,
+      phone,
+      address,
+      christianity,
+      declaration,
+      born_again: bornAgain,
+      church,
+      occupation,
+      reason_about: reasonAbout,
+      duration,
+      timestamp,
+      service_area: serviceArea,
+      affiliated_to_church: affiliatedToChurch,
+    };
+    try {
+      const res = await missionary(credentials).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+      router.push("/join-registry?status=registration-success");
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+    }
+  };
+  const onFinish =
+    value === "yes-want-to-be-a-missionary" ? onFinish1 : onFinish2;
   const beginingPart = () => (
     <Fragment>
       <Item
@@ -102,7 +204,7 @@ const MissionaryForm = () => {
           />
         </Item>
         <Item
-          name="number"
+          name="phone"
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           label="Phone Number"
           rules={[
@@ -130,7 +232,7 @@ const MissionaryForm = () => {
         </Item>
       </Space>
       <Item
-        name="address_line"
+        name="address"
         label="Address Line"
         className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
         rules={[
@@ -151,7 +253,7 @@ const MissionaryForm = () => {
   );
   const concludingPart = () => (
     <Fragment>
-      <Item name="missionary_declaration" valuePropName="checked">
+      <Item name="declaration" valuePropName="checked">
         <Checkbox className="text-[12px] tablet:text-[15px]">
           I declare that all information by me is true, and I can be held liable
           legally if it is found that I declared false information, and also
@@ -194,9 +296,9 @@ const MissionaryForm = () => {
       <Form
         form={form}
         layout="vertical"
-        name="widow_registry_form"
+        name="missionary_registry_form"
         onFinish={onFinish}
-        initialValues={{ register_on_behalf: "Yes", suffix: "Years" }}
+        initialValues={{ register_on_behalf: "Yes", timestamp: "year" }}
         autoComplete="off"
       >
         <Item
@@ -239,14 +341,14 @@ const MissionaryForm = () => {
                   Are you a Christian?
                 </Text>
               }
-              name="religion"
+              name="christianity"
             >
               <Radio.Group
                 name="radiogroup"
                 className="[&>label>.ant-radio-checked>.ant-radio-inner]:border-primary [&>label>.ant-radio-checked>.ant-radio-inner]:bg-primary"
               >
-                <Radio value="Yes">Yes</Radio>
-                <Radio value="No">No</Radio>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
               </Radio.Group>
             </Item>
             <Item
@@ -258,18 +360,18 @@ const MissionaryForm = () => {
                   Are you born again?
                 </Text>
               }
-              name="born_again"
+              name="bornAgain"
             >
               <Radio.Group
                 name="radiogroup"
                 className="[&>label>.ant-radio-checked>.ant-radio-inner]:border-primary [&>label>.ant-radio-checked>.ant-radio-inner]:bg-primary"
               >
-                <Radio value="Yes">Yes</Radio>
-                <Radio value="No">No</Radio>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
               </Radio.Group>
             </Item>
             <Item
-              name="church_attended"
+              name="church"
               label="What church do you attend?"
               className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
               rules={[
@@ -305,7 +407,7 @@ const MissionaryForm = () => {
               />
             </Item>
             <Item
-              name="msg_reason"
+              name="reasonAbout"
               label="Why do you want to be a missionary?"
               className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
               rules={[
@@ -346,7 +448,7 @@ const MissionaryForm = () => {
               />
             </Item>
             <Item
-              name="service_area"
+              name="serviceArea"
               label="Where are you serving as a missionary?"
               className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
               rules={[
@@ -364,7 +466,7 @@ const MissionaryForm = () => {
               />
             </Item>
             <Item
-              name="msg"
+              name="reasonAbout"
               label="Tell us about some of your previous missionary work?"
               className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
               rules={[
@@ -389,14 +491,14 @@ const MissionaryForm = () => {
                   Are you affiliated to any church?
                 </Text>
               }
-              name="church_affliated"
+              name="affiliatedToChurch"
             >
               <Radio.Group
                 name="radiogroup"
                 className="[&>label>.ant-radio-checked>.ant-radio-inner]:border-primary [&>label>.ant-radio-checked>.ant-radio-inner]:bg-primary"
               >
-                <Radio value="Yes">Yes</Radio>
-                <Radio value="No">No</Radio>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
               </Radio.Group>
             </Item>
             {concludingPart()}

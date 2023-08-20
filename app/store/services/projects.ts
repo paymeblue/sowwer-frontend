@@ -4,6 +4,7 @@ import {
   ErrorResponse,
   ExploreProjectsRequest,
   ExploreProjectsResponse,
+  GetDonorsForProjectPesponse,
   GetProjectDetailsResponse,
   MinistryProjectDonorsResponse,
   MinistryProjectsRequest,
@@ -112,7 +113,7 @@ const projects = api.injectEndpoints({
         response.data.message,
     }),
     getMinistryProjectDonors: build.query<
-      MinistryProjectDonorsResponse,
+      GetDonorsForProjectPesponse,
       string | undefined
     >({
       query: (id) => `projects/${id}/donors?page=1&limit=10`,
@@ -120,7 +121,7 @@ const projects = api.injectEndpoints({
       providesTags: cacher.cacheByIdArg("Projects") as any,
       // Transform response and error
       transformResponse: (
-        response: MinistryProjectDonorsResponse,
+        response: GetDonorsForProjectPesponse,
         meta,
         arg
       ): any => {
@@ -131,10 +132,10 @@ const projects = api.injectEndpoints({
     }),
     getDonationsForDonorUser: build.query<
       MinistryProjectDonorsResponse,
-      { page: number; type: "project" | "ministry" }
+      { page?: number; type: "project" | "ministry"; pageSize?: number }
     >({
-      query: ({ page, type }) =>
-        `donors/donations?limit=6&page=${page}&type=${type}`,
+      query: ({ page, type, pageSize }) =>
+        `donors/donations?limit=${pageSize}&page=${page}&type=${type}`,
       providesTags: cacher.cacheByIdArg("Projects") as any,
       transformResponse: (
         response: MinistryProjectDonorsResponse,

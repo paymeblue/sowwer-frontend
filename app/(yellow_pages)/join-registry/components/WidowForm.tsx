@@ -1,6 +1,7 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
 import FrameIcon from "@components/assets/icons/Frame";
+import { useWidowMutation } from "@store/services/join-soower";
 import {
   Button,
   Checkbox,
@@ -20,22 +21,40 @@ import { Fragment, useState } from "react";
 import { ArrowRight } from "react-iconly";
 import { useStep } from "../context/registry-context";
 
+type State1 = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  christianity: boolean;
+  declaration: boolean;
+  duration: string;
+  timestamp: "month" | "year";
+  age: string;
+  kids: boolean;
+};
+type RegistrerInfo = {
+  registrerName: string;
+  registrerEmail: string;
+  registrerPhone: string;
+};
+type State2 = State1 & RegistrerInfo;
+
 const { Item, useForm } = Form;
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const suffixSelector = (
-  <Item name="suffix" noStyle>
+  <Item name="timestamp" noStyle>
     <Select style={{ width: 100 }}>
-      <Option value="months">Months</Option>
-      <Option value="years">Years</Option>
+      <Option value="month">Months</Option>
+      <Option value="year">Years</Option>
     </Select>
   </Item>
 );
 
 const WidowForm = () => {
   const [form] = useForm();
-  const [isLoading, setIsLoading] = useState(false);
   const [regStatus, setRegStatus] = useState("Yes");
   const [messageApi, contextHolder] = message.useMessage();
   const { prev } = useStep();
@@ -52,7 +71,7 @@ const WidowForm = () => {
   const beginingPart = () => (
     <Fragment>
       <Item
-        name="widows_name"
+        name="name"
         label="Name"
         className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
         rules={[
@@ -72,7 +91,7 @@ const WidowForm = () => {
       </Item>
       <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">
         <Item
-          name="widows_age"
+          name="age"
           label="How old are you? "
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           rules={[
@@ -94,7 +113,7 @@ const WidowForm = () => {
           />
         </Item>
         <Item
-          name="widow_duration"
+          name="duration"
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           label="How long have you been a widow?"
           rules={[
@@ -115,7 +134,7 @@ const WidowForm = () => {
       </Space>
       <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">
         <Item
-          name="widows_email"
+          name="email"
           label="Email address"
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           rules={[
@@ -137,7 +156,7 @@ const WidowForm = () => {
           />
         </Item>
         <Item
-          name="widows_number"
+          name="phone"
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           label="Phone Number"
           rules={[
@@ -165,7 +184,7 @@ const WidowForm = () => {
         </Item>
       </Space>
       <Item
-        name="widows_address_line"
+        name="address"
         label="Address Line"
         className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
         rules={[
@@ -191,14 +210,14 @@ const WidowForm = () => {
             Are you a Christian?
           </Text>
         }
-        name="widows_religion"
+        name="christianity"
       >
         <Radio.Group
           name="radiogroup"
           className="[&>label>.ant-radio-checked>.ant-radio-inner]:border-primary [&>label>.ant-radio-checked>.ant-radio-inner]:bg-primary"
         >
-          <Radio value="Yes">Yes</Radio>
-          <Radio value="No">No</Radio>
+          <Radio value={true}>Yes</Radio>
+          <Radio value={false}>No</Radio>
         </Radio.Group>
       </Item>
       <Item
@@ -210,17 +229,17 @@ const WidowForm = () => {
             Do you have kids?
           </Text>
         }
-        name="widow_have_kids"
+        name="kids"
       >
         <Radio.Group
           name="radiogroup"
           className="[&>label>.ant-radio-checked>.ant-radio-inner]:border-primary [&>label>.ant-radio-checked>.ant-radio-inner]:bg-primary"
         >
-          <Radio value="Yes">Yes</Radio>
-          <Radio value="No">No</Radio>
+          <Radio value={true}>Yes</Radio>
+          <Radio value={false}>No</Radio>
         </Radio.Group>
       </Item>
-      <Item name="widows_declaration" valuePropName="checked">
+      <Item name="declaration" valuePropName="checked">
         <Checkbox className="text-[12px] tablet:text-[15px]">
           I declare that all information by me is true, and I can be held liable
           legally if it is found that I declared false information, and also
@@ -229,20 +248,96 @@ const WidowForm = () => {
       </Item>
     </Fragment>
   );
-
-  const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
-    console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    setIsLoading(false);
-    messageApi.open({
-      content: `Subimssion successful!`,
-      className: "[&>div]:bg-[#17B472] [&>div]:text-white",
-      icon: <CheckCircleIcon />,
-    });
-    router.push("/join-registry?status=registration-success");
+  const [widow, { isLoading }] = useWidowMutation();
+  const onFinish1 = async (values: State1): Promise<void> => {
+    const {
+      name,
+      email,
+      phone,
+      address,
+      christianity,
+      declaration,
+      duration,
+      timestamp,
+      age,
+      kids,
+    } = values;
+    const credentials = {
+      name,
+      email,
+      phone,
+      address,
+      christianity,
+      declaration,
+      duration: +duration,
+      timestamp,
+      age: +age,
+      kids,
+    };
+    try {
+      const res = await widow(credentials).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+      router.push("/join-registry?status=registration-success");
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
   };
-
+  const onFinish2 = async (values: State2): Promise<void> => {
+    const {
+      name,
+      email,
+      phone,
+      address,
+      christianity,
+      declaration,
+      duration,
+      timestamp,
+      age,
+      kids,
+      registrerName,
+      registrerEmail,
+      registrerPhone,
+    } = values;
+    const credentials = {
+      name,
+      email,
+      phone,
+      address,
+      christianity,
+      declaration,
+      duration: +duration,
+      timestamp,
+      age: +age,
+      kids,
+      registrar_name: registrerName,
+      registrar_email: registrerEmail,
+      registrar_phone: registrerPhone,
+    };
+    try {
+      const res = await widow(credentials).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+      router.push("/join-registry?status=registration-success");
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
+  };
+  const onFinish = regStatus === "Yes" ? onFinish2 : onFinish1;
   return (
     <section className="mx-auto laptop:max-w-lg">
       {contextHolder}
@@ -264,7 +359,7 @@ const WidowForm = () => {
         layout="vertical"
         name="widow_registry_form"
         onFinish={onFinish}
-        initialValues={{ register_on_behalf: "Yes", suffix: "Years" }}
+        initialValues={{ register_on_behalf: "Yes", timestamp: "year" }}
         autoComplete="off"
       >
         <Item
@@ -296,7 +391,7 @@ const WidowForm = () => {
               Your Personal Details
             </Title>
             <Item
-              name="registrer_name"
+              name="registrerName"
               label="Name"
               className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
               rules={[
@@ -316,7 +411,7 @@ const WidowForm = () => {
             </Item>
             <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">
               <Item
-                name="registrer_email"
+                name="registrerEmail"
                 label="Email address"
                 className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                 rules={[
@@ -338,7 +433,7 @@ const WidowForm = () => {
                 />
               </Item>
               <Item
-                name="registrer_number"
+                name="registrerPhone"
                 className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                 label="Phone Number"
                 rules={[

@@ -88,6 +88,7 @@ const SignupStep = () => {
       ministryWebsite,
       state,
     } = values;
+    console.log(values);
     try {
       const credentials: MinistrySignupRequest = {
         ministryType,

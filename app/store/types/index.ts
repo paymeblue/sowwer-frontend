@@ -314,8 +314,22 @@ export type UpdateSocialLinksResponse = {
   success: boolean;
   message: string;
 };
-
-export type MinistryProjectDonorsResponse = TResponse<{}>;
+export type GetDonorsForProjectPesponse = TResponse<{
+  createdAt: string;
+  id: string;
+  name: string;
+  amount: string;
+}>;
+export type MinistryProjectDonorsResponse = TResponse<{
+  title: string;
+  category: "widows" | "orphans" | "widows";
+  organisedBy: string;
+  description: string | null;
+  targetAmount: string;
+  image: string | null;
+  amountRaised: string;
+  createdAt: string;
+}>;
 export type ExploreCardData = {
   id: string;
   title: string;
@@ -326,6 +340,7 @@ export type ExploreCardData = {
   category: "widows" | "orphans" | "missions";
   amountRaised: string;
   organisedBy: string;
+  donationPercent: string;
   donors: number;
 };
 export type ExploreCardsResponse = ExploreCardData[] | undefined;
@@ -340,6 +355,7 @@ export type ExploreProjectsResponse = TResponse<{
   category: "widows" | "orphans" | "missions";
   amountRaised: string;
   organisedBy: string;
+  donationPercent: string;
   donors: number;
 }>;
 
@@ -405,21 +421,6 @@ export type GetSocialLinksResponse = Response<{
   createdAt: string;
 }>;
 
-export type WidowJoinSoowerRequest = {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  christianity: boolean;
-  declaration: boolean;
-  duration: number;
-  timestamp: string;
-  registrar_name: string;
-  registrar_email: string;
-  registrar_phone: string;
-  age: number;
-  kids: boolean;
-};
 export type WidowJoinSoowerResponse = {
   name: string;
   email: string;
@@ -435,8 +436,7 @@ export type WidowJoinSoowerResponse = {
   age: number;
   kids: boolean;
 };
-
-export type MissionaryJoinSoowerRequest = {
+type WidowJoinSoowerRequest1 = {
   name: string;
   email: string;
   phone: string;
@@ -445,14 +445,10 @@ export type MissionaryJoinSoowerRequest = {
   declaration: boolean;
   duration: number;
   timestamp: string;
-  registrar_name: string;
-  registrar_email: string;
-  registrar_phone: string;
   age: number;
   kids: boolean;
 };
-
-export type MissionaryJoinSoowerResponse = {
+type WidowJoinSoowerRequest2 = {
   name: string;
   email: string;
   phone: string;
@@ -460,10 +456,42 @@ export type MissionaryJoinSoowerResponse = {
   christianity: boolean;
   declaration: boolean;
   duration: number;
-  timestamp: string;
+  timestamp: "month" | "year";
   registrar_name: string;
   registrar_email: string;
   registrar_phone: string;
   age: number;
   kids: boolean;
 };
+export type WidowJoinSoowerRequest =
+  | WidowJoinSoowerRequest1
+  | WidowJoinSoowerRequest2;
+export type JoinSoowerResponse = {
+  success: boolean;
+  message: string;
+};
+export type MissionaryJoinSoowerRequest1 = {
+  status: "new" | "existing";
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  christianity: boolean;
+  declaration: boolean;
+  born_again: boolean;
+  church: string;
+  occupation: string;
+  reason_about: string;
+};
+export type MissionaryRequest = {
+  duration: number;
+  timestamp: "month" | "year";
+  service_area: string;
+  affiliated_to_church: boolean;
+};
+export type MissionaryJoinSoowerRequest2 = MissionaryJoinSoowerRequest1 &
+  MissionaryRequest;
+
+export type MissionaryJoinSoowerRequest =
+  | MissionaryJoinSoowerRequest1
+  | MissionaryJoinSoowerRequest2;

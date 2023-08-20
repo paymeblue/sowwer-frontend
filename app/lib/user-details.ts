@@ -1,7 +1,7 @@
 import capitalizeFirstLetters from "@lib/capitalize";
 import { User } from "@store/types";
 
-const generateAvatar = (name: string) => {
+export const generateAvatar = (name: string) => {
   const avatarChars = name
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase());

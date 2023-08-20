@@ -11,7 +11,7 @@ const { Title, Paragraph, Text } = Typography;
 
 const AdminPage = () => {
   const router = useRouter();
-  const user = useAuth();
+  const { user } = useAuth();
   const header = (
     <Typography>
       <Title level={3} className="mb-0 text-[24px] font-bold leading-[30.24px]">

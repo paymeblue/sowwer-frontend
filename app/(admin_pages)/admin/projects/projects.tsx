@@ -13,7 +13,7 @@ const { Title } = Typography;
 
 const ProjectsPage = () => {
   const router = useRouter();
-  const user = useAuth();
+  const { user } = useAuth();
   const id = user?.ministry.id;
 
   const {

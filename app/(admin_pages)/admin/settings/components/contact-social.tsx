@@ -22,7 +22,7 @@ type State = { email: string; phone: string };
 const ContactSocial = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const user = useAuth();
+  const { user } = useAuth();
   const [updateMinistryProfile, { isLoading }] =
     useUpdateMinistryProfileMutation();
 
