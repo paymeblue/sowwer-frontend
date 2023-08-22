@@ -1,8 +1,8 @@
 import {
   ErrorResponse,
   NotificationResponse,
+  PlainResponse,
   UpdateNotificationRequest,
-  UpdateNotificationResponse,
 } from "@store/types";
 import api from "./api/apiSlice";
 import { cacher } from "./api/rtkQueryCacheUtils";
@@ -10,7 +10,7 @@ import { cacher } from "./api/rtkQueryCacheUtils";
 const notifications = api.injectEndpoints({
   endpoints: (build) => ({
     updateNotification: build.mutation<
-      UpdateNotificationResponse,
+      PlainResponse,
       UpdateNotificationRequest
     >({
       query: (credentials) => ({
@@ -19,11 +19,7 @@ const notifications = api.injectEndpoints({
         body: credentials,
       }),
       invalidatesTags: cacher.invalidatesList("Notifications"),
-      transformResponse: (
-        response: UpdateNotificationResponse,
-        meta,
-        arg
-      ): any => {
+      transformResponse: (response: PlainResponse, meta, arg): any => {
         return response;
       },
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>

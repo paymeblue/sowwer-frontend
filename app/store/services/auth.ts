@@ -5,7 +5,9 @@ import {
   LoginRequest,
   LoginResponse,
   MinistrySignupRequest,
+  PlainResponse,
   RegisterDonorRequest,
+  ResetPassowrdRequest,
   SignupResponse,
 } from "@store/types";
 import api from "./api/apiSlice";
@@ -79,6 +81,39 @@ const auth = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data,
     }),
+    forgotPassword: build.mutation<PlainResponse, { email: string }>({
+      query: (body) => ({
+        url: "users/forgot-password",
+        method: "POST",
+        body,
+      }),
+
+      // Pick out data and prevent nested properties in a hook or selector
+      transformResponse: (response: PlainResponse, meta, arg): any => {
+        return response;
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    resetPassword: build.mutation<PlainResponse, ResetPassowrdRequest>({
+      query: (body) => {
+        const { token, ...rest } = body;
+        return {
+          url: `users/reset-password/${token}`,
+          method: "POST",
+          body: rest,
+        };
+      },
+
+      // Pick out data and prevent nested properties in a hook or selector
+      transformResponse: (response: PlainResponse, meta, arg): any => {
+        return response;
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
     logout: build.mutation<any, any>({
       query: (credentials) => ({
         url: "users/register",
@@ -98,5 +133,7 @@ export const {
   useMinistrySignupMutation,
   useDonorRegisterMutation,
   useLoginMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
   useDonorSignupMutation,
 } = auth;

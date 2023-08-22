@@ -1,10 +1,16 @@
 "use client";
-import { LinkOutlined } from "@ant-design/icons";
+import { LinkOutlined, LoadingOutlined } from "@ant-design/icons";
 import { HeartOrganIcon } from "@components/assets/icons";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
+import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
+import { generateAvatar } from "@lib/user-details";
 import Container from "@shared/Container";
-import { useGetProjectDetailsQuery } from "@store/services/projects";
+import ResultComponent from "@shared/ResultComponent";
+import {
+  useGetMinistryProjectDonorsQuery,
+  useGetProjectDetailsQuery,
+} from "@store/services/projects";
 import {
   Avatar,
   Button,
@@ -14,45 +20,75 @@ import {
   Progress,
   Row,
   Space,
+  Spin,
   Tag,
   Tooltip,
   Typography,
 } from "antd";
+import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
 import happyWoman from "public/assets/images/happy_woman.svg";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Heart2 } from "react-iconly";
 
 const { Title, Text, Paragraph } = Typography;
-const DonorList = [
-  {
-    user: "Anonymous",
-    amount: " ₦20,000",
-    time: "2 hours ago",
-    avatar: "A",
-  },
-  {
-    user: "Semira Yesufu",
-    amount: "₦35,000",
-    time: "2 hours ago",
-    avatar: "SY",
-  },
-  {
-    user: "Semira Yesufu",
-    amount: "₦35,000",
-    time: "2 hours ago",
-    avatar: "SY",
-  },
-];
+// const DonorList = [
+//   {
+//     user: "Anonymous",
+//     amount: " ₦20,000",
+//     time: "2 hours ago",
+//     avatar: "A",
+//   },
+//   {
+//     user: "Semira Yesufu",
+//     amount: "₦35,000",
+//     time: "2 hours ago",
+//     avatar: "SY",
+//   },
+//   {
+//     user: "Semira Yesufu",
+//     amount: "₦35,000",
+//     time: "2 hours ago",
+//     avatar: "SY",
+//   },
+// ];
 
 const MakeDonation = ({ projectId }: { projectId: string }) => {
   const { data: projectDetails } = useGetProjectDetailsQuery(projectId);
   const data = projectDetails?.data;
   const priceFormat = currencyFormat();
-
+  const {
+    data: donors,
+    isLoading,
+    isFetching,
+    error,
+    isError,
+    refetch,
+  } = useGetMinistryProjectDonorsQuery(projectId);
+  function handleRefetch() {
+    refetch();
+  }
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 32,
+        display: "flex",
+        alignItems: "center",
+        minHeight: "10rem",
+        color: "#FFC629",
+      }}
+      spin
+    />
+  );
+  const donorData = donors?.data.map((item) => ({
+    user: capitalizeFirstLetters(item.name),
+    amount: item.amount,
+    time: moment(item.createdAt).fromNow(),
+    avatar: generateAvatar(item.name),
+  }));
+  const [donorList, setDonorList] = useState(donorData?.slice(4));
   const { copied, copyToClipboard } = useCopyToClipboard(data?.link);
-
   return (
     <Fragment>
       <Container>
@@ -67,6 +103,8 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
               alt="widow"
               className="hidden w-full rounded-md tablet:block"
               priority
+              width={677}
+              height={446}
             />
           </Col>
           <Col>
@@ -129,7 +167,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 </Text>
               </Space>
               <Progress
-                percent={50}
+                percent={Number(data?.donationPercent)}
                 showInfo={false}
                 strokeColor="#3466ff"
                 status="active"
@@ -208,41 +246,73 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
               >
                 Donations
               </Title>
-              <List
-                itemLayout="horizontal"
-                dataSource={DonorList}
-                renderItem={(item) => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          size={56}
-                          className="bg-[#fff8e2] align-middle font-semibold text-body-1"
-                        >
-                          {item.avatar}
-                        </Avatar>
-                      }
-                      title={
-                        <span className="mb-0 text-[13px] leading-[16.38px] laptop:text-[14px] laptop:leading-[18px]">
-                          {item.user} made a <strong>{item.amount}</strong>
-                          &nbsp;donation
-                        </span>
-                      }
-                      description={
-                        <span className="text-[12px] leading-[15.12px] text-body-2 laptop:text-[12px] laptop:leading-[15.12px]">
-                          {item.time}
-                        </span>
-                      }
-                    />
-                  </List.Item>
-                )}
-              />
+              {isLoading ? (
+                <Spin size="large" indicator={antIcon} />
+              ) : isError ? (
+                <ResultComponent
+                  title="Oops... Something went wrong :("
+                  subTitle={`${error}`}
+                  btnBg="primary"
+                  btnText="Retry"
+                  btnTextColor="black"
+                  status="error"
+                  showBtn={true}
+                  onBtnClick={handleRefetch}
+                />
+              ) : donorList?.length === 0 ? (
+                <ResultComponent
+                  title={
+                    <Title className="text-[18px] font-bold leading-[22.68px]">
+                      No donors yet
+                    </Title>
+                  }
+                  subTitle={
+                    <Text className="text-[13px] leading-[19px] text-gray-500">
+                      Once you start receiving donations your list of donors
+                      will appear here.
+                    </Text>
+                  }
+                />
+              ) : (
+                <List
+                  itemLayout="horizontal"
+                  dataSource={donorList}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={
+                          <Avatar
+                            size={56}
+                            className="bg-[#fff8e2] align-middle font-semibold text-body-1"
+                          >
+                            {item.avatar}
+                          </Avatar>
+                        }
+                        title={
+                          <span className="mb-0 text-[13px] leading-[16.38px] laptop:text-[14px] laptop:leading-[18px]">
+                            {item.user} made a <strong>{item.amount}</strong>
+                            &nbsp;donation
+                          </span>
+                        }
+                        description={
+                          <span className="text-[12px] leading-[15.12px] text-body-2 laptop:text-[12px] laptop:leading-[15.12px]">
+                            {item.time}
+                          </span>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                />
+              )}
               <Button
                 block
                 type="default"
                 className="mx-auto mt-6 flex items-center justify-center border-accent text-[13px] font-medium leading-[16.38px] text-accent hover:bg-blue-50 laptop:p-6 laptop:text-[14px] laptop:leading-[18px]
                 "
                 size="large"
+                onClick={() => setDonorList(donorData?.slice(7))}
+                loading={isFetching}
+                disabled={donorList?.length === 0}
               >
                 View more donations
               </Button>

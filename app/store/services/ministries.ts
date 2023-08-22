@@ -4,8 +4,8 @@ import {
   GetSocialLinksResponse,
   MinistryProfileRequest,
   MinistryProfileResponse,
+  PlainResponse,
   UpdateSocialLinksRequest,
-  UpdateSocialLinksResponse,
 } from "@store/types";
 import api from "./api/apiSlice";
 import { cacher } from "./api/rtkQueryCacheUtils";
@@ -55,10 +55,7 @@ const ministry = api.injectEndpoints({
         return reponse.data.message;
       },
     }),
-    updateSocialLinks: build.mutation<
-      UpdateSocialLinksResponse,
-      UpdateSocialLinksRequest
-    >({
+    updateSocialLinks: build.mutation<PlainResponse, UpdateSocialLinksRequest>({
       query: (body) => ({
         url: `social-links`,
         method: "PATCH",

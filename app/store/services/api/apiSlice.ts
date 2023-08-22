@@ -24,6 +24,7 @@ const api = createApi({
     "Notifications",
     "User",
     "Social-links",
+    "Account",
   ],
   endpoints: () => ({}),
 });

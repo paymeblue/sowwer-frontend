@@ -2,13 +2,16 @@ import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
+  LoadingOutlined,
   MoreOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { CheckCircleIcon } from "@components/assets/icons";
+import { CheckCircleIcon, EmptySpeakerIcon } from "@components/assets/icons";
+import { useAuth } from "@hooks/useAuth";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import { generateAvatar } from "@lib/user-details";
+import ResultComponent from "@shared/ResultComponent";
 import {
   useDeleteMinistryProjectMutation,
   useGetMinistryProjectDonorsQuery,
@@ -29,6 +32,7 @@ import {
   Modal,
   Result,
   Space,
+  Spin,
   Table,
   Typography,
   message,
@@ -100,7 +104,12 @@ type IProps = {
 
 const { Title, Text, Paragraph } = Typography;
 
-const ProjectsTable = ({ id }: { id: string | undefined }) => {
+const ProjectsTable = () => {
+  const { user } = useAuth();
+  let id;
+  if (user) {
+    id = user.ministry.id;
+  }
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 10,
@@ -117,11 +126,14 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDonorModalOpen, setIsDonorModalOpen] = useState(false);
   const { data: donors } = useGetMinistryProjectDonorsQuery(rowId);
-  const { data, isLoading, isFetching } = useGetMinistryProjectsQuery({
-    id,
-    page: pagination.current,
-  });
-
+  const { data, isLoading, isFetching, error, isError, refetch } =
+    useGetMinistryProjectsQuery({
+      id,
+      page: pagination.current,
+    });
+  function handleRefetch() {
+    refetch();
+  }
   const [deleteMinistryProject, { isLoading: deleteLoading }] =
     useDeleteMinistryProjectMutation();
   const getColorForStatus = (status: ProjectData["status"]) => {
@@ -230,7 +242,18 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
       items.push(item3);
     }
   };
-
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 64,
+        display: "flex",
+        alignItems: "center",
+        minHeight: "10rem",
+        color: "#FFC629",
+      }}
+      spin
+    />
+  );
   const handleChange: TableProps<DataType>["onChange"] = (
     pagination,
     filters,
@@ -489,7 +512,30 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
     handleDeleteCancel();
   };
 
-  return (
+  const content = isLoading ? (
+    <Spin size="large" indicator={antIcon} />
+  ) : isError ? (
+    <ResultComponent
+      title="Oops... Something went wrong :("
+      subTitle={`${error}`}
+      btnBg="primary"
+      btnText="Retry"
+      btnTextColor="black"
+      status="error"
+      showBtn={true}
+      onBtnClick={handleRefetch}
+    />
+  ) : data?.data?.length === 0 ? (
+    <ResultComponent
+      icon={<EmptySpeakerIcon />}
+      title={
+        <Title level={4} className="text-18px leading-22.68px font-bold">
+          No Projects yet
+        </Title>
+      }
+      subTitle="Create a new project and manage all your projects from here."
+    />
+  ) : (
     <Fragment>
       {contextHolder}
       <Modal
@@ -608,6 +654,6 @@ const ProjectsTable = ({ id }: { id: string | undefined }) => {
       />
     </Fragment>
   );
+  return <Fragment>{content}</Fragment>;
 };
-
 export default ProjectsTable;

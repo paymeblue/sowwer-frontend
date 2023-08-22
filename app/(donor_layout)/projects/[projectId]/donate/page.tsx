@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Donate To Project | Soower",
 };
 
-const DonateToProject = () => <DonateToProjectPage />;
+const DonateToProject = ({ params }: { params: { projectId: string } }) => {
+  const { projectId } = params;
+  return <DonateToProjectPage id={projectId} />;
+};
 
 export default DonateToProject;

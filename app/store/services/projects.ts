@@ -4,8 +4,9 @@ import {
   ErrorResponse,
   ExploreProjectsRequest,
   ExploreProjectsResponse,
-  GetDonorsForProjectPesponse,
+  GetDonorsForProjectResponse,
   GetProjectDetailsResponse,
+  MinistryDonationResponse,
   MinistryProjectDonorsResponse,
   MinistryProjectsRequest,
   MinistryProjectsResponse,
@@ -102,8 +103,18 @@ const projects = api.injectEndpoints({
       MinistryProjectsResponse,
       MinistryProjectsRequest
     >({
-      query: (body) =>
-        `ministries/${body.id}/projects?page=${body.page}&limit=10`,
+      query: (body) => {
+        let url;
+        if (body.status) {
+          url = `ministries/${body.id}/projects?page=${body.page}&status=${body.status}&limit=10`;
+        } else {
+          url = `ministries/${body.id}/projects?page=${body.page}&limit=10`;
+        }
+        return {
+          url,
+          method: "GET",
+        };
+      },
       // Invalidate cache tags specific to ministry projects
       providesTags: cacher.providesNestedList("Projects") as any,
       transformResponse: (response, meta, arg): any => {
@@ -113,7 +124,7 @@ const projects = api.injectEndpoints({
         response.data.message,
     }),
     getMinistryProjectDonors: build.query<
-      GetDonorsForProjectPesponse,
+      GetDonorsForProjectResponse,
       string | undefined
     >({
       query: (id) => `projects/${id}/donors?page=1&limit=10`,
@@ -121,7 +132,7 @@ const projects = api.injectEndpoints({
       providesTags: cacher.cacheByIdArg("Projects") as any,
       // Transform response and error
       transformResponse: (
-        response: GetDonorsForProjectPesponse,
+        response: GetDonorsForProjectResponse,
         meta,
         arg
       ): any => {
@@ -139,6 +150,23 @@ const projects = api.injectEndpoints({
       providesTags: cacher.cacheByIdArg("Projects") as any,
       transformResponse: (
         response: MinistryProjectDonorsResponse,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getDonationsForAdminUser: build.query<
+      MinistryDonationResponse,
+      { page?: number; type: "project" | "ministry"; id?: string }
+    >({
+      query: ({ page, type, id }) =>
+        `ministries/${id}/list-donors?limit=10&page=${page}&type=${type}`,
+      providesTags: cacher.cacheByIdArg("Projects") as any,
+      transformResponse: (
+        response: MinistryDonationResponse,
         meta,
         arg
       ): any => {
@@ -176,6 +204,7 @@ export const {
   useGetProjectQuery,
   useGetProjectDetailsQuery,
   useGetDonationsForDonorUserQuery,
+  useGetDonationsForAdminUserQuery,
   useExploreProjectsQuery,
   usePublishOrDraftProjectMutation,
   useGetMinistryProjectsQuery,

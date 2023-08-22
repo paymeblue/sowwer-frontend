@@ -1,25 +1,33 @@
-import { SearchOutlined } from "@ant-design/icons";
-import { CheckCircleIcon } from "@components/assets/icons";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { CheckCircleIcon, EmptyWalletIcon } from "@components/assets/icons";
+import { useAuth } from "@hooks/useAuth";
+import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
+import ResultComponent from "@shared/ResultComponent";
+import { useRequestPayoutMutation } from "@store/services/payouts";
+import { useGetMinistryProjectsQuery } from "@store/services/projects";
 import {
   Button,
   Input,
   InputRef,
   Space,
+  Spin,
   Table,
   Typography,
   message,
 } from "antd";
 import type { ColumnType, ColumnsType, TableProps } from "antd/es/table";
-import type { FilterConfirmProps } from "antd/es/table/interface";
+import type {
+  FilterConfirmProps,
+  TablePaginationConfig,
+} from "antd/es/table/interface";
 import { FilterValue } from "antd/es/table/interface";
-import React, { Fragment, useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { FormData } from "../payouts";
 import PayoutFormModal from "./payout-modal";
 
 export interface DataType {
-  key: React.Key;
+  key: string;
   title: string;
   goal: number;
   category: string;
@@ -31,69 +39,63 @@ export interface DataType {
 type DataIndex = keyof DataType;
 const priceFormat = currencyFormat();
 const { Title, Text } = Typography;
-const data: DataType[] = [
-  {
-    key: "1",
-    goal: 500000,
-    title: "The Widows Project",
-    category: "Widows",
-    donors: 53,
-    amount: 135000,
-    btn: "Request Payout",
-  },
-  {
-    key: "2",
-    goal: 125000,
-    title: "The Orphans Project",
-    category: "Orphans",
-    donors: 50,
-    amount: 105000,
-    btn: "Request Payout",
-  },
-  {
-    key: "3",
-    goal: 500000,
-    title: "The Missions Project",
-    category: "Missions",
-    donors: 35,
-    amount: 135000,
-    btn: "Request Payout",
-  },
-  {
-    key: "4",
-    goal: 400000,
-    title: "The Widows Project",
-    category: "Widows",
-    donors: 53,
-    amount: 245000,
-    btn: "Request Payout",
-  },
-  {
-    key: "5",
-    goal: 750000,
-    title: "The Missions Project",
-    category: "Missions",
-    donors: 23,
-    amount: 375000,
-    btn: "Request Payout",
-  },
-  {
-    key: "6",
-    goal: 700000,
-    title: "The Orphans Project",
-    category: "Orphans",
-    donors: 70,
-    amount: 650000,
-    btn: "Request Payout",
-  },
-];
-const CompletedProjectsTable = ({
-  onFormData,
-  acctLinked,
-}: {
-  onFormData: (data: FormData) => void;
-  acctLinked: boolean;
-}) => {
+// const data: DataType[] = [
+//   {
+//     key: "1",
+//     goal: 500000,
+//     title: "The Widows Project",
+//     category: "Widows",
+//     donors: 53,
+//     amount: 135000,
+//     btn: "Request Payout",
+//   },
+//   {
+//     key: "2",
+//     goal: 125000,
+//     title: "The Orphans Project",
+//     category: "Orphans",
+//     donors: 50,
+//     amount: 105000,
+//     btn: "Request Payout",
+//   },
+//   {
+//     key: "3",
+//     goal: 500000,
+//     title: "The Missions Project",
+//     category: "Missions",
+//     donors: 35,
+//     amount: 135000,
+//     btn: "Request Payout",
+//   },
+//   {
+//     key: "4",
+//     goal: 400000,
+//     title: "The Widows Project",
+//     category: "Widows",
+//     donors: 53,
+//     amount: 245000,
+//     btn: "Request Payout",
+//   },
+//   {
+//     key: "5",
+//     goal: 750000,
+//     title: "The Missions Project",
+//     category: "Missions",
+//     donors: 23,
+//     amount: 375000,
+//     btn: "Request Payout",
+//   },
+//   {
+//     key: "6",
+//     goal: 700000,
+//     title: "The Orphans Project",
+//     category: "Orphans",
+//     donors: 70,
+//     amount: 650000,
+//     btn: "Request Payout",
+//   },
+// ];
+const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
@@ -101,10 +103,65 @@ const CompletedProjectsTable = ({
     Record<string, FilterValue | null>
   >({});
   const [messageApi, contextHolder] = message.useMessage();
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+  });
+  const { user } = useAuth();
+  let id;
+  if (user) {
+    id = user.ministry.id;
+  }
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 64,
+        display: "flex",
+        alignItems: "center",
+        minHeight: "10rem",
+        color: "#FFC629",
+      }}
+      spin
+    />
+  );
+  const [requestPayout, { isLoading: requestLoading }] =
+    useRequestPayoutMutation();
+  const {
+    data: res,
+    isLoading,
+    isFetching,
+    error,
+    isError,
+    refetch,
+  } = useGetMinistryProjectsQuery({
+    id,
+    page: pagination.current,
+    status: "completed",
+  });
+  function handleRefetch() {
+    refetch();
+  }
+  const paginationHandler = () => {
+    return setPagination((prev) => ({
+      ...prev,
+      current: res?.paginationInfo?.currentPage,
+      total: res?.paginationInfo?.totalItems,
+      pageSize: res?.paginationInfo?.limit,
+    }));
+  };
 
+  const dataSource: DataType[] | undefined = res?.data.map((item) => ({
+    key: item.id,
+    goal: Number(item.targetAmount),
+    title: capitalizeFirstLetters(item.title),
+    category: item.category,
+    donors: item.donors,
+    amount: Number(item.amountRaised),
+    btn: "Request Payout",
+  }));
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
-  const [dataSource, setDataSource] = useState<DataType[]>(data);
+  // const [dataSource, setDataSource] = useState<DataType[]>(data);
 
   const handleDisable = (obj: DataType) => {
     if (obj.btn === "Payout Requested") {
@@ -113,26 +170,39 @@ const CompletedProjectsTable = ({
     return false;
   };
 
-  const callback = (record: DataType) => {
-    const updatedData = dataSource.map((item) => {
-      if (item.key === record.key) {
-        return {
-          ...item,
-          btn: "Payout Requested", // Update the button text content
-        };
-      }
-      return item;
-    });
-
-    setTimeout(() => {
+  const callback = async (record: DataType) => {
+    try {
+      await requestPayout(record.key).unwrap();
       messageApi.open({
         content: `Payout payout for ${record.title} sent successfully`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
+      dataSource?.map((item) => {
+        if (item.key === record.key) {
+          return {
+            ...item,
+            btn: "Payout Requested", // Update the button text content
+          };
+        }
+        return item;
+      });
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
 
-      setDataSource(updatedData);
-    }, 500);
+    // setTimeout(() => {
+    //   messageApi.open({
+    //     content: `Payout payout for ${record.title} sent successfully`,
+    //     className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+    //     icon: <CheckCircleIcon />,
+    //   });
+
+    //   setDataSource(updatedData);
+    // }, 500);
   };
 
   // const handleModalClose = (record: DataType) => {
@@ -361,6 +431,7 @@ const CompletedProjectsTable = ({
           <Button
             className={`border-accent text-[13px] font-semibold leading-[16px] text-accent disabled:border-[#E8E9ED] disabled:bg-[#E8E9ED] disabled:text-white`}
             disabled={handleDisable(record)}
+            loading={requestLoading}
             onClick={() => handleRequestPayout(record, callback)}
           >
             {record.btn}
@@ -369,29 +440,65 @@ const CompletedProjectsTable = ({
       },
     },
   ];
-
-  return (
+  const content = isLoading ? (
+    <Spin size="large" indicator={antIcon} />
+  ) : isError ? (
+    <ResultComponent
+      title="Oops... Something went wrong :("
+      subTitle={`${error}`}
+      btnBg="primary"
+      btnText="Retry"
+      btnTextColor="black"
+      status="error"
+      showBtn={true}
+      onBtnClick={handleRefetch}
+    />
+  ) : res?.data?.length === 0 ? (
+    <ResultComponent
+      title={
+        <Title className="text-[18px] font-bold leading-[22.68px]">
+          No payouts yet
+        </Title>
+      }
+      subTitle={
+        <Text className="text-[13px] leading-[19px] text-gray-500">
+          None of your projects have been completed. Once they're completed, you
+          will see a list of <br /> your completed projects and be able to
+          request payouts after adding your payout details.
+        </Text>
+      }
+      icon={<EmptyWalletIcon />}
+    />
+  ) : (
     <Fragment>
       {contextHolder}
       <PayoutFormModal
         modalOpen={modalOpen}
         msg={msg}
-        onFormData={onFormData}
         showForm={showForm}
         setShowForm={setShowForm}
         setModalOpen={setModalOpen}
       />
+      ;
       <Table
         columns={columns}
         dataSource={dataSource}
-        scroll={{ x: 896 }}
+        loading={isLoading || isFetching}
         onChange={handleChange}
-        sticky
+        scroll={{ x: 896 }}
         rowKey="key"
-        pagination={{ position: ["bottomRight"] }}
+        pagination={{
+          defaultCurrent: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          onChange: paginationHandler,
+          position: ["bottomRight"],
+        }}
+        sticky
       />
     </Fragment>
   );
+  return <Fragment>{content}</Fragment>;
 };
 
 export default CompletedProjectsTable;

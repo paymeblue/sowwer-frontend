@@ -1,11 +1,7 @@
 "use client";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { EmptySpeakerIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
+import { PlusOutlined } from "@ant-design/icons";
 import Container from "@shared/Container";
-import ResultComponent from "@shared/ResultComponent";
-import { useGetMinistryProjectsQuery } from "@store/services/projects";
-import { Button, Space, Spin, Typography } from "antd";
+import { Button, Space, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import ProjectsTable from "./components/projects-table";
 
@@ -13,60 +9,10 @@ const { Title } = Typography;
 
 const ProjectsPage = () => {
   const router = useRouter();
-  const { user } = useAuth();
-  const id = user?.ministry.id;
-
-  const {
-    data: result,
-    isError,
-    error,
-    isSuccess,
-    isLoading,
-  } = useGetMinistryProjectsQuery({
-    id,
-    page: 1,
-  });
-  const antIcon = (
-    <LoadingOutlined
-      style={{
-        fontSize: 64,
-        display: "flex",
-        alignItems: "center",
-        minHeight: "10rem",
-        color: "#FFC629",
-      }}
-      spin
-    />
-  );
 
   const newProjectHandler = () => {
     router.push("/admin/projects/new-project");
   };
-  const content = isLoading ? (
-    <Spin size="large" indicator={antIcon} />
-  ) : isSuccess && Array.isArray(result.data) ? (
-    <ProjectsTable id={id} />
-  ) : isError ? (
-    <ResultComponent
-      icon={<EmptySpeakerIcon />}
-      title={
-        <Title level={4} className="text-18px leading-22.68px font-bold">
-          Oppsss... Something went wrong :&#40;
-        </Title>
-      }
-      subTitle={`${error}`}
-    />
-  ) : isSuccess && result.data.length === 0 ? (
-    <ResultComponent
-      icon={<EmptySpeakerIcon />}
-      title={
-        <Title level={4} className="text-18px leading-22.68px font-bold">
-          No Projects yet
-        </Title>
-      }
-      subTitle="Create a new project and manage all your projects from here."
-    />
-  ) : null;
 
   return (
     <Container className="bg-[#F7F8FA] tablet:px-3">
@@ -84,7 +30,7 @@ const ProjectsPage = () => {
           New Project
         </Button>
       </Space>
-      {content}
+      <ProjectsTable />
     </Container>
   );
 };

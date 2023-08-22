@@ -1,59 +1,50 @@
-import { Button, Form, Input, Modal, Select, Space, Typography } from "antd";
 import {
-  ChangeEvent,
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { FormData } from "../payouts";
+  useGetAccountInfoQuery,
+  useGetBanksQuery,
+  useVerifyAccountMutation,
+} from "@store/services/payouts";
+import { Button, Form, Input, Modal, Select, Space, Typography } from "antd";
+import { ChangeEvent, Fragment, useCallback, useMemo, useState } from "react";
 
 type Props = {
   modalOpen: boolean;
   handleOk: () => void;
   handleCancel: () => void;
-  msg: () => void;
-  onFormData: (data: FormData) => void;
-  initialData: FormData;
+  msg: (data: { status: "success" | "fail"; message: string }) => void;
 };
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
 
 const PayoutEditFormModal = ({
   modalOpen,
-  initialData,
   handleOk,
   handleCancel,
-  onFormData,
   msg,
 }: Props) => {
-  const [showAcctName, setShowAcctName] = useState<boolean>(false);
   const [form] = useForm();
   const [acctNo, setAcctNo] = useState<string>("");
-  const [acctName] = useState<string>("FAMILY MINISTRIES INTL.");
   const regexPattern = useMemo(() => /^\d{10}$/, []);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const { data: res } = useGetAccountInfoQuery();
+  const { data, isLoading } = useGetBanksQuery();
+  const [verifyAccount, { isLoading: sendLoading }] =
+    useVerifyAccountMutation();
   const acctHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setAcctNo(e.target.value);
   }, []);
 
-  useEffect(() => {
-    if (acctNo.match(regexPattern)) {
-      setShowAcctName(true);
-    }
-  }, [acctNo, regexPattern]);
-
   const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    console.log("Received values of form: ", values);
-    onFormData({ ...values, acct_name: acctName });
-    form.resetFields();
-    handleCancel();
-    setIsLoading(false);
-    msg();
+    try {
+      const res = await verifyAccount({
+        account_number: values.acctNo,
+        bank_id: "44",
+      }).unwrap();
+      console.log(res);
+      form.resetFields();
+      msg({ status: "success", message: res.message });
+      handleCancel();
+    } catch (error: any) {
+      msg({ status: "fail", message: error });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -84,8 +75,8 @@ const PayoutEditFormModal = ({
           onFinishFailed={onFinishFailed}
           autoComplete="off"
           initialValues={{
-            bank: initialData.bank,
-            acct_no: initialData.acct_no,
+            bank: res?.data.bank_name,
+            acctNo: res?.data.accountNumber,
           }}
           className="rounded bg-white p-4"
         >
@@ -106,17 +97,16 @@ const PayoutEditFormModal = ({
             >
               <Select
                 placeholder="-- Select --"
-                options={[
-                  { value: "", label: "-- Select --", disabled: true },
-                  { value: "stanbic-bank", label: "Stanbic Bank" },
-                  { value: "GTBank", label: "GTBank" },
-                  { value: "OPay", label: "OPay" },
-                ]}
+                options={data?.data.map((item) => ({
+                  value: item.code,
+                  label: item.name,
+                }))}
+                disabled={isLoading}
                 className="[&>.ant-select-selector]:h-auto  [&>.ant-select-selector]:border-none [&>.ant-select-selector]:bg-[#f9f9f9]  [&>.ant-select-selector]:py-3 [&>.ant-select-selector]:outline-none"
               />
             </Item>
             <Item
-              name="acct_no"
+              name="acctNo"
               label="Account number"
               className="mb-0 [&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
               rules={[
@@ -137,17 +127,14 @@ const PayoutEditFormModal = ({
           </Space>
           <Space className="m-0 w-full flex-row justify-end p-0">
             <Item>
-              {showAcctName && (
-                <Text className="mb-6 block text-accent">{acctName}</Text>
-              )}
               <Button
                 htmlType="submit"
                 type="primary"
                 size="large"
                 className="mt-0 bg-accent text-[13px] leading-[16px] text-white"
-                loading={isLoading}
+                loading={sendLoading}
               >
-                {isLoading ? "Updating" : "Update Bank Information"}
+                {sendLoading ? "Updating" : "Update Bank Information"}
               </Button>
             </Item>
           </Space>

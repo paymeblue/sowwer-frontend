@@ -54,7 +54,7 @@ const { Password } = Input;
 const { Item, useForm } = Form;
 const { Option } = Select;
 
-const DonateToProjectPage = () => {
+const DonateToProjectPage = ({ id }: { id: string }) => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
@@ -163,22 +163,37 @@ const DonateToProjectPage = () => {
     ),
     [formData.currency]
   );
-
-  const onFinish = async () => {
+  const callback: () => Promise<void> = async () => {
+    const data = {
+      id,
+      phone: phoneNumber,
+      email,
+      firstName: firstname,
+      lastName: lastname,
+      password,
+      anonymous: displayIdentity,
+      createAccount: signup,
+      confirm_password: cPassword,
+      amount: +amount,
+    };
+    await donorSignup(data).unwrap();
+  };
+  const onFinish = async (callback: () => Promise<void>) => {
     try {
-      const data = {
-        id: "172d1a79-4640-4948-af89-a420e460ce99",
-        phone: phoneNumber,
-        email,
-        firstName: firstname,
-        lastName: lastname,
-        password,
-        anonymous: displayIdentity,
-        createAccount: signup,
-        confirm_password: cPassword,
-        amount: +amount,
-      };
-      await donorSignup(data).unwrap();
+      // const data = {
+      //   id,
+      //   phone: phoneNumber,
+      //   email,
+      //   firstName: firstname,
+      //   lastName: lastname,
+      //   password,
+      //   anonymous: displayIdentity,
+      //   createAccount: signup,
+      //   confirm_password: cPassword,
+      //   amount: +amount,
+      // };
+      // await donorSignup(data).unwrap();
+      await callback();
       console.log("waiting");
       handleFlutterPayment({
         callback: (response) => {
@@ -244,7 +259,7 @@ const DonateToProjectPage = () => {
               signup: false,
             }}
             form={form}
-            onFinish={onFinish}
+            onFinish={() => onFinish(callback)}
             onFinishFailed={onFinishFailed}
             size="large"
             autoComplete="off"

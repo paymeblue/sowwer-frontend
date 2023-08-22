@@ -1,8 +1,12 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
+import {
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+} from "@store/services/auth";
 import { Button, Card, Form, Input, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 type Reset = {
   password: string;
@@ -13,8 +17,6 @@ type Forgot = {
   email: string;
 };
 
-type State = Forgot | Reset;
-
 const { Item, useForm } = Form;
 const { Password } = Input;
 const { Title, Text } = Typography;
@@ -22,36 +24,58 @@ const { Title, Text } = Typography;
 const PasswordPage = ({
   forgotPassword,
   resetPassword,
+  token,
 }: {
   forgotPassword?: boolean;
   resetPassword?: boolean;
+  token?: string;
 }) => {
   const [form] = useForm();
-  const [isLoading, setIsLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
-  const onFinish = async (values: State): Promise<void> => {
-    setIsLoading(true);
-    console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    form.resetFields();
-    setIsLoading(false);
-    messageApi.open({
-      content: forgotPassword
-        ? `A password reset link has been sent to your mail!`
-        : resetPassword
-        ? `Passord reset successful!`
-        : null,
-      className: "[&>div]:bg-[#17B472] [&>div]:text-white",
-      icon: <CheckCircleIcon />,
-    });
-    forgotPassword
-      ? router.push("/auth/reset-password")
-      : resetPassword
-      ? router.push("/")
-      : null;
+  const [forgotPasswordData, { isLoading }] = useForgotPasswordMutation();
+  const [resetPasswordData, { isLoading: resetLoading }] =
+    useResetPasswordMutation();
+  const onFinish1 = async (values: Forgot): Promise<void> => {
+    try {
+      const res = await forgotPasswordData(values).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+      router.push("/auth/reset-password");
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
   };
-
+  const onFinish2 = async (values: Reset): Promise<void> => {
+    try {
+      const body = {
+        token,
+        password: values.password,
+        password_confirm: values.cPassword,
+      };
+      const res = await resetPasswordData(body).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+      router.push("/");
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
+  };
+  const onFinish: any = forgotPassword ? onFinish1 : onFinish2;
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
     messageApi.open({
@@ -161,7 +185,7 @@ const PasswordPage = ({
                   />
                 </Item>
                 <Item
-                  name="c_password"
+                  name="cPassword"
                   label="Confirm Password"
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
@@ -196,9 +220,9 @@ const PasswordPage = ({
                     block
                     size="large"
                     className="mx-auto mt-3 flex items-center justify-center text-sm font-medium text-black laptop:p-6"
-                    loading={isLoading}
+                    loading={resetLoading}
                   >
-                    {isLoading ? "Resetting" : "Reset Password"}
+                    {resetLoading ? "Resetting" : "Reset Password"}
                   </Button>
                 </Item>
               </Fragment>

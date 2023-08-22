@@ -1,11 +1,20 @@
-import { SearchOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { EmptyDonorIcon } from "@components/assets/icons";
+import { useAuth } from "@hooks/useAuth";
+import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
-import { Button, InputRef, Space, Typography, Input, Table } from "antd";
-import type { ColumnsType, ColumnType, TableProps } from "antd/es/table";
+import ResultComponent from "@shared/ResultComponent";
+import { useGetDonationsForAdminUserQuery } from "@store/services/projects";
+import { Button, Input, InputRef, Space, Spin, Table, Typography } from "antd";
+import type { ColumnType, ColumnsType, TableProps } from "antd/es/table";
+import type {
+  FilterConfirmProps,
+  TablePaginationConfig,
+} from "antd/es/table/interface";
 import { FilterValue } from "antd/es/table/interface";
+import moment from "moment";
+import { Fragment, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-import React, { useRef, useState } from "react";
-import type { FilterConfirmProps } from "antd/es/table/interface";
 
 interface DataType {
   key: string;
@@ -19,56 +28,56 @@ interface DataType {
 type DataIndex = keyof DataType;
 const priceFormat = currencyFormat();
 const { Title, Text } = Typography;
-const data: DataType[] = [
-  {
-    key: "1",
-    frequency: "-",
-    name: "Semira Yesufu",
-    type: "One-time Donation",
-    amount: 135000,
-    date: "21st March 2023; 4:45pm",
-  },
-  {
-    key: "2",
-    frequency: "Monthly",
-    name: "Anonymous",
-    type: "Recurring  Donation",
-    amount: 550000,
-    date: "21st March 2023; 4:45pm",
-  },
-  {
-    key: "3",
-    frequency: "-",
-    name: "Semira Yesufu",
-    type: "One-time Donation",
-    amount: 157000,
-    date: "21st March 2023; 4:45pm",
-  },
-  {
-    key: "4",
-    frequency: "Monthly",
-    name: "Anonymous",
-    type: "Recurring  Donation",
-    amount: 500000,
-    date: "21st March 2023; 4:45pm",
-  },
-  {
-    key: "5",
-    frequency: "-",
-    name: "Semira Yesufu",
-    type: "One-time Donation",
-    amount: 600000,
-    date: "21st March 2023; 4:45pm",
-  },
-  {
-    key: "6",
-    frequency: "Monthly",
-    name: "Anonymous",
-    type: "Recurring  Donation",
-    amount: 300000,
-    date: "21st March 2023; 4:45pm",
-  },
-];
+// const data: DataType[] = [
+//   {
+//     key: "1",
+//     frequency: "-",
+//     name: "Semira Yesufu",
+//     type: "One-time Donation",
+//     amount: 135000,
+//     date: "21st March 2023; 4:45pm",
+//   },
+//   {
+//     key: "2",
+//     frequency: "Monthly",
+//     name: "Anonymous",
+//     type: "Recurring  Donation",
+//     amount: 550000,
+//     date: "21st March 2023; 4:45pm",
+//   },
+//   {
+//     key: "3",
+//     frequency: "-",
+//     name: "Semira Yesufu",
+//     type: "One-time Donation",
+//     amount: 157000,
+//     date: "21st March 2023; 4:45pm",
+//   },
+//   {
+//     key: "4",
+//     frequency: "Monthly",
+//     name: "Anonymous",
+//     type: "Recurring  Donation",
+//     amount: 500000,
+//     date: "21st March 2023; 4:45pm",
+//   },
+//   {
+//     key: "5",
+//     frequency: "-",
+//     name: "Semira Yesufu",
+//     type: "One-time Donation",
+//     amount: 600000,
+//     date: "21st March 2023; 4:45pm",
+//   },
+//   {
+//     key: "6",
+//     frequency: "Monthly",
+//     name: "Anonymous",
+//     type: "Recurring  Donation",
+//     amount: 300000,
+//     date: "21st March 2023; 4:45pm",
+//   },
+// ];
 
 const GeneralDonorsTable = () => {
   const [searchText, setSearchText] = useState("");
@@ -77,6 +86,59 @@ const GeneralDonorsTable = () => {
   const [filteredInfo, setFilteredInfo] = useState<
     Record<string, FilterValue | null>
   >({});
+  const { user } = useAuth();
+  let id;
+  if (user) {
+    id = user.ministry.id;
+  }
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+  });
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 64,
+        display: "flex",
+        alignItems: "center",
+        minHeight: "10rem",
+        color: "#FFC629",
+      }}
+      spin
+    />
+  );
+  const {
+    data: res,
+    isLoading,
+    isFetching,
+    error,
+    isError,
+    refetch,
+  } = useGetDonationsForAdminUserQuery({
+    id,
+    page: pagination.current,
+    type: "ministry",
+  });
+  function handleRefetch() {
+    refetch();
+  }
+  const paginationHandler = () => {
+    return setPagination((prev) => ({
+      ...prev,
+      current: res?.paginationInfo?.currentPage,
+      total: res?.paginationInfo?.totalItems,
+      pageSize: res?.paginationInfo?.limit,
+    }));
+  };
+  const dataSource: DataType[] | undefined = res?.data.map((item: any) => ({
+    key: item.id,
+    name: capitalizeFirstLetters(item.name),
+    frequency: capitalizeFirstLetters(item.frequency ?? "-"),
+    amount: Number(item.amount),
+    type: item.type,
+    date: moment(item.date).format("Do MMMM YYYY; h:mm:ss a"),
+  }));
+
   const handleSearch = (
     selectedKeys: string[],
     confirm: (param?: FilterConfirmProps) => void,
@@ -263,15 +325,54 @@ const GeneralDonorsTable = () => {
     },
   ];
 
-  return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      scroll={{ x: 896 }}
-      onChange={handleChange}
-      sticky
+  const content = isLoading ? (
+    <Spin size="large" indicator={antIcon} />
+  ) : isError ? (
+    <ResultComponent
+      title="Oops... Something went wrong :("
+      subTitle={`${error}`}
+      btnBg="primary"
+      btnText="Retry"
+      btnTextColor="black"
+      status="error"
+      showBtn={true}
+      onBtnClick={handleRefetch}
     />
+  ) : res?.data?.length === 0 ? (
+    <ResultComponent
+      title={
+        <Title className="text-[18px] font-bold leading-[22.68px]">
+          No donors yet
+        </Title>
+      }
+      subTitle={
+        <Text className="text-[13px] leading-[19px] text-gray-500">
+          Once you start receiving donations your list of donors will appear
+          here.
+        </Text>
+      }
+      icon={<EmptyDonorIcon />}
+    />
+  ) : (
+    <Fragment>
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        loading={isLoading || isFetching}
+        onChange={handleChange}
+        scroll={{ x: 896 }}
+        pagination={{
+          defaultCurrent: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          onChange: paginationHandler,
+          position: ["bottomRight"],
+        }}
+        sticky
+      />
+    </Fragment>
   );
+  return <Fragment>{content}</Fragment>;
 };
 
 export default GeneralDonorsTable;

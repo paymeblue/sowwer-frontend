@@ -1,4 +1,8 @@
 import {
+  useGetBanksQuery,
+  useVerifyAccountMutation,
+} from "@store/services/payouts";
+import {
   Button,
   Form,
   Input,
@@ -14,39 +18,37 @@ import {
   Fragment,
   SetStateAction,
   useCallback,
-  useEffect,
   useMemo,
   useState,
 } from "react";
 import { InfoCircle } from "react-iconly";
-import { FormData } from "../payouts";
 
 const { Title, Text, Paragraph } = Typography;
 const { Item, useForm } = Form;
 
 type Props = {
   modalOpen: boolean;
-  msg: () => void;
+  msg: (data: { status: "success" | "fail"; message: string }) => void;
   showForm: boolean;
   setShowForm: Dispatch<SetStateAction<boolean>>;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
-  onFormData: (data: FormData) => void;
 };
 
 const PayoutFormModal = ({
   modalOpen,
-  onFormData,
   showForm,
   setShowForm,
   msg,
   setModalOpen,
 }: Props) => {
-  const [showAcctName, setShowAcctName] = useState<boolean>(false);
+  // const [showAcctName, setShowAcctName] = useState<boolean>(false);
   const [form] = useForm();
   const [acctNo, setAcctNo] = useState<string>("");
-  const [acctName] = useState<string>("FAMILY MINISTRIES INTL.");
+  // const [acctName, setAcctName] = useState<string>("FAMILY MINISTRIES INTL.");
   const regexPattern = useMemo(() => /^\d{10}$/, []);
-
+  const { data, isLoading } = useGetBanksQuery();
+  const [verifyAccount, { isLoading: sendLoading }] =
+    useVerifyAccountMutation();
   const showFormHandler = useCallback(() => setShowForm(true), [setShowForm]);
 
   const handleOk = () => {
@@ -60,24 +62,26 @@ const PayoutFormModal = ({
     setAcctNo(e.target.value);
   }, []);
 
-  useEffect(() => {
-    if (acctNo.match(regexPattern)) {
-      setShowAcctName(true);
-    }
-  }, [acctNo, regexPattern]);
-
-  const [isLoading, setIsLoading] = useState(false);
+  // useEffect(() => {
+  //   if (acctNo.match(regexPattern)) {
+  //     setShowAcctName(true);
+  //   }
+  // }, [acctNo, regexPattern]);
 
   const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
-    console.log("Form data: ", values);
-    onFormData({ ...values, acct_name: acctName });
-    await new Promise((resolve) => setTimeout(resolve, 500)); // Simulating an asynchronous operation
-    form.resetFields();
-    setIsLoading(false);
-    handleCancel();
-
-    msg();
+    try {
+      const res = await verifyAccount({
+        account_number: values.acctNo,
+        bank_id: "44",
+      }).unwrap();
+      console.log(res);
+      // setAcctName(res.data.accountName);
+      form.resetFields();
+      msg({ status: "success", message: res.message });
+      handleCancel();
+    } catch (error: any) {
+      msg({ status: "fail", message: error });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -131,17 +135,16 @@ const PayoutFormModal = ({
                 >
                   <Select
                     placeholder="-- Select bank --"
-                    options={[
-                      { value: "", label: "-- Select bank --", disabled: true },
-                      { value: "Stanbic Bank", label: "Stanbic Bank" },
-                      { value: "GTBank", label: "GTBank" },
-                      { value: "OPay", label: "OPay" },
-                    ]}
+                    options={data?.data.map((item) => ({
+                      value: item.code,
+                      label: item.name,
+                    }))}
+                    disabled={isLoading}
                     className="[&>.ant-select-selector]:h-auto  [&>.ant-select-selector]:border-none [&>.ant-select-selector]:bg-[#f9f9f9]  [&>.ant-select-selector]:py-2 [&>.ant-select-selector]:outline-none"
                   />
                 </Item>
                 <Item
-                  name="acct_no"
+                  name="acctNo"
                   label="Account number"
                   className="mb-0 [&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
@@ -162,17 +165,17 @@ const PayoutFormModal = ({
               </Space>
               <Space className="m-0 w-full flex-row justify-end p-0">
                 <Item>
-                  {showAcctName && (
+                  {/* {showAcctName && (
                     <Text className="mb-4 block text-accent">{acctName}</Text>
-                  )}
+                  )} */}
                   <Button
                     htmlType="submit"
                     type="primary"
                     size="large"
                     className="mt-2 bg-accent text-[13px] leading-[16px] text-white"
-                    loading={isLoading}
+                    loading={sendLoading}
                   >
-                    {isLoading ? "Connecting" : "Connect Bank Account"}
+                    {sendLoading ? "Connecting" : "Connect Bank Account"}
                   </Button>
                 </Item>
               </Space>

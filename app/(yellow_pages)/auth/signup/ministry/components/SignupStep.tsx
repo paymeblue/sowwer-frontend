@@ -87,6 +87,7 @@ const SignupStep = () => {
       ministryType,
       ministryWebsite,
       state,
+      cacDocument,
     } = values;
     console.log(values);
     try {
@@ -99,7 +100,7 @@ const SignupStep = () => {
         ministryState: state,
         ministrySocialLink: ministryWebsite,
         ministryAddress: ministryAddressLine,
-        cacDocument: "4 Madianna close, Wuse 2",
+        cacDocument: cacDocument[0].thumbUrl,
         phone: adminPhoneNumber,
         email: adminEmail,
         firstName: adminFirstName,

@@ -1,27 +1,25 @@
 "use client";
-import { CheckCircleIcon, EmptyWalletIcon } from "@components/assets/icons";
+import { CheckCircleIcon } from "@components/assets/icons";
 import Container from "@shared/Container";
-import ResultComponent from "@shared/ResultComponent";
 import TabList from "@shared/TabList";
+import { useGetAccountInfoQuery } from "@store/services/payouts";
 import { Alert, Button, Space, TabsProps, Typography, message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, EditSquare, InfoCircle } from "react-iconly";
 import CompletedProjectsTable from "./components/completed-projects";
 import PayoutEditFormModal from "./components/payout-edit-modal";
 import PayoutHistoryTable from "./components/payout-history";
 import PayoutFormModal from "./components/payout-modal";
 
-export type FormData = { bank: string; acct_no: string; acct_name: string };
-
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 
 const PayoutsPage = () => {
-  const [payoutsPage, setPayoutsPage] = useState<boolean>(false);
   const [displayAcctInfo, setDisplayAcctInfo] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [connectBankModal, setConnectBankModal] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [showForm, setShowForm] = useState<boolean>(false);
+  const { data: res } = useGetAccountInfoQuery();
 
   const showModal = () => {
     setModalOpen(true);
@@ -30,12 +28,21 @@ const PayoutsPage = () => {
   const handleOk = () => {
     setModalOpen(false);
   };
-  const showMessage = (content: string) => {
-    messageApi.open({
-      content,
-      className: "[&>div]:bg-[#17B472] [&>div]:text-white",
-      icon: <CheckCircleIcon />,
-    });
+  const showMessage = (content: {
+    status: "success" | "fail";
+    message: string;
+  }) => {
+    if (content.status === "success")
+      messageApi.open({
+        content: content.message,
+        className: "[&>div]:bg-[#17B472] [&>div]:text-white",
+        icon: <CheckCircleIcon />,
+      });
+    else
+      messageApi.open({
+        content: content.message,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
   };
   const handleCancel = () => {
     setModalOpen(false);
@@ -45,31 +52,15 @@ const PayoutsPage = () => {
     setShowForm(true);
   };
 
-  const [formInputs, setFormInputs] = useState<FormData>({
-    bank: "",
-    acct_no: "",
-    acct_name: "",
-  });
-  const onFormData = (data: FormData) => {
-    setFormInputs((prev) => ({
-      ...prev,
-      bank: data.bank,
-      acct_no: data.acct_no,
-      acct_name: data.acct_name,
-    }));
-    setDisplayAcctInfo(true);
-  };
+  useEffect(() => {
+    if (res) setDisplayAcctInfo(true);
+  }, [res]);
 
   const items: TabsProps["items"] = [
     {
       key: "completed-projects",
       label: "Completed Projects",
-      children: (
-        <CompletedProjectsTable
-          onFormData={onFormData}
-          acctLinked={displayAcctInfo}
-        />
-      ),
+      children: <CompletedProjectsTable acctLinked={displayAcctInfo} />,
     },
     {
       key: "payout-history",
@@ -87,7 +78,7 @@ const PayoutsPage = () => {
           Account number:
         </Title>
         <Paragraph className="m-0 text-[12px] leading-[20px]">
-          &nbsp;{formInputs.acct_no}
+          &nbsp;{res?.data.accountNumber}
         </Paragraph>
       </Space>
       <Space className="w-full flex-col items-start tablet:flex-row tablet:items-center">
@@ -98,7 +89,7 @@ const PayoutsPage = () => {
           Account name:
         </Title>
         <Paragraph className="m-0 text-[12px] leading-[20px]">
-          &nbsp;{formInputs.acct_name}
+          &nbsp;{res?.data.accountName}
         </Paragraph>
       </Space>
       <Space className="w-full flex-col items-start tablet:flex-row tablet:items-center">
@@ -109,7 +100,7 @@ const PayoutsPage = () => {
           Bank name:
         </Title>
         <Paragraph className="m-0 text-[12px] leading-[20px]">
-          &nbsp;{formInputs.bank}
+          &nbsp;{res?.data.bank_name}
         </Paragraph>
       </Space>
     </Typography>
@@ -121,27 +112,20 @@ const PayoutsPage = () => {
         <PayoutEditFormModal
           modalOpen={modalOpen}
           handleOk={handleOk}
-          msg={() => showMessage("Account Info updated successfully!")}
+          msg={(info) => showMessage(info)}
           handleCancel={handleCancel}
-          onFormData={onFormData}
-          initialData={formInputs}
         />
       )}
       {connectBankModal && (
         <PayoutFormModal
           modalOpen={connectBankModal}
-          msg={() => showMessage("Account connected successfully!")}
+          msg={(info) => showMessage(info)}
           setModalOpen={setConnectBankModal}
-          onFormData={onFormData}
           showForm={showForm}
           setShowForm={setShowForm}
         />
       )}
-      <Title
-        level={2}
-        onClick={() => setPayoutsPage(true)}
-        className="leading-30.24px] text-[24px] font-bold"
-      >
+      <Title level={2} className="text-[24px] font-bold leading-[30.24px]">
         Payouts
       </Title>
       {!displayAcctInfo ? (
@@ -193,25 +177,7 @@ const PayoutsPage = () => {
           showIcon={false}
         />
       )}
-      {!payoutsPage ? (
-        <ResultComponent
-          title={
-            <Title className="text-[18px] font-bold leading-[22.68px]">
-              No payouts yet
-            </Title>
-          }
-          subTitle={
-            <Text className="text-[13px] leading-[19px] text-gray-500">
-              None of your projects have been completed. Once they're completed,
-              you will see a list of <br /> your completed projects and be able
-              to request payouts after adding your payout details.
-            </Text>
-          }
-          icon={<EmptyWalletIcon />}
-        />
-      ) : (
-        <TabList items={items} />
-      )}
+      <TabList items={items} />
     </Container>
   );
 };

@@ -34,6 +34,7 @@ type IProps = {
   targetAmount: string;
   organisedBy?: string;
   donationPercent?: string;
+  image: string | null;
 };
 
 const ReuseableCards = ({
@@ -134,6 +135,7 @@ const ReuseableCards = ({
               amountRaised,
               targetAmount,
               organisedBy,
+              image,
               donationPercent,
             }: IProps) => (
               <Col className="gutter-row" key={id}>
@@ -143,7 +145,7 @@ const ReuseableCards = ({
                   cover={
                     <Image
                       alt="example"
-                      src={getImageForCategory(category)}
+                      src={image ?? getImageForCategory(category)}
                       width={385}
                       height={209}
                       className="h-auto"

@@ -94,8 +94,9 @@ export type PublishOrDraftResponse = Response<{
   paginationInfo: null;
 };
 export type MinistryProjectsRequest = {
-  id?: string;
+  id?: string | null;
   page?: number;
+  status?: "in-progress" | "active" | "drafted" | "completed";
 };
 
 export type Ministry = {
@@ -105,7 +106,7 @@ export type Ministry = {
   email: string;
   phone: string;
   address: string;
-  cac_document: boolean | string;
+  cac_document: any;
   createdAt: string;
   state: string;
   updatedAt: string;
@@ -152,7 +153,7 @@ export type MinistrySignupRequest = {
   ministryState: string;
   ministrySocialLink: string;
   ministryAddress: string;
-  cacDocument: string;
+  cacDocument: any;
   phone: string;
   email: string;
   firstName: string;
@@ -214,6 +215,7 @@ export type MinistryProjectsResponse = TResponse<{
   category: "widows" | "orphans" | "missions";
   amountRaised: string;
   status: string;
+  image: string | null;
   donors: number;
 }>;
 
@@ -252,7 +254,7 @@ export type UpdateNotificationRequest = {
   recurringDonation?: boolean;
 };
 
-export type UpdateNotificationResponse = {
+export type PlainResponse = {
   success: boolean;
   message: string;
 };
@@ -310,11 +312,7 @@ export type UpdateSocialLinksRequest = {
   youtube: string;
 };
 
-export type UpdateSocialLinksResponse = {
-  success: boolean;
-  message: string;
-};
-export type GetDonorsForProjectPesponse = TResponse<{
+export type GetDonorsForProjectResponse = TResponse<{
   createdAt: string;
   id: string;
   name: string;
@@ -379,6 +377,7 @@ export type GetProjectDetailsResponse = Response<{
   organisedBy: string;
   amountRaised: string;
   donors: string;
+  donationPercent: string;
 }>;
 
 export type GetMinistryDetailsResponse = Response<
@@ -466,10 +465,7 @@ type WidowJoinSoowerRequest2 = {
 export type WidowJoinSoowerRequest =
   | WidowJoinSoowerRequest1
   | WidowJoinSoowerRequest2;
-export type JoinSoowerResponse = {
-  success: boolean;
-  message: string;
-};
+
 export type MissionaryJoinSoowerRequest1 = {
   status: "new" | "existing";
   name: string;
@@ -495,3 +491,20 @@ export type MissionaryJoinSoowerRequest2 = MissionaryJoinSoowerRequest1 &
 export type MissionaryJoinSoowerRequest =
   | MissionaryJoinSoowerRequest1
   | MissionaryJoinSoowerRequest2;
+
+export type GetBanksResponse = TResponse<{ name: string; code: string }>;
+export type ResetPassowrdRequest = {
+  token?: string;
+  password: string;
+  password_confirm: string;
+};
+export type VerifyAccountRequest = { account_number: string; bank_id: string };
+export type AccountResponse = Response<{
+  accountName: string;
+  accountNumber: string;
+  bank_name: string;
+  createdAt: string;
+  id: string;
+}>;
+export type PayoutHistoryResponse = TResponse<{}>;
+export type MinistryDonationResponse = TResponse<{}>;
