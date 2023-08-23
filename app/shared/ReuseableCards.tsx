@@ -146,9 +146,10 @@ const ReuseableCards = ({
                     <Image
                       alt="example"
                       src={image ?? getImageForCategory(category)}
-                      width={385}
-                      height={209}
-                      className="h-auto"
+                      width={416}
+                      height={225.86}
+                      className="object-fit h-[225.86px] w-[416px]"
+                      quality={100}
                       priority
                     />
                   }

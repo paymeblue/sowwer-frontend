@@ -494,7 +494,7 @@ export type MissionaryJoinSoowerRequest =
 
 export type GetBanksResponse = TResponse<{ name: string; code: string }>;
 export type ResetPassowrdRequest = {
-  token?: string;
+  token: string | null;
   password: string;
   password_confirm: string;
 };

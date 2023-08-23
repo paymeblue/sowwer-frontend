@@ -1,9 +1,10 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
-import {
-  useForgotPasswordMutation,
-  useResetPasswordMutation,
-} from "@store/services/auth";
+import
+  {
+    useForgotPasswordMutation,
+    useResetPasswordMutation,
+  } from "@store/services/auth";
 import { Button, Card, Form, Input, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { Fragment } from "react";
@@ -28,7 +29,7 @@ const PasswordPage = ({
 }: {
   forgotPassword?: boolean;
   resetPassword?: boolean;
-  token?: string;
+  token: string | null;
 }) => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();

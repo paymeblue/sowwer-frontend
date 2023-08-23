@@ -90,6 +90,9 @@ const SignupStep = () => {
       cacDocument,
     } = values;
     console.log(values);
+    const formdata = new FormData();
+    formdata.append("cacDocument", cacDocument[0]);
+    console.log(formdata, cacDocument);
     try {
       const credentials: MinistrySignupRequest = {
         ministryType,
@@ -100,7 +103,7 @@ const SignupStep = () => {
         ministryState: state,
         ministrySocialLink: ministryWebsite,
         ministryAddress: ministryAddressLine,
-        cacDocument: cacDocument[0].thumbUrl,
+        cacDocument: formdata,
         phone: adminPhoneNumber,
         email: adminEmail,
         firstName: adminFirstName,
