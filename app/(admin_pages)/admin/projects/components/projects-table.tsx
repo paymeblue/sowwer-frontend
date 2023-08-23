@@ -44,6 +44,7 @@ import type {
   TablePaginationConfig,
 } from "antd/es/table/interface";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 import { Fragment, ReactNode, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { InfoCircle } from "react-iconly";
@@ -106,6 +107,7 @@ const { Title, Text, Paragraph } = Typography;
 
 const ProjectsTable = () => {
   const { user } = useAuth();
+  const router = useRouter();
   let id;
   if (user) {
     id = user.ministry.id;
@@ -194,6 +196,7 @@ const ProjectsTable = () => {
         icon={<EditOutlined />}
         type="text"
         className="flex items-center justify-center text-[12px] hover:bg-transparent"
+        onClick={() => router.push(`/admin/projects/new-project?id=${rowId}`)}
       >
         Edit
       </Button>

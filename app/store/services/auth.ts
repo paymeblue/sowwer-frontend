@@ -101,7 +101,7 @@ const auth = api.injectEndpoints({
         const { token, ...rest } = body;
         return {
           url: `users/reset-password/${token}`,
-          method: "POST",
+          method: "PATCH",
           body: rest,
         };
       },

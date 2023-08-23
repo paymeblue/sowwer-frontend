@@ -178,35 +178,46 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     };
     await donorSignup(data).unwrap();
   };
+  // const onFinish = async (callback: () => Promise<void>) => {
+  //   try {
+  //     await callback();
+  //     console.log("waiting");
+  //     setTimeout(()=>{})
+  //     handleFlutterPayment({
+  //       callback: (response) => {
+  //         console.log(response);
+  //         closePaymentModal(); // this will close the modal programmatically
+  //         router.push("/projects/donation-successful");
+  //       },
+  //       onClose: () => {},
+  //     });
+  //   } catch (error: any) {
+  //     messageApi.open({
+  //       content: `${error.message}`,
+  //       className: "[&>div]:bg-red-500 [&>div]:text-white",
+  //     });
+  //   }
+  // };
   const onFinish = async (callback: () => Promise<void>) => {
     try {
-      // const data = {
-      //   id,
-      //   phone: phoneNumber,
-      //   email,
-      //   firstName: firstname,
-      //   lastName: lastname,
-      //   password,
-      //   anonymous: displayIdentity,
-      //   createAccount: signup,
-      //   confirm_password: cPassword,
-      //   amount: +amount,
-      // };
-      // await donorSignup(data).unwrap();
-      await callback();
+      await callback(); // Wait for the callback to complete
       console.log("waiting");
-      handleFlutterPayment({
-        callback: (response) => {
-          console.log(response);
-          closePaymentModal(); // this will close the modal programmatically
-          router.push("/projects/donation-successful");
-        },
-        onClose: () => {},
-      });
+      setTimeout(() => {
+        handleFlutterPayment({
+          callback: (response) => {
+            console.log(response);
+            closePaymentModal(); // this will close the modal programmatically
+            router.push("/projects/donation-successful");
+          },
+          onClose: () => {},
+        });
+      }, 3000);
+
+      // console.log("Payment process completed with response:", response);
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,
-        className: "[&>div]:bg-red-500 [&>div]:text-white",
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
       });
     }
   };
