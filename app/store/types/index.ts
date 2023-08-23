@@ -496,7 +496,7 @@ export type GetBanksResponse = TResponse<{ name: string; code: string }>;
 export type ResetPassowrdRequest = {
   token?: string | null;
   password: string;
-  password_confirm: string;
+  confirm_password: string;
 };
 export type VerifyAccountRequest = { account_number: string; bank_id: string };
 export type AccountResponse = Response<{
