@@ -57,7 +57,7 @@ const PasswordPage = ({
       const body = {
         token,
         password: values.password,
-        password_confirm: values.cPassword,
+        confirm_password: values.cPassword,
       };
       const res = await resetPasswordData(body).unwrap();
       messageApi.open({

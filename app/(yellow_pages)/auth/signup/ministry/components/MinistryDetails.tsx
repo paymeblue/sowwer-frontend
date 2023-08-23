@@ -61,11 +61,11 @@ const props: UploadProps = {
       message.error(`${info.file.name} file upload failed.`);
     }
   },
-  customRequest({ file }) {
-    const formData = new FormData();
-    formData.append("cacDocument", file);
-    console.log(formData, file);
-  },
+  // customRequest({ file }) {
+  //   const formData = new FormData();
+  //   formData.append("cacDocument", file);
+  //   console.log(formData, file);
+  // },
   onDrop(e) {
     console.log("Dropped files", e.dataTransfer.files);
   },
@@ -97,6 +97,7 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
     if (Array.isArray(e)) {
       return e;
     }
+    console.log(e);
     return e?.fileList;
   };
   const options = [
