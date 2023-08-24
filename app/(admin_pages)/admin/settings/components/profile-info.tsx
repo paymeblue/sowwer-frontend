@@ -62,7 +62,6 @@ const ProfileInfo = () => {
       messageApi.open({
         content: `${error}`,
         className: `[&>div]:bg-red-800 [&>div]:text-white`,
-        icon: <CheckCircleIcon />,
       });
     }
   };

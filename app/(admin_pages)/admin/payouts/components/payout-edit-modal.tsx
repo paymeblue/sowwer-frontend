@@ -131,7 +131,7 @@ const PayoutEditFormModal = ({
                 htmlType="submit"
                 type="primary"
                 size="large"
-                className="mt-0 bg-accent text-[13px] leading-[16px] text-white"
+                className="mt-3 bg-accent text-[13px] leading-[16px] text-white"
                 loading={sendLoading}
               >
                 {sendLoading ? "Updating" : "Update Bank Information"}

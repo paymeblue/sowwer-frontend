@@ -9,7 +9,7 @@ const DonationSuccess = ({ page }: { page: string }) => {
   return (
     <Fragment>
       <div className="flex min-h-screen items-center justify-center">
-        <Card className="mx-4 max-w-2xl shadow tablet:m-auto" bordered={false}>
+        <Card className="mx-4 max-w-2xl tablet:m-auto" bordered={false}>
           <ResultComponent
             icon={<DonateIcon />}
             title={

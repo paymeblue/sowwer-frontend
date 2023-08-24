@@ -1,15 +1,11 @@
-"use client";
-// import { Metadata } from "next";
-import { useSearchParams } from "next/navigation";
+import { Metadata } from "next";
 import PasswordPage from "../components/Password";
 
-// export const metadata: Metadata = {
-//   title: "Reset Password | Soower",
-// };
+export const metadata: Metadata = {
+  title: "Reset Password | Soower",
+};
 const ResetPassordPage = () => {
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
-  return <PasswordPage resetPassword token={token} />;
+  return <PasswordPage resetPassword />;
 };
 
 export default ResetPassordPage;

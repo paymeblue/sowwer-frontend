@@ -168,7 +168,7 @@ const ReuseableCards = ({
                     {capitalizeFirstLetters(title)}
                   </Title>
                   <Paragraph className="text-[12px] uppercase leading-[15px] text-body-2 laptop:leading-[15.12px]">
-                    {organisedBy ?? `BY FAMILY WORSHIP CENTER`}
+                    {organisedBy ?? `N/A`}
                   </Paragraph>
                   <Text className="text-[13px] leading-[23px] text-body-2">
                     {description
@@ -198,7 +198,7 @@ const ReuseableCards = ({
                           </Text>
                         </Space>
                         <Progress
-                          percent={Number(donationPercent) ?? 50}
+                          percent={Number(donationPercent) ?? 0}
                           showInfo={false}
                           strokeColor="#3466ff"
                           status={

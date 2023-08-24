@@ -3,7 +3,11 @@ import { Fragment } from "react";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
 import { setProjectId } from "@store/reducers/utilSlice";
-import { useCreateProjectMutation } from "@store/services/projects";
+import {
+  useCreateProjectMutation,
+  useEditProjectMutation,
+  useGetProjectQuery,
+} from "@store/services/projects";
 import {
   Button,
   Divider,
@@ -14,25 +18,59 @@ import {
   Typography,
   message,
 } from "antd";
+import { useSearchParams } from "next/navigation";
 
 const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
 
-type State = { amount: string; category: string; title: string };
+type State = {
+  amount: string;
+  category: "orphans" | "widows" | "ministry";
+  title: string;
+};
 
 const MainDetails = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("q");
+  let id;
+  if (projectId) {
+    id = projectId;
+  }
+  const { data } = useGetProjectQuery(id);
+  const [editProject, { isLoading: editLoading }] = useEditProjectMutation();
   const [createProject, { isLoading }] = useCreateProjectMutation();
+
+  const initialValues = data
+    ? {
+        title: data.data.title,
+        category: data.data.category,
+        amount: data.data.targetAmount.toString(),
+      }
+    : {
+        title: "",
+        category: "",
+        amount: "",
+      };
+
   const onFinish = async (values: State): Promise<void> => {
-    const credentials = {
-      amount: +values.amount,
-      category: values.category,
-      title: values.title,
-    };
+    const credentials = data
+      ? {
+          id: projectId,
+          amount: +values.amount,
+          category: values.category,
+          title: values.title,
+        }
+      : {
+          amount: +values.amount,
+          category: values.category,
+          title: values.title,
+        };
+    const mutationFn = data ? editProject : createProject;
     try {
-      const res = await createProject(credentials).unwrap();
+      const res = await mutationFn(credentials).unwrap();
       console.log(res);
       dispatch(setProjectId({ projectId: res.data.id }));
       form.resetFields();
@@ -66,6 +104,7 @@ const MainDetails = () => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         className="rounded bg-white p-4"
+        initialValues={initialValues}
       >
         <Space
           className="flex w-full  flex-col items-start laptop:flex-row [&>div.ant-space-item]:w-full"
@@ -151,9 +190,9 @@ const MainDetails = () => {
               type="primary"
               size="large"
               className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
-              loading={isLoading}
+              loading={data ? editLoading : isLoading}
             >
-              {isLoading ? "Saving" : "Save"}
+              {editLoading || isLoading ? "Saving" : "Save"}
             </Button>
           </Item>
         </Space>

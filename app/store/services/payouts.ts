@@ -3,7 +3,9 @@ import {
   ErrorResponse,
   GetBanksResponse,
   PayoutHistoryResponse,
+  PlainResponse,
   VerifyAccountRequest,
+  VerifyPaymentRequest,
 } from "@store/types";
 import api from "./api/apiSlice";
 import { cacher } from "./api/rtkQueryCacheUtils";
@@ -27,6 +29,15 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    verifyPayment: build.mutation<any, VerifyPaymentRequest>({
+      query: (body) => ({ url: `payments/verify`, method: "POST", body }),
+      invalidatesTags: cacher.providesProperty("Account"),
+      transformResponse: (response: AccountResponse, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
     getAccountInfo: build.query<AccountResponse, void>({
       query: () => `accounts`,
       providesTags: cacher.providesProperty("Account"),
@@ -36,7 +47,7 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    requestPayout: build.mutation<any, string>({
+    requestPayout: build.mutation<PlainResponse, string>({
       query: (id) => `projects/${id}/payout`,
       invalidatesTags: cacher.providesProperty("Projects"),
       transformResponse: (response, meta, arg): any => {
@@ -65,6 +76,7 @@ const payouts = api.injectEndpoints({
 export const {
   useGetBanksQuery,
   useVerifyAccountMutation,
+  useVerifyPaymentMutation,
   useGetAccountInfoQuery,
   useRequestPayoutMutation,
   usePayoutHistoryQuery,

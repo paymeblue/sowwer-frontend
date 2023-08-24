@@ -1,6 +1,8 @@
 "use client";
 import { HeartOrganIcon } from "@components/assets/icons";
 import useFlutterConfig from "@hooks/useFlutterConfig";
+import capitalizeFirstLetters from "@lib/capitalize";
+import { useGetMinistryDetailsQuery } from "@store/services/ministries";
 import type { RadioChangeEvent } from "antd";
 import {
   Alert,
@@ -17,6 +19,7 @@ import {
 } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
+// import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, Fragment, useCallback, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
@@ -41,11 +44,10 @@ const { Password } = Input;
 const { Item, useForm } = Form;
 const { Option } = Select;
 
-const DonateToMinistryPage = () => {
+const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const [form] = useForm();
   const router = useRouter();
-  // const { ministryId } = router.query;
-  // const title = ministryId?.toString().replace("-", " ");
+  const { data: ministry } = useGetMinistryDetailsQuery(ministryId);
   const [messageApi, contextHolder] = message.useMessage();
   const [checked, setChecked] = useState(false);
   const [recurring, setRecurring] = useState(false);
@@ -171,16 +173,24 @@ const DonateToMinistryPage = () => {
           <Title className="my-4 text-[10.07px] leading-[12.69px] text-body-1 laptop:text-[12px] laptop:leading-[15px]">
             YOU ARE MAKING A DONATION TO
           </Title>
-          <Space align="center" className="my-4">
-            <HeartOrganIcon />
-            <Title
-              level={2}
-              className=" mb-0 font-title text-[21.18px] leading-[24.23px] laptop:text-[30px] laptop:leading-[34px]"
-            >
-              {/* {title?.replaceAll("-", " ")} */}
-              Family Worship Center
-            </Title>
-          </Space>
+          {ministry ? (
+            <Space align="center" className="my-4">
+              <HeartOrganIcon />
+              {/* <Image
+                src={ministry.data.image ?? "/assets/images/happy_woman.jpg"}
+                alt="happy woman"
+                width={200}
+                height={20}
+                className="h-[20px] w-[200px]  rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
+              /> */}
+              <Title
+                level={2}
+                className=" mb-0 font-title text-[21.18px] leading-[24.23px] laptop:text-[30px] laptop:leading-[34px]"
+              >
+                {capitalizeFirstLetters(ministry.data.name)}
+              </Title>
+            </Space>
+          ) : null}
           <Form
             name="donate_form"
             layout="vertical"

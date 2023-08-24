@@ -1,4 +1,6 @@
 import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
+import { useUtil } from "@hooks/useUtil";
+import { useEditCoverPhotoMutation } from "@store/services/projects";
 import {
   Button,
   Divider,
@@ -10,7 +12,7 @@ import {
   message,
 } from "antd";
 import { RcFile } from "antd/es/upload";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
@@ -19,7 +21,6 @@ const { Dragger } = Upload;
 
 const props: UploadProps = {
   name: "file",
-  // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
   headers: {
     authorization: "authorization-text",
   },
@@ -65,19 +66,25 @@ const props: UploadProps = {
 const CoverPhoto = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
-    console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    form.resetFields();
-    setIsLoading(false);
-    messageApi.open({
-      content: "Cover photo submitted successfully!",
-      className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-      icon: <CheckCircleIcon />,
-    });
+  const [coverPhoto, { isLoading }] = useEditCoverPhotoMutation();
+  const projectId = useUtil();
+  const onFinish = async (values: any) => {
+    try {
+      const res = await coverPhoto({
+        id: projectId,
+        cover_photo: values.coverPhoto[0].thumbUrl,
+      }).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: `[&>div]:bg-red-800 [&>div]:text-white`,
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -122,13 +129,14 @@ const CoverPhoto = () => {
               Add a cover photo to your project.
             </Paragraph>
           </Typography>
+
           <Item
             label="Upload cover photo"
             className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
             required
           >
             <Item
-              name="cover_photo"
+              name="coverPhoto"
               valuePropName="fileList"
               getValueFromEvent={normFile}
               rules={[

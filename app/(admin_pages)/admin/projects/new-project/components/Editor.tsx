@@ -1,146 +1,71 @@
-// "use client";
-// import { CheckCircleIcon } from "@components/assets/icons";
-// import { Button, Space, Typography, message } from "antd";
-// import React, { FormEvent, Fragment, useState } from "react";
-// import ReactQuill from "react-quill";
-
-// const { Title, Paragraph } = Typography;
-
-// const formats = [
-//   "header",
-//   "font",
-//   "size",
-//   "bold",
-//   "italic",
-//   "underline",
-//   "strike",
-//   "blockquote",
-//   "list",
-//   "bullet",
-//   "indent",
-//   "link",
-//   "image",
-//   "video",
-// ];
-// const modules = {
-//   toolbar: [
-//     [{ header: "1" }, { header: "2" }, { font: [] }],
-//     [{ size: [] }],
-//     ["bold", "italic", "underline", "strike", "blockquote"],
-//     [
-//       { list: "ordered" },
-//       { list: "bullet" },
-//       { indent: "-1" },
-//       { indent: "+1" },
-//     ],
-//     ["link", "image", "video"],
-//     ["clean"],
-//   ],
-//   clipboard: {
-//     // toggle to add extra line breaks when pasting HTML:
-//     matchVisual: false,
-//   },
-// };
-
-// const Editor: React.FC = () => {
-//   const [messageApi, contextHolder] = message.useMessage();
-//   const [editorHtml, setEditorHtml] = useState("");
-
-//   const handleChange = (html: any) => {
-//     setEditorHtml(html);
-//   };
-
-//   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     if (editorHtml && editorHtml === "") {
-//       console.log(editorHtml);
-//     }
-//     messageApi.open({
-//       content: "Form submission successful",
-//       className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-//       icon: <CheckCircleIcon />,
-//     });
-//   };
-
-//   return (
-//     <Fragment>
-//       {contextHolder}
-//       <Space className="flex w-full flex-col items-start bg-white p-4 [&>div.ant-space-item]:w-full">
-//         <Typography>
-//           <Title level={5} className="mb-0 font-bold">
-//             Story
-//           </Title>
-//           <Paragraph>Describe and talk about your project.</Paragraph>
-//         </Typography>
-//         <form onSubmit={submitHandler} autoComplete="off">
-//           <div className="mb-2">
-//             <span className="mr-2 font-bold text-red-300">*</span>
-//             <label htmlFor="editor">What is this project about?</label>
-//           </div>
-//           <ReactQuill
-//             theme="snow"
-//             onChange={handleChange}
-//             value={editorHtml}
-//             modules={modules}
-//             formats={formats}
-//             // bounds={".app"}
-//             placeholder="Write something here..."
-//           />
-//           <Space className="mt-6 w-full justify-end">
-//             <Button
-//               htmlType="submit"
-//               type="primary"
-//               size="large"
-//               className="bg-accent text-white "
-//             >
-//               Save
-//             </Button>
-//           </Space>
-//         </form>
-//       </Space>
-//     </Fragment>
-//   );
-// };
-
-// export default Editor;
-
-// const Editor = () => {
-//   return <div>Editor</div>;
-// };
-
-// export default Editor;
 import { CheckCircleIcon } from "@components/assets/icons";
+import { useUtil } from "@hooks/useUtil";
+import {
+  useEditProjectMutation,
+  useGetProjectQuery,
+} from "@store/services/projects";
 import { Button, Space, Typography, message } from "antd";
-import React, { FormEvent, Fragment, useState } from "react";
+import Parser from "html-react-parser";
+import { useSearchParams } from "next/navigation";
+import React, { FormEvent, Fragment, useEffect, useState } from "react";
 import QuillWrapper from "./QuillEditor";
 
 const { Title, Paragraph } = Typography;
 
 const Editor: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
-  const [isLoading, setIsLoading] = useState(false);
+  const [value, setValue] = useState<string | undefined>("");
+  const searchParams = useSearchParams();
+  const projectIdOld = searchParams.get("q");
+  const projectId = useUtil();
+  let id: string | undefined;
+  if (projectIdOld) {
+    id = projectIdOld;
+  }
+  const { data } = useGetProjectQuery(id);
+  const [editProject, { isLoading }] = useEditProjectMutation();
+  useEffect(() => {
+    const description = data?.data?.description ?? "";
+    setValue(description);
+  }, [data?.data?.description]);
 
-  const [value, setValue] = useState("");
+  const getTextFromParsedHTML = (parsedHTML: any): string => {
+    if (Array.isArray(parsedHTML)) {
+      return parsedHTML.map((item) => getTextFromParsedHTML(item)).join("");
+    } else if (typeof parsedHTML === "object" && parsedHTML.props) {
+      return getTextFromParsedHTML(parsedHTML.props.children);
+    } else if (typeof parsedHTML === "string") {
+      return parsedHTML;
+    } else {
+      return "";
+    }
+  };
 
   const submitHandler = async (
     e: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-    setIsLoading(true);
+    const parsedText = Parser(value ? value : "");
+    const extractedText = getTextFromParsedHTML(parsedText);
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-      console.log(value);
+      const res = await editProject({
+        id: projectId || id,
+        description: extractedText,
+      }).unwrap();
+      setValue("");
       messageApi.open({
-        content: "Form submission successful",
+        content: `${res.message}`,
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
         icon: <CheckCircleIcon />,
       });
     } catch {
-      (e: any) => {
-        console.log("error:", e);
+      (error: any) => {
+        messageApi.open({
+          content: `${error}`,
+          className: `[&>div]:bg-red-800 [&>div]:text-white`,
+        });
       };
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -138,6 +138,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     page: pagination.current,
     status: "completed",
   });
+  console.log(res, "wink");
   function handleRefetch() {
     refetch();
   }
@@ -157,7 +158,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     category: item.category,
     donors: item.donors,
     amount: Number(item.amountRaised),
-    btn: "Request Payout",
+    btn: item.request_payout ? "Payout Requested" : "Request Payout",
   }));
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
@@ -172,20 +173,11 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
 
   const callback = async (record: DataType) => {
     try {
-      await requestPayout(record.key).unwrap();
+      const res = await requestPayout(record.key).unwrap();
       messageApi.open({
-        content: `Payout payout for ${record.title} sent successfully`,
+        content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
-      });
-      dataSource?.map((item) => {
-        if (item.key === record.key) {
-          return {
-            ...item,
-            btn: "Payout Requested", // Update the button text content
-          };
-        }
-        return item;
       });
     } catch (error) {
       messageApi.open({
@@ -193,21 +185,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
         className: "[&>div]:bg-red-800 [&>div]:text-white",
       });
     }
-
-    // setTimeout(() => {
-    //   messageApi.open({
-    //     content: `Payout payout for ${record.title} sent successfully`,
-    //     className: "[&>div]:bg-[#17B472] [&>div]:text-white",
-    //     icon: <CheckCircleIcon />,
-    //   });
-
-    //   setDataSource(updatedData);
-    // }, 500);
   };
-
-  // const handleModalClose = (record: DataType) => {
-  //   callback(record); // Continue execution after form modal updates acctLinked
-  // };
 
   const handleRequestPayout = (
     record: DataType,

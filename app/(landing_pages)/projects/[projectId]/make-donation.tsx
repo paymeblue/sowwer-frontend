@@ -16,6 +16,7 @@ import {
   Button,
   Card,
   Col,
+  Empty,
   List,
   Progress,
   Row,
@@ -87,7 +88,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
     time: moment(item.createdAt).fromNow(),
     avatar: generateAvatar(item.name),
   }));
-  const [donorList, setDonorList] = useState(donorData?.slice(4));
+  const [donorList, setDonorList] = useState(donorData?.slice(0, 4));
   const { copied, copyToClipboard } = useCopyToClipboard(data?.link);
   return (
     <Fragment>
@@ -223,18 +224,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 Story
               </Title>
               <Paragraph className="text-[13px] leading-[23px] text-body-1 laptop:text-[14px] laptop:leading-[26px]">
-                {data?.description ??
-                  `Lorem ipsum dolor sit amet consectetur. Sed sit consequat quis
-                habitant massa. Commodo turpis tempor ipsum libero ut semper
-                dapibus dolor. Viverra cras consequat tincidunt nibh ut vitae
-                maecenas quis. Blandit molestie est semper nunc id curabitur a
-                amet. At aliquet facilisi vestibulum congue aliquam elementum.
-                Vulputate venenatis vehicula sem fusce at cursus aliquet eget.
-                Proin enim quis aliquet nulla. Risus nam in donec iaculis
-                suspendisse nunc arcu. Mattis vitae massa tincidunt feugiat nisi
-                ante nulla blandit. Sed nulla neque turpis tellus lorem vitae
-                venenatis. Nunc nisi nibh massa elementum. In risus semper
-                dapibus tristique massa eu tempor.`}
+                {data?.description ?? `N/A`}
               </Paragraph>
             </Typography>
           </Col>
@@ -260,18 +250,9 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                   onBtnClick={handleRefetch}
                 />
               ) : donorList?.length === 0 ? (
-                <ResultComponent
-                  title={
-                    <Title className="text-[18px] font-bold leading-[22.68px]">
-                      No donors yet
-                    </Title>
-                  }
-                  subTitle={
-                    <Text className="text-[13px] leading-[19px] text-gray-500">
-                      Once you start receiving donations your list of donors
-                      will appear here.
-                    </Text>
-                  }
+                <Empty
+                  description="No donors available for this project yet!"
+                  className="text-[13px] leading-[19px] text-gray-500"
                 />
               ) : (
                 <List
@@ -307,10 +288,10 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
               <Button
                 block
                 type="default"
-                className="mx-auto mt-6 flex items-center justify-center border-accent text-[13px] font-medium leading-[16.38px] text-accent hover:bg-blue-50 laptop:p-6 laptop:text-[14px] laptop:leading-[18px]
+                className="mx-auto mt-6 flex items-center justify-center border-accent text-[13px] font-medium leading-[16.38px] text-accent hover:bg-blue-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-800 laptop:p-6 laptop:text-[14px] laptop:leading-[18px]
                 "
                 size="large"
-                onClick={() => setDonorList(donorData?.slice(7))}
+                onClick={() => setDonorList(donorData?.slice(0, 7))}
                 loading={isFetching}
                 disabled={donorList?.length === 0}
               >

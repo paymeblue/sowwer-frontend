@@ -1,6 +1,10 @@
 "use client";
+import { CheckCircleIcon } from "@components/assets/icons";
 import useFlutterConfig from "@hooks/useFlutterConfig";
+import capitalizeFirstLetters from "@lib/capitalize";
 import { useDonorSignupMutation } from "@store/services/auth";
+import { useVerifyPaymentMutation } from "@store/services/payouts";
+import { useGetProjectDetailsQuery } from "@store/services/projects";
 import {
   Button,
   Card,
@@ -38,17 +42,7 @@ type FormValues = {
   phoneNumber: string;
   displayIdentity: boolean;
 };
-// {
-//     "phone": "08076358025",
-//     "email": "another@sample.com",
-//     "firstName": "John",
-//     "lastName": "Doe",
-//     "password": "12345678a.",
-//     "anonymous": false,
-//     "createAccount": false,
-//     "confirm_password": "12345678a.",
-//     "amount": 100.01
-// }
+
 const { Title, Text } = Typography;
 const { Password } = Input;
 const { Item, useForm } = Form;
@@ -58,6 +52,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
+  const { data: project } = useGetProjectDetailsQuery(id);
   const [tnxRef, setTnxRef] = useState<string>("");
   const [{ showPassword, formData }, setState] = useState<{
     showPassword: boolean;
@@ -126,6 +121,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     [email, firstname, lastname, phoneNumber]
   );
   const [donorSignup, { data }] = useDonorSignupMutation();
+  const [verifyPayment] = useVerifyPaymentMutation();
   const updateTnxRef = useCallback(() => {
     if (data?.data?.txn_reference) {
       setTnxRef(data.data.txn_reference);
@@ -204,10 +200,26 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
       console.log("waiting");
       setTimeout(() => {
         handleFlutterPayment({
-          callback: (response) => {
+          callback: async (response) => {
             console.log(response);
+            try {
+              const res = await verifyPayment({
+                txn_id: response.transaction_id.toString(),
+                txn_reference: response.tx_ref,
+              }).unwrap();
+              messageApi.open({
+                content: `${res.message}`,
+                className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+                icon: <CheckCircleIcon />,
+              });
+              router.push("/projects/donation-successful");
+            } catch (error) {
+              messageApi.open({
+                content: `${error}`,
+                className: `[&>div]:bg-red-800 [&>div]:text-white`,
+              });
+            }
             closePaymentModal(); // this will close the modal programmatically
-            router.push("/projects/donation-successful");
           },
           onClose: () => {},
         });
@@ -237,30 +249,32 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
           <Title className="my-4 text-[10.07px] leading-[12.69px] text-body-1 laptop:text-[12px] laptop:leading-[15px]">
             YOU ARE MAKING A DONATION TO
           </Title>
-          <Space
-            size="large"
-            align="center"
-            className="w-full flex-col items-start tablet:flex-row tablet:items-center [&>.ant-space-item]:w-full"
-          >
-            <Image
-              src="/assets/images/happy_woman.jpg"
-              alt="happy woman"
-              width={200}
-              height={20}
-              className="w-full rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
-            />
-            <Typography>
-              <Title
-                level={3}
-                className=" mb-0 font-title text-[21.18px] leading-[24.23px] laptop:text-[30px] laptop:leading-[34px]"
-              >
-                The Widows Project
-              </Title>
-              <Text className=" text-[10.07px] leading-[12.69px] text-body-2 laptop:text-[12px] laptop:leading-[15px]">
-                BY FAMILY WORSHIP CENTER
-              </Text>
-            </Typography>
-          </Space>
+          {project ? (
+            <Space
+              size="large"
+              align="center"
+              className="w-full flex-col items-start tablet:flex-row tablet:items-center [&>.ant-space-item]:w-full"
+            >
+              <Image
+                src={project.data.image ?? "/assets/images/happy_woman.jpg"}
+                alt="happy woman"
+                width={200}
+                height={100}
+                className="h-[100px] w-[200px]  rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
+              />
+              <Typography>
+                <Title
+                  level={3}
+                  className=" mb-0 font-title text-[21.18px] leading-[24.23px] laptop:text-[30px] laptop:leading-[34px]"
+                >
+                  {capitalizeFirstLetters(project.data.title)}
+                </Title>
+                <Text className=" text-[10.07px] uppercase leading-[12.69px] text-body-2 laptop:text-[12px] laptop:leading-[15px]">
+                  {project.data.organisedBy}
+                </Text>
+              </Typography>
+            </Space>
+          ) : null}
           <Form
             name="donate_form"
             layout="vertical"

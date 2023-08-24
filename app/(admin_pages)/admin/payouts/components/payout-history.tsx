@@ -115,12 +115,12 @@ const CompletedProjectsTable = () => {
     }));
   };
 
-  const dataSource: DataType[] | undefined = res?.data.map((item: any) => ({
+  const dataSource: DataType[] | undefined = res?.data.map((item) => ({
     key: item.id,
-    title: capitalizeFirstLetters(item.title),
+    title: capitalizeFirstLetters(item.project_title),
     amount: Number(item.amount),
     reference: item.reference,
-    date: moment(item.date).format("Do MMMM YYYY; h:mm:ss a"),
+    date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
 
   const handleSearch = (

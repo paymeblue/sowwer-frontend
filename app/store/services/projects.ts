@@ -1,6 +1,8 @@
 import {
+  CoverPhotoRequest,
   CreateProjectRequest,
   CreateProjectResponse,
+  EditProjectRequest,
   ErrorResponse,
   ExploreProjectsRequest,
   ExploreProjectsResponse,
@@ -21,7 +23,7 @@ const projects = api.injectEndpoints({
   endpoints: (build) => ({
     createProject: build.mutation<CreateProjectResponse, CreateProjectRequest>({
       query: (credentials) => ({
-        url: "projects",
+        url: "projects/create",
         method: "POST",
         body: credentials,
       }),
@@ -35,10 +37,41 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getProject: build.query<ResultResponse, string | undefined>({
+    editCoverPhoto: build.mutation<CreateProjectResponse, CoverPhotoRequest>({
+      query: (credentials) => ({
+        url: `projects/${credentials.id}`,
+        method: "PATCH",
+        body: credentials.cover_photo,
+      }),
+      // Invalidate cache tags for 'Projects' on successful project creation
+      invalidatesTags: cacher.cacheByIdArg("Projects") as any,
+      // Pick out data and prevent nested properties in a hook or selector
+      transformResponse: (response: CreateProjectResponse, meta, arg): any => {
+        return response;
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getProject: build.query<ResultResponse, string | null | undefined>({
       query: (id) => `projects/${id}`,
       // Cache tags for individual project retrieval
       providesTags: cacher.cacheByIdArg("Projects") as any,
+      // Pick out data and prevent nested properties in a hook or selector
+      transformResponse: (response: ResultResponse, meta, arg): any => {
+        return response;
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    editProject: build.mutation<ResultResponse, EditProjectRequest>({
+      query: (body) => {
+        const { id, ...rest } = body;
+        return { url: `projects/${id}`, method: "PATCH", body: rest };
+      },
+      // Cache tags for individual project retrieval
+      invalidatesTags: cacher.cacheByIdArgProperty("Projects") as any,
       // Pick out data and prevent nested properties in a hook or selector
       transformResponse: (response: ResultResponse, meta, arg): any => {
         return response;
@@ -201,7 +234,9 @@ const projects = api.injectEndpoints({
 
 export const {
   useCreateProjectMutation,
+  useEditCoverPhotoMutation,
   useGetProjectQuery,
+  useEditProjectMutation,
   useGetProjectDetailsQuery,
   useGetDonationsForDonorUserQuery,
   useGetDonationsForAdminUserQuery,

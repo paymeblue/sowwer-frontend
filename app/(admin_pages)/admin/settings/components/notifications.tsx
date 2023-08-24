@@ -1,4 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
+import ResultComponent from "@shared/ResultComponent";
 import { useGetNotificationQuery } from "@store/services/notifications";
 import { Card, Space, Spin, Typography } from "antd";
 import { Fragment, ReactNode } from "react";
@@ -14,7 +15,16 @@ type Data = {
 };
 
 const Notifications = () => {
-  const { data: toggle, isLoading } = useGetNotificationQuery();
+  function handleRefetch() {
+    refetch();
+  }
+  const {
+    data: toggle,
+    isLoading,
+    error,
+    isError,
+    refetch,
+  } = useGetNotificationQuery();
   if (!toggle) {
     return null;
   }
@@ -88,35 +98,44 @@ const Notifications = () => {
       switch: <ToggleSwitch toggle={payout} label="payout" />,
     },
   ];
-  return (
-    <Fragment>
-      {isLoading ? (
-        <Spin size="large" indicator={antIcon} />
-      ) : (
-        <Card bordered={false}>
-          {data.map((item) => (
-            <Space
-              key={item.id}
-              className="mb-4 flex w-full items-center justify-between"
+
+  const content = isLoading ? (
+    <Spin size="large" indicator={antIcon} />
+  ) : isError ? (
+    <ResultComponent
+      title="Oops... Something went wrong :("
+      subTitle={`${error}`}
+      btnBg="primary"
+      btnText="Retry"
+      btnTextColor="black"
+      status="error"
+      showBtn={true}
+      onBtnClick={handleRefetch}
+    />
+  ) : (
+    <Card bordered={false}>
+      {data.map((item) => (
+        <Space
+          key={item.id}
+          className="mb-4 flex w-full items-center justify-between"
+        >
+          <Typography>
+            <Title
+              level={5}
+              className="m-0 text-[15px] font-bold leading-[18.9px]"
             >
-              <Typography>
-                <Title
-                  level={5}
-                  className="m-0 text-[15px] font-bold leading-[18.9px]"
-                >
-                  {item.title}
-                </Title>
-                <Text className="text-[14px] leading-[17.64px] text-body-2">
-                  {item.subTitle}
-                </Text>
-              </Typography>
-              {item.switch}
-            </Space>
-          ))}
-        </Card>
-      )}
-    </Fragment>
+              {item.title}
+            </Title>
+            <Text className="text-[14px] leading-[17.64px] text-body-2">
+              {item.subTitle}
+            </Text>
+          </Typography>
+          {item.switch}
+        </Space>
+      ))}
+    </Card>
   );
+  return <Fragment>{content}</Fragment>;
 };
 
 export default Notifications;

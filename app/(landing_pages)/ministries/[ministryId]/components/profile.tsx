@@ -39,17 +39,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             About
           </Title>
           <Paragraph className="text-[13px] leading-[23px] laptop:text-[14px] laptop:leading-[26px]">
-            {data?.description ??
-              `Lorem ipsum dolor sit amet consectetur. Sed sit consequat quis
-            habitant massa. Commodo turpis tempor ipsum libero ut semper dapibus
-            dolor. Viverra cras consequat tincidunt nibh ut vitae maecenas quis.
-            Blandit molestie est semper nunc id curabitur a amet. At aliquet
-            facilisi vestibulum congue aliquam elementum. Vulputate venenatis
-            vehicula sem fusce at cursus aliquet eget. Proin enim quis aliquet
-            nulla. Risus nam in donec iaculis suspendisse nunc arcu. Mattis
-            vitae massa tincidunt feugiat nisi ante nulla blandit. Sed nulla
-            neque turpis tellus lorem vitae venenatis. Nunc nisi nibh massa
-            elementum. In risus semper dapibus tristique massa eu tempor.`}
+            {data?.description ?? `N/A`}
           </Paragraph>
         </Typography>
       </Col>

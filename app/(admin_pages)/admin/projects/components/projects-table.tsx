@@ -189,6 +189,9 @@ const ProjectsTable = () => {
   const handleDonorCancel = () => {
     setIsDonorModalOpen(false);
   };
+  const editHandler = () => {
+    if (rowId) router.push(`/admin/projects/new-project?q=${rowId}`);
+  };
   const item1 = {
     key: "1",
     label: (
@@ -196,7 +199,7 @@ const ProjectsTable = () => {
         icon={<EditOutlined />}
         type="text"
         className="flex items-center justify-center text-[12px] hover:bg-transparent"
-        onClick={() => router.push(`/admin/projects/new-project?id=${rowId}`)}
+        onClick={editHandler}
       >
         Edit
       </Button>
@@ -574,9 +577,7 @@ const ProjectsTable = () => {
               key="console"
               onClick={handleDeleteBtn}
               loading={deleteLoading}
-              className={
-                "mt-0 bg-[#EB5757] text-[13px] leading-[16px] text-white"
-              }
+              className="mt-0 bg-[#EB5757] text-[13px] leading-[16px] text-white"
               size="large"
             >
               Yes, delete project
@@ -589,6 +590,7 @@ const ProjectsTable = () => {
         onOk={handleDonorOk}
         onCancel={handleDonorCancel}
         footer={null}
+        className="[&>.ant-modal-content]:max-h-[450px] [&>.ant-modal-content]:overflow-scroll"
       >
         {donors?.data?.length === 0 ? (
           <Empty

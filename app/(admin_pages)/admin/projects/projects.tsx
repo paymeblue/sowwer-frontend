@@ -16,7 +16,10 @@ const ProjectsPage = () => {
 
   return (
     <Container className="bg-[#F7F8FA] tablet:px-3">
-      <Space className="mb-6 w-full justify-between" align="center">
+      <Space
+        className="mb-6 w-full flex-col justify-between mobile-md:flex-row"
+        align="center"
+      >
         <Title level={3} className="leading-30.24px] text-[24px] font-bold">
           Projects
         </Title>

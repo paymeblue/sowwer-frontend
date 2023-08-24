@@ -153,6 +153,7 @@ const PayoutsPage = () => {
         />
       ) : (
         <Alert
+          className="flex w-full flex-col-reverse rounded bg-white mobile-md:flex-row laptop:w-1/2 "
           message={
             <Title
               level={5}
@@ -173,7 +174,6 @@ const PayoutsPage = () => {
             </Button>
           }
           banner
-          className="w-full rounded bg-white laptop:w-1/2"
           showIcon={false}
         />
       )}

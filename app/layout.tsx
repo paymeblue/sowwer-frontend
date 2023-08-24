@@ -47,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-scroll">
       <body
         className={`${libreBaskerville.variable} ${baskerville.variable} ${plusJakarta.variable}`}
       >

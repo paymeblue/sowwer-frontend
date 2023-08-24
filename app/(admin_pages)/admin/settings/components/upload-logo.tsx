@@ -1,7 +1,9 @@
 import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
+import { useAuth } from "@hooks/useAuth";
+import { useUpdateMinistryProfileMutation } from "@store/services/ministries";
 import { Button, Form, Space, Upload, message } from "antd";
 import { RcFile, UploadProps } from "antd/es/upload";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 const { Item, useForm } = Form;
 
@@ -54,20 +56,33 @@ const props: UploadProps = {
 
 const UploadLogo = () => {
   const [form] = useForm();
-  const [isLoading, setIsLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-
+  const [updateMinistryProfile, { isLoading }] =
+    useUpdateMinistryProfileMutation();
+  const { user } = useAuth();
+  let id: string;
+  if (user) {
+    id = user.ministry.id;
+  }
   const onFinish = async (values: any): Promise<void> => {
-    setIsLoading(true);
     console.log("Form data: ", values);
-    await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    form.resetFields();
-    setIsLoading(false);
-    messageApi.open({
-      content: "Form submission successful",
-      className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-      icon: <CheckCircleIcon />,
-    });
+    try {
+      const res = await updateMinistryProfile({
+        id,
+        logo: values.minisrtyLogo[0].thumbUrl,
+      }).unwrap(); // Simulating an asynchronous operation
+      messageApi.open({
+        content: `${res.message}`,
+        className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+      form.resetFields();
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: `[&>div]:bg-red-800 [&>div]:text-white`,
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -81,6 +96,7 @@ const UploadLogo = () => {
     if (Array.isArray(e)) {
       return e;
     }
+    console.log(e?.fileList);
     return e?.fileList;
   };
   return (
@@ -100,7 +116,7 @@ const UploadLogo = () => {
           required
         >
           <Item
-            name="logo_photo"
+            name="minisrtyLogo"
             valuePropName="fileList"
             getValueFromEvent={normFile}
             rules={[

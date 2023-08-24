@@ -10,6 +10,23 @@ import MinistryDetails from "./MinistryDetails";
 import PersonalInfo from "./PersonalInfo";
 import Terms from "./Terms";
 
+type FormDataFields = {
+  adminEmail: string;
+  adminFirstName: string;
+  adminLastName: string;
+  adminPassword: string;
+  adminPhoneNumber: string;
+  adminRole: string;
+  ministryAddressLine: string;
+  ministryEmail: string;
+  ministryMsg: string;
+  ministryName: string;
+  ministryPhoneNumber: string;
+  ministryType: string;
+  ministryWebsite: string;
+  state: string;
+  cacDocument: any;
+};
 const { useForm } = Form;
 const SignupStep = () => {
   const { token } = theme.useToken();
@@ -70,8 +87,9 @@ const SignupStep = () => {
   }
   const [messageApi, contextHolder] = message.useMessage();
   const [ministrySignup, { isLoading }] = useMinistrySignupMutation();
+
   const onFormFinish = async (): Promise<void> => {
-    const values = form.getFieldsValue(true);
+    const values: FormDataFields = form.getFieldsValue(true);
     const {
       adminEmail,
       adminFirstName,
@@ -89,10 +107,7 @@ const SignupStep = () => {
       state,
       cacDocument,
     } = values;
-    console.log(values);
-    const formdata = new FormData();
-    formdata.append("cacDocument", cacDocument[0]);
-    console.log(formdata, cacDocument);
+    console.log(values.cacDocument[0].thumbUrl);
     try {
       const credentials: MinistrySignupRequest = {
         ministryType,
@@ -103,7 +118,7 @@ const SignupStep = () => {
         ministryState: state,
         ministrySocialLink: ministryWebsite,
         ministryAddress: ministryAddressLine,
-        cacDocument: formdata,
+        cacDocument: cacDocument[0].thumbUrl,
         phone: adminPhoneNumber,
         email: adminEmail,
         firstName: adminFirstName,

@@ -5,6 +5,7 @@ import {
   useResetPasswordMutation,
 } from "@store/services/auth";
 import { Button, Card, Form, Input, Typography, message } from "antd";
+import { useSearchParams } from "next/navigation";
 // import { useRouter } from "next/navigation";
 import { Fragment } from "react";
 
@@ -24,14 +25,14 @@ const { Title, Text } = Typography;
 const PasswordPage = ({
   forgotPassword,
   resetPassword,
-  token,
 }: {
   forgotPassword?: boolean;
   resetPassword?: boolean;
-  token?: string | null;
 }) => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   // const router = useRouter();
   const [forgotPasswordData, { isLoading }] = useForgotPasswordMutation();
   const [resetPasswordData, { isLoading: resetLoading }] =

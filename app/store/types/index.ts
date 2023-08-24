@@ -129,9 +129,15 @@ type MinistryProfileRequest2 = {
   phone: string;
 };
 
+type MinistryProfileRequest3 = {
+  id?: string;
+  logo: string;
+};
+
 export type MinistryProfileRequest =
   | MinistryProfileRequest1
-  | MinistryProfileRequest2;
+  | MinistryProfileRequest2
+  | MinistryProfileRequest3;
 
 export type MinistryProfileResponse = Response<{
   id: string;
@@ -153,7 +159,7 @@ export type MinistrySignupRequest = {
   ministryState: string;
   ministrySocialLink: string;
   ministryAddress: string;
-  cacDocument: any;
+  cacDocument: string;
   phone: string;
   email: string;
   firstName: string;
@@ -217,6 +223,8 @@ export type MinistryProjectsResponse = TResponse<{
   status: string;
   image: string | null;
   donors: number;
+  request_payout: boolean;
+  paid: boolean;
 }>;
 
 export type ProjectResult = {
@@ -506,5 +514,29 @@ export type AccountResponse = Response<{
   createdAt: string;
   id: string;
 }>;
-export type PayoutHistoryResponse = TResponse<{}>;
+export type PayoutHistoryResponse = TResponse<{
+  id: string;
+  user_id: string;
+  reference: string;
+  project_title: string;
+  amount: string;
+  createdAt: string;
+  updatedAt: string;
+}>;
 export type MinistryDonationResponse = TResponse<{}>;
+export type CoverPhotoRequest = {
+  id?: string | null;
+  cover_photo: FormData;
+};
+export type EditProjectRequest = {
+  id?: string | null;
+  amount?: number;
+  description?: string;
+  title?: string;
+  category?: "orphans" | "widows" | "ministry";
+};
+
+export type VerifyPaymentRequest = {
+  txn_id: string;
+  txn_reference: string;
+};
