@@ -76,7 +76,7 @@ const UploadLogo = () => {
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
+      // form.resetFields();
     } catch (error) {
       messageApi.open({
         content: `${error}`,

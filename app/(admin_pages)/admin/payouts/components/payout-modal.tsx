@@ -76,7 +76,7 @@ const PayoutFormModal = ({
       }).unwrap();
       console.log(res);
       // setAcctName(res.data.accountName);
-      form.resetFields();
+      // form.resetFields();
       msg({ status: "success", message: res.message });
       handleCancel();
     } catch (error: any) {

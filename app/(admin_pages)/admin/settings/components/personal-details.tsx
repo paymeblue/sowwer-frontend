@@ -1,5 +1,8 @@
 import { CheckCircleIcon } from "@components/assets/icons";
-import { useUpdateUserProfileMutation } from "@store/services/user";
+import {
+  useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
+} from "@store/services/user";
 import {
   Button,
   Card,
@@ -29,6 +32,21 @@ const PersonalDetails = (): JSX.Element => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
+  const { data: userProfile } = useGetUserProfileQuery();
+  const initialValues =
+    userProfile && userProfile?.data
+      ? {
+          firstName: userProfile.data.firstName,
+          lastName: userProfile.data.lastName,
+          email: userProfile.data.email,
+          phone: userProfile.data.phone,
+        }
+      : {
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+        };
   const onFinish = async (values: State): Promise<void> => {
     try {
       const res = await updateUserProfile(values).unwrap();
@@ -37,7 +55,7 @@ const PersonalDetails = (): JSX.Element => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
+      // form.resetFields();
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -80,6 +98,7 @@ const PersonalDetails = (): JSX.Element => {
               className=""
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
+              initialValues={initialValues}
               autoComplete="off"
             >
               <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">

@@ -142,7 +142,11 @@ const AdminSidebar = ({ children }: Props) => {
           className="px-6 py-0 shadow-sm"
         >
           <div className="flex w-full justify-end">
-            <AuthUser {...userDetails(user)} signIn="ministry" />
+            <AuthUser
+              {...userDetails(user)}
+              signIn="ministry"
+              profile="admin"
+            />
           </div>
         </Header>
 

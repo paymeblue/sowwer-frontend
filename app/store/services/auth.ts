@@ -60,6 +60,27 @@ const auth = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data,
     }),
+    initiatePaymentForMinistry: build.mutation<
+      DonorSignupResponse,
+      DonorSignupRequest
+    >({
+      query: (credentials) => {
+        const { id, ...rest } = credentials;
+        return {
+          url: `projects/${id}/p-initiate`,
+          method: "POST",
+          body: rest,
+        };
+      },
+      transformResponse: (response: DonorSignupResponse, meta, arg): any => {
+        const { message, data } = response;
+        return { message, data };
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
+    }),
+
     login: build.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
         url: "users/login",

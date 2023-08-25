@@ -73,7 +73,7 @@ const MainDetails = () => {
       const res = await mutationFn(credentials).unwrap();
       console.log(res);
       dispatch(setProjectId({ projectId: res.data.id }));
-      form.resetFields();
+      // form.resetFields();
       messageApi.open({
         content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",

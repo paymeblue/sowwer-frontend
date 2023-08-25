@@ -1,7 +1,10 @@
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import states from "@lib/NigeriaStates";
-import { useUpdateMinistryProfileMutation } from "@store/services/ministries";
+import {
+  useGetMinistryDetailsQuery,
+  useUpdateMinistryProfileMutation,
+} from "@store/services/ministries";
 import {
   Button,
   Card,
@@ -36,6 +39,28 @@ const ProfileInfo = () => {
     useUpdateMinistryProfileMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const { user } = useAuth();
+  let id: string;
+  if (user?.ministry) {
+    id = user.ministry.id;
+  }
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(
+    user?.ministry.id
+  );
+  const initialValues = ministryDetails?.data
+    ? {
+        name: ministryDetails.data.name,
+        addressLine: ministryDetails.data.address,
+        postalCode: ministryDetails.data.postal_code,
+        state: ministryDetails.data.state,
+        ministryMsg: ministryDetails.data.about,
+      }
+    : {
+        name: "",
+        addressLine: "",
+        postalCode: "",
+        state: "",
+        ministryMsg: "",
+      };
   const options = [
     { value: "", label: "-- Select --", disabled: true },
     ...states.map((state) => ({ value: state, label: state })),
@@ -43,7 +68,7 @@ const ProfileInfo = () => {
   const onFinish = async (values: State): Promise<void> => {
     const { addressLine, ministryMsg, name, postalCode, state } = values;
     const credentials = {
-      id: user?.ministry?.id,
+      id,
       name,
       address: addressLine,
       postalCode: postalCode,
@@ -57,7 +82,7 @@ const ProfileInfo = () => {
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
+      // form.resetFields();
     } catch (error: any) {
       messageApi.open({
         content: `${error}`,
@@ -100,6 +125,7 @@ const ProfileInfo = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
+              initialValues={initialValues}
             >
               <Item
                 name="name"

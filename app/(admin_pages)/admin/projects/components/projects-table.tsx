@@ -1,4 +1,5 @@
 import {
+  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
@@ -23,6 +24,7 @@ import {
   Avatar,
   Badge,
   Button,
+  Divider,
   Dropdown,
   Empty,
   Input,
@@ -126,6 +128,7 @@ const ProjectsTable = () => {
     Record<string, FilterValue | null>
   >({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
   const [isDonorModalOpen, setIsDonorModalOpen] = useState(false);
   const { data: donors } = useGetMinistryProjectDonorsQuery(rowId);
   const { data, isLoading, isFetching, error, isError, refetch } =
@@ -137,6 +140,9 @@ const ProjectsTable = () => {
     refetch();
   }
   const [deleteMinistryProject, { isLoading: deleteLoading }] =
+    useDeleteMinistryProjectMutation();
+
+  const [closeMinistryProject, { isLoading: closeLoading }] =
     useDeleteMinistryProjectMutation();
   const getColorForStatus = (status: ProjectData["status"]) => {
     return status === "drafted"
@@ -169,6 +175,9 @@ const ProjectsTable = () => {
   const showModal = () => {
     setIsDeleteModalOpen(true);
   };
+  const showCloseProjectModal = () => {
+    setIsCloseModalOpen(true);
+  };
 
   const handleDeleteOk = () => {
     setIsDeleteModalOpen(false);
@@ -176,6 +185,14 @@ const ProjectsTable = () => {
 
   const handleDeleteCancel = () => {
     setIsDeleteModalOpen(false);
+  };
+
+  const handleCloseOk = () => {
+    setIsCloseModalOpen(false);
+  };
+
+  const handleCloseCancel = () => {
+    setIsCloseModalOpen(false);
   };
 
   const showDonorModal = () => {
@@ -231,6 +248,19 @@ const ProjectsTable = () => {
       </Button>
     ),
   };
+  const item4 = {
+    key: "4",
+    label: (
+      <Button
+        type="text"
+        icon={<CloseOutlined />}
+        className="flex items-center justify-center text-[12px] hover:bg-transparent"
+        onClick={showCloseProjectModal}
+      >
+        Close project
+      </Button>
+    ),
+  };
   const items: MenuProps["items"] = [];
   const dropdownHandler = (record: RecordState) => {
     const { text } = record.status.props;
@@ -246,6 +276,9 @@ const ProjectsTable = () => {
     ) {
       items.length = 0; // Clear the array
       items.push(item3);
+    } else if (text.toLowerCase() === "active") {
+      items.length = 0; // Clear the array
+      items.push(item4);
     }
   };
   const antIcon = (
@@ -517,7 +550,22 @@ const ProjectsTable = () => {
     }
     handleDeleteCancel();
   };
-
+  const handleCloseBtn = async () => {
+    try {
+      const res = await closeMinistryProject(rowId).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+    } catch (error) {
+      messageApi.open({
+        content: `${error}`,
+        className: `[&>div]:bg-red-800 [&>div]:text-white`,
+      });
+    }
+    handleCloseCancel();
+  };
   const content = isLoading ? (
     <Spin size="large" indicator={antIcon} />
   ) : isError ? (
@@ -581,6 +629,51 @@ const ProjectsTable = () => {
               size="large"
             >
               Yes, delete project
+            </Button>
+          }
+        />
+      </Modal>
+      <Modal
+        open={isCloseModalOpen}
+        onOk={handleCloseOk}
+        onCancel={handleCloseCancel}
+        footer={null}
+      >
+        <Result
+          status="error"
+          title={
+            <Fragment>
+              <Title level={5} className="text-[18px] leading-[22px]">
+                Close Project
+              </Title>
+              <Divider type="horizontal" className="my-2" />
+            </Fragment>
+          }
+          subTitle={
+            <Paragraph className="text-[13px] leading-[20px] text-body-1">
+              Are you sure you want to close your project “{rowTitle}”? Please
+              note that you haven't reached your project goal and this action
+              cannot be undone.
+            </Paragraph>
+          }
+          icon={
+            <InfoCircle
+              set="light"
+              size={75}
+              style={{ margin: "auto" }}
+              primaryColor="#EB5757"
+            />
+          }
+          extra={
+            <Button
+              type="primary"
+              key="console"
+              onClick={handleCloseBtn}
+              loading={closeLoading}
+              className="mt-0 bg-[#EB5757] text-[13px] leading-[16px] text-white"
+              size="large"
+            >
+              Close project
             </Button>
           }
         />

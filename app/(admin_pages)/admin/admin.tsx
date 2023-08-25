@@ -12,10 +12,13 @@ const { Title, Paragraph, Text } = Typography;
 const AdminPage = () => {
   const router = useRouter();
   const { user } = useAuth();
+
   const header = (
     <Typography>
       <Title level={3} className="mb-0 text-[24px] font-bold leading-[30.24px]">
-        Welcome, {capitalizeFirstLetters(user!.firstName)}!
+        {user
+          ? `Welcome,${capitalizeFirstLetters(user.firstName)}!`
+          : "Welcome!"}
       </Title>
       <Paragraph className="text-[14px] leading-[17.64px] text-body-2">
         Let&apos;s get you set up to start using Soower!
@@ -36,7 +39,6 @@ const AdminPage = () => {
           type="text"
           shape="circle"
           className="flex items-center justify-center"
-          onClick={() => router.push("/admin/settings")}
           icon={<ChevronRight set="light" size="small" />}
         />
       ),
@@ -54,7 +56,6 @@ const AdminPage = () => {
           type="text"
           shape="circle"
           className="flex items-center justify-center"
-          onClick={() => router.push("/admin/payouts")}
           icon={<ChevronRight set="light" size="small" />}
         />
       ),
@@ -72,7 +73,6 @@ const AdminPage = () => {
           type="text"
           shape="circle"
           className="flex items-center justify-center"
-          onClick={() => router.push("/admin/projects")}
           icon={<ChevronRight set="light" size="small" />}
         />
       ) : (
@@ -98,7 +98,7 @@ const AdminPage = () => {
           header={header}
           dataSource={data}
           renderItem={(item) => (
-            <List.Item>
+            <List.Item onClick={() => router.push(`/admin/${item.page}`)}>
               <List.Item.Meta
                 className="items-center [&>div.ant-list-item-meta-avatar]:flex [&>div>div>div.ant-typography]:mb-0"
                 avatar={item.icon}

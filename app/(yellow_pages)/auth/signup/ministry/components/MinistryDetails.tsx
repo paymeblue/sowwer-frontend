@@ -106,6 +106,7 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
             name="ministry_info__register_form"
             layout="vertical"
             autoComplete="off"
+            initialValues={{ ministryWebsite: "https://" }}
           >
             <Title
               level={2}

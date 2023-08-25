@@ -17,6 +17,7 @@ import {
   Card,
   Col,
   Form,
+  FormInstance,
   Input,
   Row,
   Select,
@@ -25,7 +26,7 @@ import {
   message,
 } from "antd";
 import Link from "next/link";
-import { FC, Fragment, useId, useState } from "react";
+import { FC, Fragment, useId, useRef, useState } from "react";
 
 type State = {
   name: string;
@@ -41,11 +42,15 @@ const ContactPage: FC = () => {
   const { Option } = Select;
   const { TextArea } = Input;
   const [form] = useForm();
+  const formRef = useRef<FormInstance>(null);
 
+  const onCodeChange = (value: string) => {
+    formRef.current?.setFieldsValue({ phone: value });
+  };
   const selectBefore = () => {
     return (
       <Item name="code" noStyle>
-        <Select style={{ width: 60 }}>
+        <Select style={{ width: 60 }} onChange={onCodeChange}>
           {countrycodes.map((country) => (
             <Option value={country.code} key={country.flag}>
               {country.flag}
@@ -63,7 +68,7 @@ const ContactPage: FC = () => {
     setIsLoading(true);
     console.log("Form data: ", values);
     await new Promise((resolve) => setTimeout(resolve, 2500)); // Simulating an asynchronous operation
-    form.resetFields();
+    // form.resetFields();
     setIsLoading(false);
     messageApi.open({
       content: `Subimssion successful!`,
@@ -143,6 +148,7 @@ const ContactPage: FC = () => {
             <Card className="rounded-none shadow-[5px_0px_20px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05)]">
               <Form
                 form={form}
+                ref={formRef}
                 name="contact_form"
                 layout="vertical"
                 className="max-w-lg"
@@ -238,7 +244,7 @@ const ContactPage: FC = () => {
                     <Button
                       type="primary"
                       htmlType="submit"
-                      className="mx-auto mt-6 flex items-center justify-center font-medium text-white laptop:p-6 "
+                      className="mx-auto mt-6 flex items-center justify-center bg-accent font-medium text-white laptop:p-6 "
                       loading={isLoading}
                     >
                       {isLoading ? "Submitting..." : "Submit"}

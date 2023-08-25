@@ -16,7 +16,7 @@ type SubmitHandlerProps = {
 };
 
 const Details = ({ link }: IProps) => {
-  const projectId = useUtil();
+  const { projectId } = useUtil();
   const [isLoading, setIsLoading] = useState({ draft: false, publish: false });
   const [publishOrDraftProject] = usePublishOrDraftProjectMutation();
   const [messageApi, contextHolder] = message.useMessage();

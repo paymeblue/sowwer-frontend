@@ -19,7 +19,7 @@ import Highlighter from "react-highlight-words";
 interface DataType {
   key: string;
   name: string;
-  type: string;
+  type: string | any;
   frequency: string;
   amount: number;
   date: string;
@@ -28,56 +28,6 @@ interface DataType {
 type DataIndex = keyof DataType;
 const priceFormat = currencyFormat();
 const { Title, Text } = Typography;
-// const data: DataType[] = [
-//   {
-//     key: "1",
-//     frequency: "-",
-//     name: "Semira Yesufu",
-//     type: "One-time Donation",
-//     amount: 135000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "2",
-//     frequency: "Monthly",
-//     name: "Anonymous",
-//     type: "Recurring  Donation",
-//     amount: 550000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "3",
-//     frequency: "-",
-//     name: "Semira Yesufu",
-//     type: "One-time Donation",
-//     amount: 157000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "4",
-//     frequency: "Monthly",
-//     name: "Anonymous",
-//     type: "Recurring  Donation",
-//     amount: 500000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "5",
-//     frequency: "-",
-//     name: "Semira Yesufu",
-//     type: "One-time Donation",
-//     amount: 600000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "6",
-//     frequency: "Monthly",
-//     name: "Anonymous",
-//     type: "Recurring  Donation",
-//     amount: 300000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-// ];
 
 const GeneralDonorsTable = () => {
   const [searchText, setSearchText] = useState("");
@@ -130,13 +80,13 @@ const GeneralDonorsTable = () => {
       pageSize: res?.paginationInfo?.limit,
     }));
   };
-  const dataSource: DataType[] | undefined = res?.data.map((item: any) => ({
-    key: item.id,
-    name: capitalizeFirstLetters(item.name),
-    frequency: capitalizeFirstLetters(item.frequency ?? "-"),
+  const dataSource: DataType[] | undefined = res?.data.map((item, i) => ({
+    key: item.donorName,
+    name: capitalizeFirstLetters(item.donorName),
+    frequency: capitalizeFirstLetters(item.donorInterval ?? "-"),
     amount: Number(item.amount),
-    type: item.type,
-    date: moment(item.date).format("Do MMMM YYYY; h:mm:ss a"),
+    type: item.donorType,
+    date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
 
   const handleSearch = (

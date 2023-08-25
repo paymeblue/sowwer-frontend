@@ -7,7 +7,10 @@ import {
   TwitterColorIcon,
   YoutubeColorIcon,
 } from "@components/assets/icons";
-import { useUpdateSocialLinksMutation } from "@store/services/ministries";
+import {
+  useGetSocialLinksQuery,
+  useUpdateSocialLinksMutation,
+} from "@store/services/ministries";
 import { UpdateSocialLinksRequest } from "@store/types";
 import { Button, Form, Input, Space, message } from "antd";
 import { Fragment } from "react";
@@ -18,11 +21,31 @@ const SocialLinksForm = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [updateSocialLinks, { isLoading }] = useUpdateSocialLinksMutation();
+  const { data: socialLinks } = useGetSocialLinksQuery();
+  const initialValues =
+    socialLinks && socialLinks?.data
+      ? {
+          website: socialLinks.data.website,
+          facebook: socialLinks.data.facebook,
+          instagram: socialLinks.data.instagram,
+          twitter: socialLinks.data.twitter,
+          linkedin: socialLinks.data.linkedin,
+          youtube: socialLinks.data.youtube,
+        }
+      : {
+          website: "https://",
+          facebook: "https://",
+          instagram: "https://",
+          twitter: "https://",
+          linkedin: "https://",
+          youtube: "https://",
+        };
+
   const onFinish = async (values: UpdateSocialLinksRequest): Promise<void> => {
     console.log("Form data: ", values);
     try {
       const res = await updateSocialLinks(values).unwrap();
-      form.resetFields();
+      // form.resetFields();
       messageApi.open({
         content: `${res.message}`,
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
@@ -53,6 +76,7 @@ const SocialLinksForm = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        initialValues={initialValues}
       >
         <Item
           name="website"
@@ -65,7 +89,7 @@ const SocialLinksForm = () => {
           ]}
         >
           <Input
-            placeholder="fwcabuja.orgy"
+            placeholder="fwcabuja.org"
             type="text"
             prefix={<GlobalOutlined style={{ fontSize: 20 }} />}
             className="rounded border-none bg-[#f9f9f9] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"

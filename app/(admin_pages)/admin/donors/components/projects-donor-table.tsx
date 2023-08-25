@@ -28,56 +28,6 @@ interface DataType {
 type DataIndex = keyof DataType;
 const priceFormat = currencyFormat();
 const { Title, Text } = Typography;
-// const data: DataType[] = [
-//   {
-//     key: "1",
-//     title: "The Widows Project",
-//     name: "Semira Yesufu",
-//     category: "Widows",
-//     amount: 135000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "2",
-//     title: "The Missions Project",
-//     name: "Anonymous",
-//     category: "Missions",
-//     amount: 550000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "3",
-//     title: "The Widows Project",
-//     name: "Semira Yesufu",
-//     category: "Widows",
-//     amount: 157000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "4",
-//     title: "The Orphans Project",
-//     name: "Anonymous",
-//     category: "Orphans",
-//     amount: 500000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "5",
-//     title: "The Missions Project",
-//     name: "Semira Yesufu",
-//     category: "Missions",
-//     amount: 600000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-//   {
-//     key: "6",
-//     title: "The Orphans Project",
-//     name: "Anonymous",
-//     category: "Orphans",
-//     amount: 300000,
-//     date: "21st March 2023; 4:45pm",
-//   },
-// ];
 
 const ProjectsDonorTable = () => {
   const [searchText, setSearchText] = useState("");
@@ -132,7 +82,7 @@ const ProjectsDonorTable = () => {
   };
   const dataSource: DataType[] | undefined = res?.data.map((item: any) => ({
     key: item.id,
-    name: capitalizeFirstLetters(item.name),
+    name: capitalizeFirstLetters(item.donorName),
     title: capitalizeFirstLetters(item.title),
     amount: Number(item.amount),
     category: item.category,

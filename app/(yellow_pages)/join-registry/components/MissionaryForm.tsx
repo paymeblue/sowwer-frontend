@@ -62,6 +62,9 @@ const MissionaryForm = () => {
   const handleChange = (value: string) => {
     setValue(value);
   };
+
+  const declaration = Form.useWatch("declaration", form);
+
   const [missionary, { isLoading }] = useMissionaryMutation();
   const onFinish1 = async (values: State1): Promise<void> => {
     const {
@@ -96,8 +99,8 @@ const MissionaryForm = () => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
-      router.push("/join-registry?status=registration-success");
+      // form.resetFields();
+      router.push("/join-registry?category=registration-success");
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -147,8 +150,8 @@ const MissionaryForm = () => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
-      router.push("/join-registry?status=registration-success");
+      // form.resetFields();
+      router.push("/join-registry?category=registration-success");
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -265,8 +268,9 @@ const MissionaryForm = () => {
           <Button
             type="primary"
             htmlType="submit"
-            className="mx-auto mt-3 flex items-center justify-center gap-2 bg-accent text-[14px] font-medium text-white"
+            className="mx-auto mt-3 flex items-center justify-center gap-2 bg-accent text-[14px] font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-400"
             size="large"
+            disabled={!declaration}
             loading={isLoading}
           >
             {isLoading ? "Saving" : "Submit"}
@@ -342,6 +346,13 @@ const MissionaryForm = () => {
                 </Text>
               }
               name="christianity"
+              className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select",
+                },
+              ]}
             >
               <Radio.Group
                 name="radiogroup"
@@ -361,6 +372,13 @@ const MissionaryForm = () => {
                 </Text>
               }
               name="bornAgain"
+              className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select",
+                },
+              ]}
             >
               <Radio.Group
                 name="radiogroup"
@@ -492,6 +510,13 @@ const MissionaryForm = () => {
                 </Text>
               }
               name="affiliatedToChurch"
+              className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select",
+                },
+              ]}
             >
               <Radio.Group
                 name="radiogroup"

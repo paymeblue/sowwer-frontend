@@ -327,6 +327,7 @@ export type GetDonorsForProjectResponse = TResponse<{
   amount: string;
 }>;
 export type MinistryProjectDonorsResponse = TResponse<{
+  id: string;
   title: string;
   category: "widows" | "orphans" | "widows";
   organisedBy: string;
@@ -350,7 +351,7 @@ export type ExploreCardData = {
   donors: number;
 };
 export type ExploreCardsResponse = ExploreCardData[] | undefined;
-export type ExploreProjectsRequest = { page: number; query: string | null };
+export type ExploreRequest = { page: number; query: string | null };
 export type ExploreProjectsResponse = TResponse<{
   id: string;
   title: string;
@@ -364,7 +365,13 @@ export type ExploreProjectsResponse = TResponse<{
   donationPercent: string;
   donors: number;
 }>;
-
+export type ExploreMinistriesResponse = TResponse<{
+  id: string;
+  name: string;
+  state: string;
+  logo: string | null;
+  category: "church" | "organisation";
+}>;
 export type RegisterDonorRequest = {
   phone: string;
   email: string;
@@ -388,25 +395,23 @@ export type GetProjectDetailsResponse = Response<{
   donationPercent: string;
 }>;
 
-export type GetMinistryDetailsResponse = Response<
-  {
-    id: string;
-    user_id: string;
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    description: string;
-    state: string;
-    website: string;
-    postal_code: string | null;
-    cac_document: string;
-    ministryType: string;
-    createdAt: string;
-  } & {
-    paginationInfo: number;
-  }
->;
+export type GetMinistryDetailsResponse = Response<{
+  id: string;
+  user_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  state: string;
+  website: string;
+  postal_code: string | null;
+  cac_document: string;
+  ministryType: string;
+  createdAt: string;
+  donation_description: string;
+  about: string;
+  logo: string;
+}>;
 export type SocialLinks = {
   id: string;
   website: string | null;
@@ -523,7 +528,13 @@ export type PayoutHistoryResponse = TResponse<{
   createdAt: string;
   updatedAt: string;
 }>;
-export type MinistryDonationResponse = TResponse<{}>;
+export type MinistryDonationResponse = TResponse<{
+  amount: string;
+  donorName: string;
+  donorType: string | null;
+  donorInterval: string | null;
+  createdAt: string;
+}>;
 export type CoverPhotoRequest = {
   id?: string | null;
   cover_photo: FormData;
@@ -540,3 +551,14 @@ export type VerifyPaymentRequest = {
   txn_id: string;
   txn_reference: string;
 };
+export type UserProfileResponse = Response<{
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  verificationStatus: false;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}>;

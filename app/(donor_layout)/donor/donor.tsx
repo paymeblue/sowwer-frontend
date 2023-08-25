@@ -12,6 +12,7 @@ const items = [
         rtkHook={useGetDonationsForDonorUserQuery}
         prop={{ type: "project" }}
         emptyDesc="You have not made any project donations yet!"
+        showSection
       />
     ),
   },

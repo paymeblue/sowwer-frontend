@@ -1,5 +1,5 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-// import capitalizeFirstLetters from "@lib/capitalize";
+import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import ResultComponent from "@shared/ResultComponent";
 import { useGetDonationsForDonorUserQuery } from "@store/services/projects";
@@ -19,22 +19,14 @@ import type {
   TablePaginationConfig,
 } from "antd/es/table/interface";
 import { FilterValue } from "antd/es/table/interface";
-// import moment from "moment";
-import React, { FC, Fragment, useId, useRef, useState } from "react";
+import moment from "moment";
+import { FC, Fragment, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 
 type DataIndex = keyof DataType;
 const priceFormat = currencyFormat();
-// type IProps = {
-//   id: string;
-//   title: string;
-//   createdAt: string;
-//   category: "widows" | "orphans" | "missions";
-//   amount: string;
-//   date: string;
-// };
 interface DataType {
-  key: React.Key;
+  key: string;
   title: string;
   category: string;
   amount: number;
@@ -187,42 +179,13 @@ const ProjectDonationTable: FC = () => {
       ),
   });
 
-  const dataSource: DataType[] = [
-    {
-      key: useId(),
-      title: "The Widows Project",
-      category: "Widows",
-      amount: 135000,
-      date: "21st March 2023; 4:45pm",
-    },
-    {
-      key: useId(),
-      title: "The Orphans Project",
-      category: "Orphans",
-      amount: 125000,
-      date: "21st March 2023; 4:45pm",
-    },
-    {
-      key: useId(),
-      title: "The Missions Project",
-      category: "Missions",
-      amount: 105000,
-      date: "21st March 2023; 4:45pm",
-    },
-    {
-      key: useId(),
-      title: "The Widows Project",
-      category: "Widows",
-      amount: 145000,
-      date: "21st March 2023; 4:45pm",
-    },
-  ];
-  // const dataSource: DataType[] | undefined = data?.data.map((item: IProps) => ({
-  //   key: item.id,
-  //   title: capitalizeFirstLetters(item.title),
-  //   category: capitalizeFirstLetters(item.category),
-  //   amount: item.amount,
-  // date: moment(item.date).format('Do MMMM YYYY; h:mm:ss a')  }));
+  const dataSource: DataType[] | undefined = data?.data.map((item) => ({
+    key: item.id,
+    title: capitalizeFirstLetters(item.title),
+    category: capitalizeFirstLetters(item.category),
+    amount: Number(item.amountRaised),
+    date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
+  }));
 
   const columns: ColumnsType<DataType> = [
     {

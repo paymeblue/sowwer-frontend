@@ -1,4 +1,5 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import ResultComponent from "@shared/ResultComponent";
 import { useGetDonationsForDonorUserQuery } from "@store/services/projects";
@@ -18,8 +19,8 @@ import type {
   TablePaginationConfig,
 } from "antd/es/table/interface";
 import { FilterValue } from "antd/es/table/interface";
-// import moment from "moment";
-import React, { FC, Fragment, useId, useRef, useState } from "react";
+import moment from "moment";
+import React, { FC, Fragment, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 
 const priceFormat = currencyFormat();
@@ -31,16 +32,6 @@ interface DataType {
   amount: number;
   date: string;
 }
-// type IProps = {
-//   id: string;
-//   title: string;
-//   createdAt: string;
-//   category: "widows" | "orphans" | "missions";
-//   type: "one-time" | "recurring";
-//   frequency: string;
-//   amount: string;
-//   date: string;
-// };
 
 type DataIndex = keyof DataType;
 const { Title, Text } = Typography;
@@ -190,55 +181,14 @@ const GeneralDonationTable: FC = () => {
         text
       ),
   });
-  const dataSource: DataType[] = [
-    {
-      key: useId(),
-      ministry: "Family Worship Centre",
-      frequency: "Monthly",
-      type: "Recurring Donation",
-      amount: 135000,
-      date: "21st March 2023; 4:45pm",
-    },
-    {
-      key: useId(),
-      ministry: "Family Worship Centre",
-      type: "One-time Donation",
-      amount: 150000,
-      frequency: "-",
-      date: "21st March 2023; 4:45pm",
-    },
-    {
-      key: useId(),
-      ministry: "Family Worship Centre",
-      type: "Recurring Donation",
-      frequency: "Monthly",
-      amount: 130000,
-      date: "21st March 2023; 4:45pm",
-    },
-    {
-      key: useId(),
-      ministry: "Family Worship Centre",
-      type: "One-time Donation",
-      frequency: "-",
-      amount: 125000,
-      date: "21st March 2023; 4:45pm",
-    },
-    {
-      key: useId(),
-      ministry: "Family Worship Centre",
-      type: "Recurring Donation",
-      frequency: "Monthly",
-      amount: 145000,
-      date: "21st March 2023; 4:45pm",
-    },
-  ];
-  // const dataSource: DataType[] | undefined = data?.data.map((item: IProps) => ({
-  //   key: item.id,
-  //   ministry: capitalizeFirstLetters(item.title),
-  // type: capitalizeFirstLetters(`${item.type} donation`),
-  // frequency: capitalizeFirstLetters(item.frequency),
-  //   amount: item.amount,
-  //   date: moment(item.date).format('Do MMMM YYYY; h:mm:ss a')  }));
+  const dataSource: DataType[] | undefined = data?.data.map((item) => ({
+    key: item.id,
+    ministry: capitalizeFirstLetters(item.title),
+    type: capitalizeFirstLetters(`${item.amountRaised} donation`),
+    frequency: capitalizeFirstLetters(item.amountRaised),
+    amount: Number(item.amountRaised),
+    date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
+  }));
 
   const columns: ColumnsType<DataType> = [
     {

@@ -17,7 +17,7 @@ const Editor: React.FC = () => {
   const [value, setValue] = useState<string | undefined>("");
   const searchParams = useSearchParams();
   const projectIdOld = searchParams.get("q");
-  const projectId = useUtil();
+  const { projectId } = useUtil();
   let id: string | undefined;
   if (projectIdOld) {
     id = projectIdOld;

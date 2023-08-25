@@ -1,6 +1,9 @@
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
-import { useUpdateMinistryProfileMutation } from "@store/services/ministries";
+import {
+  useGetMinistryDetailsQuery,
+  useUpdateMinistryProfileMutation,
+} from "@store/services/ministries";
 import {
   Button,
   Card,
@@ -20,16 +23,29 @@ const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
 type State = { email: string; phone: string };
 const ContactSocial = () => {
+  let id: string | undefined;
+  const [updateMinistryProfile, { isLoading }] =
+    useUpdateMinistryProfileMutation();
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const { user } = useAuth();
-  const [updateMinistryProfile, { isLoading }] =
-    useUpdateMinistryProfileMutation();
-
+  if (user?.ministry) {
+    id = user.ministry.id;
+  }
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(id);
+  const initialValues = ministryDetails?.data
+    ? {
+        email: ministryDetails.data.email,
+        phone: ministryDetails.data.phone,
+      }
+    : {
+        email: "",
+        phone: "",
+      };
   const onFinish = async (values: State): Promise<void> => {
     const { email, phone } = values;
     const credentials = {
-      id: user?.ministry?.id,
+      id,
       email,
       phone,
     };
@@ -40,7 +56,7 @@ const ContactSocial = () => {
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
+      // form.resetFields();
     } catch (error: any) {
       messageApi.open({
         content: `${error}`,
@@ -84,6 +100,7 @@ const ContactSocial = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
+              initialValues={initialValues}
             >
               <Space
                 className="flex w-full flex-col items-start tablet:flex-row [&>div.ant-space-item]:w-full"

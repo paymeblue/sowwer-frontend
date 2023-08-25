@@ -39,6 +39,7 @@ const Navbar = () => {
         ]}
         {...userDetails(user)}
         signIn="donor"
+        profile="donor"
       />
     </Header>
   );

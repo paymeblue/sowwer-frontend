@@ -3,6 +3,7 @@ import {
   //   UserResponse,
   UpdateUserRequest,
   UpdateUserResponse,
+  UserProfileResponse,
 } from "@store/types";
 import api from "./api/apiSlice";
 import { cacher } from "./api/rtkQueryCacheUtils";
@@ -22,8 +23,8 @@ const user = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getUserProfile: build.query<any, void>({
-      query: () => `user/profile`,
+    getUserProfile: build.query<UserProfileResponse, void>({
+      query: () => `users/me`,
       providesTags: cacher.providesProperty("User"),
       transformResponse: (response: any, meta, arg): any => {
         return response;

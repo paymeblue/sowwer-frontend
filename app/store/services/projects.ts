@@ -4,8 +4,8 @@ import {
   CreateProjectResponse,
   EditProjectRequest,
   ErrorResponse,
-  ExploreProjectsRequest,
   ExploreProjectsResponse,
+  ExploreRequest,
   GetDonorsForProjectResponse,
   GetProjectDetailsResponse,
   MinistryDonationResponse,
@@ -80,10 +80,7 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    exploreProjects: build.query<
-      ExploreProjectsResponse,
-      ExploreProjectsRequest
-    >({
+    exploreProjects: build.query<ExploreProjectsResponse, ExploreRequest>({
       query: (body) => {
         let url;
         if (body.query === "all") {
@@ -197,7 +194,7 @@ const projects = api.injectEndpoints({
     >({
       query: ({ page, type, id }) =>
         `ministries/${id}/list-donors?limit=10&page=${page}&type=${type}`,
-      providesTags: cacher.cacheByIdArg("Projects") as any,
+      providesTags: cacher.cacheByIdArgProperty("Projects") as any,
       transformResponse: (
         response: MinistryDonationResponse,
         meta,

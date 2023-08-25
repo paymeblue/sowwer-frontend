@@ -6,17 +6,30 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import logo from "public/assets/icons/logo.svg";
 import { useState } from "react";
+import { ChevronDown, ChevronUp } from "react-iconly";
 
 const { Header } = Layout;
 
 const Navbar = () => {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [openKeys, setOpenKeys] = useState([""]);
+  const rootSubmenuKeys = ["/explore"];
 
   const [current, setCurrent] = useState(
     pathname === "" || pathname === "/" ? "/home" : pathname
   );
-  const [open, setOpen] = useState(false);
+
   const backgroundTransparent = useNavBg();
+
+  const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+    if (rootSubmenuKeys.indexOf(latestOpenKey!) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
 
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
@@ -26,6 +39,16 @@ const Navbar = () => {
   const showDrawer = () => setOpen(true);
 
   const onClose = () => setOpen(false);
+  const [hover, setHover] = useState<boolean>(false);
+
+  const mouseEnterHandler = () => {
+    setHover(true);
+  };
+
+  const mouseLeaveHandler = () => {
+    setHover(false);
+  };
+
   const items: MenuProps["items"] = [
     {
       key: "/home",
@@ -47,15 +70,42 @@ const Navbar = () => {
       ),
     },
     {
-      key: "/projects",
+      key: "/explore",
       label: (
-        <Link
-          className="font-body text-sm font-medium text-inherit"
-          href="projects"
+        <span
+          className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit"
+          onClick={mouseEnterHandler}
+          onMouseLeave={mouseLeaveHandler}
         >
-          Explore projects
-        </Link>
+          Explore
+          {hover ? (
+            <ChevronUp set="light" size={16} />
+          ) : (
+            <ChevronDown set="light" size={16} />
+          )}
+        </span>
       ),
+      children: [
+        {
+          key: "/projects",
+          label: (
+            <Link className="font-body text-sm text-inherit" href="projects">
+              Projects
+            </Link>
+          ),
+        },
+        {
+          key: "/explore/ministries",
+          label: (
+            <Link
+              className="font-body text-sm text-inherit"
+              href="/explore/ministries"
+            >
+              Ministries
+            </Link>
+          ),
+        },
+      ],
     },
     {
       key: "/ministries",
@@ -98,7 +148,8 @@ const Navbar = () => {
           selectedKeys={[current]}
           mode="horizontal"
           disabledOverflow={true}
-          className=" hidden border-b-0 laptop:flex [&>.ant-menu-item-selected]:text-primary [&>li::after]:border-b-0 [&>li]:rounded-md laptop:[&>li]:mx-2"
+          triggerSubMenuAction="click"
+          className="hidden border-b-0 laptop:flex laptop:items-center laptop:justify-between [&>.ant-menu-item-selected]:text-primary [&>li::after]:border-b-0 [&>li]:rounded-md laptop:[&>li]:mx-2"
         />
         <Drawer
           placement="right"
@@ -111,8 +162,11 @@ const Navbar = () => {
             items={items}
             onClick={onClick}
             selectedKeys={[current]}
-            mode="vertical"
+            mode="inline"
             disabledOverflow={true}
+            openKeys={openKeys}
+            onOpenChange={onOpenChange}
+            triggerSubMenuAction="click"
             className="border-b-0 border-none laptop:hidden [&>.ant-menu-item-selected]:text-primary [&>li::after]:border-b-0 [&>li]:rounded-md hover:[&>li]:bg-amber-50 laptop:[&>li]:mx-2"
           />
           <Space direction="vertical" className="mt-   w-full">

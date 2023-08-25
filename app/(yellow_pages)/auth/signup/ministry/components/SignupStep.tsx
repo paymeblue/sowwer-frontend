@@ -88,6 +88,8 @@ const SignupStep = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [ministrySignup, { isLoading }] = useMinistrySignupMutation();
 
+  const tandc = Form.useWatch("tandc", form);
+
   const onFormFinish = async (): Promise<void> => {
     const values: FormDataFields = form.getFieldsValue(true);
     const {
@@ -133,7 +135,7 @@ const SignupStep = () => {
         icon: <CheckCircleIcon />,
       });
 
-      form.resetFields();
+      // form.resetFields();
       router.push("/auth/signup/ministry?step=registration-complete");
     } catch (error: any) {
       console.log(error);
@@ -199,10 +201,11 @@ const SignupStep = () => {
               size="large"
               htmlType="submit"
               loading={isLoading}
+              disabled={!tandc}
               onClick={() => {
                 form.submit();
               }}
-              className={`bg-accent text-[13px] font-semibold leading-[16.38px] text-white
+              className={`bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-400
                     ${
                       path ===
                       "/auth/signup/ministry?step=registration-complete"

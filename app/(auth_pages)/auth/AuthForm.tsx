@@ -3,6 +3,7 @@ import { CheckCircleIcon } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
 import capitalizeFirstLetters from "@lib/capitalize";
 import { setCredentials } from "@store/reducers/authSlice";
+import { setLoginCallback } from "@store/reducers/utilSlice";
 import {
   useDonorRegisterMutation,
   useLoginMutation,
@@ -58,7 +59,7 @@ const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
         token: res.data.token.accessToken,
       };
       dispatch(setCredentials(payload));
-      form.resetFields();
+      // form.resetFields();
       messageApi.open({
         content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
@@ -83,13 +84,13 @@ const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
     };
     try {
       const res = await donorRegister(credentials).unwrap();
-      form.resetFields();
+      // form.resetFields();
       messageApi.open({
         content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      router.push(`/${page}`);
+      // router.push(`/${page}`);
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,
@@ -340,6 +341,9 @@ const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
                 <Link
                   href="/auth/forgot-password"
                   className="text-xs font-semibold text-accent"
+                  onClick={() =>
+                    dispatch(setLoginCallback({ callback: title }))
+                  }
                 >
                   Forgot Password?
                 </Link>

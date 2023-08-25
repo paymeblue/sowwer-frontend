@@ -142,10 +142,6 @@ const WidowForm = () => {
               type: "email",
               message: "Email is not valid!",
             },
-            {
-              required: true,
-              message: "Please enter your email!",
-            },
           ]}
           hasFeedback
         >
@@ -160,10 +156,6 @@ const WidowForm = () => {
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           label="Phone Number"
           rules={[
-            {
-              required: true,
-              message: "Please enter your phone number!",
-            },
             {
               min: 11,
               message: "A minimum of 11 digits",
@@ -211,6 +203,13 @@ const WidowForm = () => {
           </Text>
         }
         name="christianity"
+        className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+        rules={[
+          {
+            required: true,
+            message: "Please select",
+          },
+        ]}
       >
         <Radio.Group
           name="radiogroup"
@@ -230,6 +229,13 @@ const WidowForm = () => {
           </Text>
         }
         name="kids"
+        className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+        rules={[
+          {
+            required: true,
+            message: "Please select",
+          },
+        ]}
       >
         <Radio.Group
           name="radiogroup"
@@ -248,6 +254,9 @@ const WidowForm = () => {
       </Item>
     </Fragment>
   );
+
+  const declaration = Form.useWatch("declaration", form);
+
   const [widow, { isLoading }] = useWidowMutation();
   const onFinish1 = async (values: State1): Promise<void> => {
     const {
@@ -281,8 +290,8 @@ const WidowForm = () => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
-      router.push("/join-registry?status=registration-success");
+      // form.resetFields();
+      router.push("/join-registry?category=registration-success");
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -328,8 +337,8 @@ const WidowForm = () => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
-      router.push("/join-registry?status=registration-success");
+      // form.resetFields();
+      router.push("/join-registry?category=registration-success");
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -477,9 +486,10 @@ const WidowForm = () => {
             <Button
               type="primary"
               htmlType="submit"
-              className="mx-auto mt-3 flex items-center justify-center gap-2 bg-accent text-[14px] font-medium text-white"
+              className="mx-auto mt-3 flex items-center justify-center gap-2 bg-accent text-[14px] font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-400"
               size="large"
               loading={isLoading}
+              disabled={!declaration}
             >
               {isLoading ? "Saving" : "Submit"}
               <ArrowRight set="light" />

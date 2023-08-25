@@ -121,7 +121,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 level={2}
                 className="my-3 font-title text-[30px] leading-[34px] laptop:text-[50px] laptop:leading-[57px]"
               >
-                {data?.title}
+                {capitalizeFirstLetters(data?.title)}
               </Title>
               <Text className="block text-[13px] leading-[23px] tablet:hidden">
                 Lorem ipsum dolor sit amet consectetur. Faucibus risus risus
@@ -229,7 +229,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
             </Typography>
           </Col>
           <Col>
-            <Card className="mx-auto max-w-md border-none bg-white mobile-md:p-3">
+            <Card className="mx-auto max-h-[400px] max-w-md overflow-scroll border-none bg-white mobile-md:p-3">
               <Title
                 level={4}
                 className="my-3 font-title text-[24px] leading-[27.46px] laptop:text-[30px] laptop:leading-[34px]"

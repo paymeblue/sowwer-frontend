@@ -19,7 +19,7 @@ const NewProjectPage = () => {
     "https://soower.com/title-of-project"
   );
   const router = useRouter();
-  const projectId = useUtil();
+  const { projectId } = useUtil();
   const { data } = useGetProjectQuery(projectId);
   const updateLink = useCallback(() => {
     if (data?.data?.link) setLink(data.data.link);

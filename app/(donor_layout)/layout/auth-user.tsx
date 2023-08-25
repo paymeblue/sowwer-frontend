@@ -13,7 +13,7 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, {
   ForwardRefRenderFunction,
   ForwardedRef,
@@ -36,6 +36,7 @@ type Props = {
   itemList?: MenuItem[];
   avatar: string | undefined;
   signIn: string;
+  profile: string;
 };
 
 const { Title, Text, Paragraph } = Typography;
@@ -44,16 +45,20 @@ type AuthUserRef = {
   getNode(): HTMLDivElement | null;
 };
 const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
-  { name, email, avatar, signIn, itemList = [] }: Props,
+  { name, email, avatar, signIn, itemList = [], profile }: Props,
   ref: ForwardedRef<AuthUserRef>
 ) => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
   const [auth, setAuth] = useState(!!user);
   const router = useRouter();
+  const regex = /^(\/projects\/[^/]+\/donate|\/ministries\/[^/]+\/donate)$/;
   const [open, setOpen] = useState<boolean>(false);
   const showDrawer = () => setOpen(true);
-
+  const pathname = usePathname();
+  if (regex.test(pathname) && user === null) {
+    setAuth(false);
+  }
   const onClose = () => setOpen(false);
   const data = [
     {
@@ -127,12 +132,14 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
             className="cursor-pointer"
           >
             <Space size="middle" align="center">
-              <Avatar
-                size={48}
-                className="bg-[#fff8e2] align-middle font-semibold text-body-1"
-              >
-                {avatar}
-              </Avatar>
+              <Link href={`/${profile}`}>
+                <Avatar
+                  size={48}
+                  className="bg-[#fff8e2] align-middle font-semibold text-body-1"
+                >
+                  {avatar}
+                </Avatar>
+              </Link>
               <Typography>
                 <Title
                   level={5}

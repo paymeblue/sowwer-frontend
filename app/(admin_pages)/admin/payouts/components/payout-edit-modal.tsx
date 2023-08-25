@@ -39,7 +39,7 @@ const PayoutEditFormModal = ({
         bank_id: "44",
       }).unwrap();
       console.log(res);
-      form.resetFields();
+      // form.resetFields();
       msg({ status: "success", message: res.message });
       handleCancel();
     } catch (error: any) {

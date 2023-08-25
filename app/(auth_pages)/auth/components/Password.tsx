@@ -1,12 +1,12 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
+import { useUtil } from "@hooks/useUtil";
 import {
   useForgotPasswordMutation,
   useResetPasswordMutation,
 } from "@store/services/auth";
 import { Button, Card, Form, Input, Typography, message } from "antd";
-import { useSearchParams } from "next/navigation";
-// import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Fragment } from "react";
 
 type Reset = {
@@ -33,7 +33,9 @@ const PasswordPage = ({
   const [messageApi, contextHolder] = message.useMessage();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  // const router = useRouter();
+  const router = useRouter();
+  const { callbackString } = useUtil();
+
   const [forgotPasswordData, { isLoading }] = useForgotPasswordMutation();
   const [resetPasswordData, { isLoading: resetLoading }] =
     useResetPasswordMutation();
@@ -45,7 +47,7 @@ const PasswordPage = ({
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
+      // form.resetFields();
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -66,8 +68,12 @@ const PasswordPage = ({
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      form.resetFields();
-      // router.push("/");
+      // form.resetFields();
+      if (callbackString) {
+        router.push(`/auth/signin/${callbackString}`);
+      } else {
+        return;
+      }
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -102,7 +108,7 @@ const PasswordPage = ({
             </Title>
             <Text className="font-body-1 text-[12px] leading-[15.75px] laptop:text-[13px] laptop:leading-[16.38px]">
               {forgotPassword
-                ? "Enter your email address below and a rest link will be sent to you"
+                ? "Enter your email address below and a reset link will be sent to you"
                 : resetPassword
                 ? "Please enter your new password below"
                 : null}

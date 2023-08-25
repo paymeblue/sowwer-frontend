@@ -29,7 +29,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
     router.push(`/ministries/${id}/donate`);
   };
   return (
-    <Row className="mb-12 mt-6 grid grid-cols-1 items-center justify-start justify-items-start gap-6 laptop:grid-cols-2 laptop:justify-between laptop:justify-items-end desktop:mt-auto">
+    <Row className="mb-12 mt-10 grid grid-cols-1 items-start justify-between gap-6 laptop:grid-cols-2 laptop:justify-between desktop:mt-auto">
       <Col>
         <Typography>
           <Title
@@ -39,7 +39,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             About
           </Title>
           <Paragraph className="text-[13px] leading-[23px] laptop:text-[14px] laptop:leading-[26px]">
-            {data?.description ?? `N/A`}
+            {data?.about ?? `N/A`}
           </Paragraph>
         </Typography>
       </Col>
@@ -49,7 +49,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             <Space>
               <EnvironmentOutlined style={{ fontSize: "16px" }} />
               <Text className="text-[13px] leading-[16.78px] text-body-1 laptop:text-[14px] laptop:leading-[18px]">
-                {data?.state}, Nigeria.
+                {data?.state ? `${data.state}, Nigeria.` : `N/A`}
               </Text>
             </Space>
           </Paragraph>
@@ -61,7 +61,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
                 target="_blank"
                 className="text-[13.32px] leading-[16.78px] text-body-1 laptop:text-[14px] laptop:leading-[18px]"
               >
-                {data?.website}
+                {data?.website ? `${data.website}` : `N/A`}
               </Link>
             </Space>
           </Paragraph>

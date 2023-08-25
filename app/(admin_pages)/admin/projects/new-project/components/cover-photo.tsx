@@ -67,7 +67,7 @@ const CoverPhoto = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [coverPhoto, { isLoading }] = useEditCoverPhotoMutation();
-  const projectId = useUtil();
+  const { projectId } = useUtil();
   const onFinish = async (values: any) => {
     try {
       const res = await coverPhoto({

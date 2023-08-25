@@ -1,5 +1,7 @@
 import {
   ErrorResponse,
+  ExploreMinistriesResponse,
+  ExploreRequest,
   GetMinistryDetailsResponse,
   GetSocialLinksResponse,
   MinistryProfileRequest,
@@ -27,6 +29,30 @@ const ministry = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    exploreMinistries: build.query<ExploreMinistriesResponse, ExploreRequest>({
+      query: (body) => {
+        let url;
+        if (body.query === "all") {
+          url = `ministries?page=${body.page}&limit=6`;
+        } else {
+          url = `ministries?page=${body.page}&limit=6&category=${body.query}`;
+        }
+        return {
+          url,
+          method: "GET",
+        };
+      },
+      providesTags: cacher.providesProperty("Ministry"),
+      transformResponse: (
+        response: ExploreMinistriesResponse,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
     updateMinistryProfile: build.mutation<
       MinistryProfileResponse,
       MinistryProfileRequest
@@ -45,7 +71,10 @@ const ministry = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getMinistryDetails: build.query<GetMinistryDetailsResponse, string>({
+    getMinistryDetails: build.query<
+      GetMinistryDetailsResponse,
+      string | undefined
+    >({
       query: (id) => `ministries/${id}`,
       providesTags: cacher.cacheByIdArg("Ministry"),
       transformResponse: (reponse: GetMinistryDetailsResponse, meta, arg) => {
@@ -89,6 +118,7 @@ const ministry = api.injectEndpoints({
 export const {
   useCreateMinistryMutation,
   useGetMinistryDetailsQuery,
+  useExploreMinistriesQuery,
   useUpdateMinistryProfileMutation,
   useUpdateSocialLinksMutation,
   useGetSocialLinksQuery,

@@ -84,7 +84,7 @@ const PaymentMethods = () => {
     //   expiryDate: values.cardExpires,
     // };
     // setCardDetails((prev) => [newCard, prev]);
-    // form.resetFields();
+    // // form.resetFields();
   };
 
   const onFinishFailed = (errorInfo: any) => {
