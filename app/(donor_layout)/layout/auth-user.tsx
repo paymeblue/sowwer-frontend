@@ -19,6 +19,7 @@ import React, {
   ForwardedRef,
   Fragment,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import { ChevronDown, Login, Logout } from "react-iconly";
@@ -52,13 +53,15 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
   const dispatch = useAppDispatch();
   const [auth, setAuth] = useState(!!user);
   const router = useRouter();
-  const regex = /^(\/projects\/[^/]+\/donate|\/ministries\/[^/]+\/donate)$/;
   const [open, setOpen] = useState<boolean>(false);
   const showDrawer = () => setOpen(true);
   const pathname = usePathname();
-  if (regex.test(pathname) && user === null) {
-    setAuth(false);
-  }
+  useEffect(() => {
+    const regex = /^(\/projects\/[^/]+\/donate|\/ministries\/[^/]+\/donate)$/;
+    if (regex.test(pathname) && user === null) {
+      setAuth(false);
+    }
+  }, [pathname, user]);
   const onClose = () => setOpen(false);
   const data = [
     {
