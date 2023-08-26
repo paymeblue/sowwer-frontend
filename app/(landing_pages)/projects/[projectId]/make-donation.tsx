@@ -1,6 +1,5 @@
 "use client";
 import { LinkOutlined, LoadingOutlined } from "@ant-design/icons";
-import { HeartOrganIcon } from "@components/assets/icons";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
@@ -129,7 +128,13 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 dignissim.
               </Text>
               <Space>
-                <HeartOrganIcon />
+                <Avatar
+                  size={75}
+                  alt={data?.organisedBy}
+                  src={data?.logo}
+                  onError={() => true}
+                  className="object-fit mx-auto my-6"
+                />
                 <Paragraph className="hidden text-[12.89px] leading-[20px] text-body-2 mobile-lg:text-sm tablet:block laptop:text-[15px] laptop:leading-[18.9px]">
                   Organized by
                   <Link

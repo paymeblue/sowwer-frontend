@@ -395,6 +395,7 @@ export type RegisterDonorRequest = {
 };
 
 export type GetProjectDetailsResponse = Response<{
+  id: string;
   title: string;
   targetAmount: string;
   category: string;
@@ -406,6 +407,7 @@ export type GetProjectDetailsResponse = Response<{
   amountRaised: string;
   donors: string;
   donationPercent: string;
+  logo: string | null;
 }>;
 
 export type GetMinistryDetailsResponse = Response<{

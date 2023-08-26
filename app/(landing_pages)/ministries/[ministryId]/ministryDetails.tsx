@@ -1,5 +1,4 @@
 "use client";
-import { HeartOrganIcon } from "@components/assets/icons";
 import capitalizeFirstLetters from "@lib/capitalize";
 import Container from "@shared/Container";
 import TabList from "@shared/TabList";
@@ -27,7 +26,6 @@ const MinistryDetailsPage = ({ ministryId }: { ministryId: string }) => {
   return (
     <Container className="mt-15">
       <Space align="center" className="my-4">
-        <HeartOrganIcon />
         <Avatar
           size={75}
           alt="example"
