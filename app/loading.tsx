@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "public/assets/icons/loading.svg";
+import logo from "public/assets/icons/logo-white.svg";
 
 const Loading = () => {
   return (

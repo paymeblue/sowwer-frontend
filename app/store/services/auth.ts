@@ -1,7 +1,11 @@
 import {
-  DonorSignupRequest,
-  DonorSignupResponse,
   ErrorResponse,
+  InitiateDonationResponseAuth,
+  InitiateDonationResponseUnauth,
+  InitiateDonationToMinistryRequestAuth,
+  InitiateDonationToMinistryRequestUnauth,
+  InitiateDonationToProjectRequest,
+  InitiateDonationToProjectRequestAuth,
   LoginRequest,
   LoginResponse,
   MinistrySignupRequest,
@@ -43,26 +47,9 @@ const auth = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data,
     }),
-    donorSignup: build.mutation<DonorSignupResponse, DonorSignupRequest>({
-      query: (credentials) => {
-        const { id, ...rest } = credentials;
-        return {
-          url: `projects/${id}/p-initiate`,
-          method: "POST",
-          body: rest,
-        };
-      },
-      transformResponse: (response: DonorSignupResponse, meta, arg): any => {
-        const { message, data } = response;
-        return { message, data };
-      },
-      // Pick out errors and prevent nested properties in a hook or selector
-      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
-        response.data,
-    }),
-    initiatePaymentForMinistry: build.mutation<
-      DonorSignupResponse,
-      DonorSignupRequest
+    initiatePaymentToProjectUnauth: build.mutation<
+      InitiateDonationResponseUnauth,
+      InitiateDonationToProjectRequest
     >({
       query: (credentials) => {
         const { id, ...rest } = credentials;
@@ -72,7 +59,82 @@ const auth = api.injectEndpoints({
           body: rest,
         };
       },
-      transformResponse: (response: DonorSignupResponse, meta, arg): any => {
+      transformResponse: (
+        response: InitiateDonationResponseUnauth,
+        meta,
+        arg
+      ): any => {
+        const { message, data } = response;
+        return { message, data };
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
+    }),
+    initiatePaymentToProjectAuth: build.mutation<
+      InitiateDonationResponseAuth,
+      InitiateDonationToProjectRequestAuth
+    >({
+      query: (credentials) => {
+        const { id, ...rest } = credentials;
+        return {
+          url: `projects/${id}/project-donate`,
+          method: "POST",
+          body: rest,
+        };
+      },
+      transformResponse: (
+        response: InitiateDonationResponseAuth,
+        meta,
+        arg
+      ): any => {
+        const { message, data } = response;
+        return { message, data };
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
+    }),
+    initiatePaymentToMinistryUnauth: build.mutation<
+      InitiateDonationResponseUnauth,
+      InitiateDonationToMinistryRequestUnauth
+    >({
+      query: (credentials) => {
+        const { id, ...rest } = credentials;
+        return {
+          url: `ministries/${id}/m-initiate`,
+          method: "POST",
+          body: rest,
+        };
+      },
+      transformResponse: (
+        response: InitiateDonationResponseUnauth,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
+    }),
+    initiatePaymentToMinistryAuth: build.mutation<
+      InitiateDonationResponseAuth,
+      InitiateDonationToMinistryRequestAuth
+    >({
+      query: (credentials) => {
+        const { id, ...rest } = credentials;
+        return {
+          url: `ministries/${id}/ministry-donate`,
+          method: "POST",
+          body: rest,
+        };
+      },
+      transformResponse: (
+        response: InitiateDonationResponseAuth,
+        meta,
+        arg
+      ): any => {
         const { message, data } = response;
         return { message, data };
       },
@@ -154,7 +216,10 @@ export const {
   useMinistrySignupMutation,
   useDonorRegisterMutation,
   useLoginMutation,
+  useInitiatePaymentToMinistryUnauthMutation,
+  useInitiatePaymentToMinistryAuthMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
-  useDonorSignupMutation,
+  useInitiatePaymentToProjectAuthMutation,
+  useInitiatePaymentToProjectUnauthMutation,
 } = auth;

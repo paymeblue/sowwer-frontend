@@ -1,6 +1,9 @@
 import { MenuOutlined } from "@ant-design/icons";
+import { useAuth } from "@hooks/useAuth";
 import useNavBg from "@hooks/useNavBg";
+import userDetails from "@lib/user-details";
 import { Button, Divider, Drawer, Layout, Menu, MenuProps, Space } from "antd";
+import AuthUser from "app/(donor_layout)/layout/auth-user";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,6 +18,9 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [openKeys, setOpenKeys] = useState([""]);
   const rootSubmenuKeys = ["/explore"];
+  const { user } = useAuth();
+  const signin = user?.type;
+  const profile = user?.type === "ministry" ? "admin" : "donor";
 
   const [current, setCurrent] = useState(
     pathname === "" || pathname === "/" ? "/home" : pathname
@@ -130,7 +136,78 @@ const Navbar = () => {
       ),
     },
   ];
-
+  const items2: MenuProps["items"] = [
+    {
+      key: "/home",
+      label: (
+        <Link className="font-body text-sm font-medium text-inherit" href="/">
+          Home
+        </Link>
+      ),
+    },
+    {
+      key: "/about",
+      label: (
+        <Link
+          className="font-body text-sm font-medium text-inherit"
+          href="about"
+        >
+          About
+        </Link>
+      ),
+    },
+    {
+      key: "/explore",
+      label: (
+        <span className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit">
+          Explore
+        </span>
+      ),
+      children: [
+        {
+          key: "/projects",
+          label: (
+            <Link className="font-body text-sm text-inherit" href="projects">
+              Projects
+            </Link>
+          ),
+        },
+        {
+          key: "/explore/ministries",
+          label: (
+            <Link
+              className="font-body text-sm text-inherit"
+              href="/explore/ministries"
+            >
+              Ministries
+            </Link>
+          ),
+        },
+      ],
+    },
+    {
+      key: "/ministries",
+      label: (
+        <Link
+          className="font-body text-sm font-medium text-inherit"
+          href="ministries"
+        >
+          For ministries
+        </Link>
+      ),
+    },
+    {
+      key: "/contact",
+      label: (
+        <Link
+          className="font-body text-sm font-medium text-inherit"
+          href="contact"
+        >
+          Contact us
+        </Link>
+      ),
+    },
+  ];
   return (
     <Header
       className={`sticky left-0 top-0  z-30 m-auto flex w-full items-center justify-between px-4 py-2 transition-all ease-out  tablet:px-20 laptop:px-4 desktop:px-20 ${
@@ -159,7 +236,7 @@ const Navbar = () => {
           width="65%"
         >
           <Menu
-            items={items}
+            items={items2}
             onClick={onClick}
             selectedKeys={[current]}
             mode="inline"
@@ -171,19 +248,27 @@ const Navbar = () => {
           />
           <Space direction="vertical" className="mt-   w-full">
             <Divider orientation="center" />
-            <Button
-              type="default"
-              size="large"
-              className="mx-auto flex items-center justify-center border-black text-sm font-medium text-black laptop:p-5 "
-              block
-            >
-              <Link
-                href="auth/signin/donor"
-                className="font-body text-sm font-medium text-black"
+            {user ? (
+              <AuthUser
+                {...userDetails(user)}
+                signIn={signin}
+                profile={profile}
+              />
+            ) : (
+              <Button
+                type="default"
+                size="large"
+                className="mx-auto flex items-center justify-center border-black text-sm font-medium text-black laptop:p-5 "
+                block
               >
-                Log in
-              </Link>
-            </Button>
+                <Link
+                  href="auth/signin/donor"
+                  className="font-body text-sm font-medium text-black"
+                >
+                  Log in
+                </Link>
+              </Button>
+            )}
             <Button
               type="primary"
               size="large"
@@ -208,18 +293,22 @@ const Navbar = () => {
         />
       </div>
       <Space className="hidden laptop:flex">
-        <Button
-          type="default"
-          size="large"
-          className="mx-auto flex items-center justify-center border-black text-sm font-medium text-black laptop:p-5 "
-        >
-          <Link
-            href="auth/signin/donor"
-            className="font-body text-sm font-medium text-black"
+        {user ? (
+          <AuthUser {...userDetails(user)} signIn={signin} profile={profile} />
+        ) : (
+          <Button
+            type="default"
+            size="large"
+            className="mx-auto flex items-center justify-center border-black text-sm font-medium text-black laptop:p-5 "
           >
-            Log in
-          </Link>
-        </Button>
+            <Link
+              href="auth/signin/donor"
+              className="font-body text-sm font-medium text-black"
+            >
+              Log in
+            </Link>
+          </Button>
+        )}
         <Button
           type="primary"
           size="large"

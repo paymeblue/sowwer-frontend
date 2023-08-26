@@ -34,8 +34,8 @@ const ProjectsDonorTable = () => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
   const { user } = useAuth();
-  let id;
-  if (user) {
+  let id: string | undefined;
+  if (user && "ministry" in user) {
     id = user.ministry.id;
   }
   const [filteredInfo, setFilteredInfo] = useState<
@@ -312,6 +312,12 @@ const ProjectsDonorTable = () => {
         loading={isLoading || isFetching}
         onChange={handleChange}
         scroll={{ x: 896 }}
+        rowKey={(record) => record.key}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {},
+          };
+        }}
         pagination={{
           defaultCurrent: pagination.current,
           pageSize: pagination.pageSize,

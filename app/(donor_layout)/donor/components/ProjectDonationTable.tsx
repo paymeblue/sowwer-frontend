@@ -285,6 +285,12 @@ const ProjectDonationTable: FC = () => {
       dataSource={dataSource}
       loading={isLoading || isFetching}
       onChange={handleChange}
+      rowKey={(record) => record.key}
+      onRow={(record, rowIndex) => {
+        return {
+          onClick: (event) => {},
+        };
+      }}
       scroll={{ x: 896 }}
       pagination={{
         defaultCurrent: pagination.current,

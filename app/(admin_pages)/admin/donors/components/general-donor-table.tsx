@@ -37,8 +37,8 @@ const GeneralDonorsTable = () => {
     Record<string, FilterValue | null>
   >({});
   const { user } = useAuth();
-  let id;
-  if (user) {
+  let id: string | undefined;
+  if (user && "ministry" in user) {
     id = user.ministry.id;
   }
   const [pagination, setPagination] = useState<TablePaginationConfig>({
@@ -311,6 +311,12 @@ const GeneralDonorsTable = () => {
         loading={isLoading || isFetching}
         onChange={handleChange}
         scroll={{ x: 896 }}
+        rowKey={(record) => record.key}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {},
+          };
+        }}
         pagination={{
           defaultCurrent: pagination.current,
           pageSize: pagination.pageSize,

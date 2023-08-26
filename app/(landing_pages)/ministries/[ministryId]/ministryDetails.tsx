@@ -44,7 +44,7 @@ const MinistryDetailsPage = ({ ministryId }: { ministryId: string }) => {
       </Space>
       <TabList
         items={items}
-        className="items-center tablet:items-start [&>div>.ant-tabs-content-holder]:w-full"
+        className="items-center tablet:items-start [&>.ant-tabs-content-holder]:w-full"
       />
     </Container>
   );

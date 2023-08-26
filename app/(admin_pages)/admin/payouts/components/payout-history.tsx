@@ -329,6 +329,12 @@ const CompletedProjectsTable = () => {
         loading={isLoading || isFetching}
         onChange={handleChange}
         scroll={{ x: 896 }}
+        rowKey={(record) => record.key}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {},
+          };
+        }}
         pagination={{
           defaultCurrent: pagination.current,
           pageSize: pagination.pageSize,

@@ -14,6 +14,7 @@ import currencyFormat from "@lib/useCurrencyFormat";
 import { generateAvatar } from "@lib/user-details";
 import ResultComponent from "@shared/ResultComponent";
 import {
+  useCloseMinistryProjectMutation,
   useDeleteMinistryProjectMutation,
   useGetMinistryProjectDonorsQuery,
   useGetMinistryProjectsQuery,
@@ -104,14 +105,13 @@ type IProps = {
   status: string;
   donors: number;
 };
-
 const { Title, Text, Paragraph } = Typography;
 
 const ProjectsTable = () => {
   const { user } = useAuth();
   const router = useRouter();
-  let id;
-  if (user) {
+  let id: string | undefined;
+  if (user && "ministry" in user) {
     id = user.ministry.id;
   }
   const [pagination, setPagination] = useState<TablePaginationConfig>({
@@ -143,7 +143,7 @@ const ProjectsTable = () => {
     useDeleteMinistryProjectMutation();
 
   const [closeMinistryProject, { isLoading: closeLoading }] =
-    useDeleteMinistryProjectMutation();
+    useCloseMinistryProjectMutation();
   const getColorForStatus = (status: ProjectData["status"]) => {
     return status === "drafted"
       ? "yellow"
@@ -741,6 +741,7 @@ const ProjectsTable = () => {
         onChange={handleChange}
         scroll={{ x: 896 }}
         loading={isLoading || isFetching}
+        rowKey={(record) => record.key}
         pagination={{
           defaultCurrent: pagination.current,
           pageSize: pagination.pageSize,

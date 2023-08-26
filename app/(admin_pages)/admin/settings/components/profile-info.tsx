@@ -39,13 +39,11 @@ const ProfileInfo = () => {
     useUpdateMinistryProfileMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const { user } = useAuth();
-  let id: string;
-  if (user?.ministry) {
+  let id: string | undefined;
+  if (user && "ministry" in user) {
     id = user.ministry.id;
   }
-  const { data: ministryDetails } = useGetMinistryDetailsQuery(
-    user?.ministry.id
-  );
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(id);
   const initialValues = ministryDetails?.data
     ? {
         name: ministryDetails.data.name,

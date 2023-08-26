@@ -1,7 +1,9 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { CheckCircleIcon } from "@components/assets/icons";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import ResultComponent from "@shared/ResultComponent";
+import { useCancelRecurringPaymentMutation } from "@store/services/payouts";
 import { useGetDonationsForDonorUserQuery } from "@store/services/projects";
 import {
   Button,
@@ -12,6 +14,7 @@ import {
   Spin,
   Table,
   Typography,
+  message,
 } from "antd";
 import type { ColumnType, ColumnsType, TableProps } from "antd/es/table";
 import type {
@@ -20,12 +23,12 @@ import type {
 } from "antd/es/table/interface";
 import { FilterValue } from "antd/es/table/interface";
 import moment from "moment";
-import React, { FC, Fragment, useRef, useState } from "react";
+import { FC, Fragment, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 
 const priceFormat = currencyFormat();
 interface DataType {
-  key: React.Key;
+  key: string;
   ministry: string;
   type: string;
   frequency: string;
@@ -39,7 +42,11 @@ const { Title, Text } = Typography;
 const GeneralDonationTable: FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [rowId, setRowId] = useState("");
   const searchInput = useRef<InputRef>(null);
+  const [cancelRecurringPayment, { isLoading: cancelLoading }] =
+    useCancelRecurringPaymentMutation();
+  const [messageApi, contextHolder] = message.useMessage();
   const [filteredInfo, setFilteredInfo] = useState<
     Record<string, FilterValue | null>
   >({});
@@ -189,7 +196,23 @@ const GeneralDonationTable: FC = () => {
     amount: Number(item.amountRaised),
     date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
-
+  const pausePaymentHandler = async () => {
+    try {
+      const res = await cancelRecurringPayment(rowId).unwrap();
+      messageApi.open({
+        content: `${res.message}`,
+        className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+        icon: <CheckCircleIcon />,
+      });
+    } catch {
+      (error: any) => {
+        messageApi.open({
+          content: `${error}`,
+          className: `[&>div]:bg-red-800 [&>div]:text-white`,
+        });
+      };
+    }
+  };
   const columns: ColumnsType<DataType> = [
     {
       title: (
@@ -287,11 +310,16 @@ const GeneralDonationTable: FC = () => {
       dataIndex: "action",
       width: "12%",
       filteredValue: null,
-      render: (_, record: { frequency: string; key: React.Key }) => {
+      render: (_, record: { frequency: string; key: string }) => {
         console.log(record, "record");
         if (record.frequency !== "-") {
           return (
-            <Button className="text-[14px] font-semibold leading-[22px]" danger>
+            <Button
+              className="text-[14px] font-semibold leading-[22px]"
+              onClick={pausePaymentHandler}
+              loading={cancelLoading}
+              danger
+            >
               Pause Payment
             </Button>
           );
@@ -320,6 +348,14 @@ const GeneralDonationTable: FC = () => {
       columns={columns}
       dataSource={dataSource}
       loading={isLoading || isFetching}
+      rowKey={(record) => record.key}
+      onRow={(record, rowIndex) => {
+        return {
+          onClick: (event) => {
+            setRowId(record.key);
+          },
+        };
+      }}
       onChange={handleChange}
       scroll={{ x: 896 }}
       pagination={{
@@ -331,7 +367,12 @@ const GeneralDonationTable: FC = () => {
       sticky
     />
   );
-  return <Fragment>{content}</Fragment>;
+  return (
+    <Fragment>
+      {contextHolder}
+      {content}
+    </Fragment>
+  );
 };
 
 export default GeneralDonationTable;

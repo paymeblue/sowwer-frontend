@@ -1,9 +1,14 @@
 "use client";
-import { HeartOrganIcon } from "@components/assets/icons";
+import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import useFlutterConfig from "@hooks/useFlutterConfig";
 import capitalizeFirstLetters from "@lib/capitalize";
+import {
+  useInitiatePaymentToMinistryAuthMutation,
+  useInitiatePaymentToMinistryUnauthMutation,
+} from "@store/services/auth";
 import { useGetMinistryDetailsQuery } from "@store/services/ministries";
+import { useVerifyPaymentMutation } from "@store/services/payouts";
 import type { RadioChangeEvent } from "antd";
 import {
   Alert,
@@ -20,9 +25,17 @@ import {
 } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
+import Image from "next/image";
 // import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, useCallback, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Heart2 } from "react-iconly";
 
 type FormValues = {
@@ -36,8 +49,26 @@ type FormValues = {
   signup: boolean;
   phoneNumber: string;
   displayIdentity: boolean;
-  frequency: string;
-  type: string;
+  type: "one-time" | "recurring";
+  frequency: "monthly" | "quaterly" | "yearly";
+};
+
+type MinistryData = {
+  id: string;
+  user_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  state: string;
+  website: string;
+  postal_code: string | null;
+  cac_document: string;
+  ministryType: string;
+  createdAt: string;
+  donation_description: string;
+  about: string;
+  logo: string;
 };
 
 const { Title } = Typography;
@@ -49,7 +80,30 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const [form] = useForm();
   const { user } = useAuth();
   const router = useRouter();
-  const { data: ministry } = useGetMinistryDetailsQuery(ministryId);
+  const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
+  const { data: ministryData } = useGetMinistryDetailsQuery(ministryId);
+  let ministry: MinistryData | undefined;
+  const [
+    initiatePaymentToMinistryAuth,
+    { data: authData, isLoading: paymentAuthLoading },
+  ] = useInitiatePaymentToMinistryAuthMutation();
+  const [
+    initiatePaymentToMinistryUnauth,
+    { data: unauthData, isLoading: paymentUnauthLoading },
+  ] = useInitiatePaymentToMinistryUnauthMutation();
+  let rtkHook: any;
+  if (user) {
+    rtkHook = initiatePaymentToMinistryAuth;
+  } else {
+    rtkHook = initiatePaymentToMinistryUnauth;
+  }
+  const data = user ? authData?.data : unauthData?.data.donation;
+
+  if (ministryData) {
+    ministry = ministryData.data;
+  }
+  const [verifyPayment] = useVerifyPaymentMutation();
+
   const [messageApi, contextHolder] = message.useMessage();
   const [checked, setChecked] = useState(false);
   const [recurring, setRecurring] = useState(false);
@@ -67,8 +121,8 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     phoneNumber: "",
     signup: false,
     displayIdentity: false,
-    frequency: "one-time",
-    type: "Monthly",
+    type: "one-time",
+    frequency: "monthly",
   });
 
   const changeHandler = (
@@ -109,15 +163,24 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     [email, firstname, lastname, phoneNumber]
   );
 
+  const updatetxnRef = useCallback(() => {
+    if (data?.txn_reference) {
+      setTxnRef(data.txn_reference);
+    }
+  }, [data?.txn_reference]);
+  useEffect(() => {
+    updatetxnRef();
+  }, [updatetxnRef]);
+
   const obj = useMemo(
     () => ({
       currency,
       amount: Number(amount) || 100,
       customer,
-      desc: "family worship ministry",
-      txnRef: Date.now().toString(),
+      desc: ministry ? ministry.name : "Ministry Donation",
+      txnRef,
     }),
-    [currency, amount, customer]
+    [txnRef, ministry, currency, amount, customer]
   );
 
   const config = useFlutterConfig(obj);
@@ -138,17 +201,73 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     ),
     [formData.currency]
   );
-  const onFinish = () => {
-    handleFlutterPayment({
-      callback: (response) => {
-        console.log(response);
-        closePaymentModal(); // this will close the modal programmatically
-        router.push("/ministries/donation-successful");
-      },
-      onClose: () => {},
-    });
+
+  const callback = async (values: FormValues) => {
+    const {
+      amount,
+      firstname,
+      lastname,
+      email,
+      phoneNumber,
+      signup,
+      displayIdentity,
+      password,
+      currency,
+      type,
+      frequency,
+    } = values;
+    const data = {
+      id: ministryId,
+      phone: phoneNumber,
+      email,
+      firstName: firstname,
+      lastName: lastname,
+      anonymous: displayIdentity,
+      createAccount: signup,
+      amount: +amount,
+      payment_mode: type,
+      password,
+      currency,
+      interval: frequency,
+    };
+    await rtkHook(data).unwrap();
   };
 
+  const onFinish = async (values: FormValues) => {
+    console.log(values);
+    try {
+      await callback(values);
+      handleFlutterPayment({
+        callback: async (response) => {
+          console.log(response);
+          try {
+            const res = await verifyPayment({
+              txn_id: response.transaction_id.toString(),
+              txn_reference: response.tx_ref,
+            }).unwrap();
+            messageApi.open({
+              content: `${res.message}`,
+              className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+              icon: <CheckCircleIcon />,
+            });
+            router.push("/ministries/donation-successful");
+          } catch (error) {
+            messageApi.open({
+              content: `${error}`,
+              className: `[&>div]:bg-red-800 [&>div]:text-white`,
+            });
+          }
+          closePaymentModal();
+        },
+        onClose: () => {},
+      });
+    } catch (error: any) {
+      messageApi.open({
+        content: `${error.message}`,
+        className: "[&>div]:bg-red-800 [&>div]:text-white",
+      });
+    }
+  };
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
     messageApi.open({
@@ -162,9 +281,9 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   ];
 
   const options = [
-    { label: "Monthly", value: "Monthly" },
-    { label: "Quarterly", value: "Quarterly" },
-    { label: "Yearly", value: "Yearly" },
+    { label: "Monthly", value: "monthly" },
+    { label: "Quarterly", value: "quarterly" },
+    { label: "Yearly", value: "yearly" },
   ];
 
   return (
@@ -177,19 +296,18 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
           </Title>
           {ministry ? (
             <Space align="center" className="my-4">
-              <HeartOrganIcon />
-              {/* <Image
-                src={ministry.data.image ?? "/assets/images/happy_woman.jpg"}
+              <Image
+                src={ministry.logo ?? "/assets/images/happy_woman.jpg"}
                 alt="happy woman"
                 width={200}
-                height={20}
-                className="h-[20px] w-[200px]  rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
-              /> */}
+                height={100}
+                className="h-[100px] w-[200px]  rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
+              />
               <Title
                 level={2}
                 className=" mb-0 font-title text-[21.18px] leading-[24.23px] laptop:text-[30px] laptop:leading-[34px]"
               >
-                {capitalizeFirstLetters(ministry.data.name)}
+                {capitalizeFirstLetters(ministry.name)}
               </Title>
             </Space>
           ) : (
@@ -489,6 +607,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   icon={<Heart2 set="bold" size={19} />}
                   type="primary"
                   htmlType="submit"
+                  loading={paymentAuthLoading || paymentUnauthLoading}
                   className="mx-auto mt-6 flex items-center justify-center gap-2 text-sm font-medium text-black laptop:p-6 "
                 >
                   Donate Now

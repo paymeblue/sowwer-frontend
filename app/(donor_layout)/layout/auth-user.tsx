@@ -22,7 +22,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { ChevronDown, Login, Logout } from "react-iconly";
+import { ChevronDown, Login, Logout, User } from "react-iconly";
 
 type MenuItem = {
   label: string;
@@ -36,8 +36,8 @@ type Props = {
   email: string | undefined;
   itemList?: MenuItem[];
   avatar: string | undefined;
-  signIn: string;
-  profile: string;
+  signIn: string | undefined;
+  profile: string | undefined;
 };
 
 const { Title, Text, Paragraph } = Typography;
@@ -63,13 +63,10 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
     }
   }, [pathname, user]);
   const onClose = () => setOpen(false);
-  const data = [
-    {
-      name,
-      email,
-      avatar,
-    },
-  ];
+  const handleGoToAccount = useCallback(() => {
+    router.push(`/${profile}`);
+    setOpen(false);
+  }, [router, profile]);
   const handleItemClick = useCallback(
     (itemPath: string) => {
       router.push(`/${itemPath}`);
@@ -77,12 +74,6 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
     },
     [router]
   );
-
-  const handleLogout = useCallback(async () => {
-    dispatch(logout());
-    setAuth(false);
-  }, [dispatch]);
-
   const items = itemList.map((item) => ({
     label: (
       <Button
@@ -97,6 +88,36 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
     ),
     key: item.key,
   }));
+  // useEffect(() => {
+  if (!/^\/(admin|donor)/.test(pathname)) {
+    items.push({
+      label: (
+        <Button
+          onClick={handleGoToAccount}
+          className="flex items-center gap-1 border-none text-left text-body-1 shadow-none hover:bg-slate-100"
+          icon={<User set="light" />}
+          block
+          key="account"
+        >
+          Go to Account
+        </Button>
+      ),
+      key: "account",
+    });
+  }
+  // }, [pathname, items, handleGoToAccount]);
+  const data = [
+    {
+      name,
+      email,
+      avatar,
+    },
+  ];
+
+  const handleLogout = useCallback(async () => {
+    dispatch(logout());
+    setAuth(false);
+  }, [dispatch]);
 
   items.push({
     label: (

@@ -1,4 +1,4 @@
-export type User = {
+type BasicUserInfo = {
   id: string;
   firstName: string;
   lastName: string;
@@ -6,10 +6,19 @@ export type User = {
   phone: string;
   verificationStatus: boolean;
   role: string;
+  type: string;
   createdAt: string;
-  updatedAt: string;
+};
+
+type MinistryUserInfo = {
   ministry: Ministry;
 };
+
+type DonorUser = BasicUserInfo;
+
+type MinistryUser = BasicUserInfo & MinistryUserInfo;
+
+export type User = DonorUser | MinistryUser;
 
 export type Token = {
   accessToken: string;
@@ -101,7 +110,7 @@ export type MinistryProjectsRequest = {
 
 export type Ministry = {
   id: string;
-  userId: string;
+  user_id: string;
   name: string;
   email: string;
   phone: string;
@@ -112,6 +121,10 @@ export type Ministry = {
   updatedAt: string;
   website: string;
   ministryType: string;
+  donation_description: string;
+  postal_code: string;
+  about: string;
+  logo: string;
 };
 
 type MinistryProfileRequest1 = {
@@ -168,7 +181,7 @@ export type MinistrySignupRequest = {
   password: string;
 };
 
-export type DonorSignupRequest = {
+export type InitiateDonationToProjectRequest = {
   id: string;
   phone: string;
   email: string;
@@ -181,7 +194,7 @@ export type DonorSignupRequest = {
   amount: number;
 };
 
-export type DonorSignupResponse = Response<{
+export type InitiateDonation = Response<{
   id: string;
   amount: number;
   txn_reference: string;
@@ -561,4 +574,54 @@ export type UserProfileResponse = Response<{
   role: string;
   createdAt: string;
   updatedAt: string;
+}>;
+export type InitiateDonationToMinistryRequestUnauth = {
+  id: string;
+  payment_mode: "one-time" | "recurring";
+  phone: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  anonymous: boolean;
+  createAccount: boolean;
+  amount: number;
+  currency: string;
+  interval: "monthly" | "quarterly" | "yearly";
+};
+export type InitiateDonationToMinistryRequestAuth = {
+  id: string;
+  payment_mode: "one-time" | "recurring";
+  anonymous: boolean;
+  amount: number;
+  currency: string;
+  interval: "monthly" | "quarterly" | "yearly";
+};
+export type DonationResponse = {
+  id: string;
+  amount: number;
+  currency: string;
+  donor_id: string;
+  txn_reference: string;
+  status: string;
+  createdAt: string;
+};
+export type InitiateDonationResponseAuth = Response<{
+  id: string;
+  amount: number;
+  currency: string;
+  donor_id: string;
+  txn_reference: string;
+  status: string;
+  createdAt: string;
+}>;
+export type InitiateDonationToProjectRequestAuth = {
+  id: string;
+  currency: "NGN" | "USD";
+  amount: number;
+  anonymous: boolean;
+};
+export type InitiateDonationResponseUnauth = Response<{
+  user: BasicUserInfo;
+  token: Token;
+  donation: DonationResponse;
 }>;

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 
 const DonationSuccessful = () => {
-  return <DonationSuccess page="ministries" />;
+  return <DonationSuccess page="donor" />;
 };
 
 export default DonationSuccessful;

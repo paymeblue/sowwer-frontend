@@ -29,7 +29,7 @@ const ContactSocial = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const { user } = useAuth();
-  if (user?.ministry) {
+  if (user && "ministry" in user) {
     id = user.ministry.id;
   }
   const { data: ministryDetails } = useGetMinistryDetailsQuery(id);

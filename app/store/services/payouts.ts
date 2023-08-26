@@ -38,6 +38,15 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    cancelRecurringPayment: build.mutation<PlainResponse, string>({
+      query: (id) => `payments/${id}/cancel`,
+      invalidatesTags: cacher.providesProperty("Projects"),
+      transformResponse: (response: PlainResponse, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
     getAccountInfo: build.query<AccountResponse, void>({
       query: () => `accounts`,
       providesTags: cacher.providesProperty("Account"),
@@ -79,5 +88,6 @@ export const {
   useVerifyPaymentMutation,
   useGetAccountInfoQuery,
   useRequestPayoutMutation,
+  useCancelRecurringPaymentMutation,
   usePayoutHistoryQuery,
 } = payouts;

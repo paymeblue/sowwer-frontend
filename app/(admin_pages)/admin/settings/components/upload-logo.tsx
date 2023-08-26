@@ -61,7 +61,7 @@ const UploadLogo = () => {
     useUpdateMinistryProfileMutation();
   const { user } = useAuth();
   let id: string;
-  if (user) {
+  if (user && "ministry" in user) {
     id = user.ministry.id;
   }
   const onFinish = async (values: any): Promise<void> => {

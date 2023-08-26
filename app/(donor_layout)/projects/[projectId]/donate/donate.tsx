@@ -3,7 +3,10 @@ import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import useFlutterConfig from "@hooks/useFlutterConfig";
 import capitalizeFirstLetters from "@lib/capitalize";
-import { useDonorSignupMutation } from "@store/services/auth";
+import {
+  useInitiatePaymentToProjectAuthMutation,
+  useInitiatePaymentToProjectUnauthMutation,
+} from "@store/services/auth";
 import { useVerifyPaymentMutation } from "@store/services/payouts";
 import { useGetProjectDetailsQuery } from "@store/services/projects";
 import {
@@ -43,7 +46,19 @@ type FormValues = {
   phoneNumber: string;
   displayIdentity: boolean;
 };
-
+type ProjectData = {
+  title: string;
+  targetAmount: string;
+  category: string;
+  image: string | null;
+  description: string | null;
+  link: string;
+  organisedById: string;
+  organisedBy: string;
+  amountRaised: string;
+  donors: string;
+  donationPercent: string;
+};
 const { Title, Text } = Typography;
 const { Password } = Input;
 const { Item, useForm } = Form;
@@ -54,8 +69,27 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const { user } = useAuth();
-  const { data: project } = useGetProjectDetailsQuery(id);
-  const [tnxRef, setTnxRef] = useState<string>("");
+  const { data: projectData } = useGetProjectDetailsQuery(id);
+  const [
+    initiatePaymentToProjectAuth,
+    { data: authData, isLoading: paymentAuthLoading },
+  ] = useInitiatePaymentToProjectAuthMutation();
+  const [
+    initiatePaymentToProjectUnauth,
+    { data: unauthData, isLoading: paymentUnauthLoading },
+  ] = useInitiatePaymentToProjectUnauthMutation();
+  let rtkHook: any;
+  if (user) {
+    rtkHook = initiatePaymentToProjectAuth;
+  } else {
+    rtkHook = initiatePaymentToProjectUnauth;
+  }
+  const data = user ? authData?.data : unauthData?.data.donation;
+  let project: ProjectData | undefined;
+  if (projectData) {
+    project = projectData.data;
+  }
+  const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
   const [{ showPassword, formData }, setState] = useState<{
     showPassword: boolean;
     formData: FormValues;
@@ -122,25 +156,25 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     }),
     [email, firstname, lastname, phoneNumber]
   );
-  const [donorSignup, { data }] = useDonorSignupMutation();
+
   const [verifyPayment] = useVerifyPaymentMutation();
-  const updateTnxRef = useCallback(() => {
-    if (data?.data?.txn_reference) {
-      setTnxRef(data.data.txn_reference);
+  const updatetxnRef = useCallback(() => {
+    if (data?.txn_reference) {
+      setTxnRef(data.txn_reference);
     }
-  }, [data?.data?.txn_reference]);
+  }, [data?.txn_reference]);
   useEffect(() => {
-    updateTnxRef();
-  }, [updateTnxRef]);
+    updatetxnRef();
+  }, [updatetxnRef]);
   const obj = useMemo(
     () => ({
       currency,
       amount: Number(amount),
       customer,
-      desc: "widows project",
-      txnRef: tnxRef,
+      desc: project ? project.title : "Project Donation",
+      txnRef,
     }),
-    [tnxRef, currency, amount, customer]
+    [txnRef, project, currency, amount, customer]
   );
   const config = useFlutterConfig(obj);
   console.log(config);
@@ -170,11 +204,12 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
       lastName: lastname,
       password,
       anonymous: displayIdentity,
+      currency,
       createAccount: signup,
       confirm_password: cPassword,
       amount: +amount,
     };
-    await donorSignup(data).unwrap();
+    await rtkHook(data).unwrap();
   };
   // const onFinish = async (callback: () => Promise<void>) => {
   //   try {
@@ -258,7 +293,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
               className="w-full flex-col items-start tablet:flex-row tablet:items-center [&>.ant-space-item]:w-full"
             >
               <Image
-                src={project.data.image ?? "/assets/images/happy_woman.jpg"}
+                src={project.image ?? "/assets/images/happy_woman.jpg"}
                 alt="happy woman"
                 width={200}
                 height={100}
@@ -269,10 +304,10 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   level={3}
                   className=" mb-0 font-title text-[21.18px] leading-[24.23px] laptop:text-[30px] laptop:leading-[34px]"
                 >
-                  {capitalizeFirstLetters(project.data.title)}
+                  {capitalizeFirstLetters(project.title)}
                 </Title>
                 <Text className=" text-[10.07px] uppercase leading-[12.69px] text-body-2 laptop:text-[12px] laptop:leading-[15px]">
-                  {project.data.organisedBy}
+                  {project.organisedBy}
                 </Text>
               </Typography>
             </Space>
@@ -520,6 +555,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   icon={<Heart2 set="bold" size={19} />}
                   type="primary"
                   htmlType="submit"
+                  loading={paymentAuthLoading || paymentUnauthLoading}
                   className="mx-auto mt-6 flex items-center justify-center gap-2 text-[14px] font-medium leading-[17.64px] text-black laptop:p-6 "
                 >
                   Donate Now

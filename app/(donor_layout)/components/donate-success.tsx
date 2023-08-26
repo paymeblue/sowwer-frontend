@@ -1,5 +1,6 @@
 "use client";
 import { DonateIcon } from "@components/assets/icons";
+import capitalizeFirstLetters from "@lib/capitalize";
 import ResultComponent from "@shared/ResultComponent";
 import { Card, Typography } from "antd";
 import { Fragment } from "react";
@@ -26,7 +27,7 @@ const DonationSuccess = ({ page }: { page: string }) => {
                 successful.
               </Text>
             }
-            btnText={`Back to ${page} page`}
+            btnText={`Back to ${capitalizeFirstLetters(page)} page`}
             btnLink={page}
             showBtn
             btnBg="primary"

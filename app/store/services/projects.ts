@@ -1,21 +1,22 @@
-import {
-  CoverPhotoRequest,
-  CreateProjectRequest,
-  CreateProjectResponse,
-  EditProjectRequest,
-  ErrorResponse,
-  ExploreProjectsResponse,
-  ExploreRequest,
-  GetDonorsForProjectResponse,
-  GetProjectDetailsResponse,
-  MinistryDonationResponse,
-  MinistryProjectDonorsResponse,
-  MinistryProjectsRequest,
-  MinistryProjectsResponse,
-  PublishOrDraftRequest,
-  PublishOrDraftResponse,
-  ResultResponse,
-} from "@store/types";
+import
+  {
+    CoverPhotoRequest,
+    CreateProjectRequest,
+    CreateProjectResponse,
+    EditProjectRequest,
+    ErrorResponse,
+    ExploreProjectsResponse,
+    ExploreRequest,
+    GetDonorsForProjectResponse,
+    GetProjectDetailsResponse,
+    MinistryDonationResponse,
+    MinistryProjectDonorsResponse,
+    MinistryProjectsRequest,
+    MinistryProjectsResponse,
+    PublishOrDraftRequest,
+    PublishOrDraftResponse,
+    ResultResponse,
+  } from "@store/types";
 import api from "./api/apiSlice";
 import { cacher } from "./api/rtkQueryCacheUtils";
 
@@ -205,6 +206,21 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    closeMinistryProject: build.mutation<any, string | undefined>({
+      query: (id) => `projects/${id}/cancel`,
+      // Invalidates the tag for this Project `id`, as well as the `LIST` tag,
+      // causing the `Projects list` query to re-fetch if a component is subscribed to the query.
+      invalidatesTags: cacher.providesProperty("Projects"),
+      // invalidatesTags: (result, error, id) => [
+      //   { type: "Projects", id },
+      //   { type: "Projects", id: "PARTIAL-LIST" },
+      // ],
+      transformResponse: (response: any, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
     deleteMinistryProject: build.mutation<any, string | undefined>({
       query: (id) => `projects/${id}/delete`,
       // Invalidates the tag for this Project `id`, as well as the `LIST` tag,
@@ -220,7 +236,6 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-
     refetchErroredQueries: build.mutation<null, void>({
       queryFn: () => ({ data: null }),
       invalidatesTags: cacher.invalidatesUnknownErrors(),
@@ -242,4 +257,5 @@ export const {
   useGetMinistryProjectsQuery,
   useGetMinistryProjectDonorsQuery,
   useDeleteMinistryProjectMutation,
+  useCloseMinistryProjectMutation,
 } = projects;

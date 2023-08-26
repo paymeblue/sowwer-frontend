@@ -98,6 +98,7 @@ const { Title, Text } = Typography;
 const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [rowId, setRowId] = useState("");
   const searchInput = useRef<InputRef>(null);
   const [filteredInfo, setFilteredInfo] = useState<
     Record<string, FilterValue | null>
@@ -108,8 +109,8 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     pageSize: 10,
   });
   const { user } = useAuth();
-  let id;
-  if (user) {
+  let id: string | undefined;
+  if (user && "ministry" in user) {
     id = user.ministry.id;
   }
   const antIcon = (
@@ -138,7 +139,6 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     page: pagination.current,
     status: "completed",
   });
-  console.log(res, "wink");
   function handleRefetch() {
     refetch();
   }
@@ -171,9 +171,9 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     return false;
   };
 
-  const callback = async (record: DataType) => {
+  const callback = async () => {
     try {
-      const res = await requestPayout(record.key).unwrap();
+      const res = await requestPayout(rowId).unwrap();
       messageApi.open({
         content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
@@ -187,10 +187,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     }
   };
 
-  const handleRequestPayout = (
-    record: DataType,
-    callback: (record: DataType) => void
-  ) => {
+  const handleRequestPayout = (record: DataType, callback: () => void) => {
     if (!acctLinked) {
       setModalOpen(true);
       // Assuming the form modal updates acctLinked when closed
@@ -200,7 +197,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
       // When the modal is closed, the handleModalClose callback will be triggered
       // and the execution will continue from there.
     } else {
-      callback(record); // Continue execution if acctLinked is already true
+      callback(); // Continue execution if acctLinked is already true
     }
   };
 
@@ -464,12 +461,19 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
         loading={isLoading || isFetching}
         onChange={handleChange}
         scroll={{ x: 896 }}
-        rowKey="key"
+        rowKey={(record) => record.key}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              setRowId(record.key);
+            },
+          };
+        }}
         pagination={{
           defaultCurrent: pagination.current,
           pageSize: pagination.pageSize,
           total: pagination.total,
-          onChange: paginationHandler,
+          onChange: () => paginationHandler,
           position: ["bottomRight"],
         }}
         sticky
