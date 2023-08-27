@@ -1,10 +1,18 @@
 import {
   useGetAccountInfoQuery,
   useGetBanksQuery,
+  useSaveAccountMutation,
   useVerifyAccountMutation,
 } from "@store/services/payouts";
 import { Button, Form, Input, Modal, Select, Space, Typography } from "antd";
-import { ChangeEvent, Fragment, useCallback, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 type Props = {
   modalOpen: boolean;
@@ -12,7 +20,12 @@ type Props = {
   handleCancel: () => void;
   msg: (data: { status: "success" | "fail"; message: string }) => void;
 };
-const { Title, Paragraph } = Typography;
+type State = {
+  accountNo: string;
+  bankId: string;
+  ref?: string;
+};
+const { Title, Paragraph, Text } = Typography;
 const { Item, useForm } = Form;
 
 const PayoutEditFormModal = ({
@@ -24,19 +37,61 @@ const PayoutEditFormModal = ({
   const [form] = useForm();
   const [acctNo, setAcctNo] = useState<string>("");
   const regexPattern = useMemo(() => /^\d{10}$/, []);
+  const [showAcctName, setShowAcctName] = useState<boolean>(false);
+  const [acctName, setAcctName] = useState<string | undefined>();
   const { data: res } = useGetAccountInfoQuery();
   const { data, isLoading } = useGetBanksQuery();
-  const [verifyAccount, { isLoading: sendLoading }] =
+  const [formdata, setFormdata] = useState<State>({
+    accountNo: "",
+    bankId: "",
+    ref: undefined,
+  });
+
+  const [verifyAccount, { isLoading: verifyLoading }] =
     useVerifyAccountMutation();
+  const [saveAccount, { isLoading: sendLoading }] = useSaveAccountMutation();
+  // const showFormHandler = useCallback(() => setShowForm(true), [setShowForm]);
   const acctHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setAcctNo(e.target.value);
   }, []);
+  useEffect(() => {
+    const isMatchingAccountNumber = acctNo.match(regexPattern);
+
+    if (isMatchingAccountNumber) {
+      const fetchAccountDetails = async () => {
+        try {
+          const res = await verifyAccount({
+            account_number: formdata.accountNo,
+            bank_id: "44",
+          }).unwrap();
+
+          console.log(res);
+
+          setAcctName(res.data.accountName);
+          setFormdata((prev) => ({
+            ...prev,
+            ref: res.data.reference,
+          }));
+
+          setShowAcctName(true);
+        } catch (error: any) {
+          msg({ status: "fail", message: error });
+        }
+      };
+
+      fetchAccountDetails();
+    }
+  }, [acctNo, formdata, msg, verifyAccount, regexPattern]);
 
   const onFinish = async (values: any): Promise<void> => {
+    setFormdata((prev) => ({
+      ...prev,
+      accountNo: values.acctNo,
+      bankId: values.bank,
+    }));
     try {
-      const res = await verifyAccount({
-        account_number: values.acctNo,
-        bank_id: "44",
+      const res = await saveAccount({
+        reference: values.acctNo,
       }).unwrap();
       console.log(res);
       // form.resetFields();
@@ -46,6 +101,20 @@ const PayoutEditFormModal = ({
       msg({ status: "fail", message: error });
     }
   };
+  // const onFinish = async (values: any): Promise<void> => {
+  //   try {
+  //     const res = await verifyAccount({
+  //       account_number: values.acctNo,
+  //       bank_id: "44",
+  //     }).unwrap();
+  //     console.log(res);
+  //     // form.resetFields();
+  //     msg({ status: "success", message: res.message });
+  //     handleCancel();
+  //   } catch (error: any) {
+  //     msg({ status: "fail", message: error });
+  //   }
+  // };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -101,7 +170,14 @@ const PayoutEditFormModal = ({
                   value: item.code,
                   label: item.name,
                 }))}
-                disabled={isLoading}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+                disabled={isLoading || verifyLoading}
                 className="[&>.ant-select-selector]:h-auto  [&>.ant-select-selector]:border-none [&>.ant-select-selector]:bg-[#f9f9f9]  [&>.ant-select-selector]:py-3 [&>.ant-select-selector]:outline-none"
               />
             </Item>
@@ -120,6 +196,7 @@ const PayoutEditFormModal = ({
               <Input
                 placeholder="Account number"
                 value={acctNo}
+                disabled={verifyLoading}
                 onChange={acctHandler}
                 className="rounded border-none bg-[#F9f9f9] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
               />
@@ -127,6 +204,9 @@ const PayoutEditFormModal = ({
           </Space>
           <Space className="m-0 w-full flex-row justify-end p-0">
             <Item>
+              {showAcctName && (
+                <Text className="mb-4 block text-accent">{acctName}</Text>
+              )}
               <Button
                 htmlType="submit"
                 type="primary"

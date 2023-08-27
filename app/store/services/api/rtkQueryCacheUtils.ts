@@ -1,4 +1,6 @@
-import { FetchBaseQueryError } from "@rtk-incubator/rtk-query/dist";
+// import { FetchBaseQueryError } from "@rtk-incubator/rtk-query/dist";
+
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 
 // Default tags used by the cacher helpers
 

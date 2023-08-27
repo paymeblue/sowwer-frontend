@@ -42,7 +42,7 @@ const ministry = api.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: cacher.providesProperty("Ministry"),
+      providesTags: cacher.providesNestedList("Ministry"),
       transformResponse: (
         response: ExploreMinistriesResponse,
         meta,
@@ -62,7 +62,6 @@ const ministry = api.injectEndpoints({
         return { url: `ministries/${id}/profile`, method: "PATCH", body: rest };
       },
       // Invalidate 'Ministry' cache tags on successful creation
-      // invalidatesTags: cacher.cacheByIdArgProperty("Ministry") as any,
       invalidatesTags: cacher.providesProperty("Ministry"),
       // Transform response and error
       transformResponse: (response, meta, arg): any => {
@@ -90,16 +89,18 @@ const ministry = api.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: cacher.providesProperty("Social-links"),
+      invalidatesTags: cacher.providesProperty("Ministry"),
+      // invalidatesTags: cacher.providesProperty("Social-links"),
+
       transformResponse: (response, meta, arg): any => {
         return response;
       },
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getSocialLinks: build.query<GetSocialLinksResponse, void>({
-      query: () => `social-links`,
-      providesTags: cacher.providesProperty("Social-links"),
+    getSocialLinks: build.query<GetSocialLinksResponse, string | undefined>({
+      query: (id) => `ministries/${id}/social-links`,
+      providesTags: cacher.cacheByIdArg("Ministry"),
       transformResponse: (reponse: GetSocialLinksResponse, meta, arg) => {
         return reponse;
       },

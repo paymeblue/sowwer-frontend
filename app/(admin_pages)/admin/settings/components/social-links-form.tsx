@@ -17,11 +17,11 @@ import { Fragment } from "react";
 
 const { Item, useForm } = Form;
 
-const SocialLinksForm = () => {
+const SocialLinksForm = ({ id }: { id?: string }) => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [updateSocialLinks, { isLoading }] = useUpdateSocialLinksMutation();
-  const { data: socialLinks } = useGetSocialLinksQuery();
+  const { data: socialLinks } = useGetSocialLinksQuery(id);
   const initialValues =
     socialLinks && socialLinks?.data
       ? {

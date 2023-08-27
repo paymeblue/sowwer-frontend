@@ -44,7 +44,7 @@ const GeneralDonationTable: FC = () => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [rowId, setRowId] = useState("");
   const searchInput = useRef<InputRef>(null);
-  const [cancelRecurringPayment, { isLoading: cancelLoading }] =
+  const [cancelRecurringPayment, { isLoading: cancelLoading, isSuccess }] =
     useCancelRecurringPaymentMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const [filteredInfo, setFilteredInfo] = useState<
@@ -315,9 +315,10 @@ const GeneralDonationTable: FC = () => {
         if (record.frequency !== "-") {
           return (
             <Button
-              className="text-[14px] font-semibold leading-[22px]"
+              className="text-[14px] font-semibold leading-[22px] disabled:bg-red-400 disabled:text-white"
               onClick={pausePaymentHandler}
               loading={cancelLoading}
+              disabled={isSuccess}
               danger
             >
               Pause Payment

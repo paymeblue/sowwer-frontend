@@ -100,7 +100,7 @@ const MissionaryForm = () => {
         icon: <CheckCircleIcon />,
       });
       // form.resetFields();
-      router.push("/join-registry?category=registration-success");
+      router.push("/join-registry?status=registration-success");
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -151,7 +151,7 @@ const MissionaryForm = () => {
         icon: <CheckCircleIcon />,
       });
       // form.resetFields();
-      router.push("/join-registry?category=registration-success");
+      router.push("/join-registry?status=registration-success");
     } catch (error) {
       messageApi.open({
         content: `${error}`,

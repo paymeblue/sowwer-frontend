@@ -261,26 +261,52 @@ const ProjectsTable = () => {
       </Button>
     ),
   };
+
+  // const items: MenuProps["items"] = [];
+  // const dropdownHandler = (record: RecordState) => {
+  //   const { text } = record.status.props;
+  //   if (
+  //     text.toLowerCase() === "drafted" ||
+  //     text.toLowerCase() === "in-progress"
+  //   ) {
+  //     items.length = 0; // Clear the array
+  //     items.push(item1, item2);
+  //   } else if (
+  //     text.toLowerCase() === "active" ||
+  //     text.toLowerCase() === "completed"
+  //   ) {
+  //     items.length = 0; // Clear the array
+  //     items.push(item3);
+  //   } else if (text.toLowerCase() === "active") {
+  //     items.length = 0; // Clear the array
+  //     items.push(item4);
+  //   }
+  // };
   const items: MenuProps["items"] = [];
   const dropdownHandler = (record: RecordState) => {
     const { text } = record.status.props;
-    if (
-      text.toLowerCase() === "drafted" ||
-      text.toLowerCase() === "in-progress"
-    ) {
-      items.length = 0; // Clear the array
-      items.push(item1, item2);
-    } else if (
-      text.toLowerCase() === "active" ||
-      text.toLowerCase() === "completed"
-    ) {
-      items.length = 0; // Clear the array
-      items.push(item3);
-    } else if (text.toLowerCase() === "active") {
-      items.length = 0; // Clear the array
-      items.push(item4);
+
+    switch (text.toLowerCase()) {
+      case "drafted":
+      case "in-progress":
+        items.length = 0;
+        items.push(item1, item2);
+        break;
+
+      case "active":
+        items.length = 0;
+        items.push(item3, item4);
+        break;
+
+      case "completed":
+        items.length = 0;
+        items.push(item3);
+        break;
     }
+
+    return items;
   };
+
   const antIcon = (
     <LoadingOutlined
       style={{

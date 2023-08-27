@@ -81,11 +81,13 @@ const GeneralDonorsTable = () => {
     }));
   };
   const dataSource: DataType[] | undefined = res?.data.map((item, i) => ({
-    key: item.donorName,
+    key: item.id,
     name: capitalizeFirstLetters(item.donorName),
     frequency: capitalizeFirstLetters(item.donorInterval ?? "-"),
     amount: Number(item.amount),
-    type: item.donorType,
+    type: capitalizeFirstLetters(
+      `${item.donorType === null ? "one-time" : item.donorType} donation`
+    ),
     date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
 

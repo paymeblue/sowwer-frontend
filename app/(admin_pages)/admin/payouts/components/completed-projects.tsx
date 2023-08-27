@@ -155,7 +155,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     key: item.id,
     goal: Number(item.targetAmount),
     title: capitalizeFirstLetters(item.title),
-    category: item.category,
+    category: capitalizeFirstLetters(item.category),
     donors: item.donors,
     amount: Number(item.amountRaised),
     btn: item.request_payout ? "Payout Requested" : "Request Payout",

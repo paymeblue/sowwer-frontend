@@ -4,6 +4,7 @@ import {
   GetBanksResponse,
   PayoutHistoryResponse,
   PlainResponse,
+  SaveAccountRequest,
   VerifyAccountRequest,
   VerifyPaymentRequest,
 } from "@store/types";
@@ -12,6 +13,14 @@ import { cacher } from "./api/rtkQueryCacheUtils";
 
 const payouts = api.injectEndpoints({
   endpoints: (build) => ({
+    verifyPayment: build.mutation<any, VerifyPaymentRequest>({
+      query: (body) => ({ url: `payments/verify`, method: "POST", body }),
+      transformResponse: (response: AccountResponse, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
     getBanks: build.query<GetBanksResponse, void>({
       query: () => "banks",
       transformResponse: (response: GetBanksResponse, meta, arg): any => {
@@ -29,8 +38,8 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    verifyPayment: build.mutation<any, VerifyPaymentRequest>({
-      query: (body) => ({ url: `payments/verify`, method: "POST", body }),
+    saveAccount: build.mutation<any, SaveAccountRequest>({
+      query: (body) => ({ url: `accounts`, method: "POST", body }),
       invalidatesTags: cacher.providesProperty("Account"),
       transformResponse: (response: AccountResponse, meta, arg): any => {
         return response;
@@ -40,7 +49,7 @@ const payouts = api.injectEndpoints({
     }),
     cancelRecurringPayment: build.mutation<PlainResponse, string>({
       query: (id) => `payments/${id}/cancel`,
-      invalidatesTags: cacher.providesProperty("Projects"),
+      invalidatesTags: cacher.cacheByIdArg("Projects"),
       transformResponse: (response: PlainResponse, meta, arg): any => {
         return response;
       },
@@ -58,7 +67,7 @@ const payouts = api.injectEndpoints({
     }),
     requestPayout: build.mutation<PlainResponse, string>({
       query: (id) => `projects/${id}/payout`,
-      invalidatesTags: cacher.providesProperty("Projects"),
+      invalidatesTags: cacher.cacheByIdArg("Projects"),
       transformResponse: (response, meta, arg): any => {
         return response;
       },
@@ -67,7 +76,7 @@ const payouts = api.injectEndpoints({
     }),
     payoutHistory: build.query<PayoutHistoryResponse, { page?: number }>({
       query: (body) => `payouts?page=${body.page}&limit=10`,
-      providesTags: cacher.providesNestedList("Projects") as any,
+      providesTags: cacher.providesNestedList("Projects"),
       transformResponse: (response, meta, arg): any => {
         return response;
       },
@@ -85,6 +94,7 @@ const payouts = api.injectEndpoints({
 export const {
   useGetBanksQuery,
   useVerifyAccountMutation,
+  useSaveAccountMutation,
   useVerifyPaymentMutation,
   useGetAccountInfoQuery,
   useRequestPayoutMutation,

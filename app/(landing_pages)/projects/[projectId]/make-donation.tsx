@@ -1,5 +1,6 @@
 "use client";
 import { LinkOutlined, LoadingOutlined } from "@ant-design/icons";
+import PlaceholderImage from "@components/PlaceholderImage";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
@@ -28,31 +29,11 @@ import {
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
-import happyWoman from "public/assets/images/happy_woman.svg";
+// import happyWoman from "public/assets/images/happy_woman.svg";
 import { Fragment, useState } from "react";
 import { Heart2 } from "react-iconly";
 
 const { Title, Text, Paragraph } = Typography;
-// const DonorList = [
-//   {
-//     user: "Anonymous",
-//     amount: " ₦20,000",
-//     time: "2 hours ago",
-//     avatar: "A",
-//   },
-//   {
-//     user: "Semira Yesufu",
-//     amount: "₦35,000",
-//     time: "2 hours ago",
-//     avatar: "SY",
-//   },
-//   {
-//     user: "Semira Yesufu",
-//     amount: "₦35,000",
-//     time: "2 hours ago",
-//     avatar: "SY",
-//   },
-// ];
 
 const MakeDonation = ({ projectId }: { projectId: string }) => {
   const { data: projectDetails } = useGetProjectDetailsQuery(projectId);
@@ -98,14 +79,18 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
           className="my-12  grid  grid-cols-1 laptop:grid-cols-2"
         >
           <Col>
-            <Image
-              src={data?.image ?? happyWoman}
-              alt="widow"
-              className="hidden w-full rounded-md tablet:block"
-              priority
-              width={677}
-              height={446}
-            />
+            {data?.image ? (
+              <Image
+                src={data.image}
+                alt={data.title}
+                className="hidden w-full rounded-md tablet:block"
+                priority
+                width={677}
+                height={446}
+              />
+            ) : (
+              <PlaceholderImage />
+            )}
           </Col>
           <Col>
             <Tag
@@ -293,12 +278,12 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
               <Button
                 block
                 type="default"
-                className="mx-auto mt-6 flex items-center justify-center border-accent text-[13px] font-medium leading-[16.38px] text-accent hover:bg-blue-50 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-800 laptop:p-6 laptop:text-[14px] laptop:leading-[18px]
+                className="mx-auto mt-6 flex items-center justify-center border-accent text-[13px] font-medium leading-[16.38px] text-accent hover:bg-blue-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-200 disabled:text-gray-500 laptop:p-6 laptop:text-[14px] laptop:leading-[18px]
                 "
                 size="large"
                 onClick={() => setDonorList(donorData?.slice(0, 7))}
                 loading={isFetching}
-                disabled={donorList?.length === 0}
+                disabled={isFetching || donorList?.length === 0}
               >
                 View more donations
               </Button>

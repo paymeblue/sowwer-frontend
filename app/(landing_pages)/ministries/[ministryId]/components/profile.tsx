@@ -21,7 +21,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
   const { data: ministryDetails } = useGetMinistryDetailsQuery(ministryId);
   const data = ministryDetails?.data;
 
-  const { data: socialLinks } = useGetSocialLinksQuery();
+  const { data: socialLinks } = useGetSocialLinksQuery(ministryId);
 
   const router = useRouter();
   const onClick = (id?: string) => {

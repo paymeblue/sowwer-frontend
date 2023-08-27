@@ -183,7 +183,7 @@ const ContactSocial = () => {
             </Typography>
           </Col>
           <Col flex={1}>
-            <SocialLinksForm />
+            <SocialLinksForm id={id} />
           </Col>
         </Row>
       </Card>

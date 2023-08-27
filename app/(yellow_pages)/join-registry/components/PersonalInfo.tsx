@@ -12,7 +12,7 @@ const PersonalInfo = () => {
       return <WidowForm />;
     case "/join-registry?category=missionary":
       return <MissionaryForm />;
-    case "/join-registry?category=registration-success":
+    case "/join-registry?status=registration-success":
       return <RegistrationSuccess />;
     default:
       return <RegistrationSuccess />;

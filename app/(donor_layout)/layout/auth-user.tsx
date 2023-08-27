@@ -2,6 +2,7 @@ import { MenuOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/useAuth";
 import { useAppDispatch } from "@hooks/useStore";
 import { logout } from "@store/reducers/authSlice";
+import { setLastVisited } from "@store/reducers/utilSlice";
 import {
   Avatar,
   Button,
@@ -145,6 +146,9 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
             <Link
               href={`/auth/signin/${signIn}`}
               className="text-xs font-semibold text-accent"
+              onClick={() =>
+                dispatch(setLastVisited({ lastVisited: pathname }))
+              }
             >
               Sign in
             </Link>

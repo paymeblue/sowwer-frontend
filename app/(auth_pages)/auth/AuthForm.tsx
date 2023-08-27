@@ -1,9 +1,10 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
+import { useUtil } from "@hooks/useUtil";
 import capitalizeFirstLetters from "@lib/capitalize";
 import { setCredentials } from "@store/reducers/authSlice";
-import { setLoginCallback } from "@store/reducers/utilSlice";
+import { setLastVisited, setLoginCallback } from "@store/reducers/utilSlice";
 import {
   useDonorRegisterMutation,
   useLoginMutation,
@@ -41,6 +42,7 @@ const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
   const { Title, Paragraph } = Typography;
   const [form] = useForm();
   const router = useRouter();
+  const { lastVisitedString } = useUtil();
   const [messageApi, contextHolder] = message.useMessage();
   const [login, { isLoading }] = useLoginMutation();
   const [donorRegister, { isLoading: registerLoading }] =
@@ -57,6 +59,7 @@ const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
       const payload = {
         user: res.data.user,
         token: res.data.token.accessToken,
+        refreshToken: res.data.token.refreshToken,
       };
       dispatch(setCredentials(payload));
       // form.resetFields();
@@ -65,7 +68,8 @@ const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      router.push(`/${page}`);
+      router.push(lastVisitedString ? lastVisitedString : "/" + page);
+      dispatch(setLastVisited({ lastVisited: "" }));
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,
@@ -90,7 +94,13 @@ const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      // router.push(`/${page}`);
+      const payload = {
+        user: res.data.user,
+        token: res.data.token.accessToken,
+        refreshToken: res.data.token.refreshToken,
+      };
+      dispatch(setCredentials(payload));
+      router.push(`/${page}`);
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,

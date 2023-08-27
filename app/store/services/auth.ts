@@ -59,6 +59,7 @@ const auth = api.injectEndpoints({
           body: rest,
         };
       },
+      invalidatesTags: cacher.cacheByIdArgProperty("Projects"),
       transformResponse: (
         response: InitiateDonationResponseUnauth,
         meta,
@@ -83,6 +84,7 @@ const auth = api.injectEndpoints({
           body: rest,
         };
       },
+      invalidatesTags: cacher.cacheByIdArgProperty("Projects"),
       transformResponse: (
         response: InitiateDonationResponseAuth,
         meta,
@@ -107,6 +109,7 @@ const auth = api.injectEndpoints({
           body: rest,
         };
       },
+      invalidatesTags: cacher.cacheByIdArgProperty("Ministry"),
       transformResponse: (
         response: InitiateDonationResponseUnauth,
         meta,
@@ -130,6 +133,7 @@ const auth = api.injectEndpoints({
           body: rest,
         };
       },
+      invalidatesTags: cacher.cacheByIdArgProperty("Ministry"),
       transformResponse: (
         response: InitiateDonationResponseAuth,
         meta,

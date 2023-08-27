@@ -68,6 +68,7 @@ export type LoginResponse = Response<{
 
 export type SignupResponse = Response<{
   user: User;
+  token: Token;
 }>;
 
 export type LoginRequest = {
@@ -528,12 +529,16 @@ export type ResetPassowrdRequest = {
 };
 export type VerifyAccountRequest = { account_number: string; bank_id: string };
 export type AccountResponse = Response<{
-  accountName: string;
+  id: string;
+  reference: string;
   accountNumber: string;
+  accountName: string;
   bank_name: string;
   createdAt: string;
-  id: string;
 }>;
+export type SaveAccountRequest = {
+  reference: string;
+};
 export type PayoutHistoryResponse = TResponse<{
   id: string;
   user_id: string;
@@ -544,6 +549,7 @@ export type PayoutHistoryResponse = TResponse<{
   updatedAt: string;
 }>;
 export type MinistryDonationResponse = TResponse<{
+  id: string;
   amount: string;
   donorName: string;
   donorType: string | null;
@@ -589,6 +595,8 @@ export type InitiateDonationToMinistryRequestUnauth = {
   amount: number;
   currency: string;
   interval: "monthly" | "quarterly" | "yearly";
+  password: string;
+  confirm_password: string;
 };
 export type InitiateDonationToMinistryRequestAuth = {
   id: string;

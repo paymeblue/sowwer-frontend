@@ -291,7 +291,7 @@ const WidowForm = () => {
         icon: <CheckCircleIcon />,
       });
       // form.resetFields();
-      router.push("/join-registry?category=registration-success");
+      router.push("/join-registry?status=registration-success");
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -338,7 +338,7 @@ const WidowForm = () => {
         icon: <CheckCircleIcon />,
       });
       // form.resetFields();
-      router.push("/join-registry?category=registration-success");
+      router.push("/join-registry?status=registration-success");
     } catch (error) {
       messageApi.open({
         content: `${error}`,

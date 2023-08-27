@@ -156,6 +156,7 @@ const ContactPage: FC = () => {
                 onFinishFailed={onFinishFailed}
                 initialValues={{
                   code: "+234",
+                  phone: "+234",
                 }}
               >
                 <Item

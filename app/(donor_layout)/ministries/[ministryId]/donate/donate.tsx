@@ -1,15 +1,17 @@
 "use client";
+import PlaceholderImage from "@components/PlaceholderImage";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import useFlutterConfig from "@hooks/useFlutterConfig";
+import { useAppDispatch } from "@hooks/useStore";
 import capitalizeFirstLetters from "@lib/capitalize";
+import { setCredentials } from "@store/reducers/authSlice";
 import {
   useInitiatePaymentToMinistryAuthMutation,
   useInitiatePaymentToMinistryUnauthMutation,
 } from "@store/services/auth";
 import { useGetMinistryDetailsQuery } from "@store/services/ministries";
 import { useVerifyPaymentMutation } from "@store/services/payouts";
-import type { RadioChangeEvent } from "antd";
 import {
   Alert,
   Button,
@@ -23,34 +25,25 @@ import {
   Typography,
   message,
 } from "antd";
-import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
-// import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  ChangeEvent,
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
 
-type FormValues = {
-  currency: any;
-  amount: string;
-  firstname: string;
-  lastname: string;
+type State = {
+  phone: string;
   email: string;
+  firstName: string;
+  lastName: string;
+  anonymous: boolean;
+  createAccount: boolean;
+  amount: string;
+  payment_mode: "one-time" | "recurring";
   password: string;
-  cPassword: string;
-  signup: boolean;
-  phoneNumber: string;
-  displayIdentity: boolean;
-  type: "one-time" | "recurring";
-  frequency: "monthly" | "quaterly" | "yearly";
+  confirm_password: string;
+  currency: "NGN" | "USD";
+  interval: "monthly" | "quarterly" | "yearly";
 };
 
 type MinistryData = {
@@ -80,6 +73,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const [form] = useForm();
   const { user } = useAuth();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
   const { data: ministryData } = useGetMinistryDetailsQuery(ministryId);
   let ministry: MinistryData | undefined;
@@ -104,63 +98,31 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   }
   const [verifyPayment] = useVerifyPaymentMutation();
 
+  const createAccount = Form.useWatch("createAccount", form);
+  const mode = Form.useWatch("payment_mode", form);
+  console.log(mode, createAccount);
+
   const [messageApi, contextHolder] = message.useMessage();
-  const [checked, setChecked] = useState(false);
-  const [recurring, setRecurring] = useState(false);
-
-  const toggleChecked = useCallback(() => setChecked((prev) => !prev), []);
-
-  const [formData, setFormData] = useState<FormValues>({
+  const [formData, setFormData] = useState({
     currency: "NGN",
     amount: "",
-    firstname: "",
-    lastname: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    password: "",
-    cPassword: "",
-    phoneNumber: "",
-    signup: false,
-    displayIdentity: false,
-    type: "one-time",
-    frequency: "monthly",
+    phone: "",
+    payment_mode: "one-time",
+    interval: "monthly",
   });
 
-  const changeHandler = (
-    e: CheckboxChangeEvent | RadioChangeEvent | ChangeEvent<HTMLInputElement>
-  ) => {
-    const { type, name, value, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name!]: newValue,
-    }));
-
-    if (value === "recurring") {
-      setRecurring(newValue);
-      setFormData((prev) => ({
-        ...prev,
-        signup: true,
-      }));
-    }
-  };
-  const selectHandler = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      currency: value,
-    }));
-  };
-
-  const { currency, amount, firstname, lastname, email, phoneNumber } =
-    formData;
+  const { currency, amount, firstName, lastName, email, phone } = formData;
 
   const customer = useMemo(
     () => ({
       email,
-      phone_number: phoneNumber,
-      name: `${firstname} ${lastname}`,
+      phone_number: phone,
+      name: `${firstName} ${lastName}`,
     }),
-    [email, firstname, lastname, phoneNumber]
+    [email, firstName, lastName, phone]
   );
 
   const updatetxnRef = useCallback(() => {
@@ -189,52 +151,70 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const selectBefore = useMemo(
     () => (
       <Item name="currency" noStyle>
-        <Select
-          style={{ width: 100 }}
-          value={formData.currency}
-          onChange={selectHandler}
-        >
+        <Select style={{ width: 100 }}>
           <Option value="NGN">NGN</Option>
           <Option value="USD">USD</Option>
         </Select>
       </Item>
     ),
-    [formData.currency]
+    []
   );
 
-  const callback = async (values: FormValues) => {
-    const {
-      amount,
-      firstname,
-      lastname,
-      email,
-      phoneNumber,
-      signup,
-      displayIdentity,
-      password,
-      currency,
-      type,
-      frequency,
-    } = values;
-    const data = {
-      id: ministryId,
-      phone: phoneNumber,
-      email,
-      firstName: firstname,
-      lastName: lastname,
-      anonymous: displayIdentity,
-      createAccount: signup,
-      amount: +amount,
-      payment_mode: type,
-      password,
-      currency,
-      interval: frequency,
+  const callback = async (values: State) => {
+    let data;
+    const { amount, ...rest } = values;
+    if (!user && createAccount) {
+      data = {
+        id: ministryId,
+        amount: +amount,
+        ...rest,
+      };
+    } else if (user) {
+      data = {
+        id: ministryId,
+        amount: +amount,
+        ...rest,
+      };
+    } else if (!user && !createAccount) {
+      data = {
+        id: ministryId,
+        amount: +amount,
+        ...rest,
+      };
+    }
+    const res = await rtkHook(data).unwrap();
+    const payload = {
+      user: res.data.user,
+      token: res.data.token.accessToken,
+      refreshToken: res.data.token.refreshToken,
     };
-    await rtkHook(data).unwrap();
+    dispatch(setCredentials(payload));
   };
 
-  const onFinish = async (values: FormValues) => {
-    console.log(values);
+  const onFinish = async (values: State) => {
+    const {
+      currency,
+      amount,
+      firstName,
+      lastName,
+      email,
+      phone,
+      interval,
+      // eslint-disable-next-line camelcase
+      payment_mode,
+    } = values;
+    setFormData((prev) => ({
+      ...prev,
+      currency,
+      amount,
+      firstName,
+      lastName,
+      email,
+      phone,
+      interval,
+      // eslint-disable-next-line camelcase
+      payment_mode,
+    }));
     try {
       await callback(values);
       handleFlutterPayment({
@@ -268,6 +248,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
       });
     }
   };
+
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
     messageApi.open({
@@ -296,13 +277,17 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
           </Title>
           {ministry ? (
             <Space align="center" className="my-4">
-              <Image
-                src={ministry.logo ?? "/assets/images/happy_woman.jpg"}
-                alt="happy woman"
-                width={200}
-                height={100}
-                className="h-[100px] w-[200px]  rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
-              />
+              {ministry.logo ? (
+                <Image
+                  src={ministry.logo}
+                  alt={ministry.name}
+                  width={200}
+                  height={100}
+                  className="h-[100px] w-[200px]  rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
+                />
+              ) : (
+                <PlaceholderImage />
+              )}
               <Title
                 level={2}
                 className=" mb-0 font-title text-[21.18px] leading-[24.23px] laptop:text-[30px] laptop:leading-[34px]"
@@ -314,12 +299,12 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
             `N/A`
           )}
           <Form
-            name="donate_form"
+            name="ministry_donation_form"
             layout="vertical"
             initialValues={{
               currency: "NGN",
-              displayIdentity: false,
-              signup: false,
+              anonymous: false,
+              createAccount: false,
             }}
             form={form}
             onFinish={onFinish}
@@ -335,32 +320,24 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
               Donation Type
             </Title>
             <Item
-              name="type"
+              name="payment_mode"
               className="[&>div>div.ant-form-item-label]:p-0"
-              valuePropName="checked"
             >
               <Radio.Group
                 options={plainOptions}
-                onChange={changeHandler}
-                name="type"
-                value={formData.type}
                 className="[&>label>.ant-radio-checked>.ant-radio-inner]:border-primary [&>label>.ant-radio-checked>.ant-radio-inner]:bg-primary"
               />
             </Item>
-            {recurring && (
+            {mode === "recurring" && (
               <Item
-                name="frequency"
+                name="interval"
                 className="[&>div>div.ant-form-item-label]:p-0"
-                valuePropName="checked"
                 rules={[
                   { required: true, message: "Please select a frequency plan" },
                 ]}
               >
                 <Radio.Group
                   options={options}
-                  onChange={changeHandler}
-                  name="frequency"
-                  value={formData.frequency}
                   optionType="button"
                   buttonStyle="solid"
                   size="middle"
@@ -379,9 +356,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                 addonBefore={selectBefore}
                 type="number"
                 required
-                name="amount"
-                value={formData.amount}
-                onChange={changeHandler}
                 placeholder="0.00"
                 className="[&>span>input]:rounded-r [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none placeholder:[&>span>input]:text-[17px] placeholder:[&>span>input]:leading-[21px] placeholder:[&>span>input]:text-[#555] laptop:placeholder:[&>span>input]:text-[17px]  laptop:placeholder:[&>span>input]:leading-[21.42px] [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-l [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]"
               />
@@ -394,15 +368,9 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                 >
                   Personal Information
                 </Title>
-                <Item name="signup" valuePropName="checked">
-                  {!recurring ? (
-                    <Checkbox
-                      className="text-[13px] tablet:text-[15px]"
-                      name="signup"
-                      value={formData.signup}
-                      onChange={changeHandler}
-                      onClick={toggleChecked}
-                    >
+                <Item name="createAccount" valuePropName="checked">
+                  {!mode ? (
+                    <Checkbox className="text-[13px] tablet:text-[15px]">
                       I would like to sign up on Soower.
                     </Checkbox>
                   ) : (
@@ -418,7 +386,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                 <Space className="w-full flex-col items-start laptop:flex-row [&>div.ant-space-item]:w-full">
                   <Item
                     label="First Name"
-                    name="firstname"
+                    name="firstName"
                     rules={[
                       {
                         required: true,
@@ -434,16 +402,13 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="First name"
-                      name="firstname"
-                      value={formData.firstname}
-                      onChange={changeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
 
                   <Item
                     label="Last name"
-                    name="lastname"
+                    name="lastName"
                     className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                     rules={[
                       {
@@ -459,9 +424,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="Last name"
-                      name="lastname"
-                      value={formData.lastname}
-                      onChange={changeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -485,14 +447,11 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="Email address"
-                      name="email"
-                      value={formData.email}
-                      onChange={changeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
                   <Item
-                    name="phoneNumber"
+                    name="phone"
                     className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                     label="Phone Number"
                     rules={[
@@ -514,15 +473,12 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                     <Input
                       type="tel"
                       placeholder="Phone Number"
-                      name="phoneNumber"
-                      value={formData.phoneNumber}
-                      onChange={changeHandler}
                       pattern="^\+\d{13}|\d{11}$"
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
                 </Space>
-                {(checked || recurring) && (
+                {(createAccount || mode) && (
                   <Space className="w-full flex-col items-start laptop:flex-row [&>div.ant-space-item]:w-full">
                     <Item
                       label="Password"
@@ -546,9 +502,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                     >
                       <Password
                         placeholder="Create a password"
-                        name="password"
-                        value={formData.password}
-                        onChange={changeHandler}
                         pattern="^.{8,16}$"
                         className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                       />
@@ -556,7 +509,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
 
                     <Item
                       label="Confirm Password"
-                      name="confirmPassword"
+                      name="confirm_password"
                       className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                       rules={[
                         {
@@ -579,9 +532,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                       hasFeedback
                     >
                       <Password
-                        name="cPassword"
-                        value={formData.cPassword}
-                        onChange={changeHandler}
                         placeholder="Confirm password"
                         className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                       />
@@ -591,13 +541,8 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
               </Fragment>
             )}
 
-            <Item name="displayIdentity" valuePropName="checked">
-              <Checkbox
-                className="text-[13px] tablet:text-[15px]"
-                name="displayIdentity"
-                value={formData.displayIdentity}
-                onChange={changeHandler}
-              >
+            <Item name="anonymous" valuePropName="checked">
+              <Checkbox className="text-[13px] tablet:text-[15px]">
                 Don&apos;t display my name publicly on the donor list.
               </Checkbox>
             </Item>

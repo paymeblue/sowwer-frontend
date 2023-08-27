@@ -1,4 +1,5 @@
 "use client";
+import PlaceholderImage from "@components/PlaceholderImage";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import useFlutterConfig from "@hooks/useFlutterConfig";
@@ -20,31 +21,23 @@ import {
   Typography,
   message,
 } from "antd";
-import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  ChangeEvent,
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
 
-type FormValues = {
+type State = {
   currency: string;
   amount: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  cPassword: string;
-  signup: boolean;
-  phoneNumber: string;
-  displayIdentity: boolean;
+  confirm_password: string;
+  createAccount: boolean;
+  phone: string;
+  anonymous: boolean;
 };
 type ProjectData = {
   title: string;
@@ -90,71 +83,26 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     project = projectData.data;
   }
   const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
-  const [{ showPassword, formData }, setState] = useState<{
-    showPassword: boolean;
-    formData: FormValues;
-  }>({
-    showPassword: false,
-    formData: {
-      currency: "NGN",
-      amount: "",
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      cPassword: "",
-      phoneNumber: "",
-      signup: false,
-      displayIdentity: false,
-    },
+  const [formData, setFormData] = useState({
+    currency: "NGN",
+    amount: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
   });
 
-  const passwordHandler = useCallback(() => {
-    setState((prevState) => ({
-      ...prevState,
-      showPassword: !prevState.showPassword,
-    }));
-  }, []);
+  const createAccount = Form.useWatch("createAccount", form);
 
-  const changeHandler = (
-    e: CheckboxChangeEvent | ChangeEvent<HTMLInputElement>
-  ) => {
-    const { type, name } = e.target;
-    const value = type === "checkbox" ? e.target.checked : e.target.value;
-
-    setState((prevState) => ({
-      ...prevState,
-      formData: { ...prevState.formData, [name!.toString()]: value },
-    }));
-  };
-
-  const selectHandler = (value: string) => {
-    setState((prevState) => ({
-      ...prevState,
-      formData: { ...prevState.formData, currency: value },
-    }));
-  };
-
-  const {
-    currency,
-    amount,
-    firstname,
-    lastname,
-    email,
-    phoneNumber,
-    password,
-    cPassword,
-    signup,
-    displayIdentity,
-  } = formData;
+  const { currency, amount, firstName, lastName, email, phone } = formData;
 
   const customer = useMemo(
     () => ({
       email,
-      phone_number: phoneNumber,
-      name: `${firstname} ${lastname}`,
+      phone_number: phone,
+      name: `${firstName} ${lastName}`,
     }),
-    [email, firstname, lastname, phoneNumber]
+    [email, firstName, lastName, phone]
   );
 
   const [verifyPayment] = useVerifyPaymentMutation();
@@ -177,92 +125,81 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     [txnRef, project, currency, amount, customer]
   );
   const config = useFlutterConfig(obj);
-  console.log(config);
+  // console.log(config);
   const handleFlutterPayment = useFlutterwave(config);
 
   const selectBefore = useMemo(
     () => (
       <Item name="currency" noStyle>
-        <Select
-          style={{ width: 100 }}
-          value={formData.currency}
-          onChange={selectHandler}
-        >
+        <Select style={{ width: 100 }}>
           <Option value="NGN">NGN</Option>
           <Option value="USD">USD</Option>
         </Select>
       </Item>
     ),
-    [formData.currency]
+    []
   );
-  const callback: () => Promise<void> = async () => {
-    const data = {
-      id,
-      phone: phoneNumber,
-      email,
-      firstName: firstname,
-      lastName: lastname,
-      password,
-      anonymous: displayIdentity,
-      currency,
-      createAccount: signup,
-      confirm_password: cPassword,
-      amount: +amount,
-    };
+  const callback = async (values: State) => {
+    let data;
+    const { amount, ...rest } = values;
+    if (!user && createAccount) {
+      data = {
+        id,
+        amount: +amount,
+        ...rest,
+      };
+    } else if (user) {
+      data = {
+        id,
+        amount: +amount,
+        ...rest,
+      };
+    } else if (!user && !createAccount) {
+      data = {
+        id,
+        amount: +amount,
+        ...rest,
+      };
+    }
     await rtkHook(data).unwrap();
   };
-  // const onFinish = async (callback: () => Promise<void>) => {
-  //   try {
-  //     await callback();
-  //     console.log("waiting");
-  //     setTimeout(()=>{})
-  //     handleFlutterPayment({
-  //       callback: (response) => {
-  //         console.log(response);
-  //         closePaymentModal(); // this will close the modal programmatically
-  //         router.push("/projects/donation-successful");
-  //       },
-  //       onClose: () => {},
-  //     });
-  //   } catch (error: any) {
-  //     messageApi.open({
-  //       content: `${error.message}`,
-  //       className: "[&>div]:bg-red-500 [&>div]:text-white",
-  //     });
-  //   }
-  // };
-  const onFinish = async (callback: () => Promise<void>) => {
-    try {
-      await callback(); // Wait for the callback to complete
-      console.log("waiting");
-      setTimeout(() => {
-        handleFlutterPayment({
-          callback: async (response) => {
-            console.log(response);
-            try {
-              const res = await verifyPayment({
-                txn_id: response.transaction_id.toString(),
-                txn_reference: response.tx_ref,
-              }).unwrap();
-              messageApi.open({
-                content: `${res.message}`,
-                className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
-                icon: <CheckCircleIcon />,
-              });
-              router.push("/projects/donation-successful");
-            } catch (error) {
-              messageApi.open({
-                content: `${error}`,
-                className: `[&>div]:bg-red-800 [&>div]:text-white`,
-              });
-            }
-            closePaymentModal(); // this will close the modal programmatically
-          },
-          onClose: () => {},
-        });
-      }, 3000);
 
-      // console.log("Payment process completed with response:", response);
+  const onFinish = async (values: State) => {
+    const { currency, amount, firstName, lastName, email, phone } = values;
+    setFormData((prev) => ({
+      ...prev,
+      currency,
+      amount,
+      firstName,
+      lastName,
+      email,
+      phone,
+    }));
+    try {
+      await callback(values);
+      handleFlutterPayment({
+        callback: async (response) => {
+          try {
+            const res = await verifyPayment({
+              txn_id: response.transaction_id.toString(),
+              txn_reference: response.tx_ref,
+            }).unwrap();
+            messageApi.open({
+              content: `${res.message}`,
+              className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
+              icon: <CheckCircleIcon />,
+            });
+            router.push("/projects/donation-successful");
+          } catch (error) {
+            messageApi.open({
+              content: `${error}`,
+              className: `[&>div]:bg-red-800 [&>div]:text-white`,
+            });
+          }
+          closePaymentModal();
+        },
+        onClose: () => {},
+      });
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,
@@ -292,13 +229,18 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
               align="center"
               className="w-full flex-col items-start tablet:flex-row tablet:items-center [&>.ant-space-item]:w-full"
             >
-              <Image
-                src={project.image ?? "/assets/images/happy_woman.jpg"}
-                alt="happy woman"
-                width={200}
-                height={100}
-                className="h-[100px] w-[200px]  rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
-              />
+              {project.image ? (
+                <Image
+                  src={project.image ?? ""}
+                  alt={project.title}
+                  width={200}
+                  priority
+                  height={100}
+                  className="h-[100px] w-[200px]  rounded bg-[#fff8e2] align-middle font-semibold text-body-1"
+                />
+              ) : (
+                <PlaceholderImage />
+              )}
               <Typography>
                 <Title
                   level={3}
@@ -313,15 +255,15 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
             </Space>
           ) : null}
           <Form
-            name="donate_form"
+            name="project_donation_form"
             layout="vertical"
             initialValues={{
               currency: "NGN",
-              displayIdentity: false,
-              signup: false,
+              anonymous: false,
+              createAccount: false,
             }}
             form={form}
-            onFinish={() => onFinish(callback)}
+            onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             size="large"
             autoComplete="off"
@@ -339,9 +281,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                 addonBefore={selectBefore}
                 type="number"
                 required
-                name="amount"
-                value={formData.amount}
-                onChange={changeHandler}
                 placeholder="0.00"
                 className="[&>span>input]:rounded-r [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none placeholder:[&>span>input]:text-[17px] placeholder:[&>span>input]:leading-[21px] placeholder:[&>span>input]:text-[#555] laptop:placeholder:[&>span>input]:text-[17px]  laptop:placeholder:[&>span>input]:leading-[21.42px] [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-l [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]"
               />
@@ -354,21 +293,15 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                 >
                   Personal Information
                 </Title>
-                <Item name="signup" valuePropName="checked">
-                  <Checkbox
-                    onClick={passwordHandler}
-                    name="signup"
-                    value={formData.signup}
-                    onChange={changeHandler}
-                    className="text-[13px] tablet:text-[15px]"
-                  >
+                <Item name="createAccount" valuePropName="checked">
+                  <Checkbox className="text-[13px] tablet:text-[15px]">
                     I would like to sign up on Soower.
                   </Checkbox>
                 </Item>
                 <Space className="w-full flex-col items-start laptop:flex-row [&>div.ant-space-item]:w-full">
                   <Item
                     label="First Name"
-                    name="firstname"
+                    name="firstName"
                     rules={[
                       {
                         required: true,
@@ -384,15 +317,12 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="First name"
-                      name="firstname"
-                      value={formData.firstname}
-                      onChange={changeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
                   <Item
                     label="Last name"
-                    name="lastname"
+                    name="lastName"
                     className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                     rules={[
                       {
@@ -408,9 +338,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="Last name"
-                      name="lastname"
-                      value={formData.lastname}
-                      onChange={changeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -434,14 +361,11 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="Email address"
-                      name="email"
-                      value={formData.email}
-                      onChange={changeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
                   <Item
-                    name="phoneNumber"
+                    name="phone"
                     className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                     label="Phone Number"
                     rules={[
@@ -463,15 +387,12 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                     <Input
                       type="tel"
                       placeholder="Phone Number"
-                      name="phoneNumber"
-                      value={formData.phoneNumber}
-                      onChange={changeHandler}
                       pattern="^\+\d{13}|\d{11}$"
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
                 </Space>
-                {showPassword && (
+                {createAccount && (
                   <Space className="w-full flex-col items-start laptop:flex-row [&>div.ant-space-item]:w-full">
                     <Item
                       label="Password"
@@ -495,9 +416,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                     >
                       <Password
                         placeholder="Create a password"
-                        name="password"
-                        value={formData.password}
-                        onChange={changeHandler}
                         pattern="^.{8,16}$"
                         className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                       />
@@ -505,7 +423,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
 
                     <Item
                       label="Confirm Password"
-                      name="confirmPassword"
+                      name="confirm_password"
                       className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                       rules={[
                         {
@@ -529,9 +447,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                     >
                       <Password
                         placeholder="Confirm password"
-                        name="cPassword"
-                        value={formData.cPassword}
-                        onChange={changeHandler}
                         className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                       />
                     </Item>
@@ -539,13 +454,8 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                 )}
               </Fragment>
             )}
-            <Item name="displayIdentity" valuePropName="checked">
-              <Checkbox
-                className="text-[13px] tablet:text-[15px]"
-                name="displayIdentity"
-                value={formData.displayIdentity}
-                onChange={changeHandler}
-              >
+            <Item name="anonymous" valuePropName="checked">
+              <Checkbox className="text-[13px] tablet:text-[15px]">
                 Don&apos;t display my name publicly on the donor list.
               </Checkbox>
             </Item>

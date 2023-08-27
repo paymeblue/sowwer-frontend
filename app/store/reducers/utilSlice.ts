@@ -5,9 +5,14 @@ import { RootState } from "@store/store";
 type UtilState = {
   projectId?: string | null;
   callback?: string;
+  lastVisited?: string;
 };
 
-const initialState: UtilState = { projectId: undefined, callback: undefined };
+const initialState: UtilState = {
+  projectId: undefined,
+  callback: undefined,
+  lastVisited: undefined,
+};
 
 const utilSlice = createSlice({
   name: "util",
@@ -21,16 +26,24 @@ const utilSlice = createSlice({
     },
     setLoginCallback: (
       state,
-      { payload: { callback } }: PayloadAction<{ callback?: string }>
+      { payload: { callback } }: PayloadAction<{ callback: string }>
     ) => {
       state.callback = callback;
+    },
+    setLastVisited: (
+      state,
+      { payload: { lastVisited } }: PayloadAction<{ lastVisited: string }>
+    ) => {
+      state.lastVisited = lastVisited;
     },
   },
 });
 
-export const { setProjectId, setLoginCallback } = utilSlice.actions;
+export const { setProjectId, setLoginCallback, setLastVisited } =
+  utilSlice.actions;
 
 export default utilSlice.reducer;
 
 export const selectedProjectId = (state: RootState) => state.util.projectId;
 export const selectedCallbackString = (state: RootState) => state.util.callback;
+export const selectLastVisited = (state: RootState) => state.util.lastVisited;

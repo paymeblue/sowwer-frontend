@@ -85,7 +85,7 @@ const ProjectsDonorTable = () => {
     name: capitalizeFirstLetters(item.donorName),
     title: capitalizeFirstLetters(item.title),
     amount: Number(item.amount),
-    category: item.category,
+    category: capitalizeFirstLetters(item.category),
     date: moment(item.date).format("Do MMMM YYYY; h:mm:ss a"),
   }));
 

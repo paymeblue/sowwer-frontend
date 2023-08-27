@@ -1,4 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
+import PlaceholderImage from "@components/PlaceholderImage";
 import capitalizeFirstLetters, {
   truncateTextWithEllipsis,
 } from "@lib/capitalize";
@@ -100,10 +101,6 @@ const ReuseableCards = ({
         "blue";
   };
 
-  const getImageForCategory = (category: ExploreCardData["category"]) => {
-    return `/assets/images/${category}.jpg`;
-  };
-
   const content =
     isLoading || isFetching ? (
       <Spin size="large" indicator={antIcon} />
@@ -143,15 +140,19 @@ const ReuseableCards = ({
                   bordered={false}
                   className="w-full text-left shadow-sm"
                   cover={
-                    <Image
-                      alt="example"
-                      src={image ?? getImageForCategory(category)}
-                      width={416}
-                      height={225.86}
-                      className="object-fit h-[225.86px] w-[416px]"
-                      quality={100}
-                      priority
-                    />
+                    image ? (
+                      <Image
+                        alt="example"
+                        src={image}
+                        width={416}
+                        height={225.86}
+                        className="object-fit h-[225.86px] w-[416px]"
+                        quality={100}
+                        priority
+                      />
+                    ) : (
+                      <PlaceholderImage />
+                    )
                   }
                 >
                   <Tag
