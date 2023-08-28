@@ -283,7 +283,8 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 size="large"
                 onClick={() => setDonorList(donorData?.slice(0, 7))}
                 loading={isFetching}
-                disabled={isFetching || donorList?.length === 0}
+                disabled={isFetching || isLoading}
+                // disabled={isFetching || donorList?.length === 0}
               >
                 View more donations
               </Button>

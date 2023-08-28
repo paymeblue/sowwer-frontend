@@ -6,15 +6,17 @@ import WidowForm from "./WidowForm";
 const PersonalInfo = () => {
   const pathname = usePathname();
   const searchparams = useSearchParams();
+  const path = `${pathname}${searchparams}`;
 
-  switch (`${pathname}?${searchparams}`) {
-    case "/join-registry?category=widow":
-      return <WidowForm />;
-    case "/join-registry?category=missionary":
-      return <MissionaryForm />;
-    default:
-      return <SelectCategory />;
+  if (path === "/join-registry?category=widow") {
+    return <WidowForm />;
+  } else if (path === "/join-registry?category=missionary") {
+    return <MissionaryForm />;
   }
+  // You might want to provide a default behavior here
+  // if the path doesn't match any of the conditions.
+  // For example:
+  return <SelectCategory />;
 };
 
 export default PersonalInfo;
