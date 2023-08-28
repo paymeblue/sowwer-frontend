@@ -106,27 +106,25 @@ const AdminSidebar = ({ children }: Props) => {
         }}
         className="min-h-screen bg-secondary-black"
       >
-        <Link href="/">
+        <Image
+          src={logo}
+          alt="logo"
+          priority
+          className="mx-auto my-10 hidden tablet:block"
+        />
+        <Tooltip
+          arrow
+          placement="right"
+          title="Soower"
+          className="tablet:hidden"
+        >
           <Image
-            src={logo}
+            src={favicon}
             alt="logo"
             priority
-            className="mx-auto my-10 hidden tablet:block"
+            className="mx-auto my-10 tablet:hidden"
           />
-          <Tooltip
-            arrow
-            placement="right"
-            title="Soower"
-            className="tablet:hidden"
-          >
-            <Image
-              src={favicon}
-              alt="logo"
-              priority
-              className="mx-auto my-10 tablet:hidden"
-            />
-          </Tooltip>
-        </Link>
+        </Tooltip>
         <Menu
           items={items}
           onClick={onClick}

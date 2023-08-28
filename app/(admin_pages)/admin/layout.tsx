@@ -35,7 +35,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
           />
         </Layout>
       ) : (
-        <AdminSidebar>children</AdminSidebar>
+        <AdminSidebar>{children}</AdminSidebar>
       )}
     </Fragment>
   );
