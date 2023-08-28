@@ -1,6 +1,6 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import MissionaryForm from "./MissionaryForm";
-import RegistrationSuccess from "./RegistrationSuccess";
+import SelectCategory from "./SelectCategory";
 import WidowForm from "./WidowForm";
 
 const PersonalInfo = () => {
@@ -12,10 +12,8 @@ const PersonalInfo = () => {
       return <WidowForm />;
     case "/join-registry?category=missionary":
       return <MissionaryForm />;
-    case "/join-registry?status=registration-success":
-      return <RegistrationSuccess />;
     default:
-      return <RegistrationSuccess />;
+      return <SelectCategory />;
   }
 };
 
