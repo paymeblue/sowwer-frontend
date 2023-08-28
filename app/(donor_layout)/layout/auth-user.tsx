@@ -202,7 +202,10 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
             block
             className="mt-2 flex items-center gap-2 rounded-md border-none bg-slate-50 py-6 font-medium text-black shadow-none hover:bg-slate-100 "
             icon={<Login set="light" />}
-            onClick={() => router.push(`/auth/signin/${signIn}`)}
+            onClick={() => {
+              dispatch(setLastVisited({ lastVisited: pathname }));
+              router.push(`/auth/signin/${signIn}`);
+            }}
             key="login"
           >
             Signin
@@ -211,7 +214,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
           <Fragment>
             <List
               dataSource={data}
-              renderItem={(item, index) => (
+              renderItem={(item) => (
                 <List.Item>
                   <List.Item.Meta
                     className="items-center [&>.ant-list-item-meta-avatar]:mr-3 [&>div>div]:text-xs [&>div>h4]:mb-0 [&>div>h4]:text-xs [&>div>h4]:font-bold [&>div>h4]:leading-tight"

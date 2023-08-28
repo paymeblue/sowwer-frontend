@@ -161,7 +161,9 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
         ...rest,
       };
     }
-    await rtkHook(data).unwrap();
+    const res = await rtkHook(data).unwrap();
+    console.log(res);
+    // setTxnRef(res?.txn_reference);
   };
 
   const onFinish = async (values: State) => {

@@ -1,8 +1,9 @@
 "use client";
 import { useAuth } from "@hooks/useAuth";
 import { Button, Result } from "antd";
+import Layout from "app/(landing_pages)/components/layout";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 import AdminSidebar from "./layout/sidebar";
 
 const AdminLayout = ({ children }: { children: ReactNode }) => {
@@ -19,22 +20,24 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
   }, [userToken, user, router]);
 
   return (
-    <AdminSidebar>
+    <Fragment>
       {isNotAuthorized ? (
-        <Result
-          status="403"
-          title="403"
-          subTitle="Sorry, you are not authorized to access this page."
-          extra={
-            <Button type="primary" onClick={() => router.push("/")}>
-              Back Home
-            </Button>
-          }
-        />
+        <Layout>
+          <Result
+            status="403"
+            title="403"
+            subTitle="Sorry, you are not authorized to access this page."
+            extra={
+              <Button type="primary" onClick={() => router.push("/")}>
+                Back Home
+              </Button>
+            }
+          />
+        </Layout>
       ) : (
-        children
+        <AdminSidebar>children</AdminSidebar>
       )}
-    </AdminSidebar>
+    </Fragment>
   );
 };
 

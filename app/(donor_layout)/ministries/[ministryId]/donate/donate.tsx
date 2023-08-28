@@ -183,6 +183,8 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
       };
     }
     const res = await rtkHook(data).unwrap();
+    console.log(res);
+    // setTxnRef(res?.txn_reference);
     const payload = {
       user: res.data.user,
       token: res.data.token.accessToken,

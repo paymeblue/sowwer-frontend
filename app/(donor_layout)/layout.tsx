@@ -1,6 +1,7 @@
 "use client";
 import { useAuth } from "@hooks/useAuth";
 import { Button, Result } from "antd";
+import Layout from "app/(landing_pages)/components/layout";
 import { usePathname, useRouter } from "next/navigation";
 import { Fragment, ReactNode, useEffect, useState } from "react";
 import Footer from "./layout/Footer";
@@ -25,9 +26,8 @@ const DonorLayout = ({ children }: { children: ReactNode }) => {
   return (
     <Fragment>
       <div className="min-h-full w-full bg-grad">
-        <Navbar />
-        <main className="min-h-screen font-body">
-          {isNotAuthorized ? (
+        {isNotAuthorized ? (
+          <Layout>
             <Result
               status="403"
               title="403"
@@ -38,11 +38,14 @@ const DonorLayout = ({ children }: { children: ReactNode }) => {
                 </Button>
               }
             />
-          ) : (
-            children
-          )}
-        </main>
-        <Footer />
+          </Layout>
+        ) : (
+          <Fragment>
+            <Navbar />
+            <main className="min-h-screen font-body">{children}</main>
+            <Footer />
+          </Fragment>
+        )}
       </div>
     </Fragment>
   );
