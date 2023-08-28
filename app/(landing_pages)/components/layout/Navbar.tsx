@@ -239,16 +239,16 @@ const Navbar = () => {
             items={items2}
             onClick={onClick}
             selectedKeys={[current]}
-            // mode="inline"
+            mode="inline"
             disabledOverflow={true}
             openKeys={openKeys}
             onOpenChange={onOpenChange}
             triggerSubMenuAction="click"
-            className="border-b-0 border-none laptop:hidden [&>.ant-menu-item-selected]:text-primary [&>li::after]:border-b-0 [&>li]:rounded-md hover:[&>li]:bg-amber-50 laptop:[&>li]:mx-2"
+            className="flex flex-col items-start border-b-0 border-none laptop:hidden [&>.ant-menu-item-selected]:text-primary [&>li::after]:border-b-0 [&>li]:rounded-md hover:[&>li]:bg-amber-50 laptop:[&>li]:mx-2"
           />
           <Space direction="vertical" className="w-full">
             <Divider orientation="center" />
-            {user ? (
+            {user && user.type === "donor" ? (
               <AuthUser
                 {...userDetails(user)}
                 signIn={signin}
@@ -293,7 +293,7 @@ const Navbar = () => {
         />
       </div>
       <Space className="hidden laptop:flex">
-        {user ? (
+        {user && user.type === "donor" ? (
           <AuthUser {...userDetails(user)} signIn={signin} profile={profile} />
         ) : (
           <Button

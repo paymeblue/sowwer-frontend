@@ -23,16 +23,18 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
     <Fragment>
       {isNotAuthorized ? (
         <Layout>
-          <Result
-            status="403"
-            title="403"
-            subTitle="Sorry, you are not authorized to access this page."
-            extra={
-              <Button type="primary" onClick={() => router.push("/")}>
-                Back Home
-              </Button>
-            }
-          />
+          <main className="flex h-screen items-center justify-center">
+            <Result
+              status="403"
+              title="403"
+              subTitle="Sorry, you are not authorized to access this page."
+              extra={
+                <Button type="primary" onClick={() => router.push("/")}>
+                  Back Home
+                </Button>
+              }
+            />
+          </main>
         </Layout>
       ) : (
         <AdminSidebar>{children}</AdminSidebar>

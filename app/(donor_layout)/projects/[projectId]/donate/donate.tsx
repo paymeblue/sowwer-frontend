@@ -24,7 +24,7 @@ import {
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
 
 type State = {
@@ -63,21 +63,17 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   const router = useRouter();
   const { user } = useAuth();
   const { data: projectData } = useGetProjectDetailsQuery(id);
-  const [
-    initiatePaymentToProjectAuth,
-    { data: authData, isLoading: paymentAuthLoading },
-  ] = useInitiatePaymentToProjectAuthMutation();
-  const [
-    initiatePaymentToProjectUnauth,
-    { data: unauthData, isLoading: paymentUnauthLoading },
-  ] = useInitiatePaymentToProjectUnauthMutation();
+  const [initiatePaymentToProjectAuth, { isLoading: paymentAuthLoading }] =
+    useInitiatePaymentToProjectAuthMutation();
+  const [initiatePaymentToProjectUnauth, { isLoading: paymentUnauthLoading }] =
+    useInitiatePaymentToProjectUnauthMutation();
   let rtkHook: any;
   if (user) {
     rtkHook = initiatePaymentToProjectAuth;
   } else {
     rtkHook = initiatePaymentToProjectUnauth;
   }
-  const data = user ? authData?.data : unauthData?.data.donation;
+  // const data = user ? authData?.data : unauthData?.data.donation;
   let project: ProjectData | undefined;
   if (projectData) {
     project = projectData.data;
@@ -106,14 +102,14 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   );
 
   const [verifyPayment] = useVerifyPaymentMutation();
-  const updatetxnRef = useCallback(() => {
-    if (data?.txn_reference) {
-      setTxnRef(data.txn_reference);
-    }
-  }, [data?.txn_reference]);
-  useEffect(() => {
-    updatetxnRef();
-  }, [updatetxnRef]);
+  // const updatetxnRef = useCallback(() => {
+  //   if (data?.txn_reference) {
+  //     setTxnRef(data.txn_reference);
+  //   }
+  // }, [data?.txn_reference]);
+  // useEffect(() => {
+  //   updatetxnRef();
+  // }, [updatetxnRef]);
   const obj = useMemo(
     () => ({
       currency,
@@ -125,7 +121,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     [txnRef, project, currency, amount, customer]
   );
   const config = useFlutterConfig(obj);
-  // console.log(config);
+  console.log(config);
   const handleFlutterPayment = useFlutterwave(config);
 
   const selectBefore = useMemo(
@@ -163,7 +159,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     }
     const res = await rtkHook(data).unwrap();
     console.log(res);
-    // setTxnRef(res?.txn_reference);
+    setTxnRef(res.data.donation.txn_reference);
   };
 
   const onFinish = async (values: State) => {

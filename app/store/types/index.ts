@@ -280,16 +280,15 @@ export type PlainResponse = {
   success: boolean;
   message: string;
 };
-export type NotificationResponse = {
+export type NotificationResponse = Response<{
   id: string;
-  user_id: string;
   projectDonation: boolean;
   projectTarget: boolean;
   generalDonation: boolean;
   payout: boolean;
   ongoingRecuringDonation: boolean;
   recuringDonation: boolean;
-};
+}>;
 export type GetNotificationsResponse = Response<{
   id: string;
   user_id: string;
@@ -537,7 +536,7 @@ export type AccountResponse = Response<{
   createdAt: string;
 }>;
 export type SaveAccountRequest = {
-  reference: string;
+  reference?: string;
 };
 export type PayoutHistoryResponse = TResponse<{
   id: string;

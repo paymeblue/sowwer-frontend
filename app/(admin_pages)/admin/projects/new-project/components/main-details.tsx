@@ -42,6 +42,25 @@ const MainDetails = () => {
   const { data } = useGetProjectQuery(id);
   const [editProject, { isLoading: editLoading }] = useEditProjectMutation();
   const [createProject, { isLoading }] = useCreateProjectMutation();
+  // const defaultValues = {
+  //   title: "",
+  //   category: "",
+  //   amount: "",
+  // };
+  // const [initialValues, setInitialValues] = useState(defaultValues);
+  // const updateFormFields = useCallback(() => {
+  //   if (data?.data) {
+  //     setInitialValues((prev) => ({
+  //       ...prev,
+  //       title: data.data.title,
+  //       category: data.data.category,
+  //       amount: data.data.targetAmount.toString(),
+  //     }));
+  //   }
+  // }, [data?.data]);
+  // useEffect(() => {
+  //   updateFormFields();
+  // }, [updateFormFields]);
 
   const initialValues = data
     ? {

@@ -78,7 +78,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
           gutter={[32, 24]}
           className="my-12  grid  grid-cols-1 laptop:grid-cols-2"
         >
-          <Col>
+          <Col className="m-auto">
             {data?.image ? (
               <Image
                 src={data.image}

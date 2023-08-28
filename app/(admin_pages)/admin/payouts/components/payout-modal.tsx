@@ -14,12 +14,10 @@ import {
   Typography,
 } from "antd";
 import {
-  ChangeEvent,
   Dispatch,
   Fragment,
   SetStateAction,
   useCallback,
-  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -28,6 +26,7 @@ import { InfoCircle } from "react-iconly";
 const { Title, Text, Paragraph } = Typography;
 const { Item, useForm } = Form;
 type State = {
+  accountName: string;
   accountNo: string;
   bankId: string;
   ref?: string;
@@ -49,8 +48,6 @@ const PayoutFormModal = ({
 }: Props) => {
   const [showAcctName, setShowAcctName] = useState<boolean>(false);
   const [form] = useForm();
-  const [acctNo, setAcctNo] = useState<string>("");
-  const [acctName, setAcctName] = useState<string | undefined>();
   const regexPattern = useMemo(() => /^\d{10}$/, []);
   const { data, isLoading } = useGetBanksQuery();
   const [verifyAccount, { isLoading: verifyLoading }] =
@@ -59,9 +56,36 @@ const PayoutFormModal = ({
   const showFormHandler = useCallback(() => setShowForm(true), [setShowForm]);
   const [formdata, setFormdata] = useState<State>({
     accountNo: "",
+    accountName: "",
     bankId: "",
-    ref: undefined,
+    ref: "",
   });
+
+  const isMatchingAccountNumber = formdata.accountNo.match(regexPattern);
+
+  const fetchAccountDetails = async () => {
+    if (isMatchingAccountNumber) {
+      try {
+        const res = await verifyAccount({
+          account_number: formdata.accountNo,
+          bank_id: "44",
+        }).unwrap();
+
+        console.log(res);
+
+        setFormdata((prev) => ({
+          ...prev,
+          accountName: res.data.accountName,
+          ref: res.data.reference,
+        }));
+
+        setShowAcctName(true);
+      } catch (error: any) {
+        msg({ status: "fail", message: error });
+      }
+    }
+  };
+
   const handleOk = () => {
     setModalOpen(true);
   };
@@ -69,37 +93,6 @@ const PayoutFormModal = ({
   const handleCancel = () => {
     setModalOpen(false);
   };
-  const acctHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setAcctNo(e.target.value);
-  }, []);
-  useEffect(() => {
-    const isMatchingAccountNumber = acctNo.match(regexPattern);
-
-    if (isMatchingAccountNumber) {
-      const fetchAccountDetails = async () => {
-        try {
-          const res = await verifyAccount({
-            account_number: formdata.accountNo,
-            bank_id: "44",
-          }).unwrap();
-
-          console.log(res);
-
-          setAcctName(res.data.accountName);
-          setFormdata((prev) => ({
-            ...prev,
-            ref: res.data.reference,
-          }));
-
-          setShowAcctName(true);
-        } catch (error: any) {
-          msg({ status: "fail", message: error });
-        }
-      };
-
-      fetchAccountDetails();
-    }
-  }, [acctNo, formdata, msg, verifyAccount, regexPattern]);
 
   const onFinish = async (values: any): Promise<void> => {
     setFormdata((prev) => ({
@@ -109,7 +102,7 @@ const PayoutFormModal = ({
     }));
     try {
       const res = await saveAccount({
-        reference: values.acctNo,
+        reference: formdata.ref,
       }).unwrap();
       console.log(res);
       // form.resetFields();
@@ -200,9 +193,15 @@ const PayoutFormModal = ({
                 >
                   <Input
                     placeholder="Account number"
-                    value={acctNo}
+                    value={formdata.accountNo}
                     disabled={verifyLoading}
-                    onChange={acctHandler}
+                    onChange={async (e) => {
+                      setFormdata((prev) => ({
+                        ...prev,
+                        accountNo: e.target.value,
+                      }));
+                      await fetchAccountDetails();
+                    }}
                     className="rounded border-none bg-[#F9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                   />
                 </Item>
@@ -210,7 +209,9 @@ const PayoutFormModal = ({
               <Space className="m-0 w-full flex-row justify-end p-0">
                 <Item>
                   {showAcctName && (
-                    <Text className="mb-4 block text-accent">{acctName}</Text>
+                    <Text className="mb-4 block text-accent">
+                      {formdata.accountName}
+                    </Text>
                   )}
                   <Button
                     htmlType="submit"

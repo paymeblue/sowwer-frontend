@@ -207,7 +207,7 @@ const ProjectsTable = () => {
     setIsDonorModalOpen(false);
   };
   const editHandler = () => {
-    if (rowId) router.push(`/admin/projects/new-project?q=${rowId}`);
+    router.push(`/admin/projects/new-project?q=${rowId}`);
   };
   const item1 = {
     key: "1",

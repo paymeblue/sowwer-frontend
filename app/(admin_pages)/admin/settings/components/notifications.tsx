@@ -48,7 +48,7 @@ const Notifications = () => {
     recuringDonation,
     payout,
     generalDonation,
-  } = toggle;
+  } = toggle.data;
   const data: Data[] = [
     {
       id: "1",
