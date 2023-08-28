@@ -153,7 +153,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
               Sign in
             </Link>
           </Space>
-        ) : (
+        ) : auth && user?.type !== "ministry" ? (
           <Dropdown
             menu={{ items }}
             trigger={["click"]}
@@ -182,7 +182,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
               <ChevronDown set="light" primaryColor="#555" size={16} />
             </Space>
           </Dropdown>
-        )}
+        ) : null}
       </div>
       <MenuOutlined
         onClick={showDrawer}

@@ -41,7 +41,7 @@ const HomePage: FC = () => {
         <Hero
           title1="Alone we can do so little;"
           title2="together we can do so much."
-          para1="In all things I have shown you that by working hard in this way we must help the weak and remember the words of the Lord Jesus, how He himself said it is more blessed to give than to receive."
+          para1={`"In all things I have shown you that by working hard in this way we must help the weak and remember the words of the Lord Jesus, how He himself said it is more blessed to give than to receive."`}
           para2="—   Acts 20:35 (ESV)"
           hasIcon={true}
           btn="Make a Donation"
