@@ -1,27 +1,29 @@
 "use client";
 import { useAuth } from "@hooks/useAuth";
-import { Button, Result } from "antd";
-import Layout from "app/(landing_pages)/components/layout";
+// import { Button, Result } from "antd";
+// import Layout from "app/(landing_pages)/components/layout";
 import { useRouter } from "next/navigation";
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect } from "react";
 import AdminSidebar from "./layout/sidebar";
 
 const AdminLayout = ({ children }: { children: ReactNode }) => {
   const { userToken, user } = useAuth();
   const router = useRouter();
-  const [isNotAuthorized, setIsNotAuthorized] = useState(false);
+  // const [isNotAuthorized, setIsNotAuthorized] = useState(false);
 
   useEffect(() => {
     if (userToken === null) {
       router.push("/auth/signin/ministry");
-    } else if (user && user.type !== "ministry") {
-      setIsNotAuthorized(true);
     }
+    // else if (user && user.type !== "ministry")
+    // {
+    //   setIsNotAuthorized(true);
+    // }
   }, [userToken, user, router]);
 
   return (
     <Fragment>
-      {isNotAuthorized ? (
+      {/* {isNotAuthorized ? (
         <Layout>
           <main className="flex h-screen items-center justify-center">
             <Result
@@ -36,9 +38,9 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
             />
           </main>
         </Layout>
-      ) : (
-        <AdminSidebar>{children}</AdminSidebar>
-      )}
+      ) : ( */}
+      <AdminSidebar>{children}</AdminSidebar>
+      {/* )} */}
     </Fragment>
   );
 };

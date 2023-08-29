@@ -33,20 +33,16 @@ const PersonalDetails = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
   const { data: userProfile } = useGetUserProfileQuery();
-  const initialValues =
-    userProfile && userProfile?.data
-      ? {
-          firstName: userProfile.data.firstName,
-          lastName: userProfile.data.lastName,
-          email: userProfile.data.email,
-          phone: userProfile.data.phone,
-        }
-      : {
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-        };
+
+  if (!userProfile) {
+    return <div>Loading...</div>;
+  }
+  const initialValues = {
+    firstName: userProfile.data.firstName,
+    lastName: userProfile.data.lastName,
+    email: userProfile.data.email,
+    phone: userProfile.data.phone,
+  };
   const onFinish = async (values: State): Promise<void> => {
     try {
       const res = await updateUserProfile(values).unwrap();

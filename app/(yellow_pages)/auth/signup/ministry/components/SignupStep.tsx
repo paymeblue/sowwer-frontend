@@ -1,5 +1,7 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
+import { useAppDispatch } from "@hooks/useStore";
+import { setCredentials } from "@store/reducers/authSlice";
 import { useMinistrySignupMutation } from "@store/services/auth";
 import { MinistrySignupRequest } from "@store/types";
 import { Button, Form, Space, Steps, Typography, message, theme } from "antd";
@@ -36,6 +38,7 @@ const SignupStep = () => {
   const pathname = usePathname();
   const path = `${pathname}?${searchParam.toString()}`;
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [form] = useForm();
   const steps = [
     {
@@ -129,6 +132,12 @@ const SignupStep = () => {
         password: adminPassword,
       };
       const res = await ministrySignup(credentials).unwrap();
+      const payload = {
+        user: res.data.user,
+        token: res.data.token.accessToken,
+        refreshToken: res.data.token.refreshToken,
+      };
+      dispatch(setCredentials(payload));
       messageApi.open({
         content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",

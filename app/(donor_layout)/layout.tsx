@@ -1,9 +1,9 @@
 "use client";
 import { useAuth } from "@hooks/useAuth";
-import { Button, Result } from "antd";
-import Layout from "app/(landing_pages)/components/layout";
+// import { Button, Result } from "antd";
+// import Layout from "app/(landing_pages)/components/layout";
 import { usePathname, useRouter } from "next/navigation";
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect } from "react";
 import Footer from "./layout/Footer";
 import Navbar from "./layout/Navbar";
 
@@ -13,20 +13,22 @@ const DonorLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
   const donorPage = regex.test(pathname);
-  const [isNotAuthorized, setIsNotAuthorized] = useState(false);
+  // const [isNotAuthorized, setIsNotAuthorized] = useState(false);
 
   useEffect(() => {
     if (userToken === null && donorPage) {
       router.push("/auth/signin/donor");
-    } else if (user && user.type !== "donor") {
-      setIsNotAuthorized(true);
     }
+    // else if (user && user.type !== "donor")
+    // {
+    //   setIsNotAuthorized(true);
+    // }
   }, [userToken, user, donorPage, router]);
 
   return (
     <Fragment>
       <div className="min-h-full w-full bg-grad">
-        {isNotAuthorized ? (
+        {/* {isNotAuthorized ? (
           <Layout>
             <main className="flex h-screen items-center justify-center">
               <Result
@@ -41,13 +43,13 @@ const DonorLayout = ({ children }: { children: ReactNode }) => {
               />
             </main>
           </Layout>
-        ) : (
-          <Fragment>
-            <Navbar />
-            <main className="min-h-screen font-body">{children}</main>
-            <Footer />
-          </Fragment>
-        )}
+        ) : ( */}
+        <Fragment>
+          <Navbar />
+          <main className="min-h-screen font-body">{children}</main>
+          <Footer />
+        </Fragment>
+        {/* )} */}
       </div>
     </Fragment>
   );

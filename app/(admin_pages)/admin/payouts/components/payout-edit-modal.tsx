@@ -54,7 +54,7 @@ const PayoutEditFormModal = ({
       try {
         const res = await verifyAccount({
           account_number: formdata.accountNo,
-          bank_id: "44",
+          bank_code: "044",
         }).unwrap();
 
         console.log(res);

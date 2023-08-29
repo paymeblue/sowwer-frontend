@@ -526,7 +526,10 @@ export type ResetPassowrdRequest = {
   password: string;
   confirm_password: string;
 };
-export type VerifyAccountRequest = { account_number: string; bank_id: string };
+export type VerifyAccountRequest = {
+  account_number: string;
+  bank_code: string;
+};
 export type AccountResponse = Response<{
   id: string;
   reference: string;

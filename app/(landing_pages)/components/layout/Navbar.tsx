@@ -248,7 +248,7 @@ const Navbar = () => {
           />
           <Space direction="vertical" className="w-full">
             <Divider orientation="center" />
-            {user && user.type === "donor" ? (
+            {user ? (
               <AuthUser
                 {...userDetails(user)}
                 signIn={signin}
@@ -293,7 +293,7 @@ const Navbar = () => {
         />
       </div>
       <Space className="hidden laptop:flex">
-        {user && user.type === "donor" ? (
+        {user ? (
           <AuthUser {...userDetails(user)} signIn={signin} profile={profile} />
         ) : (
           <Button

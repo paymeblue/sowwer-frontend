@@ -62,18 +62,25 @@ const MainDetails = () => {
   //   updateFormFields();
   // }, [updateFormFields]);
 
-  const initialValues = data
-    ? {
-        title: data.data.title,
-        category: data.data.category,
-        amount: data.data.targetAmount.toString(),
-      }
-    : {
-        title: "",
-        category: "",
-        amount: "",
-      };
-
+  // const initialValues = data
+  //   ? {
+  //       title: data.data.title,
+  //       category: data.data.category,
+  //       amount: data.data.targetAmount.toString(),
+  //     }
+  //   : {
+  //       title: "",
+  //       category: "",
+  //       amount: "",
+  //     };
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+  const initialValues = {
+    title: data.data.title,
+    category: data.data.category,
+    amount: data.data.targetAmount.toString(),
+  };
   const onFinish = async (values: State): Promise<void> => {
     const credentials = data
       ? {
