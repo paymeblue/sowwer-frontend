@@ -13,8 +13,24 @@ import { cacher } from "./api/rtkQueryCacheUtils";
 
 const payouts = api.injectEndpoints({
   endpoints: (build) => ({
-    verifyPayment: build.mutation<any, VerifyPaymentRequest>({
-      query: (body) => ({ url: `payments/verify`, method: "POST", body }),
+    verifyProjectPayment: build.mutation<any, VerifyPaymentRequest>({
+      query: (body) => ({
+        url: `payments/verify-project-donation`,
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response: AccountResponse, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    verifyMinistryPayment: build.mutation<any, VerifyPaymentRequest>({
+      query: (body) => ({
+        url: `payments/verify-ministry-donation`,
+        method: "POST",
+        body,
+      }),
       transformResponse: (response: AccountResponse, meta, arg): any => {
         return response;
       },
@@ -95,7 +111,8 @@ export const {
   useGetBanksQuery,
   useVerifyAccountMutation,
   useSaveAccountMutation,
-  useVerifyPaymentMutation,
+  useVerifyProjectPaymentMutation,
+  useVerifyMinistryPaymentMutation,
   useGetAccountInfoQuery,
   useRequestPayoutMutation,
   useCancelRecurringPaymentMutation,

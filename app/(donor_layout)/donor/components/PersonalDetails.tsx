@@ -35,7 +35,7 @@ const PersonalDetails = () => {
   const { data: userProfile } = useGetUserProfileQuery();
 
   if (!userProfile) {
-    return <div>Loading...</div>;
+    return null;
   }
   const initialValues = {
     firstName: userProfile.data.firstName,

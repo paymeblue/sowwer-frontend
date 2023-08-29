@@ -246,7 +246,10 @@ const Navbar = () => {
             triggerSubMenuAction="click"
             className="flex flex-col items-start border-b-0 border-none laptop:hidden [&>.ant-menu-item-selected]:text-primary [&>li::after]:border-b-0 [&>li]:rounded-md hover:[&>li]:bg-amber-50 laptop:[&>li]:mx-2"
           />
-          <Space direction="vertical" className="w-full">
+          <Space
+            direction="vertical"
+            className={`w-full ${user ? "flex-col-reverse" : ""}`}
+          >
             <Divider orientation="center" />
             {user ? (
               <AuthUser
@@ -292,7 +295,9 @@ const Navbar = () => {
           className="hover:text-yellow-400"
         />
       </div>
-      <Space className="hidden laptop:flex">
+      <Space
+        className={`hidden laptop:flex ${user ? "flex-row-reverse gap-8" : ""}`}
+      >
         {user ? (
           <AuthUser {...userDetails(user)} signIn={signin} profile={profile} />
         ) : (

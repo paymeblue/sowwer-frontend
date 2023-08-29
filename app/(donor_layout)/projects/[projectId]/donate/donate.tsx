@@ -8,7 +8,7 @@ import {
   useInitiatePaymentToProjectAuthMutation,
   useInitiatePaymentToProjectUnauthMutation,
 } from "@store/services/auth";
-import { useVerifyPaymentMutation } from "@store/services/payouts";
+import { useVerifyMinistryPaymentMutation } from "@store/services/payouts";
 import { useGetProjectDetailsQuery } from "@store/services/projects";
 import {
   Button,
@@ -101,7 +101,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     [email, firstName, lastName, phone]
   );
 
-  const [verifyPayment] = useVerifyPaymentMutation();
+  const [verifyMinistryPayment] = useVerifyMinistryPaymentMutation();
   // const updatetxnRef = useCallback(() => {
   //   if (data?.txn_reference) {
   //     setTxnRef(data.txn_reference);
@@ -178,7 +178,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
       handleFlutterPayment({
         callback: async (response) => {
           try {
-            const res = await verifyPayment({
+            const res = await verifyMinistryPayment({
               txn_id: response.transaction_id.toString(),
               txn_reference: response.tx_ref,
             }).unwrap();

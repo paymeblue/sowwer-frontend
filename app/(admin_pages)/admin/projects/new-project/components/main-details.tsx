@@ -35,51 +35,18 @@ const MainDetails = () => {
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const projectId = searchParams.get("q");
-  let id;
+  let id: string | undefined;
   if (projectId) {
     id = projectId;
   }
   const { data } = useGetProjectQuery(id);
   const [editProject, { isLoading: editLoading }] = useEditProjectMutation();
   const [createProject, { isLoading }] = useCreateProjectMutation();
-  // const defaultValues = {
-  //   title: "",
-  //   category: "",
-  //   amount: "",
-  // };
-  // const [initialValues, setInitialValues] = useState(defaultValues);
-  // const updateFormFields = useCallback(() => {
-  //   if (data?.data) {
-  //     setInitialValues((prev) => ({
-  //       ...prev,
-  //       title: data.data.title,
-  //       category: data.data.category,
-  //       amount: data.data.targetAmount.toString(),
-  //     }));
-  //   }
-  // }, [data?.data]);
-  // useEffect(() => {
-  //   updateFormFields();
-  // }, [updateFormFields]);
 
-  // const initialValues = data
-  //   ? {
-  //       title: data.data.title,
-  //       category: data.data.category,
-  //       amount: data.data.targetAmount.toString(),
-  //     }
-  //   : {
-  //       title: "",
-  //       category: "",
-  //       amount: "",
-  //     };
-  if (!data) {
-    return <div>Loading...</div>;
-  }
   const initialValues = {
-    title: data.data.title,
-    category: data.data.category,
-    amount: data.data.targetAmount.toString(),
+    title: data && data.data.title,
+    category: data && data.data.category,
+    amount: data && data.data.targetAmount.toString(),
   };
   const onFinish = async (values: State): Promise<void> => {
     const credentials = data

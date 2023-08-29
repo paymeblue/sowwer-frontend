@@ -11,7 +11,7 @@ import {
   useInitiatePaymentToMinistryUnauthMutation,
 } from "@store/services/auth";
 import { useGetMinistryDetailsQuery } from "@store/services/ministries";
-import { useVerifyPaymentMutation } from "@store/services/payouts";
+import { useVerifyProjectPaymentMutation } from "@store/services/payouts";
 import {
   Alert,
   Button,
@@ -96,7 +96,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   if (ministryData) {
     ministry = ministryData.data;
   }
-  const [verifyPayment] = useVerifyPaymentMutation();
+  const [verifyProjectPayment] = useVerifyProjectPaymentMutation();
 
   const createAccount = Form.useWatch("createAccount", form);
   const mode = Form.useWatch("payment_mode", form);
@@ -223,7 +223,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
         callback: async (response) => {
           console.log(response);
           try {
-            const res = await verifyPayment({
+            const res = await verifyProjectPayment({
               txn_id: response.transaction_id.toString(),
               txn_reference: response.tx_ref,
             }).unwrap();

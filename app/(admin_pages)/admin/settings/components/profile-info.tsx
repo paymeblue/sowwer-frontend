@@ -44,21 +44,21 @@ const ProfileInfo = () => {
     id = user.ministry.id;
   }
   const { data: ministryDetails } = useGetMinistryDetailsQuery(id);
-  const initialValues = ministryDetails?.data
-    ? {
-        name: ministryDetails.data.name,
-        addressLine: ministryDetails.data.address,
-        postalCode: ministryDetails.data.postal_code,
-        state: ministryDetails.data.state,
-        ministryMsg: ministryDetails.data.about,
-      }
-    : {
-        name: "",
-        addressLine: "",
-        postalCode: "",
-        state: "",
-        ministryMsg: "",
-      };
+  // const initialValues = ministryDetails?.data
+  //   ? {
+  //       name: ministryDetails.data.name,
+  //       addressLine: ministryDetails.data.address,
+  //       postalCode: ministryDetails.data.postal_code,
+  //       state: ministryDetails.data.state,
+  //       ministryMsg: ministryDetails.data.about,
+  //     }
+  //   : {
+  //       name: "",
+  //       addressLine: "",
+  //       postalCode: "",
+  //       state: "",
+  //       ministryMsg: "",
+  //     };
   const options = [
     { value: "", label: "-- Select --", disabled: true },
     ...states.map((state) => ({ value: state, label: state })),
@@ -123,7 +123,13 @@ const ProfileInfo = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
-              initialValues={initialValues}
+              initialValues={{
+                name: ministryDetails && ministryDetails.data.name,
+                addressLine: ministryDetails && ministryDetails.data.address,
+                postalCode: ministryDetails && ministryDetails.data.postal_code,
+                state: ministryDetails && ministryDetails.data.state,
+                ministryMsg: ministryDetails && ministryDetails.data.about,
+              }}
             >
               <Item
                 name="name"

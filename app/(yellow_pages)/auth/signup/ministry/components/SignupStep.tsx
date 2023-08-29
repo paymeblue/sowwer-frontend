@@ -1,6 +1,7 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
+// import { readAsDataURL } from "@lib/convertPdf";
 import { setCredentials } from "@store/reducers/authSlice";
 import { useMinistrySignupMutation } from "@store/services/auth";
 import { MinistrySignupRequest } from "@store/types";
@@ -34,6 +35,7 @@ const SignupStep = () => {
   const { token } = theme.useToken();
   const { Text } = Typography;
   const [current, setCurrent] = useState(0);
+  const [base64Data, setBase64Data] = useState<string | null>(null);
   const searchParam = useSearchParams();
   const pathname = usePathname();
   const path = `${pathname}?${searchParam.toString()}`;
@@ -92,7 +94,7 @@ const SignupStep = () => {
   const [ministrySignup, { isLoading }] = useMinistrySignupMutation();
 
   const tandc = Form.useWatch("tandc", form);
-
+  console.log(base64Data);
   const onFormFinish = async (): Promise<void> => {
     const values: FormDataFields = form.getFieldsValue(true);
     const {
@@ -112,8 +114,17 @@ const SignupStep = () => {
       state,
       cacDocument,
     } = values;
-    console.log(values.cacDocument[0].thumbUrl);
     try {
+      const fileToLoad = cacDocument[0];
+      if (fileToLoad.type === "application/pdf") {
+        // file = await readAsDataURL(fileToLoad);
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64String = event.target?.result as string;
+          setBase64Data(base64String);
+        };
+        reader.readAsDataURL(fileToLoad);
+      }
       const credentials: MinistrySignupRequest = {
         ministryType,
         ministryPhone: ministryPhoneNumber,

@@ -33,15 +33,15 @@ const ContactSocial = () => {
     id = user.ministry.id;
   }
   const { data: ministryDetails } = useGetMinistryDetailsQuery(id);
-  const initialValues = ministryDetails?.data
-    ? {
-        email: ministryDetails.data.email,
-        phone: ministryDetails.data.phone,
-      }
-    : {
-        email: "",
-        phone: "",
-      };
+  // const initialValues = ministryDetails?.data
+  //   ? {
+  // email: ministryDetails.data.email,
+  // phone: ministryDetails.data.phone,
+  //     }
+  //   : {
+  //       email: "",
+  //       phone: "",
+  //     };
   const onFinish = async (values: State): Promise<void> => {
     const { email, phone } = values;
     const credentials = {
@@ -100,7 +100,10 @@ const ContactSocial = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
-              initialValues={initialValues}
+              initialValues={{
+                email: ministryDetails && ministryDetails.data.email,
+                phone: ministryDetails && ministryDetails.data.phone,
+              }}
             >
               <Space
                 className="flex w-full flex-col items-start tablet:flex-row [&>div.ant-space-item]:w-full"

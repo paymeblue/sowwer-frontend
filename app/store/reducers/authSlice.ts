@@ -6,7 +6,7 @@ import { User } from "@store/types";
 type AuthState = {
   user: User | null;
   token: string | null;
-  refreshToken: string | null;
+  refreshToken?: string | null;
 };
 
 const initialState: AuthState = { user: null, token: null, refreshToken: null };
@@ -22,7 +22,7 @@ const authSlice = createSlice({
       }: PayloadAction<{
         user: User | null;
         token: string | null;
-        refreshToken: string | null;
+        refreshToken?: string | null;
       }>
     ) => {
       state.user = user;

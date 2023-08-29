@@ -66,26 +66,6 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-// const donorDataSource = [
-//   {
-//     user: "Anonymous",
-//     amount: " ₦20,000",
-//     time: "2 hours ago",
-//     avatar: "A",
-//   },
-//   {
-//     user: "Semira Yesufu",
-//     amount: "₦35,000",
-//     time: "2 hours ago",
-//     avatar: "SY",
-//   },
-//   {
-//     user: "Semira Yesufu",
-//     amount: "₦35,000",
-//     time: "2 hours ago",
-//     avatar: "SY",
-//   },
-// ];
 type RecordState = {
   amount_raised: number;
   category: string;
@@ -206,8 +186,8 @@ const ProjectsTable = () => {
   const handleDonorCancel = () => {
     setIsDonorModalOpen(false);
   };
-  const editHandler = () => {
-    router.push(`/admin/projects/new-project?q=${rowId}`);
+  const editHandler = (id: string) => {
+    router.push(`/admin/projects/new-project?q=${id}`);
   };
   const item1 = {
     key: "1",
@@ -216,7 +196,7 @@ const ProjectsTable = () => {
         icon={<EditOutlined />}
         type="text"
         className="flex items-center justify-center text-[12px] hover:bg-transparent"
-        onClick={editHandler}
+        onClick={() => rowId && editHandler(rowId)}
       >
         Edit
       </Button>
@@ -262,26 +242,6 @@ const ProjectsTable = () => {
     ),
   };
 
-  // const items: MenuProps["items"] = [];
-  // const dropdownHandler = (record: RecordState) => {
-  //   const { text } = record.status.props;
-  //   if (
-  //     text.toLowerCase() === "drafted" ||
-  //     text.toLowerCase() === "in-progress"
-  //   ) {
-  //     items.length = 0; // Clear the array
-  //     items.push(item1, item2);
-  //   } else if (
-  //     text.toLowerCase() === "active" ||
-  //     text.toLowerCase() === "completed"
-  //   ) {
-  //     items.length = 0; // Clear the array
-  //     items.push(item3);
-  //   } else if (text.toLowerCase() === "active") {
-  //     items.length = 0; // Clear the array
-  //     items.push(item4);
-  //   }
-  // };
   const items: MenuProps["items"] = [];
   const dropdownHandler = (record: RecordState) => {
     const { text } = record.status.props;

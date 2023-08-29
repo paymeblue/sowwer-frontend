@@ -33,20 +33,21 @@ const PersonalDetails = (): JSX.Element => {
   const [messageApi, contextHolder] = message.useMessage();
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
   const { data: userProfile } = useGetUserProfileQuery();
-  const initialValues =
-    userProfile && userProfile?.data
-      ? {
-          firstName: userProfile.data.firstName,
-          lastName: userProfile.data.lastName,
-          email: userProfile.data.email,
-          phone: userProfile.data.phone,
-        }
-      : {
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-        };
+
+  // const initialValues =
+  //   userProfile && userProfile?.data
+  //     ? {
+  //         firstName: userProfile.data.firstName,
+  //         lastName: userProfile.data.lastName,
+  //         email: userProfile.data.email,
+  //         phone: userProfile.data.phone,
+  //       }
+  //     : {
+  //         firstName: "",
+  //         lastName: "",
+  //         email: "",
+  //         phone: "",
+  //       };
   const onFinish = async (values: State): Promise<void> => {
     try {
       const res = await updateUserProfile(values).unwrap();
@@ -98,7 +99,12 @@ const PersonalDetails = (): JSX.Element => {
               className=""
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
-              initialValues={initialValues}
+              initialValues={{
+                firstName: userProfile && userProfile.data.firstName,
+                lastName: userProfile && userProfile.data.lastName,
+                email: userProfile && userProfile.data.email,
+                phone: userProfile && userProfile.data.phone,
+              }}
               autoComplete="off"
             >
               <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">

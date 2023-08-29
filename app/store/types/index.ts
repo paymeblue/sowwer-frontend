@@ -76,7 +76,11 @@ export type LoginRequest = {
   password: string;
   type: "ministry" | "donor";
 };
-
+export type RefreshTokenResponse = Response<{
+  type: string;
+  accessToken: string;
+  expiresIn: string;
+}>;
 export type LoginData = {
   message: string;
   data: {
