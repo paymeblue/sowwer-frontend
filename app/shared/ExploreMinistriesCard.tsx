@@ -62,16 +62,13 @@ const ExploreMinistriesCard = ({
   function handleRefetch() {
     refetch();
   }
-  const paginationHandler = () => {
-    if (data)
-      setPagination((prev) => ({
-        ...prev,
-        current: data.paginationInfo.currentPage,
-        pageSize: data.paginationInfo.limit,
-        total: data.paginationInfo.totalItems,
-      }));
+  const paginationHandler = (page: number, pageSize: number) => {
+    setPagination((prev) => ({
+      ...prev,
+      current: page,
+      pageSize: pageSize,
+    }));
   };
-
   const onClick = (id?: string) => {
     router.prefetch(`/ministries/${id}`);
     router.push(`/ministries/${id}`);
@@ -139,10 +136,12 @@ const ExploreMinistriesCard = ({
           ))}
         </Row>
         <Pagination
-          defaultCurrent={pagination.current}
-          defaultPageSize={pagination.pageSize}
-          total={pagination.total}
-          onChange={paginationHandler}
+          defaultCurrent={data.paginationInfo.currentPage}
+          defaultPageSize={data.paginationInfo.limit}
+          total={data.paginationInfo.totalItems}
+          onChange={(page: number, pageSize: number) =>
+            paginationHandler(page, pageSize)
+          }
           className="my-6 laptop:my-12"
         />
       </Fragment>

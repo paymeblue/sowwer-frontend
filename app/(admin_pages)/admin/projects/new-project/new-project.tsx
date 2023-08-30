@@ -15,12 +15,18 @@ import Overview from "./components/overview";
 const { Title, Text } = Typography;
 
 const NewProjectPage = () => {
-  const [link, setLink] = useState<string>(
-    "https://soower.com/title-of-project"
-  );
+  const defaultValue = "https://soower.com/title-of-project";
+
+  const [link, setLink] = useState<string>(defaultValue);
   const router = useRouter();
   const { projectId } = useUtil();
-  const { data } = useGetProjectQuery(projectId);
+  let id: string | undefined;
+  if (!projectId) {
+    setLink(defaultValue);
+  } else {
+    id = projectId;
+  }
+  const { data } = useGetProjectQuery(id);
   const updateLink = useCallback(() => {
     if (data?.data?.link) setLink(data.data.link);
   }, [data?.data?.link]);

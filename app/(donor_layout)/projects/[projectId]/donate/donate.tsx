@@ -78,7 +78,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   if (projectData) {
     project = projectData.data;
   }
-  const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
+  const [txnRef] = useState<string>(Date.now().toString());
   const [formData, setFormData] = useState({
     currency: "NGN",
     amount: "",
@@ -92,14 +92,25 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
 
   const { currency, amount, firstName, lastName, email, phone } = formData;
 
-  const customer = useMemo(
-    () => ({
-      email,
-      phone_number: phone,
-      name: `${firstName} ${lastName}`,
-    }),
-    [email, firstName, lastName, phone]
-  );
+  const customer = useMemo(() => {
+    let credentials;
+
+    if (user) {
+      credentials = {
+        email: user.email,
+        phone_number: user.phone,
+        name: `${user.firstName} ${user.lastName}`,
+      };
+    } else {
+      credentials = {
+        email,
+        phone_number: phone,
+        name: `${firstName} ${lastName}`,
+      };
+    }
+
+    return credentials;
+  }, [email, firstName, user, lastName, phone]);
 
   const [verifyMinistryPayment] = useVerifyMinistryPaymentMutation();
   // const updatetxnRef = useCallback(() => {
@@ -116,7 +127,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
       amount: Number(amount),
       customer,
       desc: project ? project.title : "Project Donation",
-      txnRef,
+      txnRef: txnRef,
     }),
     [txnRef, project, currency, amount, customer]
   );
@@ -141,25 +152,28 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     if (!user && createAccount) {
       data = {
         id,
+        txnRef,
         amount: +amount,
         ...rest,
       };
     } else if (user) {
       data = {
+        txn_reference: txnRef,
         id,
         amount: +amount,
         ...rest,
       };
     } else if (!user && !createAccount) {
       data = {
+        txn_reference: txnRef,
         id,
         amount: +amount,
         ...rest,
       };
     }
-    const res = await rtkHook(data).unwrap();
-    console.log(res);
-    setTxnRef(res.data.donation.txn_reference);
+    await rtkHook(data).unwrap();
+    // console.log(res);
+    // setTxnRef(res.data.donation.txn_reference);
   };
 
   const onFinish = async (values: State) => {

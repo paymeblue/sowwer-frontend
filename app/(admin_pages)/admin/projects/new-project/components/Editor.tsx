@@ -108,8 +108,9 @@ const Editor: React.FC = () => {
               type="primary"
               htmlType="submit"
               size="large"
-              className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+              className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
               loading={isLoading}
+              disabled={!value}
             >
               {isLoading ? "Saving" : "Save"}
             </Button>

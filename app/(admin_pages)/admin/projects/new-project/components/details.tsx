@@ -20,7 +20,7 @@ const Details = ({ link }: IProps) => {
   const [isLoading, setIsLoading] = useState({ draft: false, publish: false });
   const [publishOrDraftProject] = usePublishOrDraftProjectMutation();
   const [messageApi, contextHolder] = message.useMessage();
-
+  // const dispatch = useAppDispatch();
   const downloadQRCode = () => {
     const canvas = document
       .getElementById("myqrcode")
@@ -36,9 +36,14 @@ const Details = ({ link }: IProps) => {
     }
   };
 
+  // useEffect(() => {
+  //   if (data) {
+  //     dispatch(setProjectId({ projectId: null }));
+  //   }
+  // }, [data, dispatch]);
+
   const submitHandler = async ({ prop, q }: SubmitHandlerProps) => {
     setIsLoading((prev) => ({ ...prev, [prop]: true }));
-
     try {
       const res = await publishOrDraftProject({
         id: projectId!,

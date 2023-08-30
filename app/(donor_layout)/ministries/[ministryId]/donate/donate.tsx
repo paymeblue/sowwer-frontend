@@ -28,7 +28,7 @@ import {
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
 
 type State = {
@@ -74,24 +74,21 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const { user } = useAuth();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
+  const [txnRef] = useState<string>(Date.now().toString());
+  // const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
   const { data: ministryData } = useGetMinistryDetailsQuery(ministryId);
   let ministry: MinistryData | undefined;
-  const [
-    initiatePaymentToMinistryAuth,
-    { data: authData, isLoading: paymentAuthLoading },
-  ] = useInitiatePaymentToMinistryAuthMutation();
-  const [
-    initiatePaymentToMinistryUnauth,
-    { data: unauthData, isLoading: paymentUnauthLoading },
-  ] = useInitiatePaymentToMinistryUnauthMutation();
+  const [initiatePaymentToMinistryAuth, { isLoading: paymentAuthLoading }] =
+    useInitiatePaymentToMinistryAuthMutation();
+  const [initiatePaymentToMinistryUnauth, { isLoading: paymentUnauthLoading }] =
+    useInitiatePaymentToMinistryUnauthMutation();
   let rtkHook: any;
   if (user) {
     rtkHook = initiatePaymentToMinistryAuth;
   } else {
     rtkHook = initiatePaymentToMinistryUnauth;
   }
-  const data = user ? authData?.data : unauthData?.data.donation;
+  // const data = user ? authData?.data : unauthData?.data.donation;
 
   if (ministryData) {
     ministry = ministryData.data;
@@ -100,7 +97,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
 
   const createAccount = Form.useWatch("createAccount", form);
   const mode = Form.useWatch("payment_mode", form);
-  console.log(mode, createAccount);
 
   const [messageApi, contextHolder] = message.useMessage();
   const [formData, setFormData] = useState({
@@ -116,23 +112,34 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
 
   const { currency, amount, firstName, lastName, email, phone } = formData;
 
-  const customer = useMemo(
-    () => ({
-      email,
-      phone_number: phone,
-      name: `${firstName} ${lastName}`,
-    }),
-    [email, firstName, lastName, phone]
-  );
+  const customer = useMemo(() => {
+    let credentials;
 
-  const updatetxnRef = useCallback(() => {
-    if (data?.txn_reference) {
-      setTxnRef(data.txn_reference);
+    if (user) {
+      credentials = {
+        email: user.email,
+        phone_number: user.phone,
+        name: `${user.firstName} ${user.lastName}`,
+      };
+    } else {
+      credentials = {
+        email,
+        phone_number: phone,
+        name: `${firstName} ${lastName}`,
+      };
     }
-  }, [data?.txn_reference]);
-  useEffect(() => {
-    updatetxnRef();
-  }, [updatetxnRef]);
+
+    return credentials;
+  }, [email, firstName, user, lastName, phone]);
+
+  // const updatetxnRef = useCallback(() => {
+  //   if (data?.txn_reference) {
+  //     setTxnRef(data.txn_reference);
+  //   }
+  // }, [data?.txn_reference]);
+  // useEffect(() => {
+  //   updatetxnRef();
+  // }, [updatetxnRef]);
 
   const obj = useMemo(
     () => ({
@@ -166,11 +173,13 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     if (!user && createAccount) {
       data = {
         id: ministryId,
+        txnRef,
         amount: +amount,
         ...rest,
       };
     } else if (user) {
       data = {
+        txn_reference: txnRef,
         id: ministryId,
         amount: +amount,
         ...rest,
@@ -178,6 +187,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     } else if (!user && !createAccount) {
       data = {
         id: ministryId,
+        txn_reference: txnRef,
         amount: +amount,
         ...rest,
       };
@@ -307,6 +317,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
               currency: "NGN",
               anonymous: false,
               createAccount: false,
+              mode: "one-time",
             }}
             form={form}
             onFinish={onFinish}
@@ -371,7 +382,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   Personal Information
                 </Title>
                 <Item name="createAccount" valuePropName="checked">
-                  {!mode ? (
+                  {mode === "one-time" ? (
                     <Checkbox className="text-[13px] tablet:text-[15px]">
                       I would like to sign up on Soower.
                     </Checkbox>
@@ -480,7 +491,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                     />
                   </Item>
                 </Space>
-                {(createAccount || mode) && (
+                {(createAccount || mode === "recurring") && (
                   <Space className="w-full flex-col items-start laptop:flex-row [&>div.ant-space-item]:w-full">
                     <Item
                       label="Password"

@@ -22,80 +22,26 @@ import type {
   TablePaginationConfig,
 } from "antd/es/table/interface";
 import { FilterValue } from "antd/es/table/interface";
+import moment from "moment";
 import { Fragment, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import PayoutFormModal from "./payout-modal";
 
-export interface DataType {
+interface DataType {
   key: string;
-  title: string;
-  goal: number;
-  category: string;
-  donors: number;
+  name: string;
+  type: string | any;
+  frequency: string;
   amount: number;
+  date: string;
   btn: string;
 }
 
 type DataIndex = keyof DataType;
 const priceFormat = currencyFormat();
 const { Title, Text } = Typography;
-// const data: DataType[] = [
-//   {
-//     key: "1",
-//     goal: 500000,
-//     title: "The Widows Project",
-//     category: "Widows",
-//     donors: 53,
-//     amount: 135000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "2",
-//     goal: 125000,
-//     title: "The Orphans Project",
-//     category: "Orphans",
-//     donors: 50,
-//     amount: 105000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "3",
-//     goal: 500000,
-//     title: "The Missions Project",
-//     category: "Missions",
-//     donors: 35,
-//     amount: 135000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "4",
-//     goal: 400000,
-//     title: "The Widows Project",
-//     category: "Widows",
-//     donors: 53,
-//     amount: 245000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "5",
-//     goal: 750000,
-//     title: "The Missions Project",
-//     category: "Missions",
-//     donors: 23,
-//     amount: 375000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "6",
-//     goal: 700000,
-//     title: "The Orphans Project",
-//     category: "Orphans",
-//     donors: 70,
-//     amount: 650000,
-//     btn: "Request Payout",
-//   },
-// ];
-const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
+
+const GeneralDonationsTable = ({ acctLinked }: { acctLinked: boolean }) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [rowId, setRowId] = useState("");
@@ -153,11 +99,13 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
 
   const dataSource: DataType[] | undefined = res?.data.map((item) => ({
     key: item.id,
-    goal: Number(item.targetAmount),
-    title: capitalizeFirstLetters(item.title),
-    category: capitalizeFirstLetters(item.category),
-    donors: item.donors,
+    name: capitalizeFirstLetters(item.title),
+    frequency: capitalizeFirstLetters(item.category ?? "-"),
     amount: Number(item.amountRaised),
+    type: capitalizeFirstLetters(
+      `${item.status === null ? "one-time" : item.status} donation`
+    ),
+    date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
     btn: item.request_payout ? "Payout Requested" : "Request Payout",
   }));
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -187,9 +135,13 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     }
   };
 
-  const handleRequestPayout = (record: DataType, callback: () => void) => {
+  const handleRequestPayout = async (
+    record: DataType,
+    callback: () => void
+  ) => {
     if (!acctLinked) {
       setModalOpen(true);
+      await callback(); // Continue execution if acctLinked is already true
       // Assuming the form modal updates acctLinked when closed
       // You can add an appropriate event listener or callback to handle the modal close event
       // For example, if the modal has an "onClose" prop:
@@ -313,87 +265,81 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
       icon: <CheckCircleIcon />,
     });
   };
-
   const columns: ColumnsType<DataType> = [
     {
       title: (
         <Title className="text-[12px] font-semibold leading-[15.12px]">
-          Project Title
+          Donor's Name
         </Title>
       ),
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "name",
+      key: "name",
       width: "20%",
-      ...getColumnSearchProps("title"),
-      sorter: (a, b) => a.title.length - b.title.length,
-      sortDirections: ["descend", "ascend"],
-      render: (item) => (
-        <Text className="text-[13px] font-semibold">{item}</Text>
+      ...getColumnSearchProps("name"),
+      sorter: (a, b) => a.name.length - b.name.length,
+      render: (value) => (
+        <Text className="text-[13px] font-semibold">{value}</Text>
       ),
-      filteredValue: filteredInfo.title || null,
+      sortDirections: ["descend", "ascend"],
+      filteredValue: filteredInfo.name || null,
     },
     {
       title: (
         <Title className="text-[12px] font-semibold leading-[15.12px]">
-          Goal
+          Donation Type
         </Title>
       ),
-      dataIndex: "goal",
-      key: "goal",
-      width: "15%",
-      filteredValue: null,
-      render: (item) => (
-        <Text className="text-[13px]">{priceFormat(item)}</Text>
-      ),
-      sortDirections: ["descend", "ascend"],
-      sorter: (a, b) => a.goal - b.goal,
-    },
-    {
-      title: (
-        <Title className="text-[12px] font-semibold leading-[15.12px]">
-          Category
-        </Title>
-      ),
-      key: "category",
-      dataIndex: "category",
+      key: "type",
+      dataIndex: "type",
       filters: [
-        { text: "Widows", value: "Widows" },
-        { text: "Orphans", value: "Orphans" },
-        { text: "Missions", value: "Missions" },
+        { text: "One-time", value: "One-time Donation" },
+        { text: "Recurring", value: "Recurring  Donation" },
       ],
-      filteredValue: filteredInfo.category || null,
-      onFilter: (value: any, record) => record.category.includes(value),
-      render: (item) => <Text className="text-[13px]">{item}</Text>,
-      width: "10%",
+      filteredValue: filteredInfo.type || null,
+      render: (value) => <Text className="text-[13px]">{value}</Text>,
+      onFilter: (value: any, record) => record.type.includes(value),
+      width: "20%",
     },
     {
       title: (
         <Title className="text-[12px] font-semibold leading-[15.12px]">
-          No of Donor's
+          Frequency
         </Title>
       ),
-      dataIndex: "donors",
-      key: "donors",
+      dataIndex: "frequency",
+      key: "frequency",
       width: "15%",
-      render: (item) => <Text className="text-[13px]">{item}</Text>,
-      sorter: (a, b) => a.donors - b.donors,
-      filteredValue: filteredInfo.donors || null,
+      render: (value) => <Text className="text-[13px]">{value}</Text>,
+      sorter: (a, b) => a.frequency.length - b.frequency.length,
+      filteredValue: filteredInfo.frequency || null,
     },
     {
       title: (
         <Title className="text-[12px] font-semibold leading-[15.12px]">
-          Amount Raised
+          Amount Donated
         </Title>
       ),
       dataIndex: "amount",
       key: "amount",
-      width: "15%",
-      filteredValue: null,
+      width: "20%",
       render: (item) => (
         <Text className="text-[13px]">{priceFormat(item)}</Text>
       ),
-      sortDirections: ["descend", "ascend"],
+      filteredValue: filteredInfo.amount || null,
       sorter: (a, b) => a.amount - b.amount,
+    },
+    {
+      title: (
+        <Title className="text-[12px] font-semibold leading-[15.12px]">
+          Date Donated
+        </Title>
+      ),
+      dataIndex: "date",
+      key: "date",
+      width: "25%",
+      render: (value) => <Text className="text-[13px]">{value}</Text>,
+      sorter: (a, b) => a.date.length - b.date.length,
+      filteredValue: filteredInfo.date || null,
     },
     {
       title: "",
@@ -415,6 +361,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
       },
     },
   ];
+
   const content = isLoading ? (
     <Spin size="large" indicator={antIcon} />
   ) : isError ? (
@@ -483,4 +430,4 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
   return <Fragment>{content}</Fragment>;
 };
 
-export default CompletedProjectsTable;
+export default GeneralDonationsTable;

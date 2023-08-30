@@ -57,6 +57,12 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
   const [open, setOpen] = useState<boolean>(false);
   const showDrawer = () => setOpen(true);
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (user) {
+      setAuth(true);
+    }
+  }, [user]);
   useEffect(() => {
     const regex = /^(\/projects\/[^/]+\/donate|\/ministries\/[^/]+\/donate)$/;
     if (regex.test(pathname) && user === null) {

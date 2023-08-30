@@ -9,10 +9,12 @@ import {
 } from "@ant-design/icons";
 import { CheckCircleIcon, EmptySpeakerIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
+import { useAppDispatch } from "@hooks/useStore";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import { generateAvatar } from "@lib/user-details";
 import ResultComponent from "@shared/ResultComponent";
+import { setProjectId } from "@store/reducers/utilSlice";
 import {
   useCloseMinistryProjectMutation,
   useDeleteMinistryProjectMutation,
@@ -90,6 +92,7 @@ const { Title, Text, Paragraph } = Typography;
 const ProjectsTable = () => {
   const { user } = useAuth();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   let id: string | undefined;
   if (user && "ministry" in user) {
     id = user.ministry.id;
@@ -108,6 +111,7 @@ const ProjectsTable = () => {
     Record<string, FilterValue | null>
   >({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
   const [isDonorModalOpen, setIsDonorModalOpen] = useState(false);
   const { data: donors } = useGetMinistryProjectDonorsQuery(rowId);
@@ -131,6 +135,8 @@ const ProjectsTable = () => {
       ? "blue"
       : status === "completed"
       ? "green"
+      : status === "cancelled"
+      ? "gainsboro"
       : "gray";
   };
 
@@ -155,9 +161,6 @@ const ProjectsTable = () => {
   const showModal = () => {
     setIsDeleteModalOpen(true);
   };
-  const showCloseProjectModal = () => {
-    setIsCloseModalOpen(true);
-  };
 
   const handleDeleteOk = () => {
     setIsDeleteModalOpen(false);
@@ -167,12 +170,25 @@ const ProjectsTable = () => {
     setIsDeleteModalOpen(false);
   };
 
+  const showCloseProjectModal = () => {
+    setIsCloseModalOpen(true);
+  };
   const handleCloseOk = () => {
     setIsCloseModalOpen(false);
   };
 
   const handleCloseCancel = () => {
     setIsCloseModalOpen(false);
+  };
+  const showEditProjectModal = () => {
+    setIsEditModalOpen(true);
+  };
+  const handleEditOk = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleEditCancel = () => {
+    setIsEditModalOpen(false);
   };
 
   const showDonorModal = () => {
@@ -186,7 +202,7 @@ const ProjectsTable = () => {
   const handleDonorCancel = () => {
     setIsDonorModalOpen(false);
   };
-  const editHandler = (id: string) => {
+  const editHandler = (id?: string) => {
     router.push(`/admin/projects/new-project?q=${id}`);
   };
   const item1 = {
@@ -196,7 +212,13 @@ const ProjectsTable = () => {
         icon={<EditOutlined />}
         type="text"
         className="flex items-center justify-center text-[12px] hover:bg-transparent"
-        onClick={() => rowId && editHandler(rowId)}
+        // onClick={() => {
+        //   if (rowId) {
+        //     editHandler(rowId);
+        //     dispatch(setProjectId({ projectId: rowId }));
+        //   }
+        // }}
+        onClick={showEditProjectModal}
       >
         Edit
       </Button>
@@ -248,6 +270,7 @@ const ProjectsTable = () => {
 
     switch (text.toLowerCase()) {
       case "drafted":
+      case "cancelled":
       case "in-progress":
         items.length = 0;
         items.push(item1, item2);
@@ -290,12 +313,10 @@ const ProjectsTable = () => {
   };
 
   const paginationHandler = (page: number, pageSize: number) => {
-    console.log("Pagination", page, pageSize);
-    return setPagination((prev) => ({
+    setPagination((prev) => ({
       ...prev,
-      current: data?.paginationInfo?.currentPage,
-      total: data?.paginationInfo?.totalItems,
-      pageSize: data?.paginationInfo?.limit,
+      current: page,
+      pageSize: pageSize,
     }));
   };
   const handleSearch = (
@@ -536,6 +557,13 @@ const ProjectsTable = () => {
     }
     handleDeleteCancel();
   };
+
+  const handleEditBtn = async () => {
+    editHandler(rowId);
+    dispatch(setProjectId({ projectId: rowId }));
+    handleEditCancel();
+  };
+
   const handleCloseBtn = async () => {
     try {
       const res = await closeMinistryProject(rowId).unwrap();
@@ -615,6 +643,40 @@ const ProjectsTable = () => {
               size="large"
             >
               Yes, delete project
+            </Button>
+          }
+        />
+      </Modal>
+      <Modal
+        open={isEditModalOpen}
+        onOk={handleEditOk}
+        onCancel={handleEditCancel}
+        footer={null}
+      >
+        <Result
+          status="info"
+          title={
+            <Title level={5} className="text-[18px] leading-[22px]">
+              Edit Project “{rowTitle}”?
+            </Title>
+          }
+          icon={
+            <InfoCircle
+              set="light"
+              size={50}
+              style={{ margin: "auto" }}
+              primaryColor="#3466FF"
+            />
+          }
+          extra={
+            <Button
+              type="primary"
+              key="console"
+              onClick={handleEditBtn}
+              className="mt-0 bg-accent text-[13px] leading-[16px] text-white"
+              // size="large"
+            >
+              Edit project
             </Button>
           }
         />
@@ -729,9 +791,9 @@ const ProjectsTable = () => {
         loading={isLoading || isFetching}
         rowKey={(record) => record.key}
         pagination={{
-          defaultCurrent: pagination.current,
-          pageSize: pagination.pageSize,
-          total: pagination.total,
+          defaultCurrent: data?.paginationInfo.currentPage,
+          defaultPageSize: data?.paginationInfo.limit,
+          total: data?.paginationInfo.totalItems,
           onChange: (page: number, pageSize: number) =>
             paginationHandler(page, pageSize),
         }}

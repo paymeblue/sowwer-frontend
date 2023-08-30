@@ -48,7 +48,7 @@ const PayoutFormModal = ({
 }: Props) => {
   const [showAcctName, setShowAcctName] = useState<boolean>(false);
   const [form] = useForm();
-  const regexPattern = useMemo(() => /^\d{10}$/, []);
+  const regexPattern = useMemo(() => /^\d{9}$/, []);
   const { data, isLoading } = useGetBanksQuery();
   const [verifyAccount, { isLoading: verifyLoading }] =
     useVerifyAccountMutation();

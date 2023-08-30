@@ -106,12 +106,11 @@ const CompletedProjectsTable = () => {
   function handleRefetch() {
     refetch();
   }
-  const paginationHandler = () => {
-    return setPagination((prev) => ({
+  const paginationHandler = (page: number, pageSize: number) => {
+    setPagination((prev) => ({
       ...prev,
-      current: res?.paginationInfo?.currentPage,
-      total: res?.paginationInfo?.totalItems,
-      pageSize: res?.paginationInfo?.limit,
+      current: page,
+      pageSize: pageSize,
     }));
   };
 
@@ -336,11 +335,11 @@ const CompletedProjectsTable = () => {
           };
         }}
         pagination={{
-          defaultCurrent: pagination.current,
-          pageSize: pagination.pageSize,
-          total: pagination.total,
-          onChange: paginationHandler,
-          position: ["bottomRight"],
+          defaultCurrent: res?.paginationInfo.currentPage,
+          defaultPageSize: res?.paginationInfo.limit,
+          total: res?.paginationInfo.totalItems,
+          onChange: (page: number, pageSize: number) =>
+            paginationHandler(page, pageSize),
         }}
         sticky
       />

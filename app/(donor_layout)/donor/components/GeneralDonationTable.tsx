@@ -75,12 +75,11 @@ const GeneralDonationTable: FC = () => {
   function handleRefetch() {
     refetch();
   }
-  const paginationHandler = () => {
-    return setPagination((prev) => ({
+  const paginationHandler = (page: number, pageSize: number) => {
+    setPagination((prev) => ({
       ...prev,
-      current: data?.paginationInfo?.currentPage,
-      total: data?.paginationInfo?.totalItems,
-      pageSize: data?.paginationInfo?.limit,
+      current: page,
+      pageSize: pageSize,
     }));
   };
 
@@ -360,10 +359,11 @@ const GeneralDonationTable: FC = () => {
       onChange={handleChange}
       scroll={{ x: 896 }}
       pagination={{
-        defaultCurrent: pagination.current,
-        pageSize: pagination.pageSize,
-        total: pagination.total,
-        onChange: paginationHandler,
+        defaultCurrent: data?.paginationInfo.currentPage,
+        defaultPageSize: data?.paginationInfo.limit,
+        total: data?.paginationInfo.totalItems,
+        onChange: (page: number, pageSize: number) =>
+          paginationHandler(page, pageSize),
       }}
       sticky
     />

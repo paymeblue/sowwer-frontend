@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-import { CheckCircleIcon } from "@components/assets/icons";
+import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
 import { setProjectId } from "@store/reducers/utilSlice";
 import {
@@ -16,8 +16,11 @@ import {
   Select,
   Space,
   Typography,
+  Upload,
+  UploadProps,
   message,
 } from "antd";
+import { RcFile } from "antd/es/upload";
 import { useSearchParams } from "next/navigation";
 
 const { Title, Paragraph } = Typography;
@@ -27,6 +30,53 @@ type State = {
   amount: string;
   category: "orphans" | "widows" | "ministry";
   title: string;
+  coverPhoto: any;
+};
+
+const { Dragger } = Upload;
+
+const props: UploadProps = {
+  name: "file",
+  headers: {
+    authorization: "authorization-text",
+  },
+  multiple: false,
+  listType: "picture",
+  beforeUpload: (file: RcFile) => {
+    const isPNG = file.type === "image/png";
+    const isJPG = file.type === "image/jpeg" || file.type === "image/jpg";
+    const isPDF = file.type === "application/pdf";
+    if (!(isPNG || isJPG || isPDF)) {
+      message.error(`${file.name} is not a png, jpeg, jpg or pdf file`);
+    }
+    console.log({ file });
+    return false;
+    // return isPNG || isJPG || isPDF || Upload.LIST_IGNORE;
+  },
+  onChange(info) {
+    const { status } = info.file;
+    if (status !== "uploading") {
+      console.log(info.file, info.fileList);
+    }
+    if (status === "done") {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (status === "error") {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+  onDrop(e) {
+    console.log("Dropped files", e.dataTransfer.files);
+  },
+  progress: {
+    strokeColor: {
+      "0%": "#108ee9",
+      "100%": "#87d068",
+    },
+    size: 3,
+    format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
+  },
+  maxCount: 1,
+  accept: ".png,.jpeg,.jpg,application/pdf",
 };
 
 const MainDetails = () => {
@@ -44,10 +94,26 @@ const MainDetails = () => {
   const [createProject, { isLoading }] = useCreateProjectMutation();
 
   const initialValues = {
-    title: data && data.data.title,
-    category: data && data.data.category,
-    amount: data && data.data.targetAmount.toString(),
+    title: data?.data.title ?? "",
+    category: data?.data.category ?? "",
+    amount: data?.data.targetAmount.toString() ?? "",
   };
+  let formIsValid = false;
+  const title = Form.useWatch("title", form);
+  const amount = Form.useWatch("amount", form);
+  const category = Form.useWatch("category", form);
+  const coverPhoto = Form.useWatch("coverPhoto", form);
+
+  if (title && category && amount && coverPhoto) {
+    formIsValid = true;
+  }
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+
   const onFinish = async (values: State): Promise<void> => {
     const credentials = data
       ? {
@@ -55,11 +121,13 @@ const MainDetails = () => {
           amount: +values.amount,
           category: values.category,
           title: values.title,
+          cover_photo: values.coverPhoto[0].thumbUrl,
         }
       : {
           amount: +values.amount,
           category: values.category,
           title: values.title,
+          cover_photo: values.coverPhoto[0].thumbUrl,
         };
     const mutationFn = data ? editProject : createProject;
     try {
@@ -181,6 +249,33 @@ const MainDetails = () => {
                 />
               </Item>
             </Space>
+            <Item
+              label="Upload cover photo"
+              className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+              required
+            >
+              <Item
+                name="coverPhoto"
+                valuePropName="fileList"
+                getValueFromEvent={normFile}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please upload a cover photo",
+                  },
+                ]}
+              >
+                <Dragger {...props}>
+                  <div className="px-1">
+                    <FileUpload />
+                    <p className="mb-0 text-primary">Upload cover photo</p>
+                    <small className="text-body-2">
+                      (.jpg, .png or .pdf file format supported)
+                    </small>
+                  </div>
+                </Dragger>
+              </Item>
+            </Item>
           </div>
         </Space>
         <Space className="w-full justify-end">
@@ -189,8 +284,9 @@ const MainDetails = () => {
               htmlType="submit"
               type="primary"
               size="large"
-              className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+              className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
               loading={data ? editLoading : isLoading}
+              disabled={!formIsValid}
             >
               {editLoading || isLoading ? "Saving" : "Save"}
             </Button>

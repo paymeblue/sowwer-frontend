@@ -134,7 +134,11 @@ const AdminSidebar = ({ children }: Props) => {
           theme="dark"
         />
       </Sider>
-      <Layout>
+      <Layout
+        style={{
+          background: "#F7F8FA",
+        }}
+      >
         <Header
           style={{ background: colorBgContainer }}
           className="px-6 py-0 shadow-sm"
@@ -147,7 +151,6 @@ const AdminSidebar = ({ children }: Props) => {
             />
           </div>
         </Header>
-
         <Content
           style={{
             margin: "24px 16px 0",

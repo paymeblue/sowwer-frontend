@@ -136,10 +136,15 @@ const projects = api.injectEndpoints({
       query: (body) => {
         let url;
         if (body.status) {
-          url = `ministries/${body.id}/projects?page=${body.page}&status=${body.status}&limit=10`;
+          url = `ministries/${body.id}/projects?page=${body.page}&status=completed&status=${body.status}&limit=10`;
         } else {
           url = `ministries/${body.id}/projects?page=${body.page}&limit=10`;
         }
+        //  if (body.type) {
+        //    url = `ministries/${body.id}/projects?page=${body.page}&status=completed&type=${body.type}&limit=10`;
+        //  } else {
+        //    url = `ministries/${body.id}/projects?page=${body.page}&limit=10`;
+        //  }
         return {
           url,
           method: "GET",

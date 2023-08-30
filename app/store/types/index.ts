@@ -110,7 +110,8 @@ export type PublishOrDraftResponse = Response<{
 export type MinistryProjectsRequest = {
   id?: string | null;
   page?: number;
-  status?: "in-progress" | "active" | "drafted" | "completed";
+  status?: "active" | "draft" | "completed" | "in-progress";
+  // type?: "project" | "ministry";
 };
 
 export type Ministry = {
@@ -230,6 +231,33 @@ export type ResultResponse = Response<{
   deletedAt: string | null;
   createdAt: string;
 }>;
+// type MinistryGeneralProjects = TResponse<{
+//   id: string;
+//   amount: string;
+//   donorName: string;
+//   donorType: string | null;
+//   donorInterval: string | null;
+//   createdAt: string;
+//   donors: number;
+//   request_payout: boolean;
+//   paid: boolean;
+// }>;
+// type MinistryCompletedProjects = TResponse<{
+//   id: string;
+//   title: string;
+//   targetAmount: string;
+//   createdAt: string;
+//   category: "widows" | "orphans" | "missions";
+//   amountRaised: string;
+//   status: string;
+//   image: string | null;
+//   donors: number;
+//   request_payout: boolean;
+//   paid: boolean;
+// }>;
+// export type MinistryProjectsResponse =
+//   | MinistryCompletedProjects
+//   | MinistryGeneralProjects;
 
 export type MinistryProjectsResponse = TResponse<{
   id: string;
@@ -610,6 +638,7 @@ export type InitiateDonationToMinistryRequestAuth = {
   anonymous: boolean;
   amount: number;
   currency: string;
+  txn_reference: string;
   interval: "monthly" | "quarterly" | "yearly";
 };
 export type DonationResponse = {
@@ -633,6 +662,7 @@ export type InitiateDonationResponseAuth = Response<{
 export type InitiateDonationToProjectRequestAuth = {
   id: string;
   currency: "NGN" | "USD";
+  txn_reference: string;
   amount: number;
   anonymous: boolean;
 };

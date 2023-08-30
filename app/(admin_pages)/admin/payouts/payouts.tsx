@@ -7,6 +7,7 @@ import { Alert, Button, Space, TabsProps, Typography, message } from "antd";
 import { useEffect, useState } from "react";
 import { ArrowRight, EditSquare, InfoCircle } from "react-iconly";
 import CompletedProjectsTable from "./components/completed-projects";
+import GeneralDonationsTable from "./components/general-donations";
 import PayoutEditFormModal from "./components/payout-edit-modal";
 import PayoutHistoryTable from "./components/payout-history";
 import PayoutFormModal from "./components/payout-modal";
@@ -61,6 +62,11 @@ const PayoutsPage = () => {
       key: "completed-projects",
       label: "Completed Projects",
       children: <CompletedProjectsTable acctLinked={displayAcctInfo} />,
+    },
+    {
+      key: "general-donations",
+      label: "General Donations",
+      children: <GeneralDonationsTable acctLinked={displayAcctInfo} />,
     },
     {
       key: "payout-history",
