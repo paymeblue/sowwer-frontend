@@ -173,7 +173,7 @@ const SignupStep = () => {
     marginTop: 16,
   };
   return (
-    <section className="mt-8">
+    <section className="clear-both mt-8">
       {contextHolder}
       <Steps
         current={current}
@@ -207,9 +207,9 @@ const SignupStep = () => {
                   onClick={nextHandler}
                   type="primary"
                   size="large"
-                  className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+                  className="float-right bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
                 >
-                  <Space className="w-full ">
+                  <Space className="w-full">
                     Continue
                     <ArrowRight set="light" />
                   </Space>
