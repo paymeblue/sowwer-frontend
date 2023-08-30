@@ -63,22 +63,26 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   const router = useRouter();
   const { user } = useAuth();
   const { data: projectData } = useGetProjectDetailsQuery(id);
-  const [initiatePaymentToProjectAuth, { isLoading: paymentAuthLoading }] =
-    useInitiatePaymentToProjectAuthMutation();
-  const [initiatePaymentToProjectUnauth, { isLoading: paymentUnauthLoading }] =
-    useInitiatePaymentToProjectUnauthMutation();
+  const [
+    initiatePaymentToProjectAuth,
+    { data: authData, isLoading: paymentAuthLoading },
+  ] = useInitiatePaymentToProjectAuthMutation();
+  const [
+    initiatePaymentToProjectUnauth,
+    { data: unauthData, isLoading: paymentUnauthLoading },
+  ] = useInitiatePaymentToProjectUnauthMutation();
   let rtkHook: any;
   if (user) {
     rtkHook = initiatePaymentToProjectAuth;
   } else {
     rtkHook = initiatePaymentToProjectUnauth;
   }
-  // const data = user ? authData?.data : unauthData?.data.donation;
+  const data = user ? authData?.data : unauthData?.data.donation;
   let project: ProjectData | undefined;
   if (projectData) {
     project = projectData.data;
   }
-  const [txnRef] = useState<string>(Date.now().toString());
+  // const [txnRef, setTxnRef] = useState<string>("");
   const [formData, setFormData] = useState({
     currency: "NGN",
     amount: "",
@@ -92,45 +96,37 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
 
   const { currency, amount, firstName, lastName, email, phone } = formData;
 
-  const customer = useMemo(() => {
-    let credentials;
-
-    if (user) {
-      credentials = {
+  const customer = user
+    ? {
         email: user.email,
         phone_number: user.phone,
         name: `${user.firstName} ${user.lastName}`,
-      };
-    } else {
-      credentials = {
+      }
+    : {
         email,
         phone_number: phone,
         name: `${firstName} ${lastName}`,
       };
-    }
-
-    return credentials;
-  }, [email, firstName, user, lastName, phone]);
 
   const [verifyMinistryPayment] = useVerifyMinistryPaymentMutation();
-  // const updatetxnRef = useCallback(() => {
-  //   if (data?.txn_reference) {
-  //     setTxnRef(data.txn_reference);
-  //   }
-  // }, [data?.txn_reference]);
-  // useEffect(() => {
-  //   updatetxnRef();
-  // }, [updatetxnRef]);
-  const obj = useMemo(
-    () => ({
-      currency,
-      amount: Number(amount),
-      customer,
-      desc: project ? project.title : "Project Donation",
-      txnRef: txnRef,
-    }),
-    [txnRef, project, currency, amount, customer]
-  );
+  const txnRefHandler = () => {
+    let tnxRef;
+    if (data?.txn_reference) {
+      tnxRef = data.txn_reference;
+    }
+    return tnxRef;
+  };
+  const ref = txnRefHandler();
+  console.log(ref);
+
+  const obj = {
+    currency,
+    amount: Number(amount),
+    customer,
+    desc: project ? project.title : "Project Donation",
+    txnRef: ref!,
+  };
+
   const config = useFlutterConfig(obj);
   console.log(config);
   const handleFlutterPayment = useFlutterwave(config);
@@ -152,20 +148,17 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     if (!user && createAccount) {
       data = {
         id,
-        txnRef,
         amount: +amount,
         ...rest,
       };
     } else if (user) {
       data = {
-        txn_reference: txnRef,
         id,
         amount: +amount,
         ...rest,
       };
     } else if (!user && !createAccount) {
       data = {
-        txn_reference: txnRef,
         id,
         amount: +amount,
         ...rest,

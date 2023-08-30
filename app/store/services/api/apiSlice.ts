@@ -1,12 +1,6 @@
 // Or from '@reduxjs/toolkit/query' if not using the auto-generated hooks
-import {
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-  createApi,
-  fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
-import { logout, setCredentials } from "@store/reducers/authSlice";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+// import { logout, setCredentials } from "@store/reducers/authSlice";
 import { RootState } from "@store/store";
 import { cacher } from "./rtkQueryCacheUtils";
 
@@ -53,43 +47,43 @@ const baseQuery = fetchBaseQuery({
 
 // initialize an empty api service that we'll inject endpoints into later as needed
 
-const baseQueryWithReauth: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions);
+// const baseQueryWithReauth: BaseQueryFn<
+//   string | FetchArgs,
+//   unknown,
+//   FetchBaseQueryError
+// > = async (args, api, extraOptions) => {
+//   let result = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
-    const refreshToken = (api.getState() as RootState).auth.refreshToken;
+//   if (result.error && result.error.status === 401) {
+//     const refreshToken = (api.getState() as RootState).auth.refreshToken;
 
-    const refreshResult: any = await baseQuery(
-      { url: "users/refreshtoken", method: "POST", body: refreshToken },
-      api,
-      extraOptions
-    );
+//     const refreshResult: any = await baseQuery(
+//       { url: "users/refreshtoken", method: "POST", body: refreshToken },
+//       api,
+//       extraOptions
+//     );
 
-    if (refreshResult.data) {
-      const user = (api.getState() as RootState).auth.user;
-      // const token = (api.getState() as RootState).auth.token;
-      // store the access token
-      api.dispatch(
-        setCredentials({
-          token: refreshResult.data.accessToken as string,
-          user,
-        })
-      );
-      // retry the initial query
-      result = await baseQuery(args, api, extraOptions);
-    } else {
-      api.dispatch(logout());
-    }
-  }
-  return result;
-};
+//     if (refreshResult.data) {
+//       const user = (api.getState() as RootState).auth.user;
+//       // const token = (api.getState() as RootState).auth.token;
+//       // store the access token
+//       api.dispatch(
+//         setCredentials({
+//           token: refreshResult.data.accessToken as string,
+//           user,
+//         })
+//       );
+//       // retry the initial query
+//       result = await baseQuery(args, api, extraOptions);
+//     } else {
+//       api.dispatch(logout());
+//     }
+//   }
+//   return result;
+// };
 
 const api = createApi({
-  baseQuery: baseQueryWithReauth,
+  baseQuery: baseQuery,
   refetchOnReconnect: true,
   refetchOnFocus: true,
   refetchOnMountOrArgChange: true,

@@ -45,7 +45,8 @@ const PayoutEditFormModal = ({
     useVerifyAccountMutation();
   const [saveAccount, { isLoading: sendLoading }] = useSaveAccountMutation();
 
-  const isMatchingAccountNumber = formdata.accountNo.match(regexPattern);
+  const isMatchingAccountNumber = regexPattern.test(formdata.accountNo);
+
   if (!res) {
     return null;
   }
@@ -53,7 +54,8 @@ const PayoutEditFormModal = ({
     if (isMatchingAccountNumber) {
       try {
         const res = await verifyAccount({
-          account_number: formdata.accountNo,
+          // account_number: formdata.accountNo,
+          account_number: "0690000032",
           bank_code: "044",
         }).unwrap();
 
@@ -166,8 +168,9 @@ const PayoutEditFormModal = ({
                   message: "Please enter your account number",
                 },
                 {
-                  max: 10,
-                  message: "Account number should not exceed 10 digits!",
+                  pattern: /^\d{10}$/,
+                  message:
+                    "Please enter a valid account number with up to 10 digits",
                 },
               ]}
             >

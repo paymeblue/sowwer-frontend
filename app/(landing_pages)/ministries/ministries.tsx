@@ -38,7 +38,7 @@ const MinistriesPage: FC = () => {
           para2=" Convallis iaculis blandit ultrices posuere. Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. "
           btn="Register as a ministry"
           link="auth/signup/ministry"
-          btn2="Log in to minstry account"
+          btn2="Log in to ministry account"
           link2="auth/signin/ministry"
           isType1={true}
           doubleBtn

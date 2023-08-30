@@ -638,7 +638,6 @@ export type InitiateDonationToMinistryRequestAuth = {
   anonymous: boolean;
   amount: number;
   currency: string;
-  txn_reference: string;
   interval: "monthly" | "quarterly" | "yearly";
 };
 export type DonationResponse = {
@@ -662,7 +661,6 @@ export type InitiateDonationResponseAuth = Response<{
 export type InitiateDonationToProjectRequestAuth = {
   id: string;
   currency: "NGN" | "USD";
-  txn_reference: string;
   amount: number;
   anonymous: boolean;
 };
