@@ -8,7 +8,7 @@ import {
   useInitiatePaymentToProjectAuthMutation,
   useInitiatePaymentToProjectUnauthMutation,
 } from "@store/services/auth";
-import { useVerifyMinistryPaymentMutation } from "@store/services/payouts";
+import { useVerifyProjectPaymentMutation } from "@store/services/payouts";
 import { useGetProjectDetailsQuery } from "@store/services/projects";
 import {
   Button,
@@ -24,7 +24,7 @@ import {
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Fragment, useMemo, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
 
 type State = {
@@ -59,6 +59,7 @@ const { Option } = Select;
 
 const DonateToProjectPage = ({ id }: { id: string }) => {
   const [form] = useForm();
+  const [ref, setRef] = useState<string>("");
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const { user } = useAuth();
@@ -82,7 +83,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   if (projectData) {
     project = projectData.data;
   }
-  // const [txnRef, setTxnRef] = useState<string>("");
   const [formData, setFormData] = useState({
     currency: "NGN",
     amount: "",
@@ -91,6 +91,19 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     email: "",
     phone: "",
   });
+
+  const onChangeHandler = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+  const selectHandler = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      currency: value,
+    }));
+  };
 
   const createAccount = Form.useWatch("createAccount", form);
 
@@ -108,84 +121,18 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
         name: `${firstName} ${lastName}`,
       };
 
-  const [verifyMinistryPayment] = useVerifyMinistryPaymentMutation();
-  const txnRefHandler = () => {
-    let tnxRef;
+  const [verifyProjectPayment] = useVerifyProjectPaymentMutation();
+  useEffect(() => {
     if (data?.txn_reference) {
-      tnxRef = data.txn_reference;
+      setRef(data.txn_reference);
     }
-    return tnxRef;
-  };
-  const ref = txnRefHandler();
-  console.log(ref);
-
-  const obj = {
-    currency,
-    amount: Number(amount),
-    customer,
-    desc: project ? project.title : "Project Donation",
-    txnRef: ref!,
-  };
-
-  const config = useFlutterConfig(obj);
-  console.log(config);
-  const handleFlutterPayment = useFlutterwave(config);
-
-  const selectBefore = useMemo(
-    () => (
-      <Item name="currency" noStyle>
-        <Select style={{ width: 100 }}>
-          <Option value="NGN">NGN</Option>
-          <Option value="USD">USD</Option>
-        </Select>
-      </Item>
-    ),
-    []
-  );
-  const callback = async (values: State) => {
-    let data;
-    const { amount, ...rest } = values;
-    if (!user && createAccount) {
-      data = {
-        id,
-        amount: +amount,
-        ...rest,
-      };
-    } else if (user) {
-      data = {
-        id,
-        amount: +amount,
-        ...rest,
-      };
-    } else if (!user && !createAccount) {
-      data = {
-        id,
-        amount: +amount,
-        ...rest,
-      };
-    }
-    await rtkHook(data).unwrap();
-    // console.log(res);
-    // setTxnRef(res.data.donation.txn_reference);
-  };
-
-  const onFinish = async (values: State) => {
-    const { currency, amount, firstName, lastName, email, phone } = values;
-    setFormData((prev) => ({
-      ...prev,
-      currency,
-      amount,
-      firstName,
-      lastName,
-      email,
-      phone,
-    }));
-    try {
-      await callback(values);
+  }, [data?.txn_reference]);
+  useEffect(() => {
+    if (ref) {
       handleFlutterPayment({
         callback: async (response) => {
           try {
-            const res = await verifyMinistryPayment({
+            const res = await verifyProjectPayment({
               txn_id: response.transaction_id.toString(),
               txn_reference: response.tx_ref,
             }).unwrap();
@@ -205,6 +152,61 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
         },
         onClose: () => {},
       });
+    }
+  }, [ref]);
+
+  const obj = {
+    currency,
+    amount: +amount,
+    customer,
+    desc: project ? project.title : "Project Donation",
+    txnRef: ref,
+  };
+
+  const config = useFlutterConfig(obj);
+
+  const handleFlutterPayment = useFlutterwave(config);
+
+  const selectBefore = useMemo(
+    () => (
+      <Item name="currency" noStyle>
+        <Select
+          style={{ width: 100 }}
+          value={formData.currency}
+          onChange={selectHandler}
+        >
+          <Option value="NGN">NGN</Option>
+          <Option value="USD">USD</Option>
+        </Select>
+      </Item>
+    ),
+    [formData]
+  );
+
+  const onFinish = async (values: State) => {
+    try {
+      let data;
+      const { amount, ...rest } = values;
+      if (!user && createAccount) {
+        data = {
+          id,
+          amount: +amount,
+          ...rest,
+        };
+      } else if (user) {
+        data = {
+          id,
+          amount: +amount,
+          ...rest,
+        };
+      } else if (!user && !createAccount) {
+        data = {
+          id,
+          amount: +amount,
+          ...rest,
+        };
+      }
+      await rtkHook(data).unwrap();
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,
@@ -286,6 +288,9 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                 addonBefore={selectBefore}
                 type="number"
                 required
+                value={formData.amount}
+                name="amount"
+                onChange={onChangeHandler}
                 placeholder="0.00"
                 className="[&>span>input]:rounded-r [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none placeholder:[&>span>input]:text-[17px] placeholder:[&>span>input]:leading-[21px] placeholder:[&>span>input]:text-[#555] laptop:placeholder:[&>span>input]:text-[17px]  laptop:placeholder:[&>span>input]:leading-[21.42px] [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-l [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]"
               />
@@ -322,6 +327,9 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="First name"
+                      value={formData.firstName}
+                      name="firstName"
+                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -343,6 +351,9 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="Last name"
+                      value={formData.lastName}
+                      name="lastName"
+                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -366,6 +377,9 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="Email address"
+                      value={formData.email}
+                      name="email"
+                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -393,6 +407,9 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                       type="tel"
                       placeholder="Phone Number"
                       pattern="^\+\d{13}|\d{11}$"
+                      value={formData.phone}
+                      name="phone"
+                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>

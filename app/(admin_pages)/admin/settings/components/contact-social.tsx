@@ -32,16 +32,16 @@ const ContactSocial = () => {
   if (user && "ministry" in user) {
     id = user.ministry.id;
   }
-  const { data: ministryDetails } = useGetMinistryDetailsQuery(id);
-  // const initialValues = ministryDetails?.data
-  //   ? {
-  // email: ministryDetails.data.email,
-  // phone: ministryDetails.data.phone,
-  //     }
-  //   : {
-  //       email: "",
-  //       phone: "",
-  //     };
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(id, {
+    skip: id ? false : true,
+  });
+  let formIsValid = false;
+  const email = Form.useWatch("email", form);
+  const phone = Form.useWatch("phone", form);
+
+  if (email && phone) {
+    formIsValid = true;
+  }
   const onFinish = async (values: State): Promise<void> => {
     const { email, phone } = values;
     const credentials = {
@@ -160,8 +160,9 @@ const ContactSocial = () => {
                 <Button
                   htmlType="submit"
                   size="large"
-                  className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+                  className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
                   loading={isLoading}
+                  disabled={!formIsValid}
                 >
                   {isLoading ? "Saving" : "Save"}
                 </Button>

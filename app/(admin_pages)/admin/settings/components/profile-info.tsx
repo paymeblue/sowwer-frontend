@@ -43,22 +43,19 @@ const ProfileInfo = () => {
   if (user && "ministry" in user) {
     id = user.ministry.id;
   }
-  const { data: ministryDetails } = useGetMinistryDetailsQuery(id);
-  // const initialValues = ministryDetails?.data
-  //   ? {
-  //       name: ministryDetails.data.name,
-  //       addressLine: ministryDetails.data.address,
-  //       postalCode: ministryDetails.data.postal_code,
-  //       state: ministryDetails.data.state,
-  //       ministryMsg: ministryDetails.data.about,
-  //     }
-  //   : {
-  //       name: "",
-  //       addressLine: "",
-  //       postalCode: "",
-  //       state: "",
-  //       ministryMsg: "",
-  //     };
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(id, {
+    skip: id ? false : true,
+  });
+  let formIsValid = false;
+  const name = Form.useWatch("name", form);
+  const addressLine = Form.useWatch("addressLine", form);
+  const postalCode = Form.useWatch("postalCode", form);
+  const state = Form.useWatch("state", form);
+  const ministryMsg = Form.useWatch("ministryMsg", form);
+
+  if (name && addressLine && postalCode && state && ministryMsg) {
+    formIsValid = true;
+  }
   const options = [
     { value: "", label: "-- Select --", disabled: true },
     ...states.map((state) => ({ value: state, label: state })),
@@ -238,8 +235,9 @@ const ProfileInfo = () => {
                 <Button
                   htmlType="submit"
                   size="large"
-                  className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+                  className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
                   loading={isLoading}
+                  disabled={!formIsValid}
                 >
                   {isLoading ? "Saving" : "Save"}
                 </Button>

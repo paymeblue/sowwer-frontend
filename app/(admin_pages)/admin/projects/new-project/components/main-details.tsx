@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
 import { setProjectId } from "@store/reducers/utilSlice";
@@ -22,6 +20,7 @@ import {
 } from "antd";
 import { RcFile } from "antd/es/upload";
 import { useSearchParams } from "next/navigation";
+import { Fragment } from "react";
 
 const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
@@ -85,11 +84,9 @@ const MainDetails = () => {
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const projectId = searchParams.get("q");
-  let id: string | undefined;
-  if (projectId) {
-    id = projectId;
-  }
-  const { data } = useGetProjectQuery(id);
+  const { data } = useGetProjectQuery(projectId, {
+    skip: projectId ? false : true,
+  });
   const [editProject, { isLoading: editLoading }] = useEditProjectMutation();
   const [createProject, { isLoading }] = useCreateProjectMutation();
 
@@ -132,7 +129,6 @@ const MainDetails = () => {
     const mutationFn = data ? editProject : createProject;
     try {
       const res = await mutationFn(credentials).unwrap();
-      console.log(res);
       dispatch(setProjectId({ projectId: res.data.id }));
       // form.resetFields();
       messageApi.open({

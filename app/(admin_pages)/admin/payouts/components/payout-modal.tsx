@@ -220,7 +220,9 @@ const PayoutFormModal = ({
                     htmlType="submit"
                     type="primary"
                     size="large"
-                    className="mt-2 bg-accent text-[13px] leading-[16px] text-white"
+                    className={`${
+                      verifyLoading ? "disabled:bg-gray-300" : ""
+                    } mt-3 bg-accent text-[13px] leading-[16px] text-white`}
                     loading={sendLoading}
                   >
                     {sendLoading ? "Connecting" : "Connect Bank Account"}

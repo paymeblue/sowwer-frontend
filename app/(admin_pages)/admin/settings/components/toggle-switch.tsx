@@ -9,7 +9,6 @@ const ToggleSwitch = ({
   label: string;
 }) => {
   const [updateNotification, { isLoading }] = useUpdateNotificationMutation();
-
   const onChange = async (option: { checked: boolean; label: string }) => {
     const update = { [option.label]: option.checked };
     try {

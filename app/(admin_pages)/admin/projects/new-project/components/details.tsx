@@ -1,9 +1,12 @@
 import { DownloadOutlined } from "@ant-design/icons";
 import { CheckCircleIcon } from "@components/assets/icons";
+import { useAppDispatch } from "@hooks/useStore";
 import { useUtil } from "@hooks/useUtil";
+import { setProjectId } from "@store/reducers/utilSlice";
 import { usePublishOrDraftProjectMutation } from "@store/services/projects";
 import { Button, QRCode, Space, Typography, message } from "antd";
-import { Fragment, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Fragment, useEffect, useState } from "react";
 
 const { Title, Paragraph } = Typography;
 type IProps = {
@@ -17,10 +20,11 @@ type SubmitHandlerProps = {
 
 const Details = ({ link }: IProps) => {
   const { projectId } = useUtil();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState({ draft: false, publish: false });
-  const [publishOrDraftProject] = usePublishOrDraftProjectMutation();
+  const [publishOrDraftProject, { data }] = usePublishOrDraftProjectMutation();
   const [messageApi, contextHolder] = message.useMessage();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const downloadQRCode = () => {
     const canvas = document
       .getElementById("myqrcode")
@@ -36,11 +40,11 @@ const Details = ({ link }: IProps) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (data) {
-  //     dispatch(setProjectId({ projectId: null }));
-  //   }
-  // }, [data, dispatch]);
+  useEffect(() => {
+    if (data) {
+      dispatch(setProjectId({ projectId: null }));
+    }
+  }, [data, dispatch]);
 
   const submitHandler = async ({ prop, q }: SubmitHandlerProps) => {
     setIsLoading((prev) => ({ ...prev, [prop]: true }));
@@ -54,6 +58,9 @@ const Details = ({ link }: IProps) => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
+      setTimeout(() => {
+        router.back();
+      }, 2000);
     } catch (error: any) {
       messageApi.open({
         content: `${error}`,

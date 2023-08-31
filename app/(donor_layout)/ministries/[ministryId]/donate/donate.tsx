@@ -11,7 +11,7 @@ import {
   useInitiatePaymentToMinistryUnauthMutation,
 } from "@store/services/auth";
 import { useGetMinistryDetailsQuery } from "@store/services/ministries";
-import { useVerifyProjectPaymentMutation } from "@store/services/payouts";
+import { useVerifyMinistryPaymentMutation } from "@store/services/payouts";
 import {
   Alert,
   Button,
@@ -28,7 +28,7 @@ import {
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Fragment, useMemo, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
 
 type State = {
@@ -73,6 +73,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const [form] = useForm();
   const { user } = useAuth();
   const router = useRouter();
+  const [ref, setRef] = useState<string>("");
   const dispatch = useAppDispatch();
   // const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
   const { data: ministryData } = useGetMinistryDetailsQuery(ministryId);
@@ -96,134 +97,21 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   if (ministryData) {
     ministry = ministryData.data;
   }
-  const [verifyProjectPayment] = useVerifyProjectPaymentMutation();
+  const [verifyMinistryPayment] = useVerifyMinistryPaymentMutation();
 
-  const createAccount = Form.useWatch("createAccount", form);
-  const mode = Form.useWatch("payment_mode", form);
-
-  const [messageApi, contextHolder] = message.useMessage();
-  const [formData, setFormData] = useState({
-    currency: "NGN",
-    amount: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    payment_mode: "one-time",
-    interval: "monthly",
-  });
-
-  const { currency, amount, firstName, lastName, email, phone } = formData;
-
-  const customer = user
-    ? {
-        email: user.email,
-        phone_number: user.phone,
-        name: `${user.firstName} ${user.lastName}`,
-      }
-    : {
-        email,
-        phone_number: phone,
-        name: `${firstName} ${lastName}`,
-      };
-
-  const txnRefHandler = () => {
-    let tnxRef;
+  useEffect(() => {
     if (data?.txn_reference) {
-      tnxRef = data.txn_reference;
+      setRef(data.txn_reference);
     }
-    return tnxRef;
-  };
-  const ref = txnRefHandler();
-  console.log(ref);
+  }, [data?.txn_reference]);
 
-  const obj = {
-    currency,
-    amount: Number(amount) || 100,
-    customer,
-    desc: ministry ? ministry.name : "Ministry Donation",
-    txnRef: ref!,
-  };
-
-  const config = useFlutterConfig(obj);
-  const handleFlutterPayment = useFlutterwave(config);
-  console.log(config);
-  const selectBefore = useMemo(
-    () => (
-      <Item name="currency" noStyle>
-        <Select style={{ width: 100 }}>
-          <Option value="NGN">NGN</Option>
-          <Option value="USD">USD</Option>
-        </Select>
-      </Item>
-    ),
-    []
-  );
-
-  const callback = async (values: State) => {
-    let data;
-    const { amount, ...rest } = values;
-    if (!user && createAccount) {
-      data = {
-        id: ministryId,
-        amount: +amount,
-        ...rest,
-      };
-    } else if (user) {
-      data = {
-        id: ministryId,
-        amount: +amount,
-        ...rest,
-      };
-    } else if (!user && !createAccount) {
-      data = {
-        id: ministryId,
-        amount: +amount,
-        ...rest,
-      };
-    }
-    const res = await rtkHook(data).unwrap();
-    console.log(res);
-    // setTxnRef(res?.txn_reference);
-    const payload = {
-      user: res.data.user,
-      token: res.data.token.accessToken,
-      refreshToken: res.data.token.refreshToken,
-    };
-    dispatch(setCredentials(payload));
-  };
-
-  const onFinish = async (values: State) => {
-    const {
-      currency,
-      amount,
-      firstName,
-      lastName,
-      email,
-      phone,
-      interval,
-      // eslint-disable-next-line camelcase
-      payment_mode,
-    } = values;
-    setFormData((prev) => ({
-      ...prev,
-      currency,
-      amount,
-      firstName,
-      lastName,
-      email,
-      phone,
-      interval,
-      // eslint-disable-next-line camelcase
-      payment_mode,
-    }));
-    try {
-      await callback(values);
+  useEffect(() => {
+    if (ref) {
       handleFlutterPayment({
         callback: async (response) => {
           console.log(response);
           try {
-            const res = await verifyProjectPayment({
+            const res = await verifyMinistryPayment({
               txn_id: response.transaction_id.toString(),
               txn_reference: response.tx_ref,
             }).unwrap();
@@ -243,6 +131,105 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
         },
         onClose: () => {},
       });
+    }
+  }, [ref]);
+
+  const createAccount = Form.useWatch("createAccount", form);
+  const mode = Form.useWatch("payment_mode", form);
+
+  const [messageApi, contextHolder] = message.useMessage();
+  const [formData, setFormData] = useState({
+    currency: "NGN",
+    amount: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    payment_mode: "one-time",
+    interval: "monthly",
+  });
+  const onChangeHandler = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+  const selectHandler = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      currency: value,
+    }));
+  };
+  const { currency, amount, firstName, lastName, email, phone } = formData;
+
+  const customer = user
+    ? {
+        email: user.email,
+        phone_number: user.phone,
+        name: `${user.firstName} ${user.lastName}`,
+      }
+    : {
+        email,
+        phone_number: phone,
+        name: `${firstName} ${lastName}`,
+      };
+
+  const obj = {
+    currency,
+    amount: +amount,
+    customer,
+    desc: ministry ? ministry.name : "Ministry Donation",
+    txnRef: ref,
+  };
+
+  const config = useFlutterConfig(obj);
+  const handleFlutterPayment = useFlutterwave(config);
+  const selectBefore = useMemo(
+    () => (
+      <Item name="currency" noStyle>
+        <Select
+          style={{ width: 100 }}
+          value={formData.currency}
+          onChange={selectHandler}
+        >
+          <Option value="NGN">NGN</Option>
+          <Option value="USD">USD</Option>
+        </Select>
+      </Item>
+    ),
+    [formData]
+  );
+
+  const onFinish = async (values: State) => {
+    try {
+      let data;
+      const { amount, ...rest } = values;
+      if (!user && createAccount) {
+        data = {
+          id: ministryId,
+          amount: +amount,
+          ...rest,
+        };
+      } else if (user) {
+        data = {
+          id: ministryId,
+          amount: +amount,
+          ...rest,
+        };
+      } else if (!user && !createAccount) {
+        data = {
+          id: ministryId,
+          amount: +amount,
+          ...rest,
+        };
+      }
+      const res = await rtkHook(data).unwrap();
+      const payload = {
+        user: res.data.user,
+        token: res.data.token.accessToken,
+        refreshToken: res.data.token.refreshToken,
+      };
+      dispatch(setCredentials(payload));
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,
@@ -360,6 +347,9 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                 type="number"
                 required
                 placeholder="0.00"
+                value={formData.amount}
+                name="amount"
+                onChange={onChangeHandler}
                 className="[&>span>input]:rounded-r [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none placeholder:[&>span>input]:text-[17px] placeholder:[&>span>input]:leading-[21px] placeholder:[&>span>input]:text-[#555] laptop:placeholder:[&>span>input]:text-[17px]  laptop:placeholder:[&>span>input]:leading-[21.42px] [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-l [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]"
               />
             </Item>
@@ -405,6 +395,9 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="First name"
+                      value={formData.firstName}
+                      name="firstName"
+                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -427,6 +420,9 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="Last name"
+                      value={formData.lastName}
+                      name="lastName"
+                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -450,6 +446,9 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="Email address"
+                      value={formData.email}
+                      name="email"
+                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -475,7 +474,9 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       type="tel"
-                      placeholder="Phone Number"
+                      value={formData.phone}
+                      name="phone"
+                      onChange={onChangeHandler}
                       pattern="^\+\d{13}|\d{11}$"
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />

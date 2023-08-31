@@ -18,7 +18,7 @@ const notifications = api.injectEndpoints({
         method: "PATCH",
         body: credentials,
       }),
-      invalidatesTags: cacher.invalidatesList("Notifications"),
+      invalidatesTags: cacher.providesProperty("Notifications"),
       transformResponse: (response: PlainResponse, meta, arg): any => {
         return response;
       },

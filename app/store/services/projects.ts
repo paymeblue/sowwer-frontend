@@ -136,7 +136,7 @@ const projects = api.injectEndpoints({
       query: (body) => {
         let url;
         if (body.status) {
-          url = `ministries/${body.id}/projects?page=${body.page}&status=completed&status=${body.status}&limit=10`;
+          url = `ministries/${body.id}/projects?page=${body.page}&status=${body.status}&limit=10`;
         } else {
           url = `ministries/${body.id}/projects?page=${body.page}&limit=10`;
         }

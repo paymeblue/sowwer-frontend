@@ -34,20 +34,16 @@ const PersonalDetails = (): JSX.Element => {
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
   const { data: userProfile } = useGetUserProfileQuery();
 
-  // const initialValues =
-  //   userProfile && userProfile?.data
-  //     ? {
-  //         firstName: userProfile.data.firstName,
-  //         lastName: userProfile.data.lastName,
-  //         email: userProfile.data.email,
-  //         phone: userProfile.data.phone,
-  //       }
-  //     : {
-  //         firstName: "",
-  //         lastName: "",
-  //         email: "",
-  //         phone: "",
-  //       };
+  let formIsValid = false;
+  const firstName = Form.useWatch("firstName", form);
+  const lastName = Form.useWatch("lastName", form);
+  const email = Form.useWatch("email", form);
+  const phone = Form.useWatch("phone", form);
+
+  if (firstName && lastName && email && phone) {
+    formIsValid = true;
+  }
+
   const onFinish = async (values: State): Promise<void> => {
     try {
       const res = await updateUserProfile(values).unwrap();
@@ -230,8 +226,9 @@ const PersonalDetails = (): JSX.Element => {
                     type="primary"
                     htmlType="submit"
                     size="large"
-                    className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+                    className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
                     loading={isLoading}
+                    disabled={!formIsValid}
                   >
                     {isLoading ? "Saving" : "Save"}
                   </Button>

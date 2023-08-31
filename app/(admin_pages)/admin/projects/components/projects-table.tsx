@@ -111,10 +111,12 @@ const ProjectsTable = () => {
     Record<string, FilterValue | null>
   >({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
   const [isDonorModalOpen, setIsDonorModalOpen] = useState(false);
-  const { data: donors } = useGetMinistryProjectDonorsQuery(rowId);
+  const { data: donors } = useGetMinistryProjectDonorsQuery(rowId, {
+    skip: rowId ? false : true,
+  });
+
   const { data, isLoading, isFetching, error, isError, refetch } =
     useGetMinistryProjectsQuery({
       id,
@@ -180,16 +182,6 @@ const ProjectsTable = () => {
   const handleCloseCancel = () => {
     setIsCloseModalOpen(false);
   };
-  const showEditProjectModal = () => {
-    setIsEditModalOpen(true);
-  };
-  const handleEditOk = () => {
-    setIsEditModalOpen(false);
-  };
-
-  const handleEditCancel = () => {
-    setIsEditModalOpen(false);
-  };
 
   const showDonorModal = () => {
     setIsDonorModalOpen(true);
@@ -212,13 +204,12 @@ const ProjectsTable = () => {
         icon={<EditOutlined />}
         type="text"
         className="flex items-center justify-center text-[12px] hover:bg-transparent"
-        // onClick={() => {
-        //   if (rowId) {
-        //     editHandler(rowId);
-        //     dispatch(setProjectId({ projectId: rowId }));
-        //   }
-        // }}
-        onClick={showEditProjectModal}
+        onClick={() => {
+          if (rowId) {
+            editHandler(rowId);
+            dispatch(setProjectId({ projectId: rowId }));
+          }
+        }}
       >
         Edit
       </Button>
@@ -558,12 +549,6 @@ const ProjectsTable = () => {
     handleDeleteCancel();
   };
 
-  const handleEditBtn = async () => {
-    editHandler(rowId);
-    dispatch(setProjectId({ projectId: rowId }));
-    handleEditCancel();
-  };
-
   const handleCloseBtn = async () => {
     try {
       const res = await closeMinistryProject(rowId).unwrap();
@@ -643,40 +628,6 @@ const ProjectsTable = () => {
               size="large"
             >
               Yes, delete project
-            </Button>
-          }
-        />
-      </Modal>
-      <Modal
-        open={isEditModalOpen}
-        onOk={handleEditOk}
-        onCancel={handleEditCancel}
-        footer={null}
-      >
-        <Result
-          status="info"
-          title={
-            <Title level={5} className="text-[18px] leading-[22px]">
-              Edit Project “{rowTitle}”?
-            </Title>
-          }
-          icon={
-            <InfoCircle
-              set="light"
-              size={50}
-              style={{ margin: "auto" }}
-              primaryColor="#3466FF"
-            />
-          }
-          extra={
-            <Button
-              type="primary"
-              key="console"
-              onClick={handleEditBtn}
-              className="mt-0 bg-accent text-[13px] leading-[16px] text-white"
-              // size="large"
-            >
-              Edit project
             </Button>
           }
         />

@@ -59,6 +59,12 @@ const UploadLogo = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [updateMinistryProfile, { isLoading }] =
     useUpdateMinistryProfileMutation();
+  let formIsValid = false;
+  const minisrtyLogo = Form.useWatch("minisrtyLogo", form);
+
+  if (minisrtyLogo) {
+    formIsValid = true;
+  }
   const { user } = useAuth();
   let id: string;
   if (user && "ministry" in user) {
@@ -141,8 +147,9 @@ const UploadLogo = () => {
           <Button
             htmlType="submit"
             size="large"
-            className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+            className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
             loading={isLoading}
+            disabled={!formIsValid}
           >
             {isLoading ? "Saving" : "Save"}
           </Button>

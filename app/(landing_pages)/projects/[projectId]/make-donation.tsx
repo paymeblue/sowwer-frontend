@@ -29,8 +29,7 @@ import {
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
-// import happyWoman from "public/assets/images/happy_woman.svg";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Heart2 } from "react-iconly";
 
 const { Title, Text, Paragraph } = Typography;
@@ -68,7 +67,6 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
     time: moment(item.createdAt).fromNow(),
     avatar: generateAvatar(item.name),
   }));
-  const [donorList, setDonorList] = useState(donorData?.slice(0, 4));
   const { copied, copyToClipboard } = useCopyToClipboard(data?.link);
   return (
     <Fragment>
@@ -239,7 +237,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                   showBtn={true}
                   onBtnClick={handleRefetch}
                 />
-              ) : donorList?.length === 0 ? (
+              ) : donorData?.length === 0 ? (
                 <Empty
                   description="No donors available for this project yet!"
                   className="text-[13px] leading-[19px] text-gray-500"
@@ -247,7 +245,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
               ) : (
                 <List
                   itemLayout="horizontal"
-                  dataSource={donorList}
+                  dataSource={donorData}
                   renderItem={(item) => (
                     <List.Item>
                       <List.Item.Meta
@@ -275,19 +273,20 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                   )}
                 />
               )}
-              <Button
-                block
-                type="default"
-                className="mx-auto mt-6 flex items-center justify-center border-accent text-[13px] font-medium leading-[16.38px] text-accent hover:bg-blue-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-200 disabled:text-gray-500 laptop:p-6 laptop:text-[14px] laptop:leading-[18px]
+              {donorData?.length !== 0 && (
+                <Button
+                  block
+                  type="default"
+                  className="mx-auto mt-6 flex items-center justify-center border-accent text-[13px] font-medium leading-[16.38px] text-accent hover:bg-blue-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-200 disabled:text-gray-500 laptop:p-6 laptop:text-[14px] laptop:leading-[18px]
                 "
-                size="large"
-                onClick={() => setDonorList(donorData?.slice(0, 7))}
-                loading={isFetching}
-                disabled={isFetching || isLoading}
-                // disabled={isFetching || donorList?.length === 0}
-              >
-                View more donations
-              </Button>
+                  size="large"
+                  onClick={() => donorData?.slice(0, 7)}
+                  loading={isFetching}
+                  disabled={isFetching || isLoading}
+                >
+                  View more donations
+                </Button>
+              )}
             </Card>
           </Col>
         </Row>

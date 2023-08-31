@@ -40,7 +40,24 @@ const SocialLinksForm = ({ id }: { id?: string }) => {
           linkedin: "https://",
           youtube: "https://",
         };
+  let formIsValid = false;
+  const website = Form.useWatch("website", form);
+  const facebook = Form.useWatch("facebook", form);
+  const instagram = Form.useWatch("instagram", form);
+  const twitter = Form.useWatch("twitter", form);
+  const linkedin = Form.useWatch("linkedin", form);
+  const youtube = Form.useWatch("youtube", form);
 
+  if (
+    website &&
+    facebook &&
+    instagram &&
+    twitter &&
+    linkedin &&
+    youtube !== "https://"
+  ) {
+    formIsValid = true;
+  }
   const onFinish = async (values: UpdateSocialLinksRequest): Promise<void> => {
     console.log("Form data: ", values);
     try {
@@ -184,8 +201,9 @@ const SocialLinksForm = ({ id }: { id?: string }) => {
           <Button
             htmlType="submit"
             size="large"
-            className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+            className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
             loading={isLoading}
+            disabled={!formIsValid}
           >
             {isLoading ? "Saving" : "Save"}
           </Button>

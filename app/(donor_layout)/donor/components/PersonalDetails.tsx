@@ -34,15 +34,16 @@ const PersonalDetails = () => {
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
   const { data: userProfile } = useGetUserProfileQuery();
 
-  if (!userProfile) {
-    return null;
+  let formIsValid = false;
+  const firstName = Form.useWatch("firstName", form);
+  const lastName = Form.useWatch("lastName", form);
+  const email = Form.useWatch("email", form);
+  const phone = Form.useWatch("phone", form);
+
+  if (firstName && lastName && email && phone) {
+    formIsValid = true;
   }
-  const initialValues = {
-    firstName: userProfile.data.firstName,
-    lastName: userProfile.data.lastName,
-    email: userProfile.data.email,
-    phone: userProfile.data.phone,
-  };
+
   const onFinish = async (values: State): Promise<void> => {
     try {
       const res = await updateUserProfile(values).unwrap();
@@ -92,7 +93,12 @@ const PersonalDetails = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
-              initialValues={initialValues}
+              initialValues={{
+                firstName: userProfile ? userProfile.data.firstName : "",
+                lastName: userProfile ? userProfile.data.lastName : "",
+                email: userProfile ? userProfile.data.email : "",
+                phone: userProfile ? userProfile.data.phone : "",
+              }}
             >
               <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">
                 <Item
@@ -217,8 +223,9 @@ const PersonalDetails = () => {
                     type="primary"
                     htmlType="submit"
                     size="large"
-                    className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+                    className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
                     loading={isLoading}
+                    disabled={!formIsValid}
                   >
                     {isLoading ? "Saving" : "Save"}
                   </Button>
