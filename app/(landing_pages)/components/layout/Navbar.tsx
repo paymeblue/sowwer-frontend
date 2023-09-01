@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import logo from "public/assets/icons/logo.svg";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronUp } from "react-iconly";
 
 const { Header } = Layout;
@@ -25,8 +25,24 @@ const Navbar = () => {
   const [current, setCurrent] = useState(
     pathname === "" || pathname === "/" ? "/home" : pathname
   );
-
   const backgroundTransparent = useNavBg();
+  const arrKeys = useMemo(
+    () => [
+      "/",
+      "/about",
+      "/projects",
+      "/explore/ministries",
+      "/ministries",
+      "/contact",
+    ],
+    []
+  );
+
+  useEffect(() => {
+    if (arrKeys.includes(pathname)) {
+      setCurrent(pathname);
+    }
+  }, [arrKeys, pathname]);
 
   const onOpenChange: MenuProps["onOpenChange"] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
@@ -45,15 +61,8 @@ const Navbar = () => {
   const showDrawer = () => setOpen(true);
 
   const onClose = () => setOpen(false);
-  const [hover, setHover] = useState<boolean>(false);
 
-  const mouseEnterHandler = () => {
-    setHover(true);
-  };
-
-  const mouseLeaveHandler = () => {
-    setHover(false);
-  };
+  const [arrow, setArrow] = useState<boolean>(false);
 
   const items: MenuProps["items"] = [
     {
@@ -78,13 +87,9 @@ const Navbar = () => {
     {
       key: "/explore",
       label: (
-        <span
-          className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit"
-          onClick={mouseEnterHandler}
-          onMouseLeave={mouseLeaveHandler}
-        >
+        <span className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit">
           Explore
-          {hover ? (
+          {arrow ? (
             <ChevronUp set="light" size={16} />
           ) : (
             <ChevronDown set="light" size={16} />
@@ -225,6 +230,10 @@ const Navbar = () => {
           selectedKeys={[current]}
           mode="horizontal"
           disabledOverflow={true}
+          onOpenChange={(openedKeys) => {
+            const isSubMenu = openedKeys[0] === "/explore";
+            isSubMenu ? setArrow(true) : setArrow(false);
+          }}
           triggerSubMenuAction="click"
           className="hidden border-b-0 laptop:flex laptop:items-center laptop:justify-between [&>.ant-menu-item-selected]:text-primary [&>li::after]:border-b-0 [&>li]:rounded-md laptop:[&>li]:mx-2"
         />

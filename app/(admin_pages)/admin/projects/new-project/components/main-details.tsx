@@ -20,7 +20,7 @@ import {
 } from "antd";
 import { RcFile } from "antd/es/upload";
 import { useSearchParams } from "next/navigation";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 
 const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
@@ -90,11 +90,15 @@ const MainDetails = () => {
   const [editProject, { isLoading: editLoading }] = useEditProjectMutation();
   const [createProject, { isLoading }] = useCreateProjectMutation();
 
-  const initialValues = {
-    title: data?.data.title ?? "",
-    category: data?.data.category ?? "",
-    amount: data?.data.targetAmount.toString() ?? "",
-  };
+  useEffect(() => {
+    if (data?.data) {
+      form.setFieldsValue({
+        title: data.data.title,
+        amount: data.data.targetAmount,
+        category: data.data.category,
+      });
+    }
+  }, [data?.data, form]);
   let formIsValid = false;
   const title = Form.useWatch("title", form);
   const amount = Form.useWatch("amount", form);
@@ -161,7 +165,6 @@ const MainDetails = () => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         className="rounded bg-white p-4"
-        initialValues={initialValues}
       >
         <Space
           className="flex w-full  flex-col items-start laptop:flex-row [&>div.ant-space-item]:w-full"

@@ -14,7 +14,8 @@ import {
   Typography,
   message,
 } from "antd";
-import { Fragment } from "react";
+
+import { Fragment, useEffect } from "react";
 
 type State = {
   firstName: string;
@@ -34,13 +35,25 @@ const PersonalDetails = () => {
   const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
   const { data: userProfile } = useGetUserProfileQuery();
 
+  useEffect(() => {
+    if (userProfile?.data) {
+      form.setFieldsValue({
+        firstName: userProfile.data.firstName,
+        lastName: userProfile.data.lastName,
+        email: userProfile.data.email,
+        phone: userProfile.data.phone,
+      });
+    }
+  }, [userProfile?.data, form]);
+
   let formIsValid = false;
   const firstName = Form.useWatch("firstName", form);
   const lastName = Form.useWatch("lastName", form);
   const email = Form.useWatch("email", form);
   const phone = Form.useWatch("phone", form);
+  const password = Form.useWatch("password", form);
 
-  if (firstName && lastName && email && phone) {
+  if (firstName && lastName && email && phone && password) {
     formIsValid = true;
   }
 
@@ -93,12 +106,6 @@ const PersonalDetails = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
-              initialValues={{
-                firstName: userProfile ? userProfile.data.firstName : "",
-                lastName: userProfile ? userProfile.data.lastName : "",
-                email: userProfile ? userProfile.data.email : "",
-                phone: userProfile ? userProfile.data.phone : "",
-              }}
             >
               <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">
                 <Item
@@ -107,16 +114,13 @@ const PersonalDetails = () => {
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
                     { required: true, message: "Please enter your firstname!" },
-                    {
-                      min: 3,
-                      message: "Atleast 3 characters",
-                    },
                   ]}
-                  hasFeedback
+                  // hasFeedback
                 >
                   <Input
                     placeholder="John"
                     type="text"
+                    readOnly
                     className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                   />
                 </Item>
@@ -126,16 +130,13 @@ const PersonalDetails = () => {
                   className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                   rules={[
                     { required: true, message: "Please enter your lastname!" },
-                    {
-                      min: 3,
-                      message: "Atleast 3 characters",
-                    },
                   ]}
-                  hasFeedback
+                  // hasFeedback
                 >
                   <Input
                     placeholder="Smith"
                     type="text"
+                    readOnly
                     className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                   />
                 </Item>
@@ -155,11 +156,12 @@ const PersonalDetails = () => {
                       message: "Please enter your email!",
                     },
                   ]}
-                  hasFeedback
+                  // hasFeedback
                 >
                   <Input
                     placeholder="johnsmith@gmail.com"
                     type="email"
+                    readOnly
                     className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                   />
                 </Item>
@@ -184,6 +186,7 @@ const PersonalDetails = () => {
                 >
                   <Input
                     type="tel"
+                    readOnly
                     placeholder="+234 123 456 7890"
                     pattern="^\+\d{13}|\d{11}$"
                     className="rounded border-none bg-[#f9f9f9] py-3 placeholder-[#555] outline-none placeholder:text-[12px] placeholder:leading-[15.62px] laptop:placeholder:text-[14px] laptop:placeholder:leading-[17.64px] [&>input]:bg-inherit"

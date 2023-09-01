@@ -18,7 +18,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import UploadLogo from "./upload-logo";
 
 const { Title, Paragraph } = Typography;
@@ -53,6 +53,17 @@ const ProfileInfo = () => {
   const state = Form.useWatch("state", form);
   const ministryMsg = Form.useWatch("ministryMsg", form);
 
+  useEffect(() => {
+    if (ministryDetails?.data) {
+      form.setFieldsValue({
+        name: ministryDetails.data.name,
+        addressLine: ministryDetails.data.address,
+        postalCode: ministryDetails.data.postal_code,
+        state: ministryDetails.data.state,
+        ministryMsg: ministryDetails.data.about,
+      });
+    }
+  }, [ministryDetails?.data, form]);
   if (name && addressLine && postalCode && state && ministryMsg) {
     formIsValid = true;
   }
@@ -120,13 +131,6 @@ const ProfileInfo = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
-              initialValues={{
-                name: ministryDetails && ministryDetails.data.name,
-                addressLine: ministryDetails && ministryDetails.data.address,
-                postalCode: ministryDetails && ministryDetails.data.postal_code,
-                state: ministryDetails && ministryDetails.data.state,
-                ministryMsg: ministryDetails && ministryDetails.data.about,
-              }}
             >
               <Item
                 name="name"

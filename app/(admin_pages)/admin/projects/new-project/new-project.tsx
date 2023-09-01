@@ -31,6 +31,7 @@ const NewProjectPage = () => {
   const { data } = useGetProjectQuery(projectId, {
     skip: projectId ? false : true,
   });
+  console.log(data);
   const updateLink = useCallback(() => {
     if (data?.data?.link) setLink(data.data.link);
   }, [data?.data?.link]);

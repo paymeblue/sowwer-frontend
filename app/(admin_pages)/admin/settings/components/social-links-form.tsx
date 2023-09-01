@@ -13,7 +13,7 @@ import {
 } from "@store/services/ministries";
 import { UpdateSocialLinksRequest } from "@store/types";
 import { Button, Form, Input, Space, message } from "antd";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 
 const { Item, useForm } = Form;
 
@@ -22,24 +22,26 @@ const SocialLinksForm = ({ id }: { id?: string }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [updateSocialLinks, { isLoading }] = useUpdateSocialLinksMutation();
   const { data: socialLinks } = useGetSocialLinksQuery(id);
-  const initialValues =
-    socialLinks && socialLinks?.data
-      ? {
-          website: socialLinks.data.website,
-          facebook: socialLinks.data.facebook,
-          instagram: socialLinks.data.instagram,
-          twitter: socialLinks.data.twitter,
-          linkedin: socialLinks.data.linkedin,
-          youtube: socialLinks.data.youtube,
-        }
-      : {
-          website: "https://",
-          facebook: "https://",
-          instagram: "https://",
-          twitter: "https://",
-          linkedin: "https://",
-          youtube: "https://",
-        };
+  useEffect(() => {
+    if (socialLinks?.data) {
+      form.setFieldsValue({
+        website: socialLinks.data.website,
+        facebook: socialLinks.data.facebook,
+        instagram: socialLinks.data.instagram,
+        twitter: socialLinks.data.twitter,
+        linkedin: socialLinks.data.linkedin,
+        youtube: socialLinks.data.youtube,
+      });
+    }
+  }, [socialLinks?.data, form]);
+  const initialValues = {
+    website: "https://",
+    facebook: "https://",
+    instagram: "https://",
+    twitter: "https://",
+    linkedin: "https://",
+    youtube: "https://",
+  };
   let formIsValid = false;
   const website = Form.useWatch("website", form);
   const facebook = Form.useWatch("facebook", form);

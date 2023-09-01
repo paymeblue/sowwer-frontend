@@ -78,6 +78,7 @@ const ReuseableCards = ({
     refetch();
   }
   const paginationHandler = (page: number, pageSize: number) => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     setPagination((prev) => ({
       ...prev,
       current: page,
@@ -228,9 +229,9 @@ const ReuseableCards = ({
           defaultCurrent={data.paginationInfo.currentPage}
           defaultPageSize={data.paginationInfo.limit}
           total={data.paginationInfo.totalItems}
-          onChange={(page: number, pageSize: number) =>
-            paginationHandler(page, pageSize)
-          }
+          onChange={(page: number, pageSize: number) => {
+            paginationHandler(page, pageSize);
+          }}
           className="my-6 laptop:my-12"
         />
       </Fragment>

@@ -63,6 +63,7 @@ const ExploreMinistriesCard = ({
     refetch();
   }
   const paginationHandler = (page: number, pageSize: number) => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     setPagination((prev) => ({
       ...prev,
       current: page,

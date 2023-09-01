@@ -42,7 +42,7 @@ const Details = ({ link }: IProps) => {
 
   useEffect(() => {
     if (data) {
-      dispatch(setProjectId({ projectId: null }));
+      dispatch(setProjectId({ projectId: undefined }));
     }
   }, [data, dispatch]);
 

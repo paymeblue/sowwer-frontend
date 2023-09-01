@@ -92,7 +92,7 @@ const api = createApi({
   baseQuery: baseQueryWithReauth,
   refetchOnReconnect: true,
   // refetchOnFocus: true,
-  refetchOnMountOrArgChange: true,
+  // refetchOnMountOrArgChange: true,
   tagTypes: [
     ...cacher.defaultTags,
     "Projects",

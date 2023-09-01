@@ -96,8 +96,25 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "amount") {
+      // // Remove any existing commas from the input
+      // const newNumber = parseInt(e.target.value || "0", 10);
+      // if (Number.isNaN(formData.amount)) {
+      //   return;
+      // }
+      // if (!("number" in value)) {
+      //   setNumber(newNumber);
+      // }
+      // triggerChange({ number: newNumber });
+      // const sanitizedValue = value.replace(/,/g, "");
+      // Format the number with commas
+      // const formattedValue = Number(sanitizedValue).toLocaleString();
+      // setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
+
   const selectHandler = (value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -226,7 +243,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
     <Fragment>
       {contextHolder}
       <div className="min-h-screen pt-[7rem] tablet:pt-[10%]">
-        <Card className="mx-4 max-w-xl border-none tablet:mx-auto">
+        <Card className="mx-4 max-w-2xl border-none tablet:mx-auto">
           <Title className="my-4 text-[10.07px] leading-[12.69px] text-body-1 laptop:text-[12px] laptop:leading-[15px]">
             YOU ARE MAKING A DONATION TO
           </Title>
@@ -286,7 +303,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
             >
               <Input
                 addonBefore={selectBefore}
-                type="number"
+                type="text"
                 required
                 value={formData.amount}
                 name="amount"
@@ -317,10 +334,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                         required: true,
                         message: "Please enter your firstname!",
                       },
-                      {
-                        min: 3,
-                        message: "Atleast 3 characters",
-                      },
                     ]}
                     hasFeedback
                     className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
@@ -341,10 +354,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                       {
                         required: true,
                         message: "Please enter your lastname!",
-                      },
-                      {
-                        min: 3,
-                        message: "Atleast 3 characters",
                       },
                     ]}
                     hasFeedback
@@ -435,6 +444,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                       ]}
                       hasFeedback
                       className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+                      extra="Password must be at least 8 characters"
                     >
                       <Password
                         placeholder="Create a password"

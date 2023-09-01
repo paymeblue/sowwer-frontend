@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@store/store";
 
 type UtilState = {
-  projectId?: string | null;
+  projectId?: string;
   callback?: string;
   lastVisited?: string;
 };
@@ -20,7 +20,7 @@ const utilSlice = createSlice({
   reducers: {
     setProjectId: (
       state,
-      { payload: { projectId } }: PayloadAction<{ projectId?: string | null }>
+      { payload: { projectId } }: PayloadAction<{ projectId?: string }>
     ) => {
       state.projectId = projectId;
     },

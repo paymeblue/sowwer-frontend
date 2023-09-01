@@ -159,7 +159,11 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 percent={Number(data?.donationPercent)}
                 showInfo={false}
                 strokeColor="#3466ff"
-                status="active"
+                status={
+                  Number(data?.amountRaised) === Number(data?.targetAmount)
+                    ? "normal"
+                    : "active"
+                }
                 className="mb-0"
               />
               <Text className="text-[11.78px] leading-[14.84px] text-body-1 laptop:text-[14px] laptop:leading-[18px]">

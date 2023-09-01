@@ -16,7 +16,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import SocialLinksForm from "./social-links-form";
 
 const { Title, Paragraph } = Typography;
@@ -35,6 +35,15 @@ const ContactSocial = () => {
   const { data: ministryDetails } = useGetMinistryDetailsQuery(id, {
     skip: id ? false : true,
   });
+  useEffect(() => {
+    if (ministryDetails?.data) {
+      form.setFieldsValue({
+        email: ministryDetails.data.email,
+        phone: ministryDetails.data.phone,
+      });
+    }
+  }, [ministryDetails?.data, form]);
+
   let formIsValid = false;
   const email = Form.useWatch("email", form);
   const phone = Form.useWatch("phone", form);
@@ -100,10 +109,6 @@ const ContactSocial = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
-              initialValues={{
-                email: ministryDetails && ministryDetails.data.email,
-                phone: ministryDetails && ministryDetails.data.phone,
-              }}
             >
               <Space
                 className="flex w-full flex-col items-start tablet:flex-row [&>div.ant-space-item]:w-full"

@@ -205,6 +205,7 @@ const ProjectsTable = () => {
         type="text"
         className="flex items-center justify-center text-[12px] hover:bg-transparent"
         onClick={() => {
+          console.log("string", rowId);
           if (rowId) {
             editHandler(rowId);
             dispatch(setProjectId({ projectId: rowId }));
@@ -255,7 +256,8 @@ const ProjectsTable = () => {
     ),
   };
 
-  const items: MenuProps["items"] = [];
+  const items: MenuProps["items"] = [item1, item2, item3, item4];
+
   const dropdownHandler = (record: RecordState) => {
     const { text } = record.status.props;
 
@@ -263,21 +265,17 @@ const ProjectsTable = () => {
       case "drafted":
       case "cancelled":
       case "in-progress":
-        items.length = 0;
-        items.push(item1, item2);
+        items.splice(2);
         break;
 
       case "active":
-        items.length = 0;
-        items.push(item3, item4);
+        items.splice(0, 4, item3, item4);
         break;
 
       case "completed":
-        items.length = 0;
-        items.push(item3);
+        items.splice(0, 4, item3);
         break;
     }
-
     return items;
   };
 

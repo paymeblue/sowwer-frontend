@@ -5,7 +5,7 @@ import {
   useVerifyAccountMutation,
 } from "@store/services/payouts";
 import { Button, Form, Input, Modal, Select, Space, Typography } from "antd";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 type Props = {
   modalOpen: boolean;
@@ -40,6 +40,15 @@ const PayoutEditFormModal = ({
     bankId: "",
     ref: "",
   });
+
+  useEffect(() => {
+    if (res?.data) {
+      form.setFieldsValue({
+        bank: res.data.bank_name || "",
+        acctNo: res.data.accountNumber || "",
+      });
+    }
+  }, [res?.data, form]);
 
   const [verifyAccount, { isLoading: verifyLoading }] =
     useVerifyAccountMutation();
@@ -120,10 +129,6 @@ const PayoutEditFormModal = ({
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
-          initialValues={{
-            bank: res.data.bank_name || "",
-            acctNo: res.data.accountNumber || "",
-          }}
           className="rounded bg-white p-4"
         >
           <Space

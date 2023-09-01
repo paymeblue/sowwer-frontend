@@ -39,7 +39,7 @@ type State = {
   anonymous: boolean;
   createAccount: boolean;
   amount: string;
-  payment_mode: "one-time" | "recurring";
+  mode: "one-time" | "recurring";
   password: string;
   confirm_password: string;
   currency: "NGN" | "USD";
@@ -135,7 +135,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   }, [ref]);
 
   const createAccount = Form.useWatch("createAccount", form);
-  const mode = Form.useWatch("payment_mode", form);
+  const mode = Form.useWatch("mode", form);
 
   const [messageApi, contextHolder] = message.useMessage();
   const [formData, setFormData] = useState({
@@ -145,7 +145,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     lastName: "",
     email: "",
     phone: "",
-    payment_mode: "one-time",
+    mode: "one-time",
     interval: "monthly",
   });
   const onChangeHandler = (
@@ -260,7 +260,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     <Fragment>
       {contextHolder}
       <div className="min-h-screen pt-[7rem] tablet:pt-[10%]">
-        <Card className="mx-4 max-w-xl border-none tablet:mx-auto">
+        <Card className="mx-4 max-w-2xl border-none tablet:mx-auto">
           <Title className="my-4 text-[10.07px] leading-[12.69px] text-body-1 laptop:text-[12px] laptop:leading-[15px]">
             YOU ARE MAKING A DONATION TO
           </Title>
@@ -309,10 +309,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
             >
               Donation Type
             </Title>
-            <Item
-              name="payment_mode"
-              className="[&>div>div.ant-form-item-label]:p-0"
-            >
+            <Item name="mode" className="[&>div>div.ant-form-item-label]:p-0">
               <Radio.Group
                 options={plainOptions}
                 className="[&>label>.ant-radio-checked>.ant-radio-inner]:border-primary [&>label>.ant-radio-checked>.ant-radio-inner]:bg-primary"
@@ -344,7 +341,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
             >
               <Input
                 addonBefore={selectBefore}
-                type="number"
+                type="text"
                 required
                 placeholder="0.00"
                 value={formData.amount}
@@ -385,10 +382,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                         required: true,
                         message: "Please enter your firstname!",
                       },
-                      {
-                        min: 3,
-                        message: "Atleast 3 characters",
-                      },
                     ]}
                     hasFeedback
                     className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
@@ -410,10 +403,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                       {
                         required: true,
                         message: "Please enter your lastname!",
-                      },
-                      {
-                        min: 3,
-                        message: "Atleast 3 characters",
                       },
                     ]}
                     hasFeedback
@@ -503,6 +492,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                       ]}
                       hasFeedback
                       className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+                      extra="Password must be at least 8 characters"
                     >
                       <Password
                         placeholder="Create a password"
