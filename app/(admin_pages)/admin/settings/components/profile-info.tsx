@@ -35,7 +35,7 @@ type State = {
 
 const ProfileInfo = () => {
   const [form] = useForm();
-  const [updateMinistryProfile, { isLoading }] =
+  const [updateMinistryProfile, { isLoading, isSuccess }] =
     useUpdateMinistryProfileMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const { user } = useAuth();
@@ -241,9 +241,9 @@ const ProfileInfo = () => {
                   size="large"
                   className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
                   loading={isLoading}
-                  disabled={!formIsValid}
+                  disabled={!formIsValid || isSuccess}
                 >
-                  {isLoading ? "Saving" : "Save"}
+                  {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
                 </Button>
               </Space>
             </Form>

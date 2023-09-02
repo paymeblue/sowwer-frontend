@@ -739,6 +739,11 @@ const ProjectsTable = () => {
         scroll={{ x: 896 }}
         loading={isLoading || isFetching}
         rowKey={(record) => record.key}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {},
+          };
+        }}
         pagination={{
           defaultCurrent: data?.paginationInfo.currentPage,
           defaultPageSize: data?.paginationInfo.limit,

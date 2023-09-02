@@ -1,5 +1,6 @@
 "use client";
 import PlaceholderImage from "@components/PlaceholderImage";
+import AmountInput from "@components/amountField";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import useFlutterConfig from "@hooks/useFlutterConfig";
@@ -28,7 +29,7 @@ import {
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
 
 type State = {
@@ -38,7 +39,7 @@ type State = {
   lastName: string;
   anonymous: boolean;
   createAccount: boolean;
-  amount: string;
+  amount: { number: number };
   mode: "one-time" | "recurring";
   password: string;
   confirm_password: string;
@@ -75,7 +76,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const router = useRouter();
   const [ref, setRef] = useState<string>("");
   const dispatch = useAppDispatch();
-  // const [txnRef, setTxnRef] = useState<string>(Date.now().toString());
   const { data: ministryData } = useGetMinistryDetailsQuery(ministryId);
   let ministry: MinistryData | undefined;
   const [
@@ -140,7 +140,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [formData, setFormData] = useState({
     currency: "NGN",
-    amount: "",
+    amount: { number: 0 },
     firstName: "",
     lastName: "",
     email: "",
@@ -148,18 +148,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     mode: "one-time",
     interval: "monthly",
   });
-  const onChangeHandler = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-  const selectHandler = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      currency: value,
-    }));
-  };
+
   const { currency, amount, firstName, lastName, email, phone } = formData;
 
   const customer = user
@@ -176,7 +165,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
 
   const obj = {
     currency,
-    amount: +amount,
+    amount: amount.number,
     customer,
     desc: ministry ? ministry.name : "Ministry Donation",
     txnRef: ref,
@@ -187,17 +176,13 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const selectBefore = useMemo(
     () => (
       <Item name="currency" noStyle>
-        <Select
-          style={{ width: 100 }}
-          value={formData.currency}
-          onChange={selectHandler}
-        >
+        <Select style={{ width: 100 }}>
           <Option value="NGN">NGN</Option>
           <Option value="USD">USD</Option>
         </Select>
       </Item>
     ),
-    [formData]
+    []
   );
 
   const onFinish = async (values: State) => {
@@ -207,19 +192,19 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
       if (!user && createAccount) {
         data = {
           id: ministryId,
-          amount: +amount,
+          amount: amount.number,
           ...rest,
         };
       } else if (user) {
         data = {
           id: ministryId,
-          amount: +amount,
+          amount: amount.number,
           ...rest,
         };
       } else if (!user && !createAccount) {
         data = {
           id: ministryId,
-          amount: +amount,
+          amount: amount.number,
           ...rest,
         };
       }
@@ -302,6 +287,9 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
             size="large"
             autoComplete="off"
             className="mt-6"
+            onValuesChange={(changedValues, allValues) => {
+              setFormData((prev) => ({ ...prev, ...changedValues }));
+            }}
           >
             <Title
               level={2}
@@ -339,15 +327,13 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                 { required: true, message: "Please enter donation amount" },
               ]}
             >
-              <Input
-                addonBefore={selectBefore}
-                type="text"
-                required
-                placeholder="0.00"
-                value={formData.amount}
-                name="amount"
-                onChange={onChangeHandler}
-                className="[&>span>input]:rounded-r [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none placeholder:[&>span>input]:text-[17px] placeholder:[&>span>input]:leading-[21px] placeholder:[&>span>input]:text-[#555] laptop:placeholder:[&>span>input]:text-[17px]  laptop:placeholder:[&>span>input]:leading-[21.42px] [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-l [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]"
+              <AmountInput
+                props={{
+                  addonBefore: selectBefore,
+                  required: true,
+                  className:
+                    "[&>span>input]:rounded-r [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none placeholder:[&>span>input]:text-[17px] placeholder:[&>span>input]:leading-[21px] placeholder:[&>span>input]:text-[#555] laptop:placeholder:[&>span>input]:text-[17px]  laptop:placeholder:[&>span>input]:leading-[21.42px] [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-l [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]",
+                }}
               />
             </Item>
             {user ? null : (
@@ -388,9 +374,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="First name"
-                      value={formData.firstName}
-                      name="firstName"
-                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -409,9 +392,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="Last name"
-                      value={formData.lastName}
-                      name="lastName"
-                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -435,9 +415,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       placeholder="Email address"
-                      value={formData.email}
-                      name="email"
-                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -463,9 +440,6 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
                   >
                     <Input
                       type="tel"
-                      value={formData.phone}
-                      name="phone"
-                      onChange={onChangeHandler}
                       pattern="^\+\d{13}|\d{11}$"
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />

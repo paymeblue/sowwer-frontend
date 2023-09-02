@@ -20,7 +20,8 @@ const { Item, useForm } = Form;
 const SocialLinksForm = ({ id }: { id?: string }) => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [updateSocialLinks, { isLoading }] = useUpdateSocialLinksMutation();
+  const [updateSocialLinks, { isLoading, isSuccess }] =
+    useUpdateSocialLinksMutation();
   const { data: socialLinks } = useGetSocialLinksQuery(id);
   useEffect(() => {
     if (socialLinks?.data) {
@@ -205,9 +206,9 @@ const SocialLinksForm = ({ id }: { id?: string }) => {
             size="large"
             className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
             loading={isLoading}
-            disabled={!formIsValid}
+            disabled={!formIsValid || isSuccess}
           >
-            {isLoading ? "Saving" : "Save"}
+            {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
           </Button>
         </Space>
       </Form>

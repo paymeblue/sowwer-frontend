@@ -32,7 +32,8 @@ const PersonalDetails = () => {
   const [form] = useForm();
 
   const [messageApi, contextHolder] = message.useMessage();
-  const [updateUserProfile, { isLoading }] = useUpdateUserProfileMutation();
+  const [updateUserProfile, { isLoading, isSuccess }] =
+    useUpdateUserProfileMutation();
   const { data: userProfile } = useGetUserProfileQuery();
 
   useEffect(() => {
@@ -228,9 +229,9 @@ const PersonalDetails = () => {
                     size="large"
                     className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
                     loading={isLoading}
-                    disabled={!formIsValid}
+                    disabled={!formIsValid || isSuccess}
                   >
-                    {isLoading ? "Saving" : "Save"}
+                    {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
                   </Button>
                 </Item>
               </Space>

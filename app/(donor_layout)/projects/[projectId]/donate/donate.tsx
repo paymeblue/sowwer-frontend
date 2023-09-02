@@ -1,5 +1,6 @@
 "use client";
 import PlaceholderImage from "@components/PlaceholderImage";
+import AmountInput from "@components/amountField";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import useFlutterConfig from "@hooks/useFlutterConfig";
@@ -24,12 +25,12 @@ import {
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Heart2 } from "react-iconly";
 
 type State = {
   currency: string;
-  amount: string;
+  amount: { number: number };
   firstName: string;
   lastName: string;
   email: string;
@@ -85,42 +86,12 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   }
   const [formData, setFormData] = useState({
     currency: "NGN",
-    amount: "",
+    amount: { number: 0 },
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
   });
-
-  const onChangeHandler = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    if (name === "amount") {
-      // // Remove any existing commas from the input
-      // const newNumber = parseInt(e.target.value || "0", 10);
-      // if (Number.isNaN(formData.amount)) {
-      //   return;
-      // }
-      // if (!("number" in value)) {
-      //   setNumber(newNumber);
-      // }
-      // triggerChange({ number: newNumber });
-      // const sanitizedValue = value.replace(/,/g, "");
-      // Format the number with commas
-      // const formattedValue = Number(sanitizedValue).toLocaleString();
-      // setFormData((prev) => ({ ...prev, [name]: formattedValue }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const selectHandler = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      currency: value,
-    }));
-  };
 
   const createAccount = Form.useWatch("createAccount", form);
 
@@ -174,7 +145,7 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
 
   const obj = {
     currency,
-    amount: +amount,
+    amount: amount.number,
     customer,
     desc: project ? project.title : "Project Donation",
     txnRef: ref,
@@ -187,17 +158,13 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
   const selectBefore = useMemo(
     () => (
       <Item name="currency" noStyle>
-        <Select
-          style={{ width: 100 }}
-          value={formData.currency}
-          onChange={selectHandler}
-        >
+        <Select style={{ width: 100 }}>
           <Option value="NGN">NGN</Option>
           <Option value="USD">USD</Option>
         </Select>
       </Item>
     ),
-    [formData]
+    []
   );
 
   const onFinish = async (values: State) => {
@@ -207,19 +174,19 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
       if (!user && createAccount) {
         data = {
           id,
-          amount: +amount,
+          amount: amount.number,
           ...rest,
         };
       } else if (user) {
         data = {
           id,
-          amount: +amount,
+          amount: amount.number,
           ...rest,
         };
       } else if (!user && !createAccount) {
         data = {
           id,
-          amount: +amount,
+          amount: amount.number,
           ...rest,
         };
       }
@@ -292,6 +259,9 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
             size="large"
             autoComplete="off"
             className="mt-6"
+            onValuesChange={(changedValues, allValues) => {
+              setFormData((prev) => ({ ...prev, ...changedValues }));
+            }}
           >
             <Item
               className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px]  [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
@@ -301,15 +271,13 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                 { required: true, message: "Please enter donation amount" },
               ]}
             >
-              <Input
-                addonBefore={selectBefore}
-                type="text"
-                required
-                value={formData.amount}
-                name="amount"
-                onChange={onChangeHandler}
-                placeholder="0.00"
-                className="[&>span>input]:rounded-r [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none placeholder:[&>span>input]:text-[17px] placeholder:[&>span>input]:leading-[21px] placeholder:[&>span>input]:text-[#555] laptop:placeholder:[&>span>input]:text-[17px]  laptop:placeholder:[&>span>input]:leading-[21.42px] [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-l [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]"
+              <AmountInput
+                props={{
+                  addonBefore: selectBefore,
+                  required: true,
+                  className:
+                    "[&>span>input]:rounded-r [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none placeholder:[&>span>input]:text-[17px] placeholder:[&>span>input]:leading-[21px] placeholder:[&>span>input]:text-[#555] laptop:placeholder:[&>span>input]:text-[17px]  laptop:placeholder:[&>span>input]:leading-[21.42px] [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-l [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]",
+                }}
               />
             </Item>
             {user ? null : (
@@ -340,9 +308,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="First name"
-                      value={formData.firstName}
-                      name="firstName"
-                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -360,9 +325,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="Last name"
-                      value={formData.lastName}
-                      name="lastName"
-                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -386,9 +348,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                   >
                     <Input
                       placeholder="Email address"
-                      value={formData.email}
-                      name="email"
-                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>
@@ -416,9 +375,6 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
                       type="tel"
                       placeholder="Phone Number"
                       pattern="^\+\d{13}|\d{11}$"
-                      value={formData.phone}
-                      name="phone"
-                      onChange={onChangeHandler}
                       className="rounded border-none bg-[#f9f9f9] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                     />
                   </Item>

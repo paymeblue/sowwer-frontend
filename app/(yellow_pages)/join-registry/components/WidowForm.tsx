@@ -496,7 +496,7 @@ const WidowForm = () => {
                   loading={isLoading}
                   disabled={!declaration}
                 >
-                  {isLoading ? "Saving" : "Submit"}
+                  {isLoading ? "Submitting" : "Submit"}
                   <ArrowRight set="light" />
                 </Button>
               </Item>

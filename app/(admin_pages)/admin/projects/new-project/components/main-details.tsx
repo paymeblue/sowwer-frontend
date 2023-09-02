@@ -1,3 +1,4 @@
+import AmountInput from "@components/amountField";
 import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
 import { setProjectId } from "@store/reducers/utilSlice";
@@ -26,7 +27,7 @@ const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
 
 type State = {
-  amount: string;
+  amount: { number: number };
   category: "orphans" | "widows" | "ministry";
   title: string;
   coverPhoto: any;
@@ -87,8 +88,10 @@ const MainDetails = () => {
   const { data } = useGetProjectQuery(projectId, {
     skip: projectId ? false : true,
   });
-  const [editProject, { isLoading: editLoading }] = useEditProjectMutation();
-  const [createProject, { isLoading }] = useCreateProjectMutation();
+  const [editProject, { isLoading: editLoading, isSuccess: editSuccess }] =
+    useEditProjectMutation();
+  const [createProject, { isLoading, isSuccess: createSuccess }] =
+    useCreateProjectMutation();
 
   useEffect(() => {
     if (data?.data) {
@@ -119,13 +122,13 @@ const MainDetails = () => {
     const credentials = data
       ? {
           id: projectId,
-          amount: +values.amount,
+          amount: values.amount.number,
           category: values.category,
           title: values.title,
           cover_photo: values.coverPhoto[0].thumbUrl,
         }
       : {
-          amount: +values.amount,
+          amount: values.amount.number,
           category: values.category,
           title: values.title,
           cover_photo: values.coverPhoto[0].thumbUrl,
@@ -240,11 +243,12 @@ const MainDetails = () => {
                   },
                 ]}
               >
-                <Input
-                  prefix="₦"
-                  placeholder="0.00"
-                  type="text"
-                  className="rounded border-none bg-[#f9f9f9] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
+                <AmountInput
+                  props={{
+                    prefix: "₦",
+                    className:
+                      "rounded border-none bg-[#f9f9f9] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]",
+                  }}
                 />
               </Item>
             </Space>
@@ -285,9 +289,13 @@ const MainDetails = () => {
               size="large"
               className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
               loading={data ? editLoading : isLoading}
-              disabled={!formIsValid}
+              disabled={!formIsValid || editSuccess || createSuccess}
             >
-              {editLoading || isLoading ? "Saving" : "Save"}
+              {editLoading || isLoading
+                ? "Saving"
+                : editSuccess || createSuccess
+                ? "Saved"
+                : "Save"}
             </Button>
           </Item>
         </Space>

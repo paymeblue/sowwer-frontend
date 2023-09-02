@@ -23,7 +23,7 @@ const Editor: React.FC = () => {
     id = projectIdOld;
   }
   const { data } = useGetProjectQuery(id);
-  const [editProject, { isLoading }] = useEditProjectMutation();
+  const [editProject, { isLoading, isSuccess }] = useEditProjectMutation();
   useEffect(() => {
     const description = data?.data?.description ?? "";
     setValue(description);
@@ -110,9 +110,9 @@ const Editor: React.FC = () => {
               size="large"
               className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
               loading={isLoading}
-              disabled={!value}
+              disabled={!value || isSuccess}
             >
-              {isLoading ? "Saving" : "Save"}
+              {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
             </Button>
           </Space>
         </form>

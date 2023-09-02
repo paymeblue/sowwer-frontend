@@ -57,7 +57,7 @@ const props: UploadProps = {
 const UploadLogo = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [updateMinistryProfile, { isLoading }] =
+  const [updateMinistryProfile, { isLoading, isSuccess }] =
     useUpdateMinistryProfileMutation();
   let formIsValid = false;
   const minisrtyLogo = Form.useWatch("minisrtyLogo", form);
@@ -149,9 +149,9 @@ const UploadLogo = () => {
             size="large"
             className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
             loading={isLoading}
-            disabled={!formIsValid}
+            disabled={!formIsValid || isSuccess}
           >
-            {isLoading ? "Saving" : "Save"}
+            {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
           </Button>
         </Space>
       </Form>

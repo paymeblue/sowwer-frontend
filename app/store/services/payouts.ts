@@ -64,7 +64,8 @@ const payouts = api.injectEndpoints({
         response.data.message,
     }),
     cancelRecurringPayment: build.mutation<PlainResponse, string>({
-      query: (id) => `payments/${id}/cancel`,
+      query: (id) => `payments/${id}/close`,
+      // query: (id) => ({url:`payments/${id}/close`,method:'PATCH',body:''}),
       invalidatesTags: cacher.cacheByIdArg("Projects"),
       transformResponse: (response: PlainResponse, meta, arg): any => {
         return response;

@@ -274,7 +274,7 @@ const MissionaryForm = () => {
             disabled={!declaration}
             loading={isLoading}
           >
-            {isLoading ? "Saving" : "Submit"}
+            {isLoading ? "Submitting" : "Submit"}
             <ArrowRight set="light" />
           </Button>
         </Item>

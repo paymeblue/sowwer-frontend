@@ -7,6 +7,7 @@ import Container from "@shared/Container";
 import TabList from "@shared/TabList";
 import { useGetProjectQuery } from "@store/services/projects";
 import { Button, Divider, Space, TabsProps, Typography } from "antd";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft } from "react-iconly";
@@ -67,7 +68,7 @@ const NewProjectPage = () => {
       </Button>
       <Space className="my-4 w-full flex-col items-center justify-between laptop:flex-row">
         <Title level={3} className="leading-30.24px] text-[24px] font-bold">
-          {query ? "Edit Project" : "New Project Name"}
+          {query ? `Edit ${data?.data.title}` : "New Project Name"}
         </Title>
         <Typography className="flex flex-col items-center justify-center gap-2 rounded-full bg-[#EBEFFF] p-1 text-[13px] font-semibold leading-[16.38px] text-accent tablet:flex-row">
           <div className="mx-2 text-[11px] laptop:text-[13px]">
@@ -87,9 +88,13 @@ const NewProjectPage = () => {
               </Text>
             )}
             <Divider type="vertical" className="mx-0 h-6 border-gray-300" />
-            <Text className="m-0 cursor-pointer rounded-full rounded-l-none px-2 py-1 text-[12px] leading-[15.12px] text-accent hover:bg-slate-100">
+            <Link
+              href={link}
+              target="_blank"
+              className="m-0 cursor-pointer rounded-full rounded-l-none px-2 py-1 text-[12px] leading-[15.12px] text-accent hover:bg-slate-100"
+            >
               Preview &nbsp; <EyeFilled />
-            </Text>
+            </Link>
           </Space>
         </Typography>
       </Space>

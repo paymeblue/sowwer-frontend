@@ -66,7 +66,7 @@ const props: UploadProps = {
 const CoverPhoto = () => {
   const [form] = useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [coverPhoto, { isLoading }] = useEditCoverPhotoMutation();
+  const [coverPhoto, { isLoading, isSuccess }] = useEditCoverPhotoMutation();
   const { projectId } = useUtil();
   const onFinish = async (values: any) => {
     try {
@@ -165,9 +165,9 @@ const CoverPhoto = () => {
               type="primary"
               size="large"
               className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
-              loading={isLoading}
+              loading={isLoading || isSuccess}
             >
-              {isLoading ? "Saving" : "Save"}
+              {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
             </Button>
           </Item>
         </Space>
