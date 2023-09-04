@@ -75,6 +75,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const { user } = useAuth();
   const router = useRouter();
   const [ref, setRef] = useState<string>("");
+  const [planId, setPlanId] = useState<number | undefined>();
   const dispatch = useAppDispatch();
   const { data: ministryData } = useGetMinistryDetailsQuery(ministryId);
   let ministry: MinistryData | undefined;
@@ -100,13 +101,14 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const [verifyMinistryPayment] = useVerifyMinistryPaymentMutation();
 
   useEffect(() => {
-    if (data?.txn_reference) {
+    if (data) {
       setRef(data.txn_reference);
+      setPlanId(data.plan_id);
     }
-  }, [data?.txn_reference]);
+  }, [data]);
 
   useEffect(() => {
-    if (ref) {
+    if ((ref && planId) || ref) {
       handleFlutterPayment({
         callback: async (response) => {
           console.log(response);
@@ -169,6 +171,8 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     customer,
     desc: ministry ? ministry.name : "Ministry Donation",
     txnRef: ref,
+    payment_plan: mode === "recurring" && planId?.toString(),
+    recurring: mode === "recurring" ? true : false,
   };
 
   const config = useFlutterConfig(obj);

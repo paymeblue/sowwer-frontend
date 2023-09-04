@@ -27,21 +27,20 @@ const props: UploadProps = {
   multiple: false,
   listType: "picture",
   beforeUpload: (file: RcFile) => {
-    // const maxSizeInBytes = 2 * 1024 * 1024; // 5 MB (adjust to your desired file size limit)
-    // if (file.size > maxSizeInBytes) {
-    //   message.error("File size exceeds the limit of 5 MB");
-    //   return false; // Prevent upload
-    // }
+    const maxSizeInBytes = 2 * 1024 * 1024; // 5 MB (adjust to your desired file size limit)
     const isPNG = file.type === "image/png";
     const isJPG = file.type === "image/jpeg" || file.type === "image/jpg";
     const isPDF = file.type === "application/pdf";
-    if (!(isPNG || isJPG || isPDF)) {
+    if (file.size > maxSizeInBytes) {
+      message.error("File size exceeds the limit of 5 MB");
+      return false; // Prevent upload
+    } else if (!(isPNG || isJPG || isPDF)) {
       message.error(`${file.name} is not a png, jpeg, jpg or pdf file`);
+      return false;
     }
     console.log({ file });
-    return false;
     // return isPNG || isJPG || isPDF || Upload.LIST_IGNORE;
-    // return true;
+    return true;
   },
   onChange(info) {
     const { status } = info.file;

@@ -12,6 +12,7 @@ import {
   MinistryProjectDonorsResponse,
   MinistryProjectsRequest,
   MinistryProjectsResponse,
+  PlainResponse,
   PublishOrDraftRequest,
   PublishOrDraftResponse,
   ResultResponse,
@@ -210,11 +211,18 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    closeMinistryProject: build.mutation<any, string | undefined>({
-      query: (id) => `projects/${id}/close`,
+    closeMinistryProject: build.mutation<
+      PlainResponse,
+      { id?: string; reason: string }
+    >({
+      query: (body) => ({
+        url: `projects/${body.id}/close`,
+        method: "PATCH",
+        body: { reason: body.reason },
+      }),
       // Invalidates the tag for this Project `id`, as well as the `LIST` tag,
       // causing the `Projects list` query to re-fetch if a component is subscribed to the query.
-      invalidatesTags: cacher.cacheByIdArg("Projects"),
+      invalidatesTags: cacher.providesProperty("Projects"),
       // invalidatesTags: (result, error, id) => [
       //   { type: "Projects", id },
       //   { type: "Projects", id: "PARTIAL-LIST" },

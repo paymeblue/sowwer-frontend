@@ -30,12 +30,12 @@ import {
   Divider,
   Dropdown,
   Empty,
+  Form,
   Input,
   InputRef,
   List,
   MenuProps,
   Modal,
-  Result,
   Space,
   Spin,
   Table,
@@ -50,9 +50,8 @@ import type {
 } from "antd/es/table/interface";
 import moment from "moment";
 import { useRouter } from "next/navigation";
-import { Fragment, ReactNode, useRef, useState } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { InfoCircle } from "react-iconly";
 
 const priceFormat = currencyFormat();
 
@@ -72,7 +71,7 @@ type RecordState = {
   amount_raised: number;
   category: string;
   goal: number;
-  key: string | undefined;
+  key: string;
   no_of_donors: number;
   status: any;
   title: string;
@@ -88,11 +87,28 @@ type IProps = {
   donors: number;
 };
 const { Title, Text, Paragraph } = Typography;
+const { Item, useForm } = Form;
 
 const ProjectsTable = () => {
   const { user } = useAuth();
   const router = useRouter();
+  const [form] = useForm();
   const dispatch = useAppDispatch();
+
+  const [submittable, setSubmittable] = useState(false);
+  // Watch all values
+  const values = Form.useWatch([], form);
+  useEffect(() => {
+    form.validateFields({ validateOnly: true }).then(
+      () => {
+        setSubmittable(true);
+      },
+      () => {
+        setSubmittable(false);
+      }
+    );
+  }, [values, form]);
+
   let id: string | undefined;
   if (user && "ministry" in user) {
     id = user.ministry.id;
@@ -104,7 +120,8 @@ const ProjectsTable = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const [rowId, setRowId] = useState<string | undefined>();
+  const [rowRecord, setRowRecord] = useState<RecordState | undefined>();
+  const [rowId, setRowId] = useState<string>("");
   const [rowTitle, setRowTitle] = useState<string>("");
   const searchInput = useRef<InputRef>(null);
   const [filteredInfo, setFilteredInfo] = useState<
@@ -137,7 +154,7 @@ const ProjectsTable = () => {
       ? "blue"
       : status === "completed"
       ? "green"
-      : status === "cancelled"
+      : status === "closed"
       ? "gainsboro"
       : "gray";
   };
@@ -205,11 +222,8 @@ const ProjectsTable = () => {
         type="text"
         className="flex items-center justify-center text-[12px] hover:bg-transparent"
         onClick={() => {
-          console.log("string", rowId);
-          if (rowId) {
-            editHandler(rowId);
-            dispatch(setProjectId({ projectId: rowId }));
-          }
+          editHandler(rowId);
+          dispatch(setProjectId({ projectId: rowId }));
         }}
       >
         Edit
@@ -256,28 +270,29 @@ const ProjectsTable = () => {
     ),
   };
 
-  const items: MenuProps["items"] = [item1, item2, item3, item4];
+  // const items: MenuProps["items"] = [item1, item2, item3, item4];
+  const [items, setItems] = useState<MenuProps["items"]>([]);
+  useEffect(() => {
+    if (rowRecord) {
+      const { text } = rowRecord.status.props;
 
-  const dropdownHandler = (record: RecordState) => {
-    const { text } = record.status.props;
+      switch (text.toLowerCase()) {
+        case "drafted":
+        case "in-progress":
+          setItems((prev) => (prev = [item1, item2]));
+          break;
 
-    switch (text.toLowerCase()) {
-      case "drafted":
-      case "cancelled":
-      case "in-progress":
-        items.splice(2);
-        break;
+        case "active":
+          setItems((prev) => (prev = [item3, item4]));
+          break;
 
-      case "active":
-        items.splice(0, 4, item3, item4);
-        break;
-
-      case "completed":
-        items.splice(0, 4, item3);
-        break;
+        case "closed":
+        case "completed":
+          setItems((prev) => (prev = [item3]));
+          break;
+      }
     }
-    return items;
-  };
+  }, [rowRecord]);
 
   const antIcon = (
     <LoadingOutlined
@@ -296,8 +311,6 @@ const ProjectsTable = () => {
     filters,
     sorter
   ) => {
-    console.log("Various parameters", pagination, filters, sorter);
-
     setFilteredInfo(filters);
   };
 
@@ -505,17 +518,10 @@ const ProjectsTable = () => {
           <Dropdown
             menu={{
               items,
-              onClick: () => {
-                if (record?.key) {
-                  setRowId(record.key);
-                  setRowTitle(record.title);
-                }
-              },
             }}
             trigger={["click"]}
             placement="bottomLeft"
             arrow
-            onOpenChange={() => dropdownHandler(record)}
           >
             <Button
               size="small"
@@ -547,14 +553,18 @@ const ProjectsTable = () => {
     handleDeleteCancel();
   };
 
-  const handleCloseBtn = async () => {
+  const onFinish = async (values: { reason: string }): Promise<void> => {
     try {
-      const res = await closeMinistryProject(rowId).unwrap();
+      const res = await closeMinistryProject({
+        id: rowId,
+        reason: values.reason,
+      }).unwrap();
       messageApi.open({
         content: `${res.message}`,
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
         icon: <CheckCircleIcon />,
       });
+      form.resetFields();
     } catch (error) {
       messageApi.open({
         content: `${error}`,
@@ -562,6 +572,14 @@ const ProjectsTable = () => {
       });
     }
     handleCloseCancel();
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+    messageApi.open({
+      content: "Form submission failed!",
+      className: "[&>div]:bg-red-800 [&>div]:text-white",
+    });
   };
   const content = isLoading ? (
     <Spin size="large" indicator={antIcon} />
@@ -593,87 +611,93 @@ const ProjectsTable = () => {
         open={isDeleteModalOpen}
         onOk={handleDeleteOk}
         onCancel={handleDeleteCancel}
+        closeIcon={<CloseOutlined style={{ color: "black" }} />}
         footer={null}
-      >
-        <Result
-          status="error"
-          title={
-            <Title level={5} className="text-[18px] leading-[22px]">
+        title={
+          <>
+            <Title level={5} className="text-[21px] font-bold leading-normal">
               Delete this project?
             </Title>
-          }
-          subTitle={
-            <Paragraph className="text-[13px] leading-[20px] text-body-1">
-              Are you sure you want to delete “{rowTitle}”? Please note that
-              this action cannot be undone.
-            </Paragraph>
-          }
-          icon={
-            <InfoCircle
-              set="light"
-              size={75}
-              style={{ margin: "auto" }}
-              primaryColor="#EB5757"
-            />
-          }
-          extra={
-            <Button
-              type="primary"
-              key="console"
-              onClick={handleDeleteBtn}
-              loading={deleteLoading}
-              className="mt-0 bg-[#EB5757] text-[13px] leading-[16px] text-white"
-              size="large"
-            >
-              Yes, delete project
-            </Button>
-          }
-        />
+            <Divider />
+          </>
+        }
+      >
+        <Paragraph className="text-center text-[14px] font-normal leading-[21px] tracking-[0.28px] text-body-1">
+          Are you sure you want to delete “<strong>{rowTitle}</strong>”? Please
+          note that this action cannot be undone.
+        </Paragraph>
+        <Button
+          type="primary"
+          key="console"
+          onClick={handleDeleteBtn}
+          loading={deleteLoading}
+          className="my-6 flex items-center justify-center bg-[#DD3636] py-6 text-[13px] font-semibold leading-[16px] text-white"
+          size="large"
+          block
+        >
+          Yes, delete project
+        </Button>
       </Modal>
       <Modal
         open={isCloseModalOpen}
         onOk={handleCloseOk}
         onCancel={handleCloseCancel}
         footer={null}
+        closeIcon={<CloseOutlined style={{ color: "black" }} />}
+        title={
+          <>
+            <Title level={5} className="text-[21px] font-bold leading-normal">
+              Close Project
+            </Title>
+            <Divider />
+          </>
+        }
       >
-        <Result
-          status="error"
-          title={
-            <Fragment>
-              <Title level={5} className="text-[18px] leading-[22px]">
-                Close Project
-              </Title>
-              <Divider type="horizontal" className="my-2" />
-            </Fragment>
-          }
-          subTitle={
-            <Paragraph className="text-[13px] leading-[20px] text-body-1">
-              Are you sure you want to close your project “{rowTitle}”? Please
-              note that you haven't reached your project goal and this action
-              cannot be undone.
-            </Paragraph>
-          }
-          icon={
-            <InfoCircle
-              set="light"
-              size={75}
-              style={{ margin: "auto" }}
-              primaryColor="#EB5757"
+        <Paragraph className="my-8 text-center text-[14px] font-medium leading-[21px] tracking-wide text-body-1">
+          Are you sure you want to close your project “
+          <strong>{rowTitle}</strong>”? Please note that you haven't reached
+          your project goal and this action cannot be undone.
+        </Paragraph>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          name="close_project_form_modal"
+          initialValues={{ reason: "" }}
+        >
+          <Item
+            name="reason"
+            label="Tell us why you are closing the project"
+            rules={[
+              {
+                required: true,
+                message: "Please state your reason!",
+              },
+            ]}
+            className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+          >
+            <Input.TextArea
+              placeholder="State reason for closing project..."
+              rows={2}
+              className="rounded border-none bg-[#f9f9f9] py-2 placeholder-[#555] outline-none placeholder:text-[12px] placeholder:leading-[15.62px] laptop:placeholder:text-[14px] laptop:placeholder:leading-[17.64px]"
             />
-          }
-          extra={
+          </Item>
+          <Item>
             <Button
               type="primary"
               key="console"
-              onClick={handleCloseBtn}
               loading={closeLoading}
-              className="mt-0 bg-[#EB5757] text-[13px] leading-[16px] text-white"
+              htmlType="submit"
+              className="my-2 flex items-center justify-center bg-[#DD3636] py-6 text-[13px] font-semibold leading-[16px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
               size="large"
+              disabled={!submittable}
+              block
             >
               Close project
             </Button>
-          }
-        />
+          </Item>
+        </Form>
       </Modal>
       <Modal
         open={isDonorModalOpen}
@@ -741,7 +765,11 @@ const ProjectsTable = () => {
         rowKey={(record) => record.key}
         onRow={(record, rowIndex) => {
           return {
-            onClick: (event) => {},
+            onClick: (event) => {
+              setRowId(record.key);
+              setRowTitle(record.title);
+              setRowRecord(record);
+            },
           };
         }}
         pagination={{

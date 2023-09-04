@@ -648,6 +648,7 @@ export type DonationResponse = {
   txn_reference: string;
   status: string;
   createdAt: string;
+  plan_id?: number;
 };
 export type InitiateDonationResponseAuth = Response<{
   id: string;
@@ -657,6 +658,7 @@ export type InitiateDonationResponseAuth = Response<{
   txn_reference: string;
   status: string;
   createdAt: string;
+  plan_id?: number;
 }>;
 export type InitiateDonationToProjectRequestAuth = {
   id: string;

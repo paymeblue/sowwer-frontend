@@ -58,9 +58,7 @@ const Details = ({ link }: IProps) => {
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",
         icon: <CheckCircleIcon />,
       });
-      setTimeout(() => {
-        router.back();
-      }, 2000);
+      router.push("/admin/projects");
     } catch (error: any) {
       messageApi.open({
         content: `${error}`,
