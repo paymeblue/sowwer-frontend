@@ -2,7 +2,16 @@ import { MenuOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/useAuth";
 import useNavBg from "@hooks/useNavBg";
 import userDetails from "@lib/user-details";
-import { Button, Divider, Drawer, Layout, Menu, MenuProps, Space } from "antd";
+import {
+  Button,
+  Divider,
+  Drawer,
+  Dropdown,
+  Layout,
+  Menu,
+  MenuProps,
+  Space,
+} from "antd";
 import AuthUser from "app/(donor_layout)/layout/auth-user";
 import Image from "next/image";
 import Link from "next/link";
@@ -64,7 +73,27 @@ const Navbar = () => {
   const onClose = () => setOpen(false);
 
   const [arrow, setArrow] = useState<boolean>(false);
-
+  const submenu: MenuProps["items"] = [
+    {
+      key: "/projects",
+      label: (
+        <Link className="font-body text-sm text-inherit" href="projects">
+          Projects
+        </Link>
+      ),
+    },
+    {
+      key: "/explore/ministries",
+      label: (
+        <Link
+          className="font-body text-sm text-inherit"
+          href="/explore/ministries"
+        >
+          Ministries
+        </Link>
+      ),
+    },
+  ];
   const items: MenuProps["items"] = [
     {
       key: "/",
@@ -88,36 +117,38 @@ const Navbar = () => {
     {
       key: "/explore",
       label: (
-        <span className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit">
-          Explore
-          {arrow ? (
-            <ChevronUp set="light" size={16} />
-          ) : (
-            <ChevronDown set="light" size={16} />
-          )}
-        </span>
+        <Dropdown menu={{ items: submenu }} trigger={["click"]}>
+          <span className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit">
+            Explore
+            {arrow ? (
+              <ChevronUp set="light" size={16} />
+            ) : (
+              <ChevronDown set="light" size={16} />
+            )}
+          </span>
+        </Dropdown>
       ),
-      children: [
-        {
-          key: "/projects",
-          label: (
-            <Link className="font-body text-sm text-inherit" href="projects">
-              Projects
-            </Link>
-          ),
-        },
-        {
-          key: "/explore/ministries",
-          label: (
-            <Link
-              className="font-body text-sm text-inherit"
-              href="/explore/ministries"
-            >
-              Ministries
-            </Link>
-          ),
-        },
-      ],
+      // children: [
+      //   {
+      //     key: "/projects",
+      //     label: (
+      //       <Link className="font-body text-sm text-inherit" href="projects">
+      //         Projects
+      //       </Link>
+      //     ),
+      //   },
+      //   {
+      //     key: "/explore/ministries",
+      //     label: (
+      //       <Link
+      //         className="font-body text-sm text-inherit"
+      //         href="/explore/ministries"
+      //       >
+      //         Ministries
+      //       </Link>
+      //     ),
+      //   },
+      // ],
     },
     {
       key: "/ministries",

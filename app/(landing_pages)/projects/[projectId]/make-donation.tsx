@@ -162,7 +162,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 showInfo={false}
                 strokeColor="#3466ff"
                 status={
-                  Number(data?.amountRaised) === Number(data?.targetAmount)
+                  Number(data?.amountRaised) >= Number(data?.targetAmount)
                     ? "normal"
                     : "active"
                 }

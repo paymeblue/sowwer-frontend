@@ -26,7 +26,7 @@ const HomeCard = ({
   const router = useRouter();
   return (
     <Card
-      className="m-24 mx-auto bg-[#FDFBF2] p-4 text-center tablet:py-10 laptop:px-[86px] laptop:py-14 [&>div.ant-card-body]:p-0"
+      className="m-24 mx-auto bg-[#FDFBF2] p-4 text-center shadow-none tablet:py-10 laptop:px-[86px] laptop:py-14 [&>div.ant-card-body]:p-0"
       bordered={false}
     >
       <Space direction="vertical">

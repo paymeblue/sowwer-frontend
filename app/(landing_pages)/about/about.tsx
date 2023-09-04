@@ -144,7 +144,7 @@ const AboutPage: FC = () => {
         >
           {cardData.map((data) => (
             <Col key={data.id}>
-              <Card className="rounded-md shadow-sm" bordered={false}>
+              <Card className="rounded-md shadow-none" bordered={false}>
                 <Space size={30} align="start" direction="vertical">
                   {data.icon}
                   <Typography>

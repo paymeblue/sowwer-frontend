@@ -1,11 +1,11 @@
+import { SoowerIcon } from "@components/assets/icons";
+import Container from "@shared/Container";
 import { Card, Col, Row, Space, Tag, Typography } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useId } from "react";
-import { SoowerIcon } from "@components/assets/icons";
-import { ArrowRight, Heart2 } from "react-iconly";
 import logo from "public/assets/icons/logo.svg";
-import Container from "@shared/Container";
+import { useId } from "react";
+import { ArrowRight, Heart2 } from "react-iconly";
 
 type CardType =
   | {
@@ -90,7 +90,7 @@ const FeaturedProjects = () => {
           {cardData.map((data) => (
             <Col className="gutter-row" key={data?.id}>
               <Card
-                className=" max-w-[400px] text-left shadow-md laptop:w-full"
+                className=" max-w-[400px] text-left shadow-[0px_1px_10px_0px_rgba(0,_0,_0,_0.07)] laptop:w-full"
                 bordered={false}
                 cover={
                   <Image

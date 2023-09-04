@@ -97,7 +97,7 @@ const MainDetails = () => {
     if (data?.data) {
       form.setFieldsValue({
         title: data.data.title,
-        amount: data.data.targetAmount,
+        amount: +data.data.targetAmount,
         category: data.data.category,
       });
     }

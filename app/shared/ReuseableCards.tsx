@@ -170,14 +170,14 @@ const ReuseableCards = ({
                   <Paragraph className="text-[12px] uppercase leading-[15px] text-body-2 laptop:leading-[15.12px]">
                     {organisedBy ?? `N/A`}
                   </Paragraph>
-                  <Text className="text-[13px] leading-[23px] text-body-2">
+                  <Paragraph className="h-[70px] text-[13px] leading-[23px] text-body-2">
                     {description
                       ? truncateTextWithEllipsis(170, description)
                       : truncateTextWithEllipsis(
                           170,
                           `Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.`
                         )}
-                  </Text>
+                  </Paragraph>
                   {showSection && (
                     <Fragment>
                       <div className="my-4">
@@ -202,7 +202,7 @@ const ReuseableCards = ({
                           showInfo={false}
                           strokeColor="#3466ff"
                           status={
-                            Number(amountRaised) === Number(targetAmount)
+                            Number(amountRaised) >= Number(targetAmount)
                               ? "normal"
                               : "active"
                           }
