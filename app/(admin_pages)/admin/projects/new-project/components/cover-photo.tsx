@@ -27,6 +27,11 @@ const props: UploadProps = {
   multiple: false,
   listType: "picture",
   beforeUpload: (file: RcFile) => {
+    // const maxSizeInBytes = 2 * 1024 * 1024; // 5 MB (adjust to your desired file size limit)
+    // if (file.size > maxSizeInBytes) {
+    //   message.error("File size exceeds the limit of 5 MB");
+    //   return false; // Prevent upload
+    // }
     const isPNG = file.type === "image/png";
     const isJPG = file.type === "image/jpeg" || file.type === "image/jpg";
     const isPDF = file.type === "application/pdf";
@@ -36,6 +41,7 @@ const props: UploadProps = {
     console.log({ file });
     return false;
     // return isPNG || isJPG || isPDF || Upload.LIST_IGNORE;
+    // return true;
   },
   onChange(info) {
     const { status } = info.file;
@@ -165,7 +171,7 @@ const CoverPhoto = () => {
               type="primary"
               size="large"
               className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
-              loading={isLoading || isSuccess}
+              loading={isLoading}
             >
               {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
             </Button>

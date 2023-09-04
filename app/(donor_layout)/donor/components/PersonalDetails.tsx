@@ -229,7 +229,7 @@ const PersonalDetails = () => {
                     size="large"
                     className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
                     loading={isLoading}
-                    disabled={!formIsValid || isSuccess}
+                    disabled={!formIsValid}
                   >
                     {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
                   </Button>

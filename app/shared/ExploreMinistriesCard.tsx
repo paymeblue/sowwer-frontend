@@ -70,7 +70,7 @@ const ExploreMinistriesCard = ({
       pageSize: pageSize,
     }));
   };
-  const onClick = (id?: string) => {
+  const onClick = (id: string) => {
     router.prefetch(`/ministries/${id}`);
     router.push(`/ministries/${id}`);
   };

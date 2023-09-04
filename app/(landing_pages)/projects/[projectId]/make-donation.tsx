@@ -43,7 +43,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
   const {
     data: donors,
     isLoading,
-    isFetching,
+    // isFetching,
     error,
     isError,
     refetch,
@@ -278,7 +278,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                   )}
                 />
               )}
-              {donorData?.length !== 0 && (
+              {/* {donorData?.length !== 0 && (
                 <Button
                   block
                   type="default"
@@ -291,7 +291,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 >
                   View more donations
                 </Button>
-              )}
+              )} */}
             </Card>
           </Col>
         </Row>

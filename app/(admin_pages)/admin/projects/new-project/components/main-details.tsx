@@ -289,7 +289,7 @@ const MainDetails = () => {
               size="large"
               className="bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
               loading={data ? editLoading : isLoading}
-              disabled={!formIsValid || editSuccess || createSuccess}
+              disabled={!formIsValid}
             >
               {editLoading || isLoading
                 ? "Saving"

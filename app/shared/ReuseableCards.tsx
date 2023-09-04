@@ -86,7 +86,7 @@ const ReuseableCards = ({
     }));
   };
 
-  const onClick = (id?: string) => {
+  const onClick = (id: string) => {
     router.prefetch(`/projects/${id}`);
     router.push(`/projects/${id}`);
   };
