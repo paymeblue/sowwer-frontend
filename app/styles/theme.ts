@@ -22,6 +22,7 @@ const theme: ThemeConfig = {
       colorPrimaryBorder: "#ffdd80",
       colorPrimaryHover: "#ffcf4d",
       colorTextLightSolid: "#000",
+      boxShadow: "none",
     },
     Switch: {
       colorTextQuaternary: "#F2F4F7",

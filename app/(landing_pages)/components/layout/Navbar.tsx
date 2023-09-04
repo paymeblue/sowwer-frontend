@@ -343,7 +343,7 @@ const Navbar = () => {
           <Button
             type="default"
             size="large"
-            className="mx-auto flex items-center justify-center border-black font-body text-sm  font-medium text-black laptop:p-5 "
+            className="mx-auto flex h-[45px] items-center justify-center border-black font-body text-sm  font-medium text-black laptop:p-5 "
             onClick={() => {
               router.prefetch("auth/signin/donor");
               router.push("auth/signin/donor");
@@ -355,7 +355,7 @@ const Navbar = () => {
         <Button
           type="primary"
           size="large"
-          className="mx-auto flex items-center justify-center font-body text-sm font-medium text-black laptop:p-5 "
+          className="mx-auto flex h-[45px] items-center justify-center font-body text-sm font-medium text-black laptop:p-5 "
           onClick={() => {
             router.prefetch("/join-registry");
             router.push("/join-registry");
