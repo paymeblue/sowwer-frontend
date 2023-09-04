@@ -6,7 +6,7 @@ import { Button, Divider, Drawer, Layout, Menu, MenuProps, Space } from "antd";
 import AuthUser from "app/(donor_layout)/layout/auth-user";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import logo from "public/assets/icons/logo.svg";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronUp } from "react-iconly";
@@ -16,6 +16,7 @@ const { Header } = Layout;
 const Navbar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const [openKeys, setOpenKeys] = useState([""]);
   const rootSubmenuKeys = ["/explore"];
   const { user } = useAuth();
@@ -23,7 +24,7 @@ const Navbar = () => {
   const profile = user?.type === "ministry" ? "admin" : "donor";
 
   const [current, setCurrent] = useState(
-    pathname === "" || pathname === "/" ? "/home" : pathname
+    pathname === "" || pathname === "/" ? "/" : pathname
   );
   const backgroundTransparent = useNavBg();
   const arrKeys = useMemo(
@@ -66,7 +67,7 @@ const Navbar = () => {
 
   const items: MenuProps["items"] = [
     {
-      key: "/home",
+      key: "/",
       label: (
         <Link className="font-body text-sm font-medium text-inherit" href="/">
           Home
@@ -143,7 +144,7 @@ const Navbar = () => {
   ];
   const items2: MenuProps["items"] = [
     {
-      key: "/home",
+      key: "/",
       label: (
         <Link className="font-body text-sm font-medium text-inherit" href="/">
           Home
@@ -270,29 +271,27 @@ const Navbar = () => {
               <Button
                 type="default"
                 size="large"
-                className="mx-auto flex items-center justify-center border-black text-sm font-medium text-black laptop:p-5 "
+                className="mx-auto flex items-center justify-center border-black font-body text-sm font-medium text-black laptop:p-5 "
                 block
+                onClick={() => {
+                  router.prefetch("auth/signin/donor");
+                  router.push("auth/signin/donor");
+                }}
               >
-                <Link
-                  href="auth/signin/donor"
-                  className="font-body text-sm font-medium text-black"
-                >
-                  Log in
-                </Link>
+                Log in
               </Button>
             )}
             <Button
               type="primary"
               size="large"
-              className="mx-auto flex items-center justify-center text-sm font-medium text-black laptop:p-5 "
+              className="mx-auto flex items-center justify-center font-body text-sm font-medium text-black laptop:p-5 "
               block
+              onClick={() => {
+                router.prefetch("/join-registry");
+                router.push("/join-registry");
+              }}
             >
-              <Link
-                href="/join-registry"
-                className="font-body text-sm font-medium text-black"
-              >
-                Join Soower&apos;s Registry
-              </Link>
+              Join Soower&apos;s Registry
             </Button>
           </Space>
         </Drawer>
@@ -313,27 +312,25 @@ const Navbar = () => {
           <Button
             type="default"
             size="large"
-            className="mx-auto flex items-center justify-center border-black text-sm font-medium text-black laptop:p-5 "
+            className="mx-auto flex items-center justify-center border-black font-body text-sm  font-medium text-black laptop:p-5 "
+            onClick={() => {
+              router.prefetch("auth/signin/donor");
+              router.push("auth/signin/donor");
+            }}
           >
-            <Link
-              href="auth/signin/donor"
-              className="font-body text-sm font-medium text-black"
-            >
-              Log in
-            </Link>
+            Log in
           </Button>
         )}
         <Button
           type="primary"
           size="large"
-          className="mx-auto flex items-center justify-center text-sm font-medium text-black laptop:p-5 "
+          className="mx-auto flex items-center justify-center font-body text-sm font-medium text-black laptop:p-5 "
+          onClick={() => {
+            router.prefetch("/join-registry");
+            router.push("/join-registry");
+          }}
         >
-          <Link
-            href="/join-registry"
-            className="font-body text-sm font-medium text-black"
-          >
-            Join Soower&apos;s Registry
-          </Link>
+          Join Soower&apos;s Registry
         </Button>
       </Space>
     </Header>

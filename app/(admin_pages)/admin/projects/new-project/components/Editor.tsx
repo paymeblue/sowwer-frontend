@@ -53,7 +53,7 @@ const Editor: React.FC = () => {
         id: projectId || id,
         description: extractedText,
       }).unwrap();
-      setValue("");
+      // setValue("");
       messageApi.open({
         content: `${res.message}`,
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,

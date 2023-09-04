@@ -24,7 +24,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
   const { data: socialLinks } = useGetSocialLinksQuery(ministryId);
 
   const router = useRouter();
-  const onClick = (id?: string) => {
+  const onClick = (id: string) => {
     router.prefetch(`/ministries/${id}/donate`);
     router.push(`/ministries/${id}/donate`);
   };
@@ -99,7 +99,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             type="primary"
             icon={<Heart2 set="bold" size={18} />}
             size="large"
-            onClick={() => onClick(ministryId as string)}
+            onClick={() => onClick(ministryId)}
             className="mx-auto mt-6 flex items-center justify-center text-[14px] font-medium leading-[17.64px] text-black laptop:p-6 laptop:text-[14px] laptop:leading-[18px] "
             block
           >

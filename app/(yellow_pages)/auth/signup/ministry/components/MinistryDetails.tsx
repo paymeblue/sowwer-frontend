@@ -1,10 +1,21 @@
 import { Christian, ChurchIcon, FileUpload } from "@components/assets/icons";
 import states from "@lib/NigeriaStates";
-import { Form, Input, Select, Space, Typography, Upload, message } from "antd";
+import {
+  Button,
+  Form,
+  FormInstance,
+  Input,
+  Select,
+  Space,
+  Typography,
+  Upload,
+  message,
+} from "antd";
 import { RcFile, UploadProps } from "antd/es/upload";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FC, Fragment, ReactNode, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { FC, Fragment, ReactNode, useEffect, useState } from "react";
+import { ArrowRight } from "react-iconly";
 
 type Item = {
   id: string;
@@ -31,18 +42,43 @@ const items: Array<Item> = [
 ];
 const { Dragger } = Upload;
 
-const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
+const MinistryDetails: FC<any> = ({
+  form,
+  next,
+}: {
+  form: FormInstance<any>;
+  next: () => void;
+}) => {
   const { Title, Paragraph } = Typography;
   const { Item } = Form;
+
   const { TextArea } = Input;
   const [title, setTitle] = useState(items[0].tag);
-  const nextScreen = useSearchParams();
+  const pathname = usePathname();
+  const searchparams = useSearchParams();
+  const path = `${pathname}?${searchparams}`;
   const router = useRouter();
+
   const changeDisplay = (item: Item) => {
     router.push("/auth/signup/ministry?step=details");
     setTitle((prev) => (prev = item.tag));
   };
-
+  const [submittable, setSubmittable] = useState(false);
+  // Watch all values
+  const values = Form.useWatch([], form);
+  useEffect(() => {
+    form.setFieldValue("ministryType", title);
+  }, [title, form]);
+  useEffect(() => {
+    form.validateFields({ validateOnly: true }).then(
+      () => {
+        setSubmittable(true);
+      },
+      () => {
+        setSubmittable(false);
+      }
+    );
+  }, [values, form]);
   const props: UploadProps = {
     name: "file",
     // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
@@ -96,21 +132,32 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
     { value: "", label: "-- Select --", disabled: true },
     ...states.map((state) => ({ value: state, label: state })),
   ];
-  form.setFieldValue("ministryType", title);
   return (
     <Fragment>
-      {nextScreen.toString() === "step=details" ? (
+      {path === "/auth/signup/ministry?step=details" ? (
         <section className="mx-auto laptop:max-w-lg">
           <Form
             form={form}
             name="ministry_info__register_form"
             layout="vertical"
+            className="clear-both"
+            preserve
             autoComplete="off"
-            initialValues={{ ministryWebsite: "https://" }}
+            initialValues={{
+              ministryType: title,
+              ministryName: "",
+              ministryEmail: "",
+              ministryPhoneNumber: "",
+              state: "",
+              ministryMsg: "",
+              ministryAddressLine: "",
+              ministryWebsite: "https://",
+            }}
           >
+            3128533032
             <Title
               level={2}
-              className="my-8 font-title text-[26px] leading-[29.75px] tablet:leading-[40.04px] laptop:text-[35px]"
+              className="mx-auto my-8 text-center font-title text-[26px] leading-[29.75px] tablet:leading-[40.04px] laptop:text-[35px]"
             >
               What type of ministry are you?
             </Title>
@@ -123,7 +170,7 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
                   </Typography>
                   <Link
                     className="rounded-md px-2 py-1 font-body text-body-2 hover:bg-slate-100"
-                    href="/auth/signup/ministry"
+                    href="/auth/signup/ministry/"
                   >
                     Edit
                   </Link>
@@ -137,7 +184,7 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
                     </span>
                   </Typography>
                   <Link
-                    href="/auth/signup/ministry"
+                    href="/auth/signup/ministry/"
                     className="rounded-md px-2 py-1 font-body text-body-2 hover:bg-slate-100"
                     type="text"
                   >
@@ -174,6 +221,10 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
                 label="Email Address"
                 className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-left [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                 rules={[
+                  {
+                    type: "email",
+                    message: "Email is not valid!",
+                  },
                   {
                     required: true,
                     message: "Please input the email address of the ministry!",
@@ -222,7 +273,10 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your church address!",
+                  message:
+                    title === "Church"
+                      ? "Please input your church address!"
+                      : "Please input your organization's address!",
                 },
               ]}
               hasFeedback
@@ -267,6 +321,12 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
                 name="ministryWebsite"
                 className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-left [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
                 label="Website or social link"
+                rules={[
+                  {
+                    type: "url",
+                  },
+                ]}
+                hasFeedback
               >
                 <Input
                   type="text"
@@ -320,13 +380,32 @@ const MinistryDetails: FC<any> = ({ form }: { form: any }) => {
                 className="rounded border-none bg-[#f9f9f9] py-2 placeholder-[#555] outline-none placeholder:text-[12px] placeholder:leading-[15.62px] laptop:placeholder:text-[14px] laptop:placeholder:leading-[17.64px]"
               />
             </Item>
+            <Space className="w-full [&>.ant-space-item]:w-full">
+              <Item>
+                <Button
+                  onClick={() => {
+                    router.push(
+                      "/auth/signup/ministry?step=personal-information"
+                    );
+                    next();
+                  }}
+                  type="primary"
+                  size="large"
+                  className="float-right flex items-center justify-center gap-2 bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:bg-gray-300"
+                  disabled={!submittable}
+                >
+                  <span>Continue</span>
+                  <ArrowRight set="light" />
+                </Button>
+              </Item>
+            </Space>
           </Form>
         </section>
       ) : (
         <section>
           <Title
             level={2}
-            className="my-8 font-title text-[26px] leading-[29.75px] tablet:leading-[40.04px] laptop:text-[35px]"
+            className="mx-auto my-8 text-center font-title text-[26px] leading-[29.75px] tablet:leading-[40.04px] laptop:text-[35px]"
           >
             What type of ministry are you?
           </Title>

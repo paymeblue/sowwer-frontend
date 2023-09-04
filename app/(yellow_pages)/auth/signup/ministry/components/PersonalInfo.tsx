@@ -1,20 +1,55 @@
-import { Form, Input, Space } from "antd";
-import { useSearchParams } from "next/navigation";
-import { FC, Fragment } from "react";
+import { Button, Form, FormInstance, Input, Space } from "antd";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { FC, Fragment, useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight } from "react-iconly";
 
-const PersonalInfo: FC<any> = ({ form }: { form: any }) => {
+const PersonalInfo: FC<any> = ({
+  form,
+  next,
+  prev,
+}: {
+  form: FormInstance<any>;
+  next: () => void;
+  prev: () => void;
+}) => {
   const { Item } = Form;
   const { Password } = Input;
-  const nextScreen = useSearchParams();
+  const pathname = usePathname();
+  const searchparams = useSearchParams();
+  const path = `${pathname}?${searchparams}`;
+  const router = useRouter();
+  const [submittable, setSubmittable] = useState(false);
+  // Watch all values
+  const values = Form.useWatch([], form);
+
+  useEffect(() => {
+    form.validateFields({ validateOnly: true }).then(
+      () => {
+        setSubmittable(true);
+      },
+      () => {
+        setSubmittable(false);
+      }
+    );
+  }, [values, form]);
   return (
     <Fragment>
-      {nextScreen.toString() === "step=personal-information" && (
+      {path === "/auth/signup/ministry?step=personal-information" ? (
         <section className="mx-auto laptop:max-w-lg">
           <Form
             form={form}
+            preserve
             name="admin_info__register_form"
             layout="vertical"
             autoComplete="off"
+            initialValues={{
+              adminFirstName: "",
+              adminLastName: "",
+              adminRole: "",
+              adminPhoneNumber: "",
+              adminEmail: "",
+              adminPassword: "",
+            }}
           >
             <Space className="flex w-full flex-col tablet:flex-row [&>div.ant-space-item]:w-full">
               <Item
@@ -79,8 +114,12 @@ const PersonalInfo: FC<any> = ({ form }: { form: any }) => {
                 label="Email Address"
                 rules={[
                   {
+                    type: "email",
+                    message: "Email is not valid!",
+                  },
+                  {
                     required: true,
-                    message: "Please input the your email address!",
+                    message: "Please enter your email!",
                   },
                 ]}
                 hasFeedback
@@ -98,7 +137,15 @@ const PersonalInfo: FC<any> = ({ form }: { form: any }) => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your phone number!",
+                    message: "Please enter your phone number!",
+                  },
+                  {
+                    min: 11,
+                    message: "A minimum of 11 digits",
+                  },
+                  {
+                    max: 14,
+                    message: "Phone number should not exceed 14 digits",
                   },
                 ]}
                 hasFeedback
@@ -106,6 +153,7 @@ const PersonalInfo: FC<any> = ({ form }: { form: any }) => {
                 <Input
                   type="tel"
                   placeholder="Phone Number"
+                  pattern="^\+\d{13}|\d{11}$"
                   className="rounded border-none bg-[#F7F8FA] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                 />
               </Item>
@@ -120,16 +168,57 @@ const PersonalInfo: FC<any> = ({ form }: { form: any }) => {
                   required: true,
                   message: "Please input your password!",
                 },
+                {
+                  min: 8,
+                  message: "Password too short!",
+                },
+                {
+                  max: 16,
+                  message: "Password should not exceed 16 characters",
+                },
               ]}
               hasFeedback
             >
               <Password
                 placeholder="Create a password"
+                pattern="^.{8,16}$"
                 className="rounded border-none bg-[#F7F8FA] py-2 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
               />
             </Item>
+            <Space className="my-6 flex w-full items-center justify-between">
+              <Item>
+                <Button
+                  onClick={() => {
+                    router.push("/auth/signup/ministry?step=details");
+                    prev();
+                  }}
+                  size="large"
+                  className="flex items-center justify-center bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+                  icon={<ArrowLeft set="light" />}
+                >
+                  Back
+                </Button>
+              </Item>
+              <Item>
+                <Button
+                  onClick={() => {
+                    router.push("/auth/signup/ministry?step=terms");
+                    next();
+                  }}
+                  type="primary"
+                  size="large"
+                  className="float-right  flex items-center justify-center gap-2 bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:bg-gray-300"
+                  disabled={!submittable}
+                >
+                  <span>Continue</span>
+                  <ArrowRight set="light" />
+                </Button>
+              </Item>
+            </Space>
           </Form>
         </section>
+      ) : (
+        <>null</>
       )}
     </Fragment>
   );

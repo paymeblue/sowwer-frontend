@@ -2,7 +2,7 @@
 import Container from "@shared/Container";
 import { Button, Col, Row, Space, Typography } from "antd";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import spiral from "public/assets/images/circular_dotted_lines.svg";
 import gridUnited from "public/assets/images/grid_images.svg";
 import gridImages from "public/assets/images/group_images.svg";
@@ -15,6 +15,7 @@ import { Accordion, FeaturedProjects, Hero, HomeCard } from "./index";
 
 const HomePage: FC = () => {
   const { Title, Paragraph } = Typography;
+  const router = useRouter();
   const gridSection = [
     {
       id: useId(),
@@ -78,13 +79,14 @@ const HomePage: FC = () => {
                 type="primary"
                 size="large"
                 className="mb-12 mt-6 flex items-center px-[35px] py-[18px] text-[14px] font-medium text-black tablet:mb-auto "
+                onClick={() => {
+                  router.prefetch("/about");
+                  router.push("/about");
+                }}
               >
-                <Link
-                  href="/about"
-                  className="pr-3 font-body text-[14px] font-medium text-black no-underline "
-                >
+                <span className="pr-3 font-body text-[14px] font-medium text-black no-underline ">
                   Learn More
-                </Link>
+                </span>
                 <ArrowRight set="light" size={18} />
               </Button>
             </Typography>

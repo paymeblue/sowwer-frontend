@@ -26,17 +26,15 @@ const AmountInput: React.FC<AmountInputProps> = ({
 
   const onNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    const newNumber = parseInt(inputValue.replace(/,/g, ""), 10);
-
-    if (isNaN(newNumber)) {
+    const newNumber = inputValue.replace(/,/g, "");
+    if (isNaN(+newNumber)) {
       return;
     }
 
-    // Format the number with commas
-    const formattedValue = newNumber.toLocaleString();
+    const formattedValue = Number(newNumber).toLocaleString();
 
     setNumber(formattedValue);
-    triggerChange({ number: newNumber });
+    triggerChange({ number: +newNumber });
   };
 
   return (

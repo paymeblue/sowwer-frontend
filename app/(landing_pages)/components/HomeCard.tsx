@@ -1,7 +1,6 @@
-import React from "react";
 import { Button, Card, Space, Typography } from "antd";
+import { useRouter } from "next/navigation";
 import { Heart2 } from "react-iconly";
-import Link from "next/link";
 
 const { Title, Paragraph } = Typography;
 
@@ -24,6 +23,7 @@ const HomeCard = ({
   link,
   btnText,
 }: Props) => {
+  const router = useRouter();
   return (
     <Card
       className="m-24 mx-auto bg-[#FDFBF2] p-4 text-center tablet:py-10 laptop:px-[86px] laptop:py-14 [&>div.ant-card-body]:p-0"
@@ -50,14 +50,13 @@ const HomeCard = ({
           type="primary"
           icon={showIcon && <Heart2 set="bold" size={18} />}
           size="large"
-          className="mx-auto mt-2 flex items-center justify-center  px-[27px] py-[15px] text-sm font-medium text-black laptop:px-[50px] laptop:py-[21px]"
+          className="mx-auto mt-2 flex items-center justify-center px-[27px] py-[15px] text-sm  font-medium leading-[17.6px] text-black laptop:px-[50px] laptop:py-[21px]"
+          onClick={() => {
+            router.prefetch(`/${link}`);
+            router.push(`/${link}`);
+          }}
         >
-          <Link
-            href={`/${link}`}
-            className="text-sm font-medium leading-[17.6px] text-black"
-          >
-            {btnText}
-          </Link>
+          {btnText}
         </Button>
       </Space>
     </Card>

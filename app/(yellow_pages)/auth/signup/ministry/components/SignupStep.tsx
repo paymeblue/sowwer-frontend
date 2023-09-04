@@ -5,10 +5,9 @@ import { useAppDispatch } from "@hooks/useStore";
 import { setCredentials } from "@store/reducers/authSlice";
 import { useMinistrySignupMutation } from "@store/services/auth";
 import { MinistrySignupRequest } from "@store/types";
-import { Button, Form, Space, Steps, Typography, message, theme } from "antd";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
-import { ArrowLeft, ArrowRight } from "react-iconly";
+import { Form, Steps, Typography, message } from "antd";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import MinistryDetails from "./MinistryDetails";
 import PersonalInfo from "./PersonalInfo";
 import Terms from "./Terms";
@@ -32,68 +31,53 @@ type FormDataFields = {
 };
 const { useForm } = Form;
 const SignupStep = () => {
-  const { token } = theme.useToken();
   const { Text } = Typography;
   const [current, setCurrent] = useState(0);
+  const next = () => {
+    setCurrent((prev) => prev + 1);
+  };
+  const prev = () => {
+    setCurrent((prev) => prev - 1);
+  };
   const [base64Data, setBase64Data] = useState<string | null>(null);
-  const searchParam = useSearchParams();
-  const pathname = usePathname();
-  const path = `${pathname}?${searchParam.toString()}`;
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [form] = useForm();
   const steps = [
     {
+      key: "1",
       title: (
         <Text className="text-[11.42px] font-semibold leading-[14.39px] laptop:text-[12px] laptop:leading-[15.12px]">
           Ministry Details
         </Text>
       ),
-      content: <MinistryDetails form={form} />,
+      content: <MinistryDetails form={form} next={next} />,
     },
     {
+      key: "2",
       title: (
         <Text className="text-[11.42px] font-semibold leading-[14.39px] laptop:text-[12px] laptop:leading-[15.12px]">
           Personal Information
         </Text>
       ),
-      content: <PersonalInfo form={form} />,
+      content: <PersonalInfo form={form} next={next} prev={prev} />,
     },
     {
+      key: "3",
       title: (
         <Text className="text-[11.42px] font-semibold leading-[14.39px] laptop:text-[12px] laptop:leading-[15.12px]">
           Terms and Conditions
         </Text>
       ),
-      content: <Terms form={form} />,
+      content: <Terms form={form} prev={prev} />,
     },
   ];
 
-  const items = steps.map((item) => ({ key: item.title, title: item.title }));
-  const next = () => {
-    setCurrent(current + 1);
-  };
+  const items = steps.map((item) => ({ key: item.key, title: item.title }));
 
-  const prev = () => {
-    setCurrent(current - 1);
-  };
-
-  const prevHandler = () => {
-    prev();
-    router.back();
-  };
-  function nextHandler() {
-    if (current === 0) {
-      router.push(`/auth/signup/ministry?step=personal-information`);
-    } else if (current === 1) {
-      router.push(`/auth/signup/ministry?step=terms`);
-    }
-    next();
-  }
   const [messageApi, contextHolder] = message.useMessage();
-  const [ministrySignup, { isLoading }] = useMinistrySignupMutation();
+  const [ministrySignup] = useMinistrySignupMutation();
 
-  const tandc = Form.useWatch("tandc", form);
   console.log(base64Data);
   const onFormFinish = async (): Promise<void> => {
     const values: FormDataFields = form.getFieldsValue(true);
@@ -166,12 +150,6 @@ const SignupStep = () => {
     }
   };
 
-  const contentStyle: React.CSSProperties = {
-    textAlign: "center",
-    color: token.colorTextTertiary,
-    borderRadius: token.borderRadiusLG,
-    marginTop: 16,
-  };
   return (
     <section className="clear-both mt-8">
       {contextHolder}
@@ -182,62 +160,7 @@ const SignupStep = () => {
         className="my-4 laptop:my-auto"
       />
       <Form.Provider onFormFinish={onFormFinish}>
-        <div style={contentStyle}>{steps[current].content}</div>
-        <Space className="my-6 flex w-full items-center justify-between">
-          {current > 0 && (
-            <Button
-              onClick={prevHandler}
-              size="large"
-              className={`flex items-center justify-center bg-accent text-[13px] font-semibold leading-[16.38px] text-white
-                ${
-                  path === "/auth/signup/ministry?step=registration-complete"
-                    ? "hidden"
-                    : ""
-                }
-                `}
-              icon={<ArrowLeft set="light" />}
-            >
-              Back
-            </Button>
-          )}
-          {path === "/auth/signup/ministry?"
-            ? null
-            : current < steps.length - 1 && (
-                <Button
-                  onClick={nextHandler}
-                  type="primary"
-                  size="large"
-                  className="float-right bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
-                >
-                  <Space className="w-full">
-                    Continue
-                    <ArrowRight set="light" />
-                  </Space>
-                </Button>
-              )}
-          {current === steps.length - 1 && (
-            <Button
-              type="primary"
-              size="large"
-              htmlType="submit"
-              loading={isLoading}
-              disabled={!tandc}
-              onClick={() => {
-                form.submit();
-              }}
-              className={`bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:cursor-not-allowed disabled:bg-gray-400
-                    ${
-                      path ===
-                      "/auth/signup/ministry?step=registration-complete"
-                        ? "hidden"
-                        : ""
-                    }
-                  `}
-            >
-              {isLoading ? "Sending..." : "Done"}
-            </Button>
-          )}
-        </Space>
+        <section>{steps[current].content}</section>
       </Form.Provider>
     </section>
   );

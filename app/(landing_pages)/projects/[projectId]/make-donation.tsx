@@ -29,6 +29,7 @@ import {
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Fragment } from "react";
 import { Heart2 } from "react-iconly";
 
@@ -37,6 +38,7 @@ const { Title, Text, Paragraph } = Typography;
 const MakeDonation = ({ projectId }: { projectId: string }) => {
   const { data: projectDetails } = useGetProjectDetailsQuery(projectId);
   const data = projectDetails?.data;
+  const router = useRouter();
   const priceFormat = currencyFormat();
   const {
     data: donors,
@@ -177,15 +179,14 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                 type="primary"
                 icon={<Heart2 set="bold" size={16} />}
                 size="large"
-                className="mx-auto flex items-center justify-center  text-sm  font-medium text-black laptop:p-6 laptop:text-[14px] laptop:leading-[18px]"
+                className="mx-auto flex items-center justify-center text-[13px] text-sm font-medium leading-[16.38px] text-black  laptop:p-6 laptop:text-[14px] laptop:leading-[18px]"
                 block
+                onClick={() => {
+                  router.prefetch(`/projects/${projectId}/donate`);
+                  router.push(`/projects/${projectId}/donate`);
+                }}
               >
-                <Link
-                  href={`/projects/${projectId}/donate`}
-                  className="text-[13px] leading-[16.38px] laptop:text-[14px] laptop:leading-[18px]"
-                >
-                  Donate
-                </Link>
+                Donate
               </Button>
               <Tooltip title={`${copied ? "link copied" : "copy link"}`}>
                 <Button
@@ -221,7 +222,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
             </Typography>
           </Col>
           <Col>
-            <Card className="mx-auto max-h-[400px] max-w-md overflow-scroll border-none bg-white mobile-md:p-3">
+            <Card className="mx-auto max-h-[400px] max-w-md overflow-y-scroll border-none bg-white mobile-md:p-3">
               <Title
                 level={4}
                 className="my-3 font-title text-[24px] leading-[27.46px] laptop:text-[30px] laptop:leading-[34px]"

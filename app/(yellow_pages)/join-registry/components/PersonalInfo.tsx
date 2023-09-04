@@ -1,22 +1,34 @@
 import { usePathname, useSearchParams } from "next/navigation";
+import { Dispatch, Fragment } from "react";
 import MissionaryForm from "./MissionaryForm";
-import SelectCategory from "./SelectCategory";
+import RegistrationSuccess from "./RegistrationSuccess";
 import WidowForm from "./WidowForm";
 
-const PersonalInfo = () => {
+const PersonalInfo = ({
+  setCurrent,
+  current,
+}: {
+  setCurrent: Dispatch<React.SetStateAction<number>>;
+  current: number;
+}) => {
   const pathname = usePathname();
   const searchparams = useSearchParams();
-  const path = `${pathname}${searchparams}`;
+  const path = `${pathname}?${searchparams}`;
 
+  const prevHandler = () => {
+    setCurrent((prev) => prev - 1);
+  };
+
+  let component;
   if (path === "/join-registry?category=widow") {
-    return <WidowForm />;
+    component = <WidowForm prev={prevHandler} />;
   } else if (path === "/join-registry?category=missionary") {
-    return <MissionaryForm />;
+    component = <MissionaryForm prev={prevHandler} />;
+  } else if (path === "/join-registry?status=registration-success") {
+    component = <RegistrationSuccess />;
   }
-  // You might want to provide a default behavior here
-  // if the path doesn't match any of the conditions.
-  // For example:
-  return <SelectCategory />;
+
+  return <Fragment>{component}</Fragment>;
 };
 
 export default PersonalInfo;

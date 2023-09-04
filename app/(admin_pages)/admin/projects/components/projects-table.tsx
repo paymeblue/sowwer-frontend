@@ -680,7 +680,7 @@ const ProjectsTable = () => {
         onOk={handleDonorOk}
         onCancel={handleDonorCancel}
         footer={null}
-        className="[&>.ant-modal-content]:max-h-[450px] [&>.ant-modal-content]:overflow-scroll"
+        className="[&>.ant-modal-content]:max-h-[450px] [&>.ant-modal-content]:overflow-y-scroll"
       >
         {donors?.data?.length === 0 ? (
           <Empty

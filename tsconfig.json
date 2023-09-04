@@ -42,7 +42,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "middleware"
+    "middleware",
+    "app/(yellow_pages)/join-registry/context/registry-context"
   ],
   "exclude": ["node_modules"]
 }

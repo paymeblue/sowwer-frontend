@@ -188,23 +188,26 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const onFinish = async (values: State) => {
     try {
       let data;
-      const { amount, ...rest } = values;
+      const { amount, mode, ...rest } = values;
       if (!user && createAccount) {
         data = {
           id: ministryId,
           amount: amount.number,
+          payment_mode: mode,
           ...rest,
         };
       } else if (user) {
         data = {
           id: ministryId,
           amount: amount.number,
+          payment_mode: mode,
           ...rest,
         };
       } else if (!user && !createAccount) {
         data = {
           id: ministryId,
           amount: amount.number,
+          payment_mode: mode,
           ...rest,
         };
       }

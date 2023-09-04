@@ -1,9 +1,12 @@
 import { DonateIcon } from "@components/assets/icons";
 import ResultComponent from "@shared/ResultComponent";
-import { Checkbox, Form, Typography } from "antd";
+import { Button, Checkbox, Form, FormInstance, Space, Typography } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FC, useState } from "react";
+import { ArrowLeft } from "react-iconly";
+
+const { Item } = Form;
 
 const items = [
   {
@@ -38,18 +41,29 @@ const items = [
   },
 ];
 
-const Terms: FC<any> = ({ form }: { form: any }) => {
+const Terms: FC<any> = ({
+  form,
+  prev,
+}: {
+  form: FormInstance<any>;
+  prev: () => void;
+}) => {
   const { Title, Paragraph } = Typography;
-  const { Item } = Form;
-  const nextScreen = useSearchParams();
+
+  const pathname = usePathname();
+  const searchparams = useSearchParams();
+  const path = `${pathname}?${searchparams}`;
   const [checkbox, setCheckbox] = useState(false);
+  const router = useRouter();
+
+  const tandc = Form.useWatch("tandc", form);
 
   const changeHandler = (e: CheckboxChangeEvent) => {
     setCheckbox(e.target.checked);
   };
   return (
     <section className="mx-auto laptop:max-w-lg">
-      {nextScreen.toString() === "step=terms" ? (
+      {path === "/auth/signup/ministry?step=terms" ? (
         <section className="text-start">
           <Title className="my-12 font-title text-[24px] text-body-1">
             Soower&apos;s Terms and Conditions
@@ -69,9 +83,14 @@ const Terms: FC<any> = ({ form }: { form: any }) => {
           ))}
           <Form
             form={form}
+            preserve
             name="tandc__register_form"
             layout="vertical"
+            className="clear-both"
             autoComplete="off"
+            initialValues={{
+              tandc: false,
+            }}
           >
             <Item name="tandc" valuePropName="checked">
               <Checkbox
@@ -82,10 +101,38 @@ const Terms: FC<any> = ({ form }: { form: any }) => {
                 I have read, and accept the Terms and Conditions
               </Checkbox>
             </Item>
+            <Space className="my-6 flex w-full items-center justify-between [&>.ant-space-item]:w-full">
+              <Item>
+                <Button
+                  onClick={() => {
+                    router.push(
+                      "/auth/signup/ministry?step=personal-information"
+                    );
+                    prev();
+                  }}
+                  size="large"
+                  className="flex items-center justify-center bg-accent text-[13px] font-semibold leading-[16.38px] text-white"
+                  icon={<ArrowLeft set="light" />}
+                >
+                  Back
+                </Button>
+              </Item>
+              <Item>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  size="large"
+                  className="float-right bg-accent text-[13px] font-semibold leading-[16.38px] text-white disabled:bg-gray-300"
+                  disabled={!tandc}
+                >
+                  Done
+                </Button>
+              </Item>
+            </Space>
           </Form>
         </section>
       ) : (
-        nextScreen.toString() === "step=registration-complete" && (
+        path === "/auth/signup/ministry?step=registration-complete" && (
           <ResultComponent
             title={
               <Title

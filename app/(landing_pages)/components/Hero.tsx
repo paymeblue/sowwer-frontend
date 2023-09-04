@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
 import { Button, Space, Typography } from "antd";
+import { useRouter } from "next/navigation";
+import { Fragment } from "react";
 import { Heart2 } from "react-iconly";
-import Link from "next/link";
 
 type Props = {
   title1: string;
@@ -37,7 +37,7 @@ const Hero = ({
   doubleBtn,
 }: Props) => {
   const { Title, Text } = Typography;
-
+  const router = useRouter();
   const landingPage = () => (
     <section
       className={`mt-8 flex items-center text-center tablet:mt-0 tablet:h-screen ${
@@ -70,8 +70,12 @@ const Hero = ({
           icon={hasIcon && <Heart2 set="bold" size={18} />}
           size="large"
           className="mx-auto mb-24 mt-6 flex items-center justify-center font-body text-[14px] font-medium text-black tablet:mb-auto laptop:px-[46px] laptop:py-[22px]"
+          onClick={() => {
+            router.prefetch(`/${link}`);
+            router.push(`/${link}`);
+          }}
         >
-          <Link href={`/${link}`}>&nbsp;{btn}</Link>
+          &nbsp;{btn}
         </Button>
       </Space>
     </section>
@@ -110,16 +114,24 @@ const Hero = ({
               icon={hasIcon && <Heart2 set="bold" size={19} />}
               size="large"
               className="mx-auto mt-6 flex items-center justify-center gap-2 text-[13px] font-medium leading-[16.38px] text-black laptop:p-6 "
+              onClick={() => {
+                router.prefetch(`/${link}`);
+                router.push(`/${link}`);
+              }}
             >
-              <Link href={`/${link}`}>&nbsp;{btn}</Link>
+              &nbsp;{btn}
             </Button>
             <Button
               type="default"
               icon={hasIcon && <Heart2 set="bold" size={19} />}
               size="large"
               className="mx-auto mt-6 flex items-center justify-center gap-2 border-black text-[13px] font-medium leading-[16.38px] text-black laptop:p-6 "
+              onClick={() => {
+                router.prefetch(`/${link2}`);
+                router.push(`/${link2}`);
+              }}
             >
-              <Link href={`/${link2}`}>&nbsp;{btn2}</Link>
+              &nbsp;{btn2}
             </Button>
           </Space>
         ) : null}
