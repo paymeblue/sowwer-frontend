@@ -2,7 +2,6 @@
 import { DonateIcon } from "@components/assets/icons";
 import ResultComponent from "@shared/ResultComponent";
 import { Typography } from "antd";
-import React from "react";
 
 const { Title, Paragraph } = Typography;
 const RegistrationSuccess = () => {
@@ -24,7 +23,7 @@ const RegistrationSuccess = () => {
         </Paragraph>
       }
       icon={<DonateIcon />}
-      btnLink=""
+      btnLink="/"
       btnText="Back to Homepage"
       btnBg="accent"
       btnTextColor="white"
