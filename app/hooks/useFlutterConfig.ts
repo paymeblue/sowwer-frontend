@@ -16,8 +16,6 @@ interface IProps {
   currency: string;
   desc: string;
   txnRef: string;
-  paymentPlan?: string;
-  recurring?: boolean;
 }
 
 interface IConfig {
@@ -26,7 +24,6 @@ interface IConfig {
   amount: number;
   currency: string;
   payment_options: string;
-  payment_plan?: string;
   customer: ICustomer;
   customizations: ICustomizations;
 }
@@ -37,16 +34,13 @@ const useFlutterConfig = ({
   currency,
   desc,
   txnRef,
-  paymentPlan,
-  recurring,
 }: IProps): IConfig => {
   const config: IConfig = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
     tx_ref: txnRef,
     amount,
     currency,
-    payment_options: recurring ? "card" : "card,mobilemoney,ussd",
-    payment_plan: recurring ? paymentPlan : undefined,
+    payment_options: "card,mobilemoney,ussd",
     customer,
     customizations: {
       title: "Soower Donations",
@@ -58,3 +52,36 @@ const useFlutterConfig = ({
 };
 
 export default useFlutterConfig;
+
+interface IPropsReccuring extends IProps {
+  paymentPlan?: string;
+}
+
+interface IConfigReccuring extends IConfig {
+  payment_plan?: string;
+}
+
+export const useFlutterConfigReccuring = ({
+  customer,
+  amount,
+  currency,
+  desc,
+  txnRef,
+  paymentPlan,
+}: IPropsReccuring): IConfigReccuring => {
+  const config: IConfigReccuring = {
+    public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
+    tx_ref: txnRef,
+    amount,
+    currency,
+    payment_options: "card",
+    payment_plan: paymentPlan,
+    customer,
+    customizations: {
+      title: "Soower Donations",
+      description: `Donation made for ${desc}`,
+      logo: "",
+    },
+  };
+  return config;
+};

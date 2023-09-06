@@ -2,6 +2,7 @@
 
 import ResultComponent from "@shared/ResultComponent";
 import { useEffect } from "react";
+import Layout from "./(landing_pages)/components/layout";
 
 export default function Error({
   error,
@@ -16,15 +17,17 @@ export default function Error({
   }, [error]);
 
   return (
-    <ResultComponent
-      title="Oops... Something went wrong :("
-      subTitle={`${error}`}
-      btnBg="primary"
-      btnText="Try Again"
-      btnTextColor="black"
-      status="error"
-      showBtn={true}
-      onBtnClick={() => reset}
-    />
+    <Layout>
+      <ResultComponent
+        title="Oops... Something went wrong :("
+        subTitle={`${error}`}
+        btnBg="primary"
+        btnText="Try Again"
+        btnTextColor="black"
+        status="error"
+        showBtn={true}
+        onBtnClick={() => reset}
+      />
+    </Layout>
   );
 }

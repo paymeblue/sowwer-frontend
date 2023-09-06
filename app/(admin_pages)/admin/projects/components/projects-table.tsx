@@ -95,19 +95,7 @@ const ProjectsTable = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
 
-  const [submittable, setSubmittable] = useState(false);
-  // Watch all values
-  const values = Form.useWatch([], form);
-  useEffect(() => {
-    form.validateFields({ validateOnly: true }).then(
-      () => {
-        setSubmittable(true);
-      },
-      () => {
-        setSubmittable(false);
-      }
-    );
-  }, [values, form]);
+  const password = Form.useWatch("password", form);
 
   let id: string | undefined;
   if (user && "ministry" in user) {
@@ -553,11 +541,11 @@ const ProjectsTable = () => {
     handleDeleteCancel();
   };
 
-  const onFinish = async (values: { reason: string }): Promise<void> => {
+  const onFinish = async (values: { password: string }): Promise<void> => {
     try {
       const res = await closeMinistryProject({
         id: rowId,
-        reason: values.reason,
+        password: values.password,
       }).unwrap();
       messageApi.open({
         content: `${res.message}`,
@@ -664,23 +652,31 @@ const ProjectsTable = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           name="close_project_form_modal"
-          initialValues={{ reason: "" }}
         >
           <Item
-            name="reason"
-            label="Tell us why you are closing the project"
+            name="password"
+            label="To close the project, enter your password below:"
+            className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[13px] [&>div>div.ant-form-item-label>label]:leading-[21px] [&>div>div.ant-form-item-label]:mx-auto  [&>div>div.ant-form-item-label]:p-0  [&>div>div.ant-form-item-label]:pb-3 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
             rules={[
               {
-                required: true,
-                message: "Please state your reason!",
+                // required: true,
+                message: "Please enter your password",
+              },
+              {
+                min: 8,
+                message: "Password too short!",
+              },
+              {
+                max: 16,
+                message: "Password should not exceed 16 characters",
               },
             ]}
-            className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
+            hasFeedback
           >
-            <Input.TextArea
-              placeholder="State reason for closing project..."
-              rows={2}
-              className="rounded border-none bg-[#f9f9f9] py-2 placeholder-[#555] outline-none placeholder:text-[12px] placeholder:leading-[15.62px] laptop:placeholder:text-[14px] laptop:placeholder:leading-[17.64px]"
+            <Input.Password
+              placeholder="Enter your password"
+              pattern="^.{8,16}$"
+              className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
             />
           </Item>
           <Item>
@@ -691,7 +687,7 @@ const ProjectsTable = () => {
               htmlType="submit"
               className="my-2 flex items-center justify-center bg-[#DD3636] py-6 text-[13px] font-semibold leading-[16px] text-white disabled:cursor-not-allowed disabled:bg-gray-300"
               size="large"
-              disabled={!submittable}
+              disabled={!password}
               block
             >
               Close project

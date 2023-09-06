@@ -63,11 +63,11 @@ const PayoutsPage = () => {
       label: "Completed Projects",
       children: <CompletedProjectsTable acctLinked={displayAcctInfo} />,
     },
-    {
-      key: "general-donations",
-      label: "General Donations",
-      children: <GeneralDonationsTable acctLinked={displayAcctInfo} />,
-    },
+    // {
+    //   key: "general-donations",
+    //   label: "General Donations",
+    //   children: <GeneralDonationsTable acctLinked={displayAcctInfo} />,
+    // },
     {
       key: "payout-history",
       label: "Payout History",

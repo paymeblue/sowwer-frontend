@@ -1,6 +1,10 @@
 "use client";
+import GeneralDonationCard from "@shared/GeneraDonationCard";
 import ReuseableCards from "@shared/ReuseableCards";
-import { useGetDonationsForDonorUserQuery } from "@store/services/projects";
+import {
+  useGetGeneralDonationsForDonorUserQuery,
+  useGetProjectDonationsForDonorUserQuery,
+} from "@store/services/projects";
 import DonorStructure from "./donor-structure";
 
 const items = [
@@ -9,8 +13,7 @@ const items = [
     key: "1",
     children: (
       <ReuseableCards
-        rtkHook={useGetDonationsForDonorUserQuery}
-        prop={{ type: "project" }}
+        rtkHook={useGetProjectDonationsForDonorUserQuery}
         emptyDesc="You have not made any project donations yet!"
         showSection
       />
@@ -20,9 +23,8 @@ const items = [
     label: "General Donations",
     key: "2",
     children: (
-      <ReuseableCards
-        rtkHook={useGetDonationsForDonorUserQuery}
-        prop={{ type: "ministry" }}
+      <GeneralDonationCard
+        rtkHook={useGetGeneralDonationsForDonorUserQuery}
         emptyDesc="You have not made any general donations yet!"
       />
     ),

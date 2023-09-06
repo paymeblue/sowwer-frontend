@@ -3,7 +3,9 @@ import PlaceholderImage from "@components/PlaceholderImage";
 import AmountInput from "@components/amountField";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
-import useFlutterConfig from "@hooks/useFlutterConfig";
+import useFlutterConfig, {
+  useFlutterConfigReccuring,
+} from "@hooks/useFlutterConfig";
 import { useAppDispatch } from "@hooks/useStore";
 import capitalizeFirstLetters from "@lib/capitalize";
 import { setCredentials } from "@store/reducers/authSlice";
@@ -75,7 +77,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const { user } = useAuth();
   const router = useRouter();
   const [ref, setRef] = useState<string>("");
-  const [planId, setPlanId] = useState<number | undefined>();
+  const [planId, setPlanId] = useState<string>("");
   const dispatch = useAppDispatch();
   const { data: ministryData } = useGetMinistryDetailsQuery(ministryId);
   let ministry: MinistryData | undefined;
@@ -103,12 +105,12 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   useEffect(() => {
     if (data) {
       setRef(data.txn_reference);
-      setPlanId(data.plan_id);
+      setPlanId(data.plan_id.toString());
     }
   }, [data]);
 
   useEffect(() => {
-    if ((ref && planId) || ref) {
+    if (ref) {
       handleFlutterPayment({
         callback: async (response) => {
           console.log(response);
@@ -171,12 +173,21 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     customer,
     desc: ministry ? ministry.name : "Ministry Donation",
     txnRef: ref,
-    payment_plan: mode === "recurring" && planId?.toString(),
-    recurring: mode === "recurring" ? true : false,
+  };
+  const objReccurring = {
+    currency,
+    amount: amount.number,
+    customer,
+    desc: ministry ? ministry.name : "Ministry Donation",
+    txnRef: ref,
+    payment_plan: planId,
   };
 
   const config = useFlutterConfig(obj);
-  const handleFlutterPayment = useFlutterwave(config);
+  const configReccurring = useFlutterConfigReccuring(objReccurring);
+  const configType = mode === "reccurring" ? configReccurring : config;
+
+  const handleFlutterPayment = useFlutterwave(configType);
   const selectBefore = useMemo(
     () => (
       <Item name="currency" noStyle>

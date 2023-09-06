@@ -113,6 +113,10 @@ export type MinistryProjectsRequest = {
   status?: "active" | "draft" | "completed" | "in-progress";
   // type?: "project" | "ministry";
 };
+export type MinistryGeneralDonationsRequest = {
+  id?: string | null;
+  page?: number;
+};
 
 export type Ministry = {
   id: string;
@@ -273,6 +277,17 @@ export type MinistryProjectsResponse = TResponse<{
   paid: boolean;
 }>;
 
+export type MinistryGeneralDonationsResponse = TResponse<{
+  id: string;
+  amount: string;
+  donorName: string;
+  donorType: string | null;
+  donorInterval: string | null;
+  request_payout: boolean;
+  paid: boolean;
+  createdAt: string;
+}>;
+
 export type ProjectResult = {
   data: ResultResponse;
   isLoading: boolean;
@@ -371,7 +386,7 @@ export type GetDonorsForProjectResponse = TResponse<{
   name: string;
   amount: string;
 }>;
-export type MinistryProjectDonorsResponse = TResponse<{
+export type DonorProjectDonationsResponse = TResponse<{
   id: string;
   title: string;
   category: "widows" | "orphans" | "widows";
@@ -382,6 +397,40 @@ export type MinistryProjectDonorsResponse = TResponse<{
   amountRaised: string;
   createdAt: string;
 }>;
+export type DonorGeneralDonations = {
+  id: string;
+  payment_id: string;
+  plan_id: string;
+  state: string;
+  type: "one-time" | "recurring";
+  logo: string | null;
+  plan_status: string;
+  organisedBy: string;
+  description: string;
+  donorCount: string;
+  amountDonated: string;
+  amountRaised: string;
+  donationPercent: string;
+  createdAt: string;
+};
+export type DonorGeneralDonationsResponse = TResponse<{
+  id: string;
+  payment_id: string;
+  plan_id: string;
+  state: string;
+  type: "one-time" | "recurring";
+  interval: "montly" | "quarterly" | "yearly";
+  logo: string | null;
+  plan_status: string;
+  organisedBy: string;
+  description: string;
+  donorCount: string;
+  amountDonated: string;
+  amountRaised: string;
+  donationPercent: string;
+  createdAt: string;
+}>;
+
 export type ExploreCardData = {
   id: string;
   title: string;
@@ -648,7 +697,7 @@ export type DonationResponse = {
   txn_reference: string;
   status: string;
   createdAt: string;
-  plan_id?: number;
+  plan_id: number;
 };
 export type InitiateDonationResponseAuth = Response<{
   id: string;
@@ -658,7 +707,7 @@ export type InitiateDonationResponseAuth = Response<{
   txn_reference: string;
   status: string;
   createdAt: string;
-  plan_id?: number;
+  plan_id: number;
 }>;
 export type InitiateDonationToProjectRequestAuth = {
   id: string;

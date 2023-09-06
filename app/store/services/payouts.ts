@@ -63,8 +63,8 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    cancelRecurringPayment: build.mutation<PlainResponse, string>({
-      query: (id) => `payments/${id}/close`,
+    pauseRecurringPayment: build.mutation<PlainResponse, string>({
+      query: (id) => `plans/${id}/cancel`,
       // query: (id) => ({url:`payments/${id}/close`,method:'PATCH',body:''}),
       invalidatesTags: cacher.cacheByIdArg("Projects"),
       transformResponse: (response: PlainResponse, meta, arg): any => {
@@ -85,6 +85,15 @@ const payouts = api.injectEndpoints({
     requestPayout: build.mutation<PlainResponse, string>({
       query: (id) => `projects/${id}/payout`,
       invalidatesTags: cacher.cacheByIdArg("Projects"),
+      transformResponse: (response, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    requestMinistryPayout: build.mutation<PlainResponse, string>({
+      query: (id) => `ministries/${id}/ministry-payout`,
+      invalidatesTags: cacher.cacheByIdArg("Ministry"),
       transformResponse: (response, meta, arg): any => {
         return response;
       },
@@ -116,6 +125,7 @@ export const {
   useVerifyMinistryPaymentMutation,
   useGetAccountInfoQuery,
   useRequestPayoutMutation,
-  useCancelRecurringPaymentMutation,
+  useRequestMinistryPayoutMutation,
+  usePauseRecurringPaymentMutation,
   usePayoutHistoryQuery,
 } = payouts;

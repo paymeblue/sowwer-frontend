@@ -2,6 +2,8 @@ import {
   CoverPhotoRequest,
   CreateProjectRequest,
   CreateProjectResponse,
+  DonorGeneralDonationsResponse,
+  DonorProjectDonationsResponse,
   EditProjectRequest,
   ErrorResponse,
   ExploreProjectsResponse,
@@ -9,7 +11,8 @@ import {
   GetDonorsForProjectResponse,
   GetProjectDetailsResponse,
   MinistryDonationResponse,
-  MinistryProjectDonorsResponse,
+  MinistryGeneralDonationsRequest,
+  MinistryGeneralDonationsResponse,
   MinistryProjectsRequest,
   MinistryProjectsResponse,
   PlainResponse,
@@ -151,8 +154,21 @@ const projects = api.injectEndpoints({
           method: "GET",
         };
       },
-      // Invalidate cache tags specific to ministry projects
       providesTags: cacher.providesNestedList("Projects"),
+      transformResponse: (response, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getMinistryGeneralDonations: build.query<
+      MinistryGeneralDonationsResponse,
+      MinistryGeneralDonationsRequest
+    >({
+      query: (body) =>
+        `ministries/${body.id}/general?page=${body.page}&status=completed&limit=10`,
+      // Invalidate cache tags specific to ministry projects
+      providesTags: cacher.providesNestedList("Ministry"),
       transformResponse: (response, meta, arg): any => {
         return response;
       },
@@ -177,18 +193,27 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getDonationsForDonorUser: build.query<
-      MinistryProjectDonorsResponse,
-      { page?: number; type: "project" | "ministry"; pageSize?: number }
+    getProjectDonationsForDonorUser: build.query<
+      DonorProjectDonationsResponse,
+      { page?: number; pageSize?: number }
     >({
-      query: ({ page, type, pageSize }) =>
-        `donors/donations?limit=${pageSize}&page=${page}&type=${type}`,
+      query: ({ page, pageSize }) =>
+        `donors/donations?limit=${pageSize}&page=${page}&type=project`,
       providesTags: cacher.providesNestedList("Projects"),
-      transformResponse: (
-        response: MinistryProjectDonorsResponse,
-        meta,
-        arg
-      ): any => {
+      transformResponse: (response, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getGeneralDonationsForDonorUser: build.query<
+      DonorGeneralDonationsResponse,
+      { page?: number; pageSize?: number }
+    >({
+      query: ({ page, pageSize }) =>
+        `donors/donations?limit=${pageSize}&page=${page}&type=ministry`,
+      providesTags: cacher.providesNestedList("Ministry"),
+      transformResponse: (response, meta, arg): any => {
         return response;
       },
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
@@ -213,12 +238,12 @@ const projects = api.injectEndpoints({
     }),
     closeMinistryProject: build.mutation<
       PlainResponse,
-      { id?: string; reason: string }
+      { id?: string; password: string }
     >({
       query: (body) => ({
         url: `projects/${body.id}/close`,
-        method: "PATCH",
-        body: { reason: body.reason },
+        method: "POST",
+        body: { password: body.password },
       }),
       // Invalidates the tag for this Project `id`, as well as the `LIST` tag,
       // causing the `Projects list` query to re-fetch if a component is subscribed to the query.
@@ -262,11 +287,13 @@ export const {
   useGetProjectQuery,
   useEditProjectMutation,
   useGetProjectDetailsQuery,
-  useGetDonationsForDonorUserQuery,
+  useGetProjectDonationsForDonorUserQuery,
+  useGetGeneralDonationsForDonorUserQuery,
   useGetDonationsForAdminUserQuery,
   useExploreProjectsQuery,
   usePublishOrDraftProjectMutation,
   useGetMinistryProjectsQuery,
+  useGetMinistryGeneralDonationsQuery,
   useGetMinistryProjectDonorsQuery,
   useDeleteMinistryProjectMutation,
   useCloseMinistryProjectMutation,

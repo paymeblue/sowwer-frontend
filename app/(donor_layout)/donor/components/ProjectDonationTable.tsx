@@ -2,7 +2,7 @@ import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import ResultComponent from "@shared/ResultComponent";
-import { useGetDonationsForDonorUserQuery } from "@store/services/projects";
+import { useGetProjectDonationsForDonorUserQuery } from "@store/services/projects";
 import {
   Button,
   Empty,
@@ -57,8 +57,7 @@ const ProjectDonationTable: FC = () => {
     />
   );
   const { data, isLoading, isFetching, error, isError, refetch } =
-    useGetDonationsForDonorUserQuery({
-      type: "project",
+    useGetProjectDonationsForDonorUserQuery({
       page: pagination.current,
       pageSize: pagination.pageSize,
     });

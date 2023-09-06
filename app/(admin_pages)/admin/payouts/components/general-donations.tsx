@@ -4,8 +4,8 @@ import { useAuth } from "@hooks/useAuth";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import ResultComponent from "@shared/ResultComponent";
-import { useRequestPayoutMutation } from "@store/services/payouts";
-import { useGetMinistryProjectsQuery } from "@store/services/projects";
+import { useRequestMinistryPayoutMutation } from "@store/services/payouts";
+import { useGetMinistryGeneralDonationsQuery } from "@store/services/projects";
 import {
   Button,
   Input,
@@ -71,8 +71,8 @@ const GeneralDonationsTable = ({ acctLinked }: { acctLinked: boolean }) => {
       spin
     />
   );
-  const [requestPayout, { isLoading: requestLoading }] =
-    useRequestPayoutMutation();
+  const [requestMinistryPayout, { isLoading: requestLoading }] =
+    useRequestMinistryPayoutMutation();
   const {
     data: res,
     isLoading,
@@ -80,11 +80,9 @@ const GeneralDonationsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     error,
     isError,
     refetch,
-  } = useGetMinistryProjectsQuery({
+  } = useGetMinistryGeneralDonationsQuery({
     id,
     page: pagination.current,
-    status: "completed",
-    // type: "ministry",
   });
   function handleRefetch() {
     refetch();
@@ -99,11 +97,11 @@ const GeneralDonationsTable = ({ acctLinked }: { acctLinked: boolean }) => {
 
   const dataSource: DataType[] | undefined = res?.data.map((item) => ({
     key: item.id,
-    name: capitalizeFirstLetters(item.title),
-    frequency: capitalizeFirstLetters(item.category ?? "-"),
-    amount: Number(item.amountRaised),
+    name: capitalizeFirstLetters(item.donorName),
+    frequency: capitalizeFirstLetters(item.donorInterval ?? "-"),
+    amount: Number(item.amount),
     type: capitalizeFirstLetters(
-      `${item.status === null ? "one-time" : item.status} donation`
+      `${item.donorType === null ? "one-time" : item.donorType} donation`
     ),
     date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
     btn: item.request_payout ? "Payout Requested" : "Request Payout",
@@ -121,7 +119,7 @@ const GeneralDonationsTable = ({ acctLinked }: { acctLinked: boolean }) => {
 
   const callback = async () => {
     try {
-      const res = await requestPayout(rowId).unwrap();
+      const res = await requestMinistryPayout(rowId).unwrap();
       messageApi.open({
         content: `${res.message}`,
         className: "[&>div]:bg-[#17B472] [&>div]:text-white",

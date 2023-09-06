@@ -1,5 +1,6 @@
-import { Christian, ChurchIcon, FileUpload } from "@components/assets/icons";
+import { Christian, ChurchIcon } from "@components/assets/icons";
 import states from "@lib/NigeriaStates";
+// import { getBase64 } from "@lib/getBase64";
 import {
   Button,
   Form,
@@ -8,14 +9,16 @@ import {
   Select,
   Space,
   Typography,
-  Upload,
-  message,
 } from "antd";
-import { RcFile, UploadProps } from "antd/es/upload";
+import {
+  // RcFile,
+  UploadFile,
+} from "antd/es/upload";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FC, Fragment, ReactNode, useEffect, useState } from "react";
 import { ArrowRight } from "react-iconly";
+import MyFile from "./text";
 
 type Item = {
   id: string;
@@ -40,7 +43,7 @@ const items: Array<Item> = [
     icon: <Christian />,
   },
 ];
-const { Dragger } = Upload;
+// const { Dragger } = Upload;
 
 const MinistryDetails: FC<any> = ({
   form,
@@ -58,6 +61,7 @@ const MinistryDetails: FC<any> = ({
   const searchparams = useSearchParams();
   const path = `${pathname}?${searchparams}`;
   const router = useRouter();
+  const [fileList] = useState<UploadFile[]>([]);
 
   const changeDisplay = (item: Item) => {
     router.push("/auth/signup/ministry?step=details");
@@ -79,49 +83,82 @@ const MinistryDetails: FC<any> = ({
       }
     );
   }, [values, form]);
-  const props: UploadProps = {
-    name: "file",
-    // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-    multiple: false,
-    listType: "picture",
-    beforeUpload: (file: RcFile) => {
-      const isPNG = file.type === "image/png";
-      const isJPG = file.type === "image/jpeg" || file.type === "image/jpg";
-      const isPDF = file.type === "application/pdf";
-      if (!(isPNG || isJPG || isPDF)) {
-        message.error(`${file.name} is not a png, jpeg, jpg or pdf file`);
-      }
-      return false;
-      // return isPNG || isJPG || isPDF || Upload.LIST_IGNORE;
-    },
-    async onChange(info) {
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file);
-      }
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
-    },
-    progress: {
-      strokeColor: {
-        "0%": "#108ee9",
-        "100%": "#87d068",
-      },
-      size: 3,
-      format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
-    },
-    maxCount: 1,
-    accept: ".png,.jpeg,.jpg,application/pdf",
-  };
+  // const props: UploadProps = {
+  //   name: "file",
+  //   // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+  //   headers: {
+  //     authorization: "authorization-text",
+  //   },
+  //   multiple: false,
+  //   listType: "picture",
+  //   beforeUpload: (file: RcFile) => {
+  //     // const isPNG = file.type === "image/png";
+  //     // const isJPG = file.type === "image/jpeg" || file.type === "image/jpg";
+  //     // const isPDF = file.type === "application/pdf";
+  //     // if (!(isPNG || isJPG || isPDF)) {
+  //     //   message.error(`${file.name} is not a png, jpeg, jpg or pdf file`);
+  //     // }
+  //     // return false;
+  //     // // return isPNG || isJPG || isPDF || Upload.LIST_IGNORE;
+
+  //     const isAcceptedFileFormat =
+  //       file.type === "application/pdf" ||
+  //       file.type === "image/png" ||
+  //       "image/jpeg" ||
+  //       file.type === "image/jpg";
+  //     if (!isAcceptedFileFormat) {
+  //       message.error("You can only upload PDF, JPG or PNG file!");
+  //     }
+  //     const isFileLimit = file.size / 1024 / 1024 < 2;
+  //     if (!isFileLimit) {
+  //       message.error("File must be smaller than 2MB!");
+  //     }
+  //     // return (isAcceptedFileFormat && isFileLimit) || Upload.LIST_IGNORE;
+  //     return false;
+  //   },
+  //   async onChange(info) {
+  //     // const { status } = info.file;
+  //     // if (status !== "uploading") {
+  //     //   console.log(info.file);
+  //     // }
+  //     // if (status === "done") {
+  //     //   message.success(`${info.file.name} file uploaded successfully.`);
+  //     // } else if (status === "error") {
+  //     //   message.error(`${info.file.name} file upload failed.`);
+  //     // }
+
+  //     const { status } = info.file;
+  //     if (status !== "uploading") {
+  //       console.log(info.file);
+  //       const newFile = info.file;
+  //       getBase64(info.file.originFileObj as RcFile, (url) => {
+  //         console.log("hi", url);
+  //         setFileList((prev) => (prev = [{ ...newFile, thumbUrl: url }]));
+  //       });
+  //     }
+  //     if (status === "done") {
+  //       // Get this url from response in real world.
+  //       message.success(`${info.file.name} file uploaded successfully.`);
+  //     } else if (status === "error") {
+  //       message.error(`${info.file.name} file upload failed.`);
+  //     }
+  //   },
+  //   onDrop(e) {
+  //     console.log("Dropped files", e.dataTransfer.files);
+  //   },
+  //   progress: {
+  //     strokeColor: {
+  //       "0%": "#108ee9",
+  //       "100%": "#87d068",
+  //     },
+  //     size: 3,
+  //     format: (percent) => percent && `${parseFloat(percent.toFixed(2))}%`,
+  //   },
+  //   maxCount: 1,
+  //   accept: ".png,.jpeg,.jpg,application/pdf",
+  //   fileList: fileList,
+  // };
+  console.log(fileList);
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
@@ -154,7 +191,6 @@ const MinistryDetails: FC<any> = ({
               ministryWebsite: "https://",
             }}
           >
-            3128533032
             <Title
               level={2}
               className="mx-auto my-8 text-center font-title text-[26px] leading-[29.75px] tablet:leading-[40.04px] laptop:text-[35px]"
@@ -347,11 +383,11 @@ const MinistryDetails: FC<any> = ({
                 rules={[
                   {
                     required: true,
-                    message: "Please upload a cover photo",
+                    message: "Please upload your CAC document",
                   },
                 ]}
               >
-                <Dragger {...props}>
+                {/* <Dragger {...props}>
                   <div className="px-1">
                     <FileUpload />
                     <p className="mb-0 text-primary">Upload CAC Document</p>
@@ -359,7 +395,8 @@ const MinistryDetails: FC<any> = ({
                       (.jpg, .png or .pdf file format supported)
                     </small>
                   </div>
-                </Dragger>
+                </Dragger> */}
+                <MyFile />
               </Item>
             </Item>
             <Item

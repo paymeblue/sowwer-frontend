@@ -77,8 +77,9 @@ const SignupStep = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
   const [ministrySignup] = useMinistrySignupMutation();
+  const values = Form.useWatch("cacDocument", form);
 
-  console.log(base64Data);
+  console.log(base64Data, values);
   const onFormFinish = async (): Promise<void> => {
     const values: FormDataFields = form.getFieldsValue(true);
     const {

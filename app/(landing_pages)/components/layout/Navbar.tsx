@@ -117,7 +117,12 @@ const Navbar = () => {
     {
       key: "/explore",
       label: (
-        <Dropdown menu={{ items: submenu }} trigger={["click"]}>
+        <Dropdown
+          menu={{ items: submenu }}
+          trigger={["click"]}
+          placement="bottom"
+          arrow
+        >
           <span className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit">
             Explore
             {arrow ? (

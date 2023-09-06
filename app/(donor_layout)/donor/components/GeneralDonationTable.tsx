@@ -3,8 +3,8 @@ import { CheckCircleIcon } from "@components/assets/icons";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import ResultComponent from "@shared/ResultComponent";
-import { useCancelRecurringPaymentMutation } from "@store/services/payouts";
-import { useGetDonationsForDonorUserQuery } from "@store/services/projects";
+import { usePauseRecurringPaymentMutation } from "@store/services/payouts";
+import { useGetGeneralDonationsForDonorUserQuery } from "@store/services/projects";
 import {
   Button,
   Empty,
@@ -44,8 +44,8 @@ const GeneralDonationTable: FC = () => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [rowId, setRowId] = useState("");
   const searchInput = useRef<InputRef>(null);
-  const [cancelRecurringPayment, { isLoading: cancelLoading, isSuccess }] =
-    useCancelRecurringPaymentMutation();
+  const [pauseRecurringPayment, { isLoading: pauseLoading, isSuccess }] =
+    usePauseRecurringPaymentMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const [filteredInfo, setFilteredInfo] = useState<
     Record<string, FilterValue | null>
@@ -67,8 +67,7 @@ const GeneralDonationTable: FC = () => {
     />
   );
   const { data, isLoading, isFetching, error, isError, refetch } =
-    useGetDonationsForDonorUserQuery({
-      type: "ministry",
+    useGetGeneralDonationsForDonorUserQuery({
       page: pagination.current,
       pageSize: pagination.pageSize,
     });
@@ -187,17 +186,18 @@ const GeneralDonationTable: FC = () => {
         text
       ),
   });
+  console.log(data?.data);
   const dataSource: DataType[] | undefined = data?.data.map((item) => ({
     key: item.id,
-    ministry: capitalizeFirstLetters(item.title),
-    type: capitalizeFirstLetters(`${item.amountRaised} donation`),
-    frequency: capitalizeFirstLetters(item.amountRaised),
-    amount: Number(item.amountRaised),
+    ministry: capitalizeFirstLetters(item.organisedBy),
+    type: capitalizeFirstLetters(`${item.type} donation`),
+    frequency: capitalizeFirstLetters(item.interval),
+    amount: Number(item.amountDonated),
     date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
   const pausePaymentHandler = async () => {
     try {
-      const res = await cancelRecurringPayment(rowId).unwrap();
+      const res = await pauseRecurringPayment(rowId).unwrap();
       messageApi.open({
         content: `${res.message}`,
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
@@ -316,7 +316,7 @@ const GeneralDonationTable: FC = () => {
             <Button
               className="text-[14px] font-semibold leading-[22px] disabled:bg-red-400 disabled:text-white"
               onClick={pausePaymentHandler}
-              loading={cancelLoading}
+              loading={pauseLoading}
               disabled={isSuccess}
               danger
             >
