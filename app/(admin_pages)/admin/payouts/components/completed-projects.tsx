@@ -39,62 +39,6 @@ export interface DataType {
 type DataIndex = keyof DataType;
 const priceFormat = currencyFormat();
 const { Title, Text } = Typography;
-// const data: DataType[] = [
-//   {
-//     key: "1",
-//     goal: 500000,
-//     title: "The Widows Project",
-//     category: "Widows",
-//     donors: 53,
-//     amount: 135000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "2",
-//     goal: 125000,
-//     title: "The Orphans Project",
-//     category: "Orphans",
-//     donors: 50,
-//     amount: 105000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "3",
-//     goal: 500000,
-//     title: "The Missions Project",
-//     category: "Missions",
-//     donors: 35,
-//     amount: 135000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "4",
-//     goal: 400000,
-//     title: "The Widows Project",
-//     category: "Widows",
-//     donors: 53,
-//     amount: 245000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "5",
-//     goal: 750000,
-//     title: "The Missions Project",
-//     category: "Missions",
-//     donors: 23,
-//     amount: 375000,
-//     btn: "Request Payout",
-//   },
-//   {
-//     key: "6",
-//     goal: 700000,
-//     title: "The Orphans Project",
-//     category: "Orphans",
-//     donors: 70,
-//     amount: 650000,
-//     btn: "Request Payout",
-//   },
-// ];
 const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -162,7 +106,6 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
   }));
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [showForm, setShowForm] = useState<boolean>(false);
-  // const [dataSource, setDataSource] = useState<DataType[]>(data);
 
   const handleDisable = (obj: DataType) => {
     if (obj.btn === "Payout Requested") {

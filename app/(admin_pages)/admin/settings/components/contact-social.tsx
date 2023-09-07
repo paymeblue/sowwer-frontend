@@ -1,5 +1,6 @@
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   useGetMinistryDetailsQuery,
   useUpdateMinistryProfileMutation,
@@ -32,9 +33,7 @@ const ContactSocial = () => {
   if (user && "ministry" in user) {
     id = user.ministry.id;
   }
-  const { data: ministryDetails } = useGetMinistryDetailsQuery(id, {
-    skip: id ? false : true,
-  });
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(id ?? skipToken);
   useEffect(() => {
     if (ministryDetails?.data) {
       form.setFieldsValue({

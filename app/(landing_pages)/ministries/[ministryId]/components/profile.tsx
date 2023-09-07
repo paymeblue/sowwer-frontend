@@ -25,7 +25,7 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
 
   const router = useRouter();
   const onClick = (id: string) => {
-    router.prefetch(`/ministries/${id}/donate`);
+    // router.prefetch(`/ministries/${id}/donate`);
     router.push(`/ministries/${id}/donate`);
   };
   return (

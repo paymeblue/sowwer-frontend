@@ -1,6 +1,7 @@
 import AmountInput from "@components/amountField";
 import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { setProjectId } from "@store/reducers/utilSlice";
 import {
   useCreateProjectMutation,
@@ -85,9 +86,7 @@ const MainDetails = () => {
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const projectId = searchParams.get("q");
-  const { data } = useGetProjectQuery(projectId, {
-    skip: projectId ? false : true,
-  });
+  const { data } = useGetProjectQuery(projectId ?? skipToken);
   const [editProject, { isLoading: editLoading, isSuccess: editSuccess }] =
     useEditProjectMutation();
   const [createProject, { isLoading, isSuccess: createSuccess }] =

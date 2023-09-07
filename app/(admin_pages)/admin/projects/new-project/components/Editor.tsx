@@ -1,5 +1,6 @@
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useUtil } from "@hooks/useUtil";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   useEditProjectMutation,
   useGetProjectQuery,
@@ -22,7 +23,7 @@ const Editor: React.FC = () => {
   if (projectIdOld) {
     id = projectIdOld;
   }
-  const { data } = useGetProjectQuery(id, { skip: id ? false : true });
+  const { data } = useGetProjectQuery(id ?? skipToken);
   const [editProject, { isLoading, isSuccess }] = useEditProjectMutation();
   useEffect(() => {
     const description = data?.data?.description ?? "";

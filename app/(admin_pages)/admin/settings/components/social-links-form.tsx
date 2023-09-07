@@ -7,6 +7,7 @@ import {
   TwitterColorIcon,
   YoutubeColorIcon,
 } from "@components/assets/icons";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   useGetSocialLinksQuery,
   useUpdateSocialLinksMutation,
@@ -22,9 +23,7 @@ const SocialLinksForm = ({ id }: { id?: string }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [updateSocialLinks, { isLoading, isSuccess }] =
     useUpdateSocialLinksMutation();
-  const { data: socialLinks } = useGetSocialLinksQuery(id, {
-    skip: id ? false : true,
-  });
+  const { data: socialLinks } = useGetSocialLinksQuery(id ?? skipToken);
   useEffect(() => {
     if (socialLinks?.data) {
       form.setFieldsValue({

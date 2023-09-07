@@ -77,7 +77,7 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
   const { user } = useAuth();
   const router = useRouter();
   const [ref, setRef] = useState<string>("");
-  const [planId, setPlanId] = useState<string>("");
+  const [planId, setPlanId] = useState<number>(0);
   const dispatch = useAppDispatch();
   const { data: ministryData } = useGetMinistryDetailsQuery(ministryId);
   let ministry: MinistryData | undefined;
@@ -104,16 +104,15 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
 
   useEffect(() => {
     if (data) {
+      const plan = data.plan_id;
       setRef(data.txn_reference);
-      setPlanId(data.plan_id.toString());
+      setPlanId(plan);
     }
   }, [data]);
-
   useEffect(() => {
     if (ref) {
       handleFlutterPayment({
         callback: async (response) => {
-          console.log(response);
           try {
             const res = await verifyMinistryPayment({
               txn_id: response.transaction_id.toString(),
@@ -174,18 +173,18 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
     desc: ministry ? ministry.name : "Ministry Donation",
     txnRef: ref,
   };
-  const objReccurring = {
+  const objRecurring = {
     currency,
     amount: amount.number,
     customer,
     desc: ministry ? ministry.name : "Ministry Donation",
     txnRef: ref,
-    payment_plan: planId,
+    payment_plan: `${planId}`,
   };
 
   const config = useFlutterConfig(obj);
-  const configReccurring = useFlutterConfigReccuring(objReccurring);
-  const configType = mode === "reccurring" ? configReccurring : config;
+  const configRecurring = useFlutterConfigReccuring(objRecurring);
+  const configType = mode === "recurring" ? configRecurring : config;
 
   const handleFlutterPayment = useFlutterwave(configType);
   const selectBefore = useMemo(
@@ -227,12 +226,14 @@ const DonateToMinistryPage = ({ ministryId }: { ministryId: string }) => {
         };
       }
       const res = await rtkHook(data).unwrap();
-      const payload = {
-        user: res.data.user,
-        token: res.data.token.accessToken,
-        refreshToken: res.data.token.refreshToken,
-      };
-      dispatch(setCredentials(payload));
+      if (mode === "recurring" && "token" in res.data) {
+        const payload = {
+          user: res.data.user,
+          token: res.data.token.accessToken,
+          refreshToken: res.data.token.refreshToken,
+        };
+        dispatch(setCredentials(payload));
+      }
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,

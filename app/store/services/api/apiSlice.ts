@@ -73,6 +73,7 @@ const baseQueryWithReauth: BaseQueryFn<
       const user = (api.getState() as RootState).auth.user;
       // const token = (api.getState() as RootState).auth.token;
       // store the access token
+      console.log(refreshResult);
       api.dispatch(
         setCredentials({
           token: refreshResult.data.accessToken as string,

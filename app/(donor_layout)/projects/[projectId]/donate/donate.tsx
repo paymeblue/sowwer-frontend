@@ -4,7 +4,9 @@ import AmountInput from "@components/amountField";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import useFlutterConfig from "@hooks/useFlutterConfig";
+import { useAppDispatch } from "@hooks/useStore";
 import capitalizeFirstLetters from "@lib/capitalize";
+import { setCredentials } from "@store/reducers/authSlice";
 import {
   useInitiatePaymentToProjectAuthMutation,
   useInitiatePaymentToProjectUnauthMutation,
@@ -61,6 +63,7 @@ const { Option } = Select;
 const DonateToProjectPage = ({ id }: { id: string }) => {
   const [form] = useForm();
   const [ref, setRef] = useState<string>("");
+  const dispatch = useAppDispatch();
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const { user } = useAuth();
@@ -190,7 +193,15 @@ const DonateToProjectPage = ({ id }: { id: string }) => {
           ...rest,
         };
       }
-      await rtkHook(data).unwrap();
+      const res = await rtkHook(data).unwrap();
+      if (createAccount && "token" in res.data) {
+        const payload = {
+          user: res.data.user,
+          token: res.data.token.accessToken,
+          refreshToken: res.data.token.refreshToken,
+        };
+        dispatch(setCredentials(payload));
+      }
     } catch (error: any) {
       messageApi.open({
         content: `${error.message}`,

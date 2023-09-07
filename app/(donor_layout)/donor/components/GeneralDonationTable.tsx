@@ -3,7 +3,10 @@ import { CheckCircleIcon } from "@components/assets/icons";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import ResultComponent from "@shared/ResultComponent";
-import { usePauseRecurringPaymentMutation } from "@store/services/payouts";
+import {
+  usePauseRecurringPaymentMutation,
+  useResumeRecurringPaymentMutation,
+} from "@store/services/payouts";
 import { useGetGeneralDonationsForDonorUserQuery } from "@store/services/projects";
 import {
   Button,
@@ -33,6 +36,8 @@ interface DataType {
   type: string;
   frequency: string;
   amount: number;
+  btn: string;
+  status: string;
   date: string;
 }
 
@@ -43,9 +48,17 @@ const GeneralDonationTable: FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [rowId, setRowId] = useState("");
+  const [rowData, setRowData] = useState<any>("");
   const searchInput = useRef<InputRef>(null);
-  const [pauseRecurringPayment, { isLoading: pauseLoading, isSuccess }] =
+  const [pauseRecurringPayment, { isLoading: pauseLoading }] =
     usePauseRecurringPaymentMutation();
+  const [resumeRecurringPayment, { isLoading: resumeLoading }] =
+    useResumeRecurringPaymentMutation();
+  const rtkHook =
+    rowData.status === "active"
+      ? pauseRecurringPayment
+      : resumeRecurringPayment;
+  const loading = rowData.status === "active" ? pauseLoading : resumeLoading;
   const [messageApi, contextHolder] = message.useMessage();
   const [filteredInfo, setFilteredInfo] = useState<
     Record<string, FilterValue | null>
@@ -188,16 +201,18 @@ const GeneralDonationTable: FC = () => {
   });
   console.log(data?.data);
   const dataSource: DataType[] | undefined = data?.data.map((item) => ({
-    key: item.id,
+    key: item.plan_id,
     ministry: capitalizeFirstLetters(item.organisedBy),
     type: capitalizeFirstLetters(`${item.type} donation`),
     frequency: capitalizeFirstLetters(item.interval),
     amount: Number(item.amountDonated),
+    btn: item.plan_status === "cancelled" ? "Resume Payment" : "Pause Payment",
+    status: item.plan_status,
     date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
   const pausePaymentHandler = async () => {
     try {
-      const res = await pauseRecurringPayment(rowId).unwrap();
+      const res = await rtkHook(rowId).unwrap();
       messageApi.open({
         content: `${res.message}`,
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
@@ -223,7 +238,7 @@ const GeneralDonationTable: FC = () => {
         </Title>
       ),
       dataIndex: "ministry",
-      width: "25%",
+      width: "23%",
       sorter: {
         compare: (a, b) => a.ministry.length - b.ministry.length,
         multiple: 1,
@@ -253,7 +268,7 @@ const GeneralDonationTable: FC = () => {
       render: (item) => <Text className="text-[13px]">{item}</Text>,
       onFilter: (value: any, record) => record.type.includes(value),
 
-      width: "20%",
+      width: "15%",
     },
     {
       title: (
@@ -267,7 +282,7 @@ const GeneralDonationTable: FC = () => {
       render: (item) => <Text className="text-[13px]">{item}</Text>,
       dataIndex: "frequency",
       filteredValue: null,
-      width: "15%",
+      width: "10%",
     },
     {
       title: (
@@ -287,7 +302,7 @@ const GeneralDonationTable: FC = () => {
         compare: (a, b) => a.amount - b.amount,
         multiple: 1,
       },
-      width: "20%",
+      width: "15%",
     },
     {
       title: (
@@ -301,26 +316,35 @@ const GeneralDonationTable: FC = () => {
       filteredValue: null,
       render: (item) => <Text className="text-[13px]">{item}</Text>,
       dataIndex: "date",
-      width: "25%",
+      width: "22%",
     },
     {
       title: "",
       key: "action",
       dataIndex: "action",
-      width: "12%",
+      width: "15%",
       filteredValue: null,
-      render: (_, record: { frequency: string; key: string }) => {
-        console.log(record, "record");
+      render: (
+        _,
+        record: {
+          ministry: string;
+          frequency: string;
+          key: string;
+          btn: string;
+          status: string;
+        }
+      ) => {
         if (record.frequency !== "-") {
           return (
             <Button
-              className="text-[14px] font-semibold leading-[22px] disabled:bg-red-400 disabled:text-white"
+              className={`
+            ${record.status === "cancelled" ? "bg-red-400" : ""}
+                text-white" : "" border-red-400 bg-white text-[14px] font-semibold leading-[22px] text-red-400
+              `}
               onClick={pausePaymentHandler}
-              loading={pauseLoading}
-              disabled={isSuccess}
-              danger
+              loading={rowData.ministry === record.ministry && loading}
             >
-              Pause Payment
+              {record.btn}
             </Button>
           );
         } else return null;
@@ -351,8 +375,9 @@ const GeneralDonationTable: FC = () => {
       rowKey={(record) => record.key}
       onRow={(record, rowIndex) => {
         return {
-          onClick: (event) => {
+          onMouseEnter: (event) => {
             setRowId(record.key);
+            setRowData(record);
           },
         };
       }}

@@ -13,6 +13,7 @@ import { useAppDispatch } from "@hooks/useStore";
 import capitalizeFirstLetters from "@lib/capitalize";
 import currencyFormat from "@lib/useCurrencyFormat";
 import { generateAvatar } from "@lib/user-details";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import ResultComponent from "@shared/ResultComponent";
 import { setProjectId } from "@store/reducers/utilSlice";
 import {
@@ -118,9 +119,7 @@ const ProjectsTable = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
   const [isDonorModalOpen, setIsDonorModalOpen] = useState(false);
-  const { data: donors } = useGetMinistryProjectDonorsQuery(rowId, {
-    skip: rowId ? false : true,
-  });
+  const { data: donors } = useGetMinistryProjectDonorsQuery(rowId ?? skipToken);
 
   const { data, isLoading, isFetching, error, isError, refetch } =
     useGetMinistryProjectsQuery({

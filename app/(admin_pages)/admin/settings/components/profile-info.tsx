@@ -1,6 +1,7 @@
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAuth } from "@hooks/useAuth";
 import states from "@lib/NigeriaStates";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   useGetMinistryDetailsQuery,
   useUpdateMinistryProfileMutation,
@@ -43,9 +44,7 @@ const ProfileInfo = () => {
   if (user && "ministry" in user) {
     id = user.ministry.id;
   }
-  const { data: ministryDetails } = useGetMinistryDetailsQuery(id, {
-    skip: id ? false : true,
-  });
+  const { data: ministryDetails } = useGetMinistryDetailsQuery(id ?? skipToken);
   let formIsValid = false;
   const name = Form.useWatch("name", form);
   const addressLine = Form.useWatch("addressLine", form);

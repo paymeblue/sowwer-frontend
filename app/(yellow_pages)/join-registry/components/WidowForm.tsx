@@ -7,7 +7,6 @@ import {
   Checkbox,
   Form,
   Input,
-  InputNumber,
   Radio,
   RadioChangeEvent,
   Select,
@@ -108,21 +107,20 @@ const WidowForm = ({ prev }: { prev: () => void }) => {
           label="How old are you? "
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           rules={[
-            {
-              type: "number",
-              message: "Age is not valid!",
-            },
+            // {
+            //   type: "number",
+            //   message: "Age is not valid!",
+            // },
             {
               required: true,
               message: "Please enter your age!",
             },
+            // hasFeedback
           ]}
-          hasFeedback
         >
-          <InputNumber
+          <Input
             placeholder="Age"
-            type="number"
-            className="w-full rounded border-none bg-[#f9f9f9] py-[4px] outline-none [&>input]:bg-inherit"
+            className="rounded border-none bg-[#f9f9f9] py-2 outline-none  [&>input]:bg-inherit"
           />
         </Item>
         <Item
@@ -130,17 +128,20 @@ const WidowForm = ({ prev }: { prev: () => void }) => {
           className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
           label="How long have you been a widow?"
           rules={[
+            // {
+            //   type: "number",
+            //   message: "Input is not valid!",
+            // },
             {
               required: true,
               message: "Please enter how long you have been a widow!",
             },
           ]}
-          hasFeedback
+          // hasFeedback
         >
-          <InputNumber
-            type="number"
+          <Input
             placeholder="No of months/years"
-            className=" w-full border-none bg-[#f9f9f9] py-[4px] outline-none [&>div>div.ant-input-number]:bg-[#f9f9f9] [&>div>div]:border-none [&>div>div]:bg-[#f9f9f9] [&>input]:bg-inherit"
+            className="w-full [&>span>input]:rounded-l [&>span>input]:border-none [&>span>input]:bg-[#f9f9f9] [&>span>input]:py-2 [&>span>input]:outline-none [&>span>span>div>div.ant-select-selector]:border-none [&>span>span]:rounded-r [&>span>span]:border-none [&>span>span]:bg-[#f2f2f2]"
             addonAfter={suffixSelector}
           />
         </Item>

@@ -3,6 +3,7 @@ import { CheckOutlined, CopyOutlined, EyeFilled } from "@ant-design/icons";
 import useCopyToClipboard from "@hooks/useCopyToClipboard";
 import { useUtil } from "@hooks/useUtil";
 import { truncateTextWithEllipsis } from "@lib/capitalize";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 import Container from "@shared/Container";
 import TabList from "@shared/TabList";
 import { useGetProjectQuery } from "@store/services/projects";
@@ -29,9 +30,7 @@ const NewProjectPage = () => {
       setLink(defaultValue);
     }
   }, [projectId]);
-  const { data } = useGetProjectQuery(projectId, {
-    skip: projectId ? false : true,
-  });
+  const { data } = useGetProjectQuery(projectId ?? skipToken);
   const updateLink = useCallback(() => {
     if (data?.data?.link) setLink(data.data.link);
   }, [data?.data?.link]);

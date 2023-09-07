@@ -16,6 +16,7 @@ interface IProps {
   currency: string;
   desc: string;
   txnRef: string;
+  // paymentPlan: string;
 }
 
 interface IConfig {
@@ -26,6 +27,7 @@ interface IConfig {
   payment_options: string;
   customer: ICustomer;
   customizations: ICustomizations;
+  // payment_plan: string;
 }
 
 const useFlutterConfig = ({
@@ -34,13 +36,15 @@ const useFlutterConfig = ({
   currency,
   desc,
   txnRef,
-}: IProps): IConfig => {
+}: // paymentPlan,
+IProps): IConfig => {
   const config: IConfig = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
     tx_ref: txnRef,
     amount,
     currency,
     payment_options: "card,mobilemoney,ussd",
+    // payment_plan: paymentPlan,
     customer,
     customizations: {
       title: "Soower Donations",

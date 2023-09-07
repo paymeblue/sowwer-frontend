@@ -63,12 +63,21 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
       spin
     />
   );
-  const donorData = donors?.data.map((item) => ({
-    user: capitalizeFirstLetters(item.name),
-    amount: item.amount,
-    time: moment(item.createdAt).fromNow(),
-    avatar: generateAvatar(item.name),
-  }));
+  const donorData = donors?.data
+    .map((item) => ({
+      user: capitalizeFirstLetters(item.name),
+      amount: item.amount,
+      time: moment(item.createdAt).fromNow(),
+      avatar: generateAvatar(item.name),
+      createdAt: item.createdAt,
+    }))
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  // .map((item) => ({
+  //   user: item.user,
+  //   amount: item.amount,
+  //   time: item.time,
+  //   avatar: item.avatar,
+  // }));
   const { copied, copyToClipboard } = useCopyToClipboard(data?.link);
   return (
     <Fragment>

@@ -6,7 +6,7 @@ import {
   Button,
   Divider,
   Drawer,
-  Dropdown,
+  // Dropdown,
   Layout,
   Menu,
   MenuProps,
@@ -73,27 +73,27 @@ const Navbar = () => {
   const onClose = () => setOpen(false);
 
   const [arrow, setArrow] = useState<boolean>(false);
-  const submenu: MenuProps["items"] = [
-    {
-      key: "/projects",
-      label: (
-        <Link className="font-body text-sm text-inherit" href="projects">
-          Projects
-        </Link>
-      ),
-    },
-    {
-      key: "/explore/ministries",
-      label: (
-        <Link
-          className="font-body text-sm text-inherit"
-          href="/explore/ministries"
-        >
-          Ministries
-        </Link>
-      ),
-    },
-  ];
+  // const submenu: MenuProps["items"] = [
+  //   {
+  //     key: "/projects",
+  //     label: (
+  //       <Link className="font-body text-sm text-inherit" href="projects">
+  //         Projects
+  //       </Link>
+  //     ),
+  //   },
+  //   {
+  //     key: "/explore/ministries",
+  //     label: (
+  //       <Link
+  //         className="font-body text-sm text-inherit"
+  //         href="/explore/ministries"
+  //       >
+  //         Ministries
+  //       </Link>
+  //     ),
+  //   },
+  // ];
   const items: MenuProps["items"] = [
     {
       key: "/",
@@ -117,43 +117,44 @@ const Navbar = () => {
     {
       key: "/explore",
       label: (
-        <Dropdown
-          menu={{ items: submenu }}
-          trigger={["click"]}
-          placement="bottom"
-          arrow
-        >
-          <span className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit">
-            Explore
-            {arrow ? (
-              <ChevronUp set="light" size={16} />
-            ) : (
-              <ChevronDown set="light" size={16} />
-            )}
-          </span>
-        </Dropdown>
+        // <Dropdown
+        //   menu={{ items: submenu }}
+        //   trigger={["click"]}
+        //   placement="bottom"
+        //   arrow
+        // >
+        <span className="flex items-center justify-center gap-2 font-body text-sm font-medium text-inherit">
+          Explore
+          {arrow ? (
+            <ChevronUp set="light" size={16} />
+          ) : (
+            <ChevronDown set="light" size={16} />
+          )}
+        </span>
+        // </Dropdown>
       ),
-      // children: [
-      //   {
-      //     key: "/projects",
-      //     label: (
-      //       <Link className="font-body text-sm text-inherit" href="projects">
-      //         Projects
-      //       </Link>
-      //     ),
-      //   },
-      //   {
-      //     key: "/explore/ministries",
-      //     label: (
-      //       <Link
-      //         className="font-body text-sm text-inherit"
-      //         href="/explore/ministries"
-      //       >
-      //         Ministries
-      //       </Link>
-      //     ),
-      //   },
-      // ],
+      children: [
+        {
+          key: "/projects",
+          label: (
+            <Link className="font-body text-sm text-inherit" href="projects">
+              Projects
+            </Link>
+          ),
+        },
+        {
+          key: "/explore/ministries",
+          label: (
+            <Link
+              className="font-body text-sm text-inherit"
+              href="/explore/ministries"
+            >
+              Ministries
+            </Link>
+          ),
+        },
+      ],
+      // popupOffset: [5, 10],
     },
     {
       key: "/ministries",
