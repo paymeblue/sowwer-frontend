@@ -7,7 +7,6 @@ import {
   Checkbox,
   Form,
   Input,
-  InputNumber,
   Radio,
   Select,
   Space,
@@ -437,11 +436,7 @@ const MissionaryForm = ({ prev }: { prev: () => void }) => {
               name="reasonAbout"
               label="Why do you want to be a missionary?"
               className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
-              rules={[
-                {
-                  message: "Please state your reason",
-                },
-              ]}
+              rules={[{ required: true, message: "Please state your reason" }]}
             >
               <TextArea
                 style={{ height: 120, resize: "none" }}
@@ -467,8 +462,7 @@ const MissionaryForm = ({ prev }: { prev: () => void }) => {
               ]}
               hasFeedback
             >
-              <InputNumber
-                type="number"
+              <Input
                 placeholder="No of months/years"
                 className=" w-full border-none bg-[#f9f9f9] py-[4px] outline-none [&>div>div.ant-input-number]:bg-[#f9f9f9] [&>div>div]:border-none [&>div>div]:bg-[#f9f9f9] [&>input]:bg-inherit"
                 addonAfter={suffixSelector}
@@ -498,6 +492,7 @@ const MissionaryForm = ({ prev }: { prev: () => void }) => {
               className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[12px] [&>div>div.ant-form-item-label>label]:leading-[15.12px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[14px] [&>div>div.ant-form-item-label>label]:laptop:leading-[17.64px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
               rules={[
                 {
+                  required: true,
                   message:
                     "Please write the name of the project you'd be receiving a donation for",
                 },
