@@ -396,6 +396,10 @@ export type DonorProjectDonationsResponse = TResponse<{
   image: string | null;
   amountRaised: string;
   createdAt: string;
+  payment_id: string;
+  donorCount: string;
+  amountDonated: string;
+  donationPercent: string;
 }>;
 export type DonorGeneralDonations = {
   id: string;

@@ -204,7 +204,7 @@ const GeneralDonationTable: FC = () => {
     key: item.plan_id,
     ministry: capitalizeFirstLetters(item.organisedBy),
     type: capitalizeFirstLetters(`${item.type} donation`),
-    frequency: capitalizeFirstLetters(item.interval),
+    frequency: capitalizeFirstLetters(item.interval ?? "-"),
     amount: Number(item.amountDonated),
     btn: item.plan_status === "cancelled" ? "Resume Payment" : "Pause Payment",
     status: item.plan_status,

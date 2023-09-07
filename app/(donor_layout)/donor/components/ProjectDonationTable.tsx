@@ -180,7 +180,7 @@ const ProjectDonationTable: FC = () => {
     key: item.id,
     title: capitalizeFirstLetters(item.title),
     category: capitalizeFirstLetters(item.category),
-    amount: Number(item.amountRaised),
+    amount: Number(item.amountDonated),
     date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
 
