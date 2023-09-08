@@ -13,8 +13,8 @@ import {
 } from "@components/assets/icons";
 import Container from "@shared/Container";
 import Image from "next/image";
-import jar from "public/assets/images/coin_tree_jar.svg";
-import partner from "public/assets/images/partner.svg";
+import jar from "public/assets/images/coin_tree_jar.png";
+import partner from "public/assets/images/partner.png";
 import { Hero } from "../components";
 import CarouselImages from "../components/Carousel";
 

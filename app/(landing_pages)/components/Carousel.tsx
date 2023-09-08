@@ -1,12 +1,12 @@
-import React, { Fragment } from "react";
 import { Carousel } from "antd";
 import Image from "next/image";
-import womanBusy from "public/assets/images/woman_busy.svg";
-import orphan from "public/assets/images/orphan.svg";
-import happyWoman from "public/assets/images/happy_woman.svg";
-import childrenLearning from "public/assets/images/children_learning.svg";
-import happyWomanAndChild from "public/assets/images/happy_woman_and_child.svg";
-import unitedHands from "public/assets/images/united_hands_plain.svg";
+import childrenLearning from "public/assets/images/children_learning.png";
+import happyWoman from "public/assets/images/happy_woman.png";
+import happyWomanAndChild from "public/assets/images/happy_woman_and_child.png";
+import orphan from "public/assets/images/orphan.png";
+import unitedHands from "public/assets/images/united_hands_plain.png";
+import womanBusy from "public/assets/images/woman_busy.png";
+import React, { Fragment } from "react";
 
 const cardImages = [
   womanBusy,
