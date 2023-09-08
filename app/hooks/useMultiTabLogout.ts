@@ -1,14 +1,10 @@
 import { logout } from "@store/reducers/authSlice";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "./useStore";
 
-const useMultiTabLogout = (onLogout: () => void) => {
-  const dispatch = useDispatch();
-
+const useMultiTabLogout = () => {
+  const dispatch = useAppDispatch();
   const handleLogoutAcrossTabs = () => {
-    // Clear the user's authentication tokens or session on the server
-    // ...
-
     // Set the logout token in browser storage
     localStorage.setItem("logout", Date.now().toString());
 
@@ -17,11 +13,6 @@ const useMultiTabLogout = (onLogout: () => void) => {
 
     // Dispatch the logout action from Redux
     dispatch(logout());
-
-    // Execute the callback function passed from the component
-    if (typeof onLogout === "function") {
-      onLogout();
-    }
   };
 
   useEffect(() => {
@@ -32,10 +23,8 @@ const useMultiTabLogout = (onLogout: () => void) => {
         // Clear local user data, redirect, or perform any other necessary actions
         console.log("User logged out in another tab");
 
-        // Execute the callback function passed from the component
-        if (typeof onLogout === "function") {
-          onLogout();
-        }
+        // Dispatch the logout action from Redux
+        dispatch(logout());
       }
     };
 
@@ -46,7 +35,7 @@ const useMultiTabLogout = (onLogout: () => void) => {
       // Cleanup: Remove event listeners
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, [onLogout]);
+  }, [dispatch]);
 
   return { handleLogoutAcrossTabs };
 };

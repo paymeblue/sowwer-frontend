@@ -31,7 +31,6 @@ const Navbar = () => {
   const { user } = useAuth();
   const signin = user?.type;
   const profile = user?.type === "ministry" ? "admin" : "donor";
-
   const [current, setCurrent] = useState(
     pathname === "" || pathname === "/" ? "/" : pathname
   );
@@ -298,7 +297,7 @@ const Navbar = () => {
             className={`w-full ${user ? "flex-col-reverse" : ""}`}
           >
             <Divider orientation="center" />
-            {user ? (
+            {!!user ? (
               <AuthUser
                 {...userDetails(user)}
                 signIn={signin}
@@ -343,7 +342,7 @@ const Navbar = () => {
       <Space
         className={`hidden laptop:flex ${user ? "flex-row-reverse gap-8" : ""}`}
       >
-        {user ? (
+        {!!user ? (
           <AuthUser {...userDetails(user)} signIn={signin} profile={profile} />
         ) : (
           <Button

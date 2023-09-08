@@ -25,9 +25,28 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
 
   const router = useRouter();
   const onClick = (id: string) => {
-    // router.prefetch(`/ministries/${id}/donate`);
+    router.prefetch(`/ministries/${id}/donate`);
     router.push(`/ministries/${id}/donate`);
   };
+  const formatLink = (name: string) => {
+    if (socialLinks?.data) {
+      const { facebook, instagram, twitter, linkedin, youtube } =
+        socialLinks.data;
+      const arr = [facebook, instagram, twitter, linkedin, youtube];
+      const foundItem = arr.find((item) => item === name);
+
+      if (foundItem && foundItem !== "https://" && foundItem !== "http://") {
+        return foundItem;
+      }
+    }
+
+    return "#";
+  };
+  const website =
+    data?.website && data.website !== "https://" && data.website !== "http://"
+      ? data.website
+      : "N/A";
+
   return (
     <Row className="mb-12 mt-10 grid grid-cols-1 items-start justify-between gap-6 laptop:grid-cols-2 laptop:justify-between desktop:mt-auto">
       <Col>
@@ -57,31 +76,28 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             <Space>
               <GlobalOutlined style={{ fontSize: "16px" }} />
               <Link
-                href={`${data?.website}`}
+                href={website}
                 target="_blank"
                 className="text-[13.32px] leading-[16.78px] text-body-1 laptop:text-[14px] laptop:leading-[18px]"
               >
-                {data?.website ? `${data.website}` : `N/A`}
+                {website}
               </Link>
             </Space>
           </Paragraph>
           <Space className="my-6 gap-6 tablet:gap-9">
-            <Link href={`${socialLinks?.data.facebook ?? "#"}`} target="_blank">
+            <Link href={formatLink("facebook")} target="_blank">
               <FbColorIcon />
             </Link>
-            <Link
-              href={`${socialLinks?.data.instagram ?? "#"}`}
-              target="_blank"
-            >
+            <Link href={formatLink("instagram")} target="_blank">
               <InstaColorIcon />
             </Link>
-            <Link href={`${socialLinks?.data.twitter ?? "#"}`} target="_blank">
+            <Link href={formatLink("twitter")} target="_blank">
               <TwitterColorIcon />
             </Link>
-            <Link href={`${socialLinks?.data.linkedin ?? "#"}`} target="_blank">
+            <Link href={formatLink("linkedin")} target="_blank">
               <LinkedInColorIcon />
             </Link>
-            <Link href={`${socialLinks?.data.youtube ?? "#"}`} target="_blank">
+            <Link href={formatLink("youtube")} target="_blank">
               <YoutubeColorIcon />
             </Link>
           </Space>

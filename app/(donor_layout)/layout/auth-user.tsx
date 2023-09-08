@@ -2,7 +2,7 @@ import { MenuOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/useAuth";
 import useMultiTabLogout from "@hooks/useMultiTabLogout";
 import { useAppDispatch } from "@hooks/useStore";
-import { logout } from "@store/reducers/authSlice";
+// import { logout } from "@store/reducers/authSlice";
 import { setLastVisited } from "@store/reducers/utilSlice";
 import {
   Avatar,
@@ -21,7 +21,7 @@ import React, {
   ForwardedRef,
   Fragment,
   useCallback,
-  useEffect,
+  // useEffect,
   useState,
 } from "react";
 import { ChevronDown, Login, Logout, User } from "react-iconly";
@@ -53,23 +53,23 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
 ) => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
-  const [auth, setAuth] = useState(!!user);
+  // const [auth, setAuth] = useState(!!user);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
   const showDrawer = () => setOpen(true);
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (user) {
-      setAuth(true);
-    }
-  }, [user]);
-  useEffect(() => {
-    const regex = /^(\/projects\/[^/]+\/donate|\/ministries\/[^/]+\/donate)$/;
-    if (regex.test(pathname) && user === null) {
-      setAuth(false);
-    }
-  }, [pathname, user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setAuth(true);
+  //   }
+  // }, [user]);
+  // useEffect(() => {
+  //   const regex = /^(\/projects\/[^/]+\/donate|\/ministries\/[^/]+\/donate)$/;
+  //   if (regex.test(pathname) && user === null) {
+  //     setAuth(false);
+  //   }
+  // }, [pathname, user]);
   const onClose = () => setOpen(false);
   const handleGoToAccount = useCallback(() => {
     router.push(`/${profile}`);
@@ -122,13 +122,13 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
     },
   ];
 
-  const { handleLogoutAcrossTabs } = useMultiTabLogout(() => {
-    dispatch(logout());
-  });
-
+  // const { handleLogoutAcrossTabs } = useMultiTabLogout(() => {
+  //   dispatch(logout());
+  // });
+  const { handleLogoutAcrossTabs } = useMultiTabLogout();
   const handleLogout = useCallback(async () => {
     handleLogoutAcrossTabs();
-    setAuth(false);
+    // setAuth(false);
   }, [handleLogoutAcrossTabs]);
 
   items.push({
@@ -149,22 +149,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
   return (
     <Fragment>
       <div className="hidden tablet:block">
-        {!auth ? (
-          <Space className="my-auto flex items-center justify-center">
-            <Paragraph className="m-0 text-center text-xs text-body-1">
-              Already have an account?
-            </Paragraph>
-            <Link
-              href={`/auth/signin/${signIn}`}
-              className="text-xs font-semibold text-accent"
-              onClick={() =>
-                dispatch(setLastVisited({ lastVisited: pathname }))
-              }
-            >
-              Sign in
-            </Link>
-          </Space>
-        ) : (
+        {!!user ? (
           <Dropdown
             menu={{ items }}
             trigger={["click"]}
@@ -193,6 +178,21 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
               <ChevronDown set="light" primaryColor="#555" size={16} />
             </Space>
           </Dropdown>
+        ) : (
+          <Space className="my-auto flex items-center justify-center">
+            <Paragraph className="m-0 text-center text-xs text-body-1">
+              Already have an account?
+            </Paragraph>
+            <Link
+              href={`/auth/signin/${signIn}`}
+              className="text-xs font-semibold text-accent"
+              onClick={() =>
+                dispatch(setLastVisited({ lastVisited: pathname }))
+              }
+            >
+              Sign in
+            </Link>
+          </Space>
         )}
       </div>
       <MenuOutlined
@@ -208,20 +208,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
         width="65%"
         className="[&>div>.ant-drawer-body]:px-4 mobile-md:[&>div>div>div>.ant-drawer-body]:p-6"
       >
-        {!auth ? (
-          <Button
-            block
-            className="mt-2 flex items-center gap-2 rounded-md border-none bg-slate-50 py-6 font-medium text-black shadow-none hover:bg-slate-100 "
-            icon={<Login set="light" />}
-            onClick={() => {
-              dispatch(setLastVisited({ lastVisited: pathname }));
-              router.push(`/auth/signin/${signIn}`);
-            }}
-            key="login"
-          >
-            Signin
-          </Button>
-        ) : (
+        {!!user ? (
           <Fragment>
             <List
               dataSource={data}
@@ -265,6 +252,19 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
               Logout
             </Button>
           </Fragment>
+        ) : (
+          <Button
+            block
+            className="mt-2 flex items-center gap-2 rounded-md border-none bg-slate-50 py-6 font-medium text-black shadow-none hover:bg-slate-100 "
+            icon={<Login set="light" />}
+            onClick={() => {
+              dispatch(setLastVisited({ lastVisited: pathname }));
+              router.push(`/auth/signin/${signIn}`);
+            }}
+            key="login"
+          >
+            Signin
+          </Button>
         )}
       </Drawer>
     </Fragment>
