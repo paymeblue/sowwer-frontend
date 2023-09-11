@@ -199,7 +199,6 @@ const GeneralDonationTable: FC = () => {
         text
       ),
   });
-  console.log(data?.data);
   const dataSource: DataType[] | undefined = data?.data.map((item) => ({
     key: item.plan_id,
     ministry: capitalizeFirstLetters(item.organisedBy),
@@ -335,7 +334,6 @@ const GeneralDonationTable: FC = () => {
         }
       ) => {
         if (record.frequency !== "-") {
-          console.log(rowData.ministry === record.ministry, record.ministry);
           return (
             <Button
               className={`
