@@ -3,7 +3,7 @@ import { HeartHandIcon, LensIcon, ReceiptIcon } from "@components/assets/icons";
 import Container from "@shared/Container";
 import { Col, Row, Space, Typography } from "antd";
 import Image from "next/image";
-import rect from "public/assets/images/rectangle.jpg";
+import rect from "public/assets/images/rectangle.png";
 import { FC, Fragment, useId } from "react";
 import { Hero } from "../components";
 

@@ -1,10 +1,11 @@
 "use client";
+import { useAuth } from "@hooks/useAuth";
 import { Col, Row, Typography } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import logo from "public/assets/icons/logo-white.svg";
-import { Fragment, ReactNode } from "react";
+import { Fragment, ReactNode, useEffect } from "react";
 
 type IProps = {
   children: ReactNode;
@@ -16,6 +17,19 @@ const { Title, Paragraph } = Typography;
 
 const StepWrapper = ({ children, title, desc }: IProps) => {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (pathname === "/auth/signup/ministry" && user && user.type === "donor") {
+      router.replace("/donor");
+    } else if (
+      pathname === "/auth/signup/ministry" &&
+      user &&
+      user.type === "ministry"
+    ) {
+      router.replace("/admin");
+    }
+  }, [user, pathname, router]);
   return (
     <Row className=" grid min-h-screen max-w-[1440px] grid-cols-1 laptop:grid-cols-2">
       <Col className="bg-primary px-4 tablet:pl-12">

@@ -300,6 +300,8 @@ export type CreateProjectRequest = {
   amount: number;
   category: string;
   title: string;
+  // cover_photo: string;
+  // description: string;
 };
 export type CreateProjectResponse = Response<{
   id: string;
@@ -649,9 +651,10 @@ export type CoverPhotoRequest = {
 };
 export type EditProjectRequest = {
   id?: string | null;
+  title?: string;
   amount?: number;
   description?: string;
-  title?: string;
+  cover_photo?: string;
   category?: "orphans" | "widows" | "ministry";
 };
 

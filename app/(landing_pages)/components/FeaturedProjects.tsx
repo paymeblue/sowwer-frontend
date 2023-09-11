@@ -25,7 +25,7 @@ const FeaturedProjects = () => {
   const { Title, Text, Paragraph } = Typography;
   const cardData: Array<CardType> = [
     {
-      image: "/assets/images/happy_woman.jpg",
+      image: "/assets/images/happy_wom.png",
       category: "widows",
       tagColor: "purple",
       title: "Name of project",
@@ -36,7 +36,7 @@ const FeaturedProjects = () => {
       id: useId(),
     },
     {
-      image: "/assets/images/children_running.jpg",
+      image: "/assets/images/children_running.png",
       category: "orphans",
       tagColor: "orange",
       title: "Name of project",
@@ -48,7 +48,7 @@ const FeaturedProjects = () => {
     },
     ,
     {
-      image: "/assets/images/woman_busy.jpg",
+      image: "/assets/images/wom_busy.png",
       category: "missions",
       tagColor: "blue",
       title: "Name of project",

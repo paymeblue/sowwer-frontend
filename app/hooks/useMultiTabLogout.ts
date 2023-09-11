@@ -13,6 +13,9 @@ const useMultiTabLogout = () => {
 
     // Dispatch the logout action from Redux
     dispatch(logout());
+
+    // clear the logout token from browser storage
+    localStorage.removeItem("logout");
   };
 
   useEffect(() => {

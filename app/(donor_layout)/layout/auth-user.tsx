@@ -1,8 +1,8 @@
 import { MenuOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/useAuth";
-import useMultiTabLogout from "@hooks/useMultiTabLogout";
+// import useMultiTabLogout from "@hooks/useMultiTabLogout";
 import { useAppDispatch } from "@hooks/useStore";
-// import { logout } from "@store/reducers/authSlice";
+import { logout } from "@store/reducers/authSlice";
 import { setLastVisited } from "@store/reducers/utilSlice";
 import {
   Avatar,
@@ -125,11 +125,12 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
   // const { handleLogoutAcrossTabs } = useMultiTabLogout(() => {
   //   dispatch(logout());
   // });
-  const { handleLogoutAcrossTabs } = useMultiTabLogout();
+  // const { handleLogoutAcrossTabs } = useMultiTabLogout();
   const handleLogout = useCallback(async () => {
-    handleLogoutAcrossTabs();
+    dispatch(logout());
+    // handleLogoutAcrossTabs();
     // setAuth(false);
-  }, [handleLogoutAcrossTabs]);
+  }, [dispatch]);
 
   items.push({
     label: (

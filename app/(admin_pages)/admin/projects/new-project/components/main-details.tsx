@@ -40,6 +40,7 @@ const props: UploadProps = {
   name: "file",
   headers: {
     authorization: "authorization-text",
+    "Content-Type": "multipart/form-data",
   },
   multiple: false,
   listType: "picture",
@@ -106,7 +107,7 @@ const MainDetails = () => {
   const amount = Form.useWatch("amount", form);
   const category = Form.useWatch("category", form);
   const coverPhoto = Form.useWatch("coverPhoto", form);
-
+  console.log(coverPhoto, "winking");
   if (title && category && amount && coverPhoto) {
     formIsValid = true;
   }
@@ -168,10 +169,7 @@ const MainDetails = () => {
         autoComplete="off"
         className="rounded bg-white p-4"
       >
-        <Space
-          className="flex w-full  flex-col items-start laptop:flex-row [&>div.ant-space-item]:w-full"
-          size="large"
-        >
+        <Space className="flex w-full flex-col items-start bg-white p-4 laptop:flex-row [&>div.ant-space-item]:w-full">
           <Typography>
             <Title
               level={5}
@@ -294,7 +292,7 @@ const MainDetails = () => {
                 ? "Saving"
                 : editSuccess || createSuccess
                 ? "Saved"
-                : "Save"}
+                : "Continue"}
             </Button>
           </Item>
         </Space>

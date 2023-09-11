@@ -13,7 +13,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (userToken === null) {
-      router.push("/auth/signin/ministry");
+      router.replace("/auth/signin/ministry");
     } else if (user && user.type !== "ministry") {
       setIsNotAuthorized(true);
     }
@@ -29,8 +29,11 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
               title="403"
               subTitle="Sorry, you are not authorized to access this page."
               extra={
-                <Button type="primary" onClick={() => router.push("/")}>
-                  Back Home
+                <Button
+                  type="primary"
+                  onClick={() => router.replace("/auth/signin/ministry")}
+                >
+                  Login
                 </Button>
               }
             />

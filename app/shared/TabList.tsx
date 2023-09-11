@@ -1,16 +1,14 @@
 import { Tabs, TabsProps } from "antd";
-import React, { memo, useState } from "react";
+import { memo, useState } from "react";
 
 type Props = {
   items: TabsProps["items"];
-  isActive?: string;
   centered?: boolean;
   className?: string;
 };
 
-const TabList = ({ items, isActive, centered, className }: Props) => {
-  const [activeKey, setActiveKey] = useState(isActive || (items![0].key ?? ""));
-
+const TabList = ({ items, centered, className }: Props) => {
+  const [activeKey, setActiveKey] = useState(items![0].key ?? "");
   const onChange = (key: string) => {
     setActiveKey(key);
   };

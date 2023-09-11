@@ -3,7 +3,7 @@ import { Fragment, ReactNode, useCallback, useEffect } from "react";
 
 const ScrollToTop = ({ children }: { children: ReactNode }) => {
   const resetWindowScrollPosition = useCallback(
-    () => window.scrollTo(0, 0),
+    () => window.scrollTo({ top: 0, left: 0, behavior: "auto" }),
     []
   );
 

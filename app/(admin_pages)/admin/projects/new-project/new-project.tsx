@@ -7,7 +7,14 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import Container from "@shared/Container";
 import TabList from "@shared/TabList";
 import { useGetProjectQuery } from "@store/services/projects";
-import { Button, Divider, Space, TabsProps, Typography } from "antd";
+import {
+  Button,
+  Divider,
+  Space,
+  // Tabs,
+  TabsProps,
+  Typography,
+} from "antd";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -20,6 +27,10 @@ const { Title, Text } = Typography;
 const NewProjectPage = () => {
   const defaultValue = "https://soower.com/title-of-project";
 
+  // const [activeKey, setActiveKey] = useState("overview");
+  // const onChange = (key: string) => {
+  //   setActiveKey(key);
+  // };
   const [link, setLink] = useState<string>(defaultValue);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -51,6 +62,18 @@ const NewProjectPage = () => {
       children: <Details link={link} />,
     },
   ];
+  // const items: TabsProps["items"] = [
+  //   {
+  //     key: "overview",
+  //     label: "Overview",
+  //     children: <Overview setActiveKey={setActiveKey} />,
+  //   },
+  //   {
+  //     key: "details",
+  //     label: "Sharing Details",
+  //     children: <Details link={link} />,
+  //   },
+  // ];
   const { copied, copyToClipboard } = useCopyToClipboard(`${link}`);
 
   return (
@@ -96,6 +119,13 @@ const NewProjectPage = () => {
           </Space>
         </Typography>
       </Space>
+      {/* <Tabs
+        className="my-8 [&>div>div>div.ant-tabs-nav-list]:gap-1 [&>div>div>div.ant-tabs-nav-list]:rounded-full [&>div>div>div.ant-tabs-nav-list]:bg-white [&>div>div>div.ant-tabs-nav-list]:p-1 [&>div>div>div>div.ant-tabs-tab]:rounded-full [&>div>div>div>div>.ant-tabs-tab-btn]:text-[11.83px] [&>div>div>div>div>.ant-tabs-tab-btn]:leading-[14.9px] [&>div>div>div>div>.ant-tabs-tab-btn]:laptop:text-[15px] [&>div>div>div>div>.ant-tabs-tab-btn]:laptop:leading-[18.9px]"
+        type="card"
+        items={items}
+        onChange={onChange}
+        activeKey={activeKey}
+      /> */}
       <TabList items={items} />
     </Container>
   );

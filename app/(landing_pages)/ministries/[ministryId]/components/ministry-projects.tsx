@@ -12,7 +12,7 @@ const MinistryProjects = ({
   return (
     <ReuseableCards
       rtkHook={useGetMinistryProjectsQuery}
-      prop={{ id }}
+      prop={{ id, status: "active" }}
       emptyDesc={`${capitalizeFirstLetters(
         createdBy
       )} has no published projects yet!`}

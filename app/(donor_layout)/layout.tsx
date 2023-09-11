@@ -13,7 +13,7 @@ const DonorLayout = ({ children }: { children: ReactNode }) => {
   const donorPage = regex.test(pathname);
 
   useEffect(() => {
-    if (userToken === null && donorPage) router.push("/auth/signin/donor");
+    if (userToken === null && donorPage) router.replace("/auth/signin/donor");
   }, [userToken, donorPage, router]);
 
   return (

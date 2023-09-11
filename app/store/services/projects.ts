@@ -212,7 +212,7 @@ const projects = api.injectEndpoints({
     >({
       query: ({ page, pageSize }) =>
         `donors/donations?limit=${pageSize}&page=${page}&type=ministry`,
-      providesTags: cacher.providesNestedList("Ministry"),
+      providesTags: cacher.providesProperty("General"),
       transformResponse: (response, meta, arg): any => {
         return response;
       },

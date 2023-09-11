@@ -1,5 +1,8 @@
-import React, { Fragment, ReactNode } from "react";
+"use client";
+import { useAuth } from "@hooks/useAuth";
 import Container from "@shared/Container";
+import { useRouter } from "next/navigation";
+import { Fragment, ReactNode, useEffect } from "react";
 import AuthFooter from "./layout/Footer";
 import AuthNavbar from "./layout/Navbar";
 
@@ -8,6 +11,15 @@ const AuthPages = ({
 }: {
   children: ReactNode;
 }) => {
+  const { user } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (user && user.type === "donor") {
+      router.replace("/donor");
+    } else if (user && user.type === "ministry") {
+      router.replace("/admin");
+    }
+  }, [user, router]);
   return (
     <Fragment>
       <main className={`min-h-full w-full bg-grad pt-10`}>

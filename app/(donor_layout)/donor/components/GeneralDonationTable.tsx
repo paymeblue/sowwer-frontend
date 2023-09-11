@@ -335,6 +335,7 @@ const GeneralDonationTable: FC = () => {
         }
       ) => {
         if (record.frequency !== "-") {
+          console.log(rowData.ministry === record.ministry, record.ministry);
           return (
             <Button
               className={`
@@ -342,7 +343,7 @@ const GeneralDonationTable: FC = () => {
                 text-white" : "" border-red-400 bg-white text-[14px] font-semibold leading-[22px] text-red-400
               `}
               onClick={pausePaymentHandler}
-              loading={rowData.ministry === record.ministry && loading}
+              loading={rowData.ministry === record.ministry ? loading : false}
             >
               {record.btn}
             </Button>
