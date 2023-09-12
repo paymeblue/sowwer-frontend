@@ -43,7 +43,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "middleware",
-    "app/(yellow_pages)/join-registry/context/registry-context"
+    "app/(yellow_pages)/join-registry/context/registry-context",
+    "app/hooks/useMultiTabLogout"
   ],
   "exclude": ["node_modules"]
 }
