@@ -144,8 +144,8 @@ const ContactPage: FC = () => {
               </Space>
             </div>
           </Col>
-          <Col className="max-w-md px-0 shadow-[10px_11px_0px_0px_#2c556a]">
-            <Card className="rounded-none shadow-[5px_0px_20px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05)]">
+          <Col className="z-10 max-w-md px-0 before:absolute before:-bottom-4 before:-right-4 before:left-4 before:top-4 before:z-0 before:border before:border-accent before:border-r-accent before:content-['']">
+            <Card className="rounded-none shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)]">
               <Form
                 form={form}
                 ref={formRef}
