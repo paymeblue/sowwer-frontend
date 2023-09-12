@@ -119,7 +119,7 @@ const GeneralDonationCard = ({
                   <Tag
                     bordered={false}
                     color={getColorForTag(type)}
-                    className="flex h-[22px] w-[69px] items-center justify-center rounded-full text-[7.43px] uppercase leading-[9.37px] laptop:p-[10px] laptop:text-[9px] laptop:leading-[11.34px]"
+                    className="flex h-[22px] w-[69px] items-center justify-center rounded-full px-3 py-1 text-[7.43px] text-xs uppercase leading-[9.37px] laptop:p-[10px] laptop:text-[9px] laptop:leading-[11.34px]"
                   >
                     {type}
                   </Tag>

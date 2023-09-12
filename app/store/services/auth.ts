@@ -109,7 +109,7 @@ const auth = api.injectEndpoints({
           body: rest,
         };
       },
-      invalidatesTags: cacher.cacheByIdArgProperty("Ministry"),
+      invalidatesTags: cacher.cacheByIdArgProperty("General"),
       transformResponse: (
         response: InitiateDonationResponseUnauth,
         meta,
@@ -133,7 +133,7 @@ const auth = api.injectEndpoints({
           body: rest,
         };
       },
-      invalidatesTags: cacher.cacheByIdArgProperty("Ministry"),
+      invalidatesTags: cacher.cacheByIdArgProperty("General"),
       transformResponse: (
         response: InitiateDonationResponseAuth,
         meta,

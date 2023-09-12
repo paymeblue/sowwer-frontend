@@ -105,7 +105,7 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
             <Tag
               bordered={false}
               color="purple"
-              className="rounded-full px-3 py-1 text-[10.87px] text-xs uppercase leading-[13.7px] laptop:text-[11.87px] laptop:leading-[14.96px]"
+              className="flex h-[22px] w-[69px] items-center justify-center rounded-full px-3 py-1 text-[7.43px] text-xs uppercase leading-[9.37px] laptop:p-[10px] laptop:text-[9px] laptop:leading-[11.34px]"
             >
               {data?.category}
             </Tag>
