@@ -86,3 +86,51 @@
 //   }
 //   return NextResponse.next();
 // }
+
+// import { Auth } from "@lib/auth";
+// import { NextRequest, NextResponse } from "next/server";
+
+// export function middleware(request: NextRequest) {
+//   const { pathname } = request.nextUrl;
+//   const donorRegex = /^\/donor(\/.*)?/;
+//   const ministryRegex = /^\/admin(\/.*)?/;
+//   const { isAuth, user } = Auth();
+//   console.log(isAuth, "isAuth");
+//   //   if (isApiOrNextPath(pathname)) {
+//   //     return NextResponse.next();
+//   //   }
+
+//   if (!isAuth) {
+//     if (donorRegex.test(pathname)) {
+//       console.log("not logged in donor");
+//       return redirectToSignIn("donor", request.url);
+//     }
+
+//     if (ministryRegex.test(pathname)) {
+//       console.log("not logged in Ministry");
+
+//       return redirectToSignIn("ministry", request.url);
+//     }
+//   }
+
+//   if (user?.type === "ministry" && isAuth && ministryRegex.test(pathname)) {
+//     console.log("logged in ministry");
+//     return NextResponse.next();
+//   }
+
+//   if (isAuth && donorRegex.test(pathname)) {
+//     console.log("logged in donor");
+
+//     return NextResponse.next();
+//   }
+
+//   return NextResponse.next();
+// }
+
+// // function isApiOrNextPath(pathname: string): boolean {
+// //   return pathname.startsWith("/api/") || pathname.startsWith("/_next/");
+// // }
+
+// function redirectToSignIn(type: string, requestUrl: string): NextResponse {
+//   return NextResponse.redirect(new URL(`/auth/signin/${type}`, requestUrl));
+// }

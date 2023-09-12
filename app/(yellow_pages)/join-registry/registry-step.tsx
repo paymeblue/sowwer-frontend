@@ -33,7 +33,7 @@ const RegistryStep = () => {
   return (
     <Fragment>
       <Steps current={current} items={items} className="my-8" progressDot />
-      <section>{steps[current].content}</section>
+      {steps[current].content}
     </Fragment>
   );
 };

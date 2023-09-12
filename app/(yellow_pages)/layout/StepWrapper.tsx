@@ -31,7 +31,7 @@ const StepWrapper = ({ children, title, desc }: IProps) => {
     }
   }, [user, pathname, router]);
   return (
-    <Row className=" grid min-h-screen max-w-[1440px] grid-cols-1 laptop:grid-cols-2">
+    <Row className=" grid min-h-screen w-full grid-cols-1 laptop:grid-cols-2">
       <Col className="bg-primary px-4 tablet:pl-12">
         <Link href="/">
           <Image src={logo} alt="logo" className="mt-6" />

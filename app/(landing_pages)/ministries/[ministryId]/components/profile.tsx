@@ -46,7 +46,6 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
     data?.website && data.website !== "https://" && data.website !== "http://"
       ? data.website
       : "N/A";
-
   return (
     <Row className="mb-12 mt-10 grid grid-cols-1 items-start justify-between gap-6 laptop:grid-cols-2 laptop:justify-between desktop:mt-auto">
       <Col>
@@ -73,33 +72,48 @@ const Profile = ({ ministryId }: { ministryId: string }) => {
             </Space>
           </Paragraph>
           <Paragraph className="my-4">
-            <Space>
-              <GlobalOutlined style={{ fontSize: "16px" }} />
-              <Link
-                href={website}
-                target="_blank"
-                className="text-[13.32px] leading-[16.78px] text-body-1 laptop:text-[14px] laptop:leading-[18px]"
-              >
-                {website}
-              </Link>
-            </Space>
+            {data?.website &&
+            data.website !== "https://" &&
+            data.website !== "http://" ? (
+              <Space>
+                <GlobalOutlined style={{ fontSize: "16px" }} />
+                <Link
+                  href={website}
+                  target="_blank"
+                  className="text-[13.32px] leading-[16.78px] text-body-1 laptop:text-[14px] laptop:leading-[18px]"
+                >
+                  {website}
+                </Link>
+              </Space>
+            ) : null}
           </Paragraph>
           <Space className="my-6 gap-6 tablet:gap-9">
-            <Link href={formatLink("facebook")} target="_blank">
-              <FbColorIcon />
-            </Link>
-            <Link href={formatLink("instagram")} target="_blank">
-              <InstaColorIcon />
-            </Link>
-            <Link href={formatLink("twitter")} target="_blank">
-              <TwitterColorIcon />
-            </Link>
-            <Link href={formatLink("linkedin")} target="_blank">
-              <LinkedInColorIcon />
-            </Link>
-            <Link href={formatLink("youtube")} target="_blank">
-              <YoutubeColorIcon />
-            </Link>
+            {Boolean(formatLink("facebook")) ? (
+              <Link href={formatLink("facebook")} target="_blank">
+                <FbColorIcon />
+              </Link>
+            ) : null}
+            {Boolean(formatLink("instagram")) ? (
+              <Link href={formatLink("instagram")} target="_blank">
+                <InstaColorIcon />
+              </Link>
+            ) : null}
+            {Boolean(formatLink("twitter")) ? (
+              <Link href={formatLink("twitter")} target="_blank">
+                <TwitterColorIcon />
+              </Link>
+            ) : null}
+            {Boolean(formatLink("linkedin")) ? (
+              <Link href={formatLink("linkedin")} target="_blank">
+                <LinkedInColorIcon />
+              </Link>
+            ) : null}
+
+            {Boolean(formatLink("youtube")) ? (
+              <Link href={formatLink("youtube")} target="_blank">
+                <YoutubeColorIcon />
+              </Link>
+            ) : null}
           </Space>
           <Alert
             message={

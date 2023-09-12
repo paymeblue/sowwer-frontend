@@ -62,7 +62,7 @@ const Terms: FC<any> = ({
     setCheckbox(e.target.checked);
   };
   return (
-    <section className="mx-auto laptop:max-w-lg">
+    <section className="mx-auto laptop:max-w-2xl">
       {path === "/auth/signup/ministry?step=terms" ? (
         <section className="text-start">
           <Title className="my-12 font-title text-[24px] text-body-1">

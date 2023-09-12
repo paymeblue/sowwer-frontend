@@ -19,11 +19,8 @@ const Editor: React.FC = () => {
   const searchParams = useSearchParams();
   const projectIdOld = searchParams.get("q");
   const { projectId } = useUtil();
-  let id: string | undefined;
-  if (projectIdOld) {
-    id = projectIdOld;
-  }
-  const { data } = useGetProjectQuery(id ?? skipToken);
+
+  const { data } = useGetProjectQuery(projectIdOld ?? skipToken);
   const [editProject, { isLoading, isSuccess }] = useEditProjectMutation();
   useEffect(() => {
     const description = data?.data?.description ?? "";
@@ -51,7 +48,7 @@ const Editor: React.FC = () => {
 
     try {
       const res = await editProject({
-        id: projectId || id,
+        id: projectId || projectIdOld,
         description: extractedText,
       }).unwrap();
       // setValue("");

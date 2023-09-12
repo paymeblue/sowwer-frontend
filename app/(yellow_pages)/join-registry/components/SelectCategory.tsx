@@ -20,7 +20,7 @@ const SelectCategory = ({
 
   return (
     <main className="max-w-[1440px] text-start tablet:px-2">
-      <section className="mx-auto laptop:max-w-lg">
+      <section className="mx-auto">
         <Title
           level={2}
           className="my-4 font-title text-[26px] leading-[29.75px] tablet:my-8 laptop:text-[35px] laptop:leading-[40px]"

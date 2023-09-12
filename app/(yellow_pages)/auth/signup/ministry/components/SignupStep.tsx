@@ -1,7 +1,6 @@
 "use client";
 import { CheckCircleIcon } from "@components/assets/icons";
 import { useAppDispatch } from "@hooks/useStore";
-// import { readAsDataURL } from "@lib/convertPdf";
 import { setCredentials } from "@store/reducers/authSlice";
 import { useMinistrySignupMutation } from "@store/services/auth";
 import { MinistrySignupRequest } from "@store/types";
@@ -33,13 +32,14 @@ const { useForm } = Form;
 const SignupStep = () => {
   const { Text } = Typography;
   const [current, setCurrent] = useState(0);
+  const [imageUrl, setImageUrl] = useState<string>();
+
   const next = () => {
     setCurrent((prev) => prev + 1);
   };
   const prev = () => {
     setCurrent((prev) => prev - 1);
   };
-  const [base64Data, setBase64Data] = useState<string | null>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [form] = useForm();
@@ -51,7 +51,9 @@ const SignupStep = () => {
           Ministry Details
         </Text>
       ),
-      content: <MinistryDetails form={form} next={next} />,
+      content: (
+        <MinistryDetails form={form} next={next} setImageUrl={setImageUrl} />
+      ),
     },
     {
       key: "2",
@@ -77,9 +79,7 @@ const SignupStep = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
   const [ministrySignup] = useMinistrySignupMutation();
-  const values = Form.useWatch("cacDocument", form);
 
-  console.log(base64Data, values);
   const onFormFinish = async (): Promise<void> => {
     const values: FormDataFields = form.getFieldsValue(true);
     const {
@@ -101,14 +101,9 @@ const SignupStep = () => {
     } = values;
     try {
       const fileToLoad = cacDocument[0];
+      console.log(fileToLoad);
       if (fileToLoad.type === "application/pdf") {
-        // file = await readAsDataURL(fileToLoad);
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const base64String = event.target?.result as string;
-          setBase64Data(base64String);
-        };
-        reader.readAsDataURL(fileToLoad);
+        fileToLoad.thumbUrl = imageUrl;
       }
       const credentials: MinistrySignupRequest = {
         ministryType,
@@ -161,7 +156,7 @@ const SignupStep = () => {
         className="my-4 laptop:my-auto"
       />
       <Form.Provider onFormFinish={onFormFinish}>
-        <section>{steps[current].content}</section>
+        {steps[current].content}
       </Form.Provider>
     </section>
   );

@@ -37,6 +37,7 @@ type Props = {
   showForm: boolean;
   setShowForm: Dispatch<SetStateAction<boolean>>;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
+  callback?: () => void;
 };
 
 const PayoutFormModal = ({
@@ -45,6 +46,7 @@ const PayoutFormModal = ({
   setShowForm,
   msg,
   setModalOpen,
+  callback,
 }: Props) => {
   const [showAcctName, setShowAcctName] = useState<boolean>(false);
   const [form] = useForm();
@@ -96,7 +98,12 @@ const PayoutFormModal = ({
   const handleCancel = () => {
     setModalOpen(false);
   };
-
+  const handleCancelWithCallback = () => {
+    if (callback) {
+      handleCancel();
+      callback();
+    }
+  };
   const onFinish = async (values: any): Promise<void> => {
     setFormdata((prev) => ({
       ...prev,
@@ -125,7 +132,7 @@ const PayoutFormModal = ({
       <Modal
         open={modalOpen}
         onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={callback ? handleCancelWithCallback : handleCancel}
         centered
         width={550}
         footer={null}

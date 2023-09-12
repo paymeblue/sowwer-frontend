@@ -130,7 +130,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
     }
   };
 
-  const handleRequestPayout = (record: DataType, callback: () => void) => {
+  const handleRequestPayout = () => {
     if (!acctLinked) {
       setModalOpen(true);
       // Assuming the form modal updates acctLinked when closed
@@ -345,12 +345,13 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
       width: "15%",
       filteredValue: null,
       render: (_, record: DataType) => {
+        const selectedRow = record.key === rowId;
         return (
           <Button
             className={`border-accent text-[13px] font-semibold leading-[16px] text-accent disabled:border-[#E8E9ED] disabled:bg-[#E8E9ED] disabled:text-white`}
             disabled={handleDisable(record)}
-            loading={requestLoading}
-            onClick={() => handleRequestPayout(record, callback)}
+            loading={selectedRow ? requestLoading : false}
+            onClick={handleRequestPayout}
           >
             {record.btn}
           </Button>
@@ -396,6 +397,7 @@ const CompletedProjectsTable = ({ acctLinked }: { acctLinked: boolean }) => {
         showForm={showForm}
         setShowForm={setShowForm}
         setModalOpen={setModalOpen}
+        callback={callback}
       />
       ;
       <Table

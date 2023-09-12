@@ -110,7 +110,7 @@ const ProjectsTable = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [rowRecord, setRowRecord] = useState<RecordState | undefined>();
-  const [rowId, setRowId] = useState<string>("");
+  const [rowId, setRowId] = useState<string | undefined>();
   const [rowTitle, setRowTitle] = useState<string>("");
   const searchInput = useRef<InputRef>(null);
   const [filteredInfo, setFilteredInfo] = useState<

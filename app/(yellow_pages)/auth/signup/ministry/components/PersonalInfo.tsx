@@ -35,7 +35,7 @@ const PersonalInfo: FC<any> = ({
   return (
     <Fragment>
       {path === "/auth/signup/ministry?step=personal-information" ? (
-        <section className="mx-auto laptop:max-w-lg">
+        <section className="mx-auto laptop:max-w-2xl">
           <Form
             form={form}
             preserve

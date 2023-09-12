@@ -361,7 +361,7 @@ const WidowForm = ({ prev }: { prev: () => void }) => {
   const onFinish = regStatus === "Yes" ? onFinish2 : onFinish1;
   return (
     <Fragment>
-      <section className="mx-auto laptop:max-w-lg">
+      <section className="mx-auto laptop:max-w-2xl">
         {contextHolder}
         <Space className="mb-8 w-full justify-between rounded border p-2">
           <Typography className="flex items-center gap-2 ">
