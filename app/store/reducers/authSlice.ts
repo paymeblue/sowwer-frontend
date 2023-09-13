@@ -29,7 +29,11 @@ const authSlice = createSlice({
       state.token = token;
       state.refreshToken = refreshToken;
     },
-    logout: () => initialState,
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.refreshToken = null;
+    },
   },
 });
 

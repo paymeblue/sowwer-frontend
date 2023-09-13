@@ -33,7 +33,9 @@ const PersonalDetails = (): JSX.Element => {
   const [messageApi, contextHolder] = message.useMessage();
   const [updateUserProfile, { isLoading, isSuccess }] =
     useUpdateUserProfileMutation();
-  const { data: userProfile } = useGetUserProfileQuery();
+  const { data: userProfile } = useGetUserProfileQuery(null, {
+    refetchOnFocus: true,
+  });
 
   useEffect(() => {
     if (userProfile?.data) {

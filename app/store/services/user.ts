@@ -23,7 +23,7 @@ const user = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getUserProfile: build.query<UserProfileResponse, void>({
+    getUserProfile: build.query<UserProfileResponse, void | null>({
       query: () => `users/me`,
       providesTags: cacher.providesProperty("User"),
       transformResponse: (response: any, meta, arg): any => {

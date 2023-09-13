@@ -2,10 +2,7 @@
 import "@styles/globals.css";
 // ant design stylesheet
 import "antd/dist/reset.css";
-// QuillJS stylesheet
-// import "react-quill/dist/quill.snow.css";
 // import { Metadata } from "next";
-import ScrollToTop from "@components/scrollToTop";
 import {
   Libre_Baskerville as LibreBaskerville,
   Plus_Jakarta_Sans as PlusJarkataSans,
@@ -48,13 +45,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <body
         className={`${libreBaskerville.variable} ${baskerville.variable} ${plusJakarta.variable}`}
       >
-        <ScrollToTop>
-          <Providers>{children}</Providers>
-        </ScrollToTop>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -47,17 +47,26 @@ const { Title, Text } = Typography;
 const GeneralDonationTable: FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const [rowId, setRowId] = useState("");
   const [rowData, setRowData] = useState<any>("");
   const searchInput = useRef<InputRef>(null);
   const [pauseRecurringPayment, { isLoading: pauseLoading }] =
     usePauseRecurringPaymentMutation();
   const [resumeRecurringPayment, { isLoading: resumeLoading }] =
     useResumeRecurringPaymentMutation();
+  // let rtkHook: any;
+  // useEffect(() => {
+  //   rtkHook =
+  // }, [rowData, pauseRecurringPayment, resumeRecurringPayment]);
   const rtkHook =
     rowData.status === "active"
       ? pauseRecurringPayment
       : resumeRecurringPayment;
+  console.log(
+    rtkHook === pauseRecurringPayment
+      ? "PausePaymentHandler"
+      : "ResumePaymentHandler",
+    rowData.status
+  );
   const loading = rowData.status === "active" ? pauseLoading : resumeLoading;
   const [messageApi, contextHolder] = message.useMessage();
   const [filteredInfo, setFilteredInfo] = useState<
@@ -209,9 +218,9 @@ const GeneralDonationTable: FC = () => {
     status: item.plan_status,
     date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
-  const pausePaymentHandler = async () => {
+  const paymentHandler = async (id: string) => {
     try {
-      const res = await rtkHook(rowId).unwrap();
+      const res = await rtkHook(id).unwrap();
       messageApi.open({
         content: `${res.message}`,
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
@@ -326,13 +335,13 @@ const GeneralDonationTable: FC = () => {
       render: (
         _,
         record: {
-          ministry: string;
           frequency: string;
           key: string;
           btn: string;
           status: string;
         }
       ) => {
+        console.log(record.key);
         if (record.frequency !== "-") {
           return (
             <Button
@@ -340,8 +349,8 @@ const GeneralDonationTable: FC = () => {
             ${record.status === "cancelled" ? "bg-red-400" : ""}
                 text-white" : "" border-red-400 bg-white text-[14px] font-semibold leading-[22px] text-red-400
               `}
-              onClick={pausePaymentHandler}
-              loading={rowData.ministry === record.ministry ? loading : false}
+              onClick={() => paymentHandler(record.key)}
+              loading={rowData.key === record.key ? loading : false}
             >
               {record.btn}
             </Button>
@@ -374,8 +383,7 @@ const GeneralDonationTable: FC = () => {
       rowKey={(record) => record.key}
       onRow={(record, rowIndex) => {
         return {
-          onMouseEnter: (event) => {
-            setRowId(record.key);
+          onClick: (event) => {
             setRowData(record);
           },
         };

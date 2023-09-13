@@ -53,23 +53,11 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
 ) => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
-  // const [auth, setAuth] = useState(!!user);
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(false);
   const showDrawer = () => setOpen(true);
   const pathname = usePathname();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     setAuth(true);
-  //   }
-  // }, [user]);
-  // useEffect(() => {
-  //   const regex = /^(\/projects\/[^/]+\/donate|\/ministries\/[^/]+\/donate)$/;
-  //   if (regex.test(pathname) && user === null) {
-  //     setAuth(false);
-  //   }
-  // }, [pathname, user]);
   const onClose = () => setOpen(false);
   const handleGoToAccount = useCallback(() => {
     router.push(`/${profile}`);
@@ -90,6 +78,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
         block
         icon={item.icon}
         key={item.key}
+        type="text"
       >
         {item.label}
       </Button>
@@ -105,6 +94,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
           className="flex items-center gap-1 border-none text-left text-body-1 shadow-none hover:bg-slate-100"
           icon={<User set="light" />}
           block
+          type="text"
           key="account"
         >
           Go to Account
@@ -128,8 +118,6 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
   // const { handleLogoutAcrossTabs } = useMultiTabLogout();
   const handleLogout = useCallback(async () => {
     dispatch(logout());
-    // handleLogoutAcrossTabs();
-    // setAuth(false);
   }, [dispatch]);
 
   items.push({
@@ -140,6 +128,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
         icon={<Logout set="light" />}
         block
         key="logout"
+        type="text"
       >
         Logout
       </Button>
@@ -237,6 +226,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
                 block
                 icon={item.icon}
                 key={item.key}
+                type="text"
               >
                 {item.label}
               </Button>

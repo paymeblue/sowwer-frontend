@@ -34,7 +34,9 @@ const PersonalDetails = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [updateUserProfile, { isLoading, isSuccess }] =
     useUpdateUserProfileMutation();
-  const { data: userProfile } = useGetUserProfileQuery();
+  const { data: userProfile } = useGetUserProfileQuery(null, {
+    refetchOnMountOrArgChange: 5,
+  });
 
   useEffect(() => {
     if (userProfile?.data) {

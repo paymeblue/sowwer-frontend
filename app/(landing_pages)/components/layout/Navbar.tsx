@@ -29,6 +29,8 @@ const Navbar = () => {
   const [openKeys, setOpenKeys] = useState([""]);
   const rootSubmenuKeys = ["/explore"];
   const { user } = useAuth();
+  console.log(user);
+
   const signin = user?.type;
   const profile = user?.type === "ministry" ? "admin" : "donor";
   const [current, setCurrent] = useState(

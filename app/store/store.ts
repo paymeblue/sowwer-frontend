@@ -13,7 +13,8 @@ import {
 import authReducer from "./reducers/authSlice";
 import utilReducer from "./reducers/utilSlice";
 import api from "./services/api/apiSlice";
-import storage from "./sync_storage";
+// import storage from "./sync_storage";
+import storage from "redux-persist/lib/storage";
 
 const persistConfig = {
   key: "root",
