@@ -2,16 +2,17 @@ import { MenuOutlined } from "@ant-design/icons";
 import { useAuth } from "@hooks/useAuth";
 import useNavBg from "@hooks/useNavBg";
 import userDetails from "@lib/user-details";
-import {
-  Button,
-  Divider,
-  Drawer,
-  // Dropdown,
-  Layout,
-  Menu,
-  MenuProps,
-  Space,
-} from "antd";
+import
+  {
+    Button,
+    Divider,
+    Drawer,
+    // Dropdown,
+    Layout,
+    Menu,
+    MenuProps,
+    Space,
+  } from "antd";
 import AuthUser from "app/(donor_layout)/layout/auth-user";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,7 +30,6 @@ const Navbar = () => {
   const [openKeys, setOpenKeys] = useState([""]);
   const rootSubmenuKeys = ["/explore"];
   const { user } = useAuth();
-  console.log(user);
 
   const signin = user?.type;
   const profile = user?.type === "ministry" ? "admin" : "donor";

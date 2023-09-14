@@ -53,20 +53,6 @@ const GeneralDonationTable: FC = () => {
     usePauseRecurringPaymentMutation();
   const [resumeRecurringPayment, { isLoading: resumeLoading }] =
     useResumeRecurringPaymentMutation();
-  // let rtkHook: any;
-  // useEffect(() => {
-  //   rtkHook =
-  // }, [rowData, pauseRecurringPayment, resumeRecurringPayment]);
-  const rtkHook =
-    rowData.status === "active"
-      ? pauseRecurringPayment
-      : resumeRecurringPayment;
-  console.log(
-    rtkHook === pauseRecurringPayment
-      ? "PausePaymentHandler"
-      : "ResumePaymentHandler",
-    rowData.status
-  );
   const loading = rowData.status === "active" ? pauseLoading : resumeLoading;
   const [messageApi, contextHolder] = message.useMessage();
   const [filteredInfo, setFilteredInfo] = useState<
@@ -93,6 +79,7 @@ const GeneralDonationTable: FC = () => {
       page: pagination.current,
       pageSize: pagination.pageSize,
     });
+  console.log(isFetching, data);
   function handleRefetch() {
     refetch();
   }
@@ -218,9 +205,13 @@ const GeneralDonationTable: FC = () => {
     status: item.plan_status,
     date: moment(item.createdAt).format("Do MMMM YYYY; h:mm:ss a"),
   }));
-  const paymentHandler = async (id: string) => {
+  const paymentHandler = async (record: any) => {
+    const rtkHook =
+      record.status === "active"
+        ? pauseRecurringPayment
+        : resumeRecurringPayment;
     try {
-      const res = await rtkHook(id).unwrap();
+      const res = await rtkHook(record.key).unwrap();
       messageApi.open({
         content: `${res.message}`,
         className: `[&>div]:bg-[#17B472] [&>div]:text-white`,
@@ -341,7 +332,6 @@ const GeneralDonationTable: FC = () => {
           status: string;
         }
       ) => {
-        console.log(record.key);
         if (record.frequency !== "-") {
           return (
             <Button
@@ -349,7 +339,7 @@ const GeneralDonationTable: FC = () => {
             ${record.status === "cancelled" ? "bg-red-400" : ""}
                 text-white" : "" border-red-400 bg-white text-[14px] font-semibold leading-[22px] text-red-400
               `}
-              onClick={() => paymentHandler(record.key)}
+              onClick={() => paymentHandler(record)}
               loading={rowData.key === record.key ? loading : false}
             >
               {record.btn}
@@ -379,7 +369,7 @@ const GeneralDonationTable: FC = () => {
     <Table
       columns={columns}
       dataSource={dataSource}
-      loading={isLoading || isFetching}
+      loading={isLoading}
       rowKey={(record) => record.key}
       onRow={(record, rowIndex) => {
         return {

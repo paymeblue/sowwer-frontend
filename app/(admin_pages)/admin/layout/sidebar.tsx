@@ -10,7 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import favicon from "public/assets/icons/favicon.svg";
 import logo from "public/assets/icons/logo-white.svg";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { Home, Setting, Wallet } from "react-iconly";
 
 type Props = { children: ReactNode };
@@ -81,7 +81,22 @@ const AdminSidebar = ({ children }: Props) => {
   const { Header, Content, Sider } = Layout;
   const pathname = usePathname();
   const { user }: { user: User | null } = useAuth();
+  const arrKeys = useMemo(
+    () => [
+      "/admin",
+      "/admin/projects",
+      "/admin/donors",
+      "/admin/payouts",
+      "/admin/settings",
+    ],
+    []
+  );
 
+  useEffect(() => {
+    if (arrKeys.includes(pathname)) {
+      setCurrent(pathname);
+    }
+  }, [arrKeys, pathname]);
   const [current, setCurrent] = useState(
     pathname === "/admin" ? "/admin" : pathname
   );
