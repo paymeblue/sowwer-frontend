@@ -1,4 +1,6 @@
+"use client";
 import { Button } from "@components/ui/button";
+import { Heart2 } from "react-iconly";
 
 const Hero = () => {
   return (
@@ -17,7 +19,12 @@ const Hero = () => {
             — Acts 20:35 (ESV)
           </span>
         </div>
-        <Button>Make a Donation</Button>
+        <Button>
+          <div className="flex items-center space-x-2">
+            <Heart2 set="bold" size={19} />
+            <span>Make a Donation</span>
+          </div>
+        </Button>
       </div>
     </section>
   );
