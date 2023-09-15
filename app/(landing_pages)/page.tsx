@@ -1,5 +1,10 @@
 import { Metadata } from "next";
-import { HomePage } from "./components";
+import dynamic from "next/dynamic";
+import LoadingPage from "@components/shared/LoadingPage";
+
+const DynamicHomePage = dynamic(() => import("./components/home"), {
+  loading: () => <LoadingPage />,
+});
 
 export const metadata: Metadata = {
   title: "Home | Soower",
@@ -7,6 +12,6 @@ export const metadata: Metadata = {
     "Soower serves as a platform that enables ministries and individuals to raise funds and contribute donations towards projects focused on improving the well-being of underprivileged individuals.",
 };
 
-const Home = () => <HomePage />;
+const Home = () => <DynamicHomePage />;
 
 export default Home;

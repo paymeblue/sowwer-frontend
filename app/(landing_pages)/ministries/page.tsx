@@ -1,9 +1,9 @@
-import Loading from "app/loading";
+import LoadingPage from "@components/shared/LoadingPage";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
 const DynamicMinistriesPage = dynamic(() => import("./ministries"), {
-  loading: () => <Loading />,
+  loading: () => <LoadingPage />,
 });
 
 export const metadata: Metadata = {
