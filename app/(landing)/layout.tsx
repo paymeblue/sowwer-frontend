@@ -5,5 +5,11 @@ export default function LandingPageLayout({
 }: {
   children: ReactNode;
 }) {
-  return <div>{children}</div>;
+  return (
+    <div className="h-full min-h-screen w-[100vw] bg-red-500">
+      {/* Top bar */}
+      <main>{children}</main>
+      {/* Footer */}
+    </div>
+  );
 }
