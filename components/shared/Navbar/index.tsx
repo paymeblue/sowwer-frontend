@@ -7,6 +7,7 @@ import useBgTransparentOnScroll from "@hooks/useBgTransparentOnScroll";
 import Image from "next/image";
 import Link from "next/link";
 import Navitem, { INavitem } from "./Navitem";
+import { Button } from "@components/ui/button";
 
 const navItems: INavitem[] = [
   {
@@ -78,6 +79,11 @@ const Navbar = () => {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <Button variant="outline">Login</Button>
+        <Button>Join Sower's Registry</Button>
       </div>
     </nav>
   );
