@@ -163,7 +163,7 @@ const MinistryDetails: FC<any> = ({
   return (
     <Fragment>
       {path === "/auth/signup/ministry?step=details" ? (
-        <section className="mx-auto laptop:max-w-2xl">
+        <section className="mx-auto laptop:max-w-xl">
           <Form
             form={form}
             name="ministry_info__register_form"
@@ -358,7 +358,7 @@ const MinistryDetails: FC<any> = ({
                 <Input
                   type="text"
                   placeholder="Website or social link"
-                  className="rounded border-none bg-[#f9f9f9] py-2 placeholder-[#555] outline-none placeholder:text-[12px] placeholder:leading-[15.62px] laptop:placeholder:text-[14px] laptop:placeholder:leading-[17.64px]"
+                  className="rounded border-none bg-[#f9f9f9] py-2 placeholder-[#555] outline-none placeholder:text-[12px] placeholder:leading-[15.62px] laptop:placeholder:text-[14px] laptop:placeholder:leading-[17.64px] [&>.ant-input]:bg-inherit"
                 />
               </Item>
             </Space>

@@ -9,7 +9,7 @@ const MinistrySignin = () => (
     title="ministry"
     link="auth/signup/ministry"
     type="login"
-    page="admin"
+    page="ministry"
   />
 );
 

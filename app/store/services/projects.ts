@@ -219,7 +219,7 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getDonationsForAdminUser: build.query<
+    getDonationsForMinistryUser: build.query<
       MinistryDonationResponse,
       { page?: number; type: "project" | "ministry"; id?: string }
     >({
@@ -289,7 +289,7 @@ export const {
   useGetProjectDetailsQuery,
   useGetProjectDonationsForDonorUserQuery,
   useGetGeneralDonationsForDonorUserQuery,
-  useGetDonationsForAdminUserQuery,
+  useGetDonationsForMinistryUserQuery,
   useExploreProjectsQuery,
   usePublishOrDraftProjectMutation,
   useGetMinistryProjectsQuery,

@@ -14,10 +14,10 @@ const AuthPages = ({
   const { user } = useAuth();
   const router = useRouter();
   useEffect(() => {
-    if (user && user.type === "donor") {
+    if (user && (user.type === "donor" || user.type === "ministry-donor")) {
       router.replace("/donor");
     } else if (user && user.type === "ministry") {
-      router.replace("/admin");
+      router.replace("/ministry");
     }
   }, [user, router]);
   return (

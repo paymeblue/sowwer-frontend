@@ -1,6 +1,6 @@
 import {
   ErrorResponse,
-  //   UserResponse,
+  UpdateUserPasswordRequest,
   UpdateUserRequest,
   UpdateUserResponse,
   UserProfileResponse,
@@ -23,6 +23,20 @@ const user = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    updateUserPassword: build.mutation<
+      UpdateUserResponse,
+      UpdateUserPasswordRequest
+    >({
+      query: (credentials) => ({
+        url: "users/profile",
+        method: "PATCH",
+        body: credentials,
+      }),
+      invalidatesTags: cacher.invalidatesList("User"),
+      transformResponse: (response: UpdateUserResponse, meta, arg): any => {
+        return response.data;
+      },
+    }),
     getUserProfile: build.query<UserProfileResponse, void | null>({
       query: () => `users/me`,
       providesTags: cacher.providesProperty("User"),
@@ -40,4 +54,8 @@ const user = api.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useUpdateUserProfileMutation, useGetUserProfileQuery } = user;
+export const {
+  useUpdateUserPasswordMutation,
+  useUpdateUserProfileMutation,
+  useGetUserProfileQuery,
+} = user;

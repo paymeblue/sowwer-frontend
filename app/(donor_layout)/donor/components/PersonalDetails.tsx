@@ -1,10 +1,7 @@
-import { CheckCircleIcon } from "@components/assets/icons";
+// import { CheckCircleIcon } from "@components/assets/icons";
+import { useGetUserProfileQuery } from "@store/services/user";
 import {
-  useGetUserProfileQuery,
-  useUpdateUserProfileMutation,
-} from "@store/services/user";
-import {
-  Button,
+  // Button,
   Card,
   Col,
   Form,
@@ -17,25 +14,25 @@ import {
 
 import { Fragment, useEffect } from "react";
 
-type State = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  password: string;
-};
+// type State = {
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phone: string;
+//   password: string;
+// };
 const { Title, Paragraph } = Typography;
 const { Item, useForm } = Form;
-const { Password } = Input;
+// const { Password } = Input;
 
 const PersonalDetails = () => {
   const [form] = useForm();
 
   const [messageApi, contextHolder] = message.useMessage();
-  const [updateUserProfile, { isLoading, isSuccess }] =
-    useUpdateUserProfileMutation();
+  // const [updateUserProfile, { isLoading, isSuccess }] =
+  //   useUpdateUserPasswordMutation();
   const { data: userProfile } = useGetUserProfileQuery(null, {
-    refetchOnMountOrArgChange: 5,
+    refetchOnFocus: true,
   });
 
   useEffect(() => {
@@ -49,33 +46,22 @@ const PersonalDetails = () => {
     }
   }, [userProfile?.data, form]);
 
-  let formIsValid = false;
-  const firstName = Form.useWatch("firstName", form);
-  const lastName = Form.useWatch("lastName", form);
-  const email = Form.useWatch("email", form);
-  const phone = Form.useWatch("phone", form);
-  const password = Form.useWatch("password", form);
-
-  if (firstName && lastName && email && phone && password) {
-    formIsValid = true;
-  }
-
-  const onFinish = async (values: State): Promise<void> => {
-    try {
-      const res = await updateUserProfile(values).unwrap();
-      messageApi.open({
-        content: `${res.message}`,
-        className: "[&>div]:bg-[#17B472]-800 [&>div]:text-white",
-        icon: <CheckCircleIcon />,
-      });
-      // form.resetFields();
-    } catch (error) {
-      messageApi.open({
-        content: `${error}`,
-        className: "[&>div]:bg-red-800 [&>div]:text-white",
-      });
-    }
-  };
+  // const onFinish = async (values: State): Promise<void> => {
+  //   try {
+  //     const res = await updateUserProfile(values).unwrap();
+  //     messageApi.open({
+  //       content: `${res.message}`,
+  //       className: "[&>div]:bg-[#17B472]-800 [&>div]:text-white",
+  //       icon: <CheckCircleIcon />,
+  //     });
+  //     // form.resetFields();
+  //   } catch (error) {
+  //     messageApi.open({
+  //       content: `${error}`,
+  //       className: "[&>div]:bg-red-800 [&>div]:text-white",
+  //     });
+  //   }
+  // };
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
     messageApi.open({
@@ -106,7 +92,7 @@ const PersonalDetails = () => {
               name="contact_form"
               layout="vertical"
               className=""
-              onFinish={onFinish}
+              // onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
@@ -124,7 +110,7 @@ const PersonalDetails = () => {
                     placeholder="John"
                     type="text"
                     readOnly
-                    className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
+                    className="rounded border bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:text-body-2 [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                   />
                 </Item>
                 <Item
@@ -140,7 +126,7 @@ const PersonalDetails = () => {
                     placeholder="Smith"
                     type="text"
                     readOnly
-                    className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
+                    className="rounded border bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:text-body-2 [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                   />
                 </Item>
               </Space>
@@ -165,7 +151,7 @@ const PersonalDetails = () => {
                     placeholder="johnsmith@gmail.com"
                     type="email"
                     readOnly
-                    className="rounded border-none bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
+                    className="rounded border bg-[#F7F8FA] py-3 outline-none [&>input]:bg-inherit [&>input]:text-body-2 [&>input]:placeholder-[#555] placeholder:[&>input]:text-[12px] placeholder:[&>input]:leading-[15.62px] laptop:placeholder:[&>input]:text-[14px] laptop:placeholder:[&>input]:leading-[17.64px]"
                   />
                 </Item>
                 <Item
@@ -192,11 +178,11 @@ const PersonalDetails = () => {
                     readOnly
                     placeholder="+234 123 456 7890"
                     pattern="^\+\d{13}|\d{11}$"
-                    className="rounded border-none bg-[#f9f9f9] py-3 placeholder-[#555] outline-none placeholder:text-[12px] placeholder:leading-[15.62px] laptop:placeholder:text-[14px] laptop:placeholder:leading-[17.64px] [&>input]:bg-inherit"
+                    className="rounded border bg-[#f9f9f9] py-3 placeholder-[#555] outline-none placeholder:text-[12px] placeholder:leading-[15.62px] laptop:placeholder:text-[14px] laptop:placeholder:leading-[17.64px] [&>input]:bg-inherit [&>input]:text-body-2"
                   />
                 </Item>
               </Space>
-              <Item
+              {/* <Item
                 name="password"
                 label="Password"
                 className="[&>div>div.ant-form-item-label>label]:flex-row-reverse [&>div>div.ant-form-item-label>label]:gap-1 [&>div>div.ant-form-item-label>label]:text-[10.91px] [&>div>div.ant-form-item-label>label]:leading-[13.75px] after:[&>div>div.ant-form-item-label>label]:content-none [&>div>div.ant-form-item-label>label]:laptop:text-[13px] [&>div>div.ant-form-item-label>label]:laptop:leading-[16.38px] [&>div>div.ant-form-item-label]:p-0 [&>div>div>.ant-form-item-extra]:text-[9.23px] [&>div>div>.ant-form-item-extra]:leading-[11.63px] [&>div>div>.ant-form-item-extra]:text-body-1 laptop:[&>div>div>.ant-form-item-extra]:text-[11px] laptop:[&>div>div>.ant-form-item-extra]:leading-[13.86px] [&>div>div>div>div>.ant-form-item-explain-error]:text-[9.23px] [&>div>div>div>div>.ant-form-item-explain-error]:leading-[11.63px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:text-[11px] laptop:[&>div>div>div>div>.ant-form-item-explain-error]:leading-[13.86px]"
@@ -236,7 +222,7 @@ const PersonalDetails = () => {
                     {isLoading ? "Saving" : isSuccess ? "Saved" : "Save"}
                   </Button>
                 </Item>
-              </Space>
+              </Space> */}
             </Form>
           </Col>
         </Row>

@@ -358,6 +358,11 @@ export type UpdateUserRequest = {
   email: string;
   password: string;
 };
+export type UpdateUserPasswordRequest = {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
 
 export type UpdateUserResponse = Response<{
   id: string;

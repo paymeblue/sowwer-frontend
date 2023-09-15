@@ -1,6 +1,6 @@
 "use client";
 import DonationHistory from "../components/DonationHistory";
-// import PaymentMethods from "../components/PaymentMethods";
+import PasswordSettings from "../components/PasswordSettings";
 import PersonalDetails from "../components/PersonalDetails";
 import DonorStructure from "../donor-structure";
 
@@ -11,15 +11,15 @@ const items = [
     children: <PersonalDetails />,
   },
   {
-    label: "Donation History",
+    label: "Password Settings",
     key: "2",
+    children: <PasswordSettings />,
+  },
+  {
+    label: "Donation History",
+    key: "3",
     children: <DonationHistory />,
   },
-  // {
-  //   label: "Payment Methods",
-  //   key: "3",
-  //   children: <PaymentMethods />,
-  // },
 ];
 
 const SettingsPage = () => {

@@ -273,7 +273,8 @@ const MakeDonation = ({ projectId }: { projectId: string }) => {
                         }
                         title={
                           <span className="mb-0 text-[13px] leading-[16.38px] laptop:text-[14px] laptop:leading-[18px]">
-                            {item.user} made a <strong>{item.amount}</strong>
+                            {item.user} made a{" "}
+                            <strong>{priceFormat(Number(item.amount))}</strong>
                             &nbsp;donation
                           </span>
                         }

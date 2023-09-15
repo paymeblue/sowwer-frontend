@@ -1,24 +1,24 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import {
-  // FLUSH,
-  // PAUSE,
-  // PERSIST,
-  // PURGE,
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
   REGISTER,
-  // REHYDRATE,
+  REHYDRATE,
   persistReducer,
   persistStore,
 } from "redux-persist";
 import authReducer from "./reducers/authSlice";
 import utilReducer from "./reducers/utilSlice";
 import api from "./services/api/apiSlice";
-// import storage from "./sync_storage";
-import storage from "redux-persist/lib/storage";
+import storage from "./sync_storage";
+// import storage from "redux-persist/lib/storage";
 
 const persistConfig = {
   key: "root",
-  // version: 1,
+  version: 1,
   storage,
 };
 const combinedReducer = combineReducers({
@@ -35,7 +35,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [REGISTER],
+        ignoredActions: [FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE],
       },
     }).concat(api.middleware),
   devTools: process.env.NODE_ENV !== "production",

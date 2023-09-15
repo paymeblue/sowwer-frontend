@@ -290,7 +290,7 @@ const MissionaryForm = ({ prev }: { prev: () => void }) => {
   );
 
   return (
-    <section className="mx-auto laptop:max-w-2xl">
+    <section className="mx-auto laptop:max-w-xl">
       {contextHolder}
       <Space className="mb-8 w-full justify-between rounded border p-2">
         <Typography className="flex items-center gap-2 ">

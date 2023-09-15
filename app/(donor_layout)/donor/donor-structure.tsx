@@ -1,12 +1,9 @@
 import Container from "@shared/Container";
 import TabList from "@shared/TabList";
-import {
-  // Button, Space,
-  Typography,
-} from "antd";
-// import { useRouter } from "next/navigation";
+import { Button, Space, Typography } from "antd";
+import { useRouter } from "next/navigation";
 import { ReactNode, memo } from "react";
-// import { ArrowLeft } from "react-iconly";
+import { ArrowLeft } from "react-iconly";
 
 type Props = {
   title: string;
@@ -15,22 +12,23 @@ type Props = {
 
 const DonorStructure = ({ title, items }: Props) => {
   const { Title } = Typography;
-  // const router = useRouter();
+  const router = useRouter();
 
   return (
     <Container className="pt-20">
-      {/* {title === "Account Settings" && (
+      {title === "Account Settings" && (
         <Space className="my-8">
           <Button
             className="flex items-center justify-center border-none bg-[#EBEFFF] text-accent outline-none"
             size="large"
+            type="text"
             icon={<ArrowLeft set="light" />}
             onClick={() => router.back()}
           >
-            Back
+            Back to dashboard
           </Button>
         </Space>
-      )} */}
+      )}
       <Title
         level={2}
         className="my-4 mb-0 text-center font-title text-[30px] leading-[34.32px] tablet:text-start"

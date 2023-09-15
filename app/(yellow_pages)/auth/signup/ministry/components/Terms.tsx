@@ -62,7 +62,7 @@ const Terms: FC<any> = ({
     setCheckbox(e.target.checked);
   };
   return (
-    <section className="mx-auto laptop:max-w-2xl">
+    <section className="mx-auto laptop:max-w-xl">
       {path === "/auth/signup/ministry?step=terms" ? (
         <section className="text-start">
           <Title className="my-12 font-title text-[24px] text-body-1">
@@ -149,7 +149,7 @@ const Terms: FC<any> = ({
                 meantime you can pro ceed to your dashboard to set up your
                 remaining account details."
             icon={<DonateIcon />}
-            btnLink="admin"
+            btnLink="ministry"
             btnText="Go to Dashboard"
             btnBg="accent"
             btnTextColor="white"

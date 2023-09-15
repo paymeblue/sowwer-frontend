@@ -20,14 +20,18 @@ const StepWrapper = ({ children, title, desc }: IProps) => {
   const { user } = useAuth();
   const router = useRouter();
   useEffect(() => {
-    if (pathname === "/auth/signup/ministry" && user && user.type === "donor") {
+    if (
+      pathname === "/auth/signup/ministry" &&
+      user &&
+      (user.type === "donor" || user.type === "ministry-donor")
+    ) {
       router.replace("/donor");
     } else if (
       pathname === "/auth/signup/ministry" &&
       user &&
       user.type === "ministry"
     ) {
-      router.replace("/admin");
+      router.replace("/ministry");
     }
   }, [user, pathname, router]);
   return (

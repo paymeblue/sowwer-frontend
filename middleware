@@ -17,7 +17,7 @@
 //   // Our logic begins here
 //   const { pathname } = request.nextUrl;
 //   const donorRegex = /^\/donor(\/.*)?/;
-//   const ministryRegex = /^\/admin(\/.*)?/;
+//   const ministryRegex = /^\/ministry(\/.*)?/;
 
 //   const donorPages = donorRegex.test(pathname);
 //   const ministryPages = ministryRegex.test(pathname);
@@ -42,7 +42,7 @@
 //   }
 //   // redirect to ministry dashboard if logged in
 //   if (ministryPages && token && user?.type === "ministry") {
-//     return NextResponse.redirect(new URL("/admin", request.url));
+//     return NextResponse.redirect(new URL("/ministry", request.url));
 //   }
 
 //   return NextResponse.next();
@@ -54,7 +54,7 @@
 // export function middleware(request: NextRequest) {
 //   const { pathname } = request.nextUrl;
 //   const donorRegex = /^\/donor(\/.*)?/;
-//   const ministryRegex = /^\/admin(\/.*)?/;
+//   const ministryRegex = /^\/ministry(\/.*)?/;
 
 //   const isApiOrNextPath =
 //     pathname.startsWith("/api/") || pathname.startsWith("/_next/");
@@ -93,7 +93,7 @@
 // export function middleware(request: NextRequest) {
 //   const { pathname } = request.nextUrl;
 //   const donorRegex = /^\/donor(\/.*)?/;
-//   const ministryRegex = /^\/admin(\/.*)?/;
+//   const ministryRegex = /^\/ministry(\/.*)?/;
 //   const { isAuth, user } = Auth();
 //   console.log(isAuth, "isAuth");
 //   //   if (isApiOrNextPath(pathname)) {

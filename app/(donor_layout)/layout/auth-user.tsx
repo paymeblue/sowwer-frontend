@@ -86,7 +86,7 @@ const AuthUser: ForwardRefRenderFunction<AuthUserRef, Props> = (
     key: item.key,
   }));
   // useEffect(() => {
-  if (!/^\/(admin|donor)/.test(pathname)) {
+  if (!/^\/(ministry|donor)/.test(pathname)) {
     items.push({
       label: (
         <Button

@@ -29,6 +29,7 @@ export { default as InstaColorIcon } from "./instaColor";
 export { default as LeftCirlceArrowIcon } from "./leftCirlceArrow";
 export { default as LinkedInColorIcon } from "./linkedInColor";
 export { default as MastercardIcon } from "./mastercard";
+export { default as QrCodeIcon } from "./qrcode";
 export { default as RightCirlceArrowIcon } from "./rightCircleArrow";
 export { default as TwitterColorIcon } from "./twitterColor";
 export { default as VisacardIcon } from "./visacard";
