@@ -46,7 +46,7 @@ const Navbar = () => {
   const backgroundTransparent = useBgTransparentOnScroll();
   return (
     <nav
-      className={`flex h-[8vh] w-full flex-row items-center justify-between px-14 ${
+      className={`fixed left-0 top-0  z-30 flex h-[8vh] w-full flex-row items-center justify-between px-16 ${
         backgroundTransparent <= 0 ? "bg-transparent" : "bg-white shadow-md"
       }`}
     >
