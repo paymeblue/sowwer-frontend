@@ -7,7 +7,7 @@ import {
   CallingIcon,
   FacebookIcon,
   MessageIcon,
-} from "@components/assets/icons";
+} from "components/assets/icons";
 import { Col, Divider, Layout, Row, Space, Typography } from "antd";
 import Image from "next/image";
 import Link from "next/link";

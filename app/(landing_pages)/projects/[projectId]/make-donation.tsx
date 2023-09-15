@@ -1,16 +1,16 @@
 "use client";
 import { LinkOutlined, LoadingOutlined } from "@ant-design/icons";
-import PlaceholderImage from "@components/PlaceholderImage";
-import useCopyToClipboard from "@hooks/useCopyToClipboard";
-import capitalizeFirstLetters from "@lib/capitalize";
-import currencyFormat from "@lib/useCurrencyFormat";
-import { generateAvatar } from "@lib/user-details";
-import Container from "@shared/Container";
-import ResultComponent from "@shared/ResultComponent";
+import PlaceholderImage from "components/PlaceholderImage";
+import useCopyToClipboard from "hooks/useCopyToClipboard";
+import capitalizeFirstLetters from "lib/capitalize";
+import currencyFormat from "lib/useCurrencyFormat";
+import { generateAvatar } from "lib/user-details";
+import Container from "@components/shared/Container";
+import ResultComponent from "@components/shared/ResultComponent";
 import {
   useGetMinistryProjectDonorsQuery,
   useGetProjectDetailsQuery,
-} from "@store/services/projects";
+} from "store/services/projects";
 import {
   Avatar,
   Button,

@@ -1,6 +1,6 @@
-import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
-import { useUtil } from "@hooks/useUtil";
-import { useEditCoverPhotoMutation } from "@store/services/projects";
+import { CheckCircleIcon, FileUpload } from "components/assets/icons";
+import { useUtil } from "hooks/useUtil";
+import { useEditCoverPhotoMutation } from "store/services/projects";
 import {
   Button,
   Divider,

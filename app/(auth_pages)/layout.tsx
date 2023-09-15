@@ -1,6 +1,6 @@
 "use client";
-import { useAuth } from "@hooks/useAuth";
-import Container from "@shared/Container";
+import { useAuth } from "hooks/useAuth";
+import Container from "@components/shared/Container";
 import { useRouter } from "next/navigation";
 import { Fragment, ReactNode, useEffect } from "react";
 import AuthFooter from "./layout/Footer";

@@ -1,6 +1,6 @@
-import capitalizeFirstLetters from "@lib/capitalize";
-import ReuseableCards from "@shared/ReuseableCards";
-import { useGetMinistryProjectsQuery } from "@store/services/projects";
+import capitalizeFirstLetters from "lib/capitalize";
+import ReuseableCards from "@components/cards/ReuseableCards";
+import { useGetMinistryProjectsQuery } from "store/services/projects";
 
 const MinistryProjects = ({
   id,

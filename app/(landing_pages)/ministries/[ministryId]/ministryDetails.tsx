@@ -1,8 +1,8 @@
 "use client";
-import capitalizeFirstLetters from "@lib/capitalize";
-import Container from "@shared/Container";
-import TabList from "@shared/TabList";
-import { useGetMinistryDetailsQuery } from "@store/services/ministries";
+import capitalizeFirstLetters from "lib/capitalize";
+import Container from "@components/shared/Container";
+import TabList from "@components/shared/TabList";
+import { useGetMinistryDetailsQuery } from "store/services/ministries";
 import { Avatar, Space, Typography } from "antd";
 import MinistryProjects from "./components/ministry-projects";
 import Profile from "./components/profile";

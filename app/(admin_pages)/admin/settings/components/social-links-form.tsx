@@ -6,13 +6,13 @@ import {
   LinkedInColorIcon,
   TwitterColorIcon,
   YoutubeColorIcon,
-} from "@components/assets/icons";
+} from "components/assets/icons";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   useGetSocialLinksQuery,
   useUpdateSocialLinksMutation,
-} from "@store/services/ministries";
-import { UpdateSocialLinksRequest } from "@store/types";
+} from "store/services/ministries";
+import { UpdateSocialLinksRequest } from "store/types";
 import { Button, Form, Input, Space, message } from "antd";
 import { Fragment, useEffect } from "react";
 

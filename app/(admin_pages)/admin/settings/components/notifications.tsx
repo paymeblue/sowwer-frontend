@@ -1,6 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import ResultComponent from "@shared/ResultComponent";
-import { useGetNotificationQuery } from "@store/services/notifications";
+import ResultComponent from "@components/shared/ResultComponent";
+import { useGetNotificationQuery } from "store/services/notifications";
 import { Card, Space, Spin, Typography } from "antd";
 import { Fragment, ReactNode } from "react";
 import ToggleSwitch from "./toggle-switch";

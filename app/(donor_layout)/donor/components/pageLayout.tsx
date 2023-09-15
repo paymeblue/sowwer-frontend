@@ -1,5 +1,5 @@
-import Container from "@shared/Container";
-import TabList from "@shared/TabList";
+import Container from "@components/shared/Container";
+import TabList from "@components/shared/TabList";
 import { Typography } from "antd";
 import { ReactNode, memo } from "react";
 

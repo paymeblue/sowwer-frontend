@@ -1,10 +1,10 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import { EmptyDonorIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
-import capitalizeFirstLetters from "@lib/capitalize";
-import currencyFormat from "@lib/useCurrencyFormat";
-import ResultComponent from "@shared/ResultComponent";
-import { useGetDonationsForAdminUserQuery } from "@store/services/projects";
+import { EmptyDonorIcon } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
+import capitalizeFirstLetters from "lib/capitalize";
+import currencyFormat from "lib/useCurrencyFormat";
+import ResultComponent from "@components/shared/ResultComponent";
+import { useGetDonationsForAdminUserQuery } from "store/services/projects";
 import { Button, Input, InputRef, Space, Spin, Table, Typography } from "antd";
 import type { ColumnType, ColumnsType, TableProps } from "antd/es/table";
 import type {

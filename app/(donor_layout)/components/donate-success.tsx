@@ -1,7 +1,7 @@
 "use client";
-import { DonateIcon } from "@components/assets/icons";
-import capitalizeFirstLetters from "@lib/capitalize";
-import ResultComponent from "@shared/ResultComponent";
+import { DonateIcon } from "components/assets/icons";
+import capitalizeFirstLetters from "lib/capitalize";
+import ResultComponent from "@components/shared/ResultComponent";
 import { Card, Typography } from "antd";
 import { Fragment } from "react";
 

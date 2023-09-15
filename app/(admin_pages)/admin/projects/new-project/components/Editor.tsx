@@ -1,10 +1,10 @@
-import { CheckCircleIcon } from "@components/assets/icons";
-import { useUtil } from "@hooks/useUtil";
+import { CheckCircleIcon } from "components/assets/icons";
+import { useUtil } from "hooks/useUtil";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   useEditProjectMutation,
   useGetProjectQuery,
-} from "@store/services/projects";
+} from "store/services/projects";
 import { Button, Space, Typography, message } from "antd";
 import Parser from "html-react-parser";
 import { useSearchParams } from "next/navigation";

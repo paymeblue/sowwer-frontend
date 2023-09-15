@@ -1,9 +1,9 @@
 import { MenuOutlined } from "@ant-design/icons";
-import { useAuth } from "@hooks/useAuth";
+import { useAuth } from "hooks/useAuth";
 // import useMultiTabLogout from "@hooks/useMultiTabLogout";
-import { useAppDispatch } from "@hooks/useStore";
-import { logout } from "@store/reducers/authSlice";
-import { setLastVisited } from "@store/reducers/utilSlice";
+import { useAppDispatch } from "hooks/useStore";
+import { logout } from "store/reducers/authSlice";
+import { setLastVisited } from "store/reducers/utilSlice";
 import {
   Avatar,
   Button,

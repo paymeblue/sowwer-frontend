@@ -1,18 +1,18 @@
 "use client";
-import PlaceholderImage from "@components/PlaceholderImage";
-import AmountInput from "@components/amountField";
-import { CheckCircleIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
-import useFlutterConfig from "@hooks/useFlutterConfig";
-import { useAppDispatch } from "@hooks/useStore";
-import capitalizeFirstLetters from "@lib/capitalize";
-import { setCredentials } from "@store/reducers/authSlice";
+import PlaceholderImage from "components/PlaceholderImage";
+import AmountInput from "@components/ui/amountField";
+import { CheckCircleIcon } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
+import useFlutterConfig from "hooks/useFlutterConfig";
+import { useAppDispatch } from "hooks/useStore";
+import capitalizeFirstLetters from "lib/capitalize";
+import { setCredentials } from "store/reducers/authSlice";
 import {
   useInitiatePaymentToProjectAuthMutation,
   useInitiatePaymentToProjectUnauthMutation,
-} from "@store/services/auth";
-import { useVerifyProjectPaymentMutation } from "@store/services/payouts";
-import { useGetProjectDetailsQuery } from "@store/services/projects";
+} from "store/services/auth";
+import { useVerifyProjectPaymentMutation } from "store/services/payouts";
+import { useGetProjectDetailsQuery } from "store/services/projects";
 import {
   Button,
   Card,

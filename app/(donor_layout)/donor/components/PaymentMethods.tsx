@@ -3,8 +3,8 @@ import {
   CheckCircleIcon,
   MastercardIcon,
   VisacardIcon,
-} from "@components/assets/icons";
-import ResultComponent from "@shared/ResultComponent";
+} from "components/assets/icons";
+import ResultComponent from "@components/shared/ResultComponent";
 import {
   Button,
   Card,

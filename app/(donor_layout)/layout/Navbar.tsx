@@ -1,8 +1,8 @@
 "use client";
-import { useAuth } from "@hooks/useAuth";
-import useNavBg from "@hooks/useNavBg";
-import userDetails from "@lib/user-details";
-import { User } from "@store/types";
+import { useAuth } from "hooks/useAuth";
+import useNavBg from "hooks/useNavBg";
+import userDetails from "lib/user-details";
+import { User } from "store/types";
 import { Layout } from "antd";
 import Image from "next/image";
 import Link from "next/link";

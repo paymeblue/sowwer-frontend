@@ -22,13 +22,13 @@
     "target": "es2018",
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["app/components/*"],
-      "@assets/*": ["app/components/assets/*"],
-      "@styles/*": ["app/styles/*"],
-      "@shared/*": ["app/shared/*"],
-      "@lib/*": ["app/lib/*"],
-      "@hooks/*": ["app/hooks/*"],
-      "@store/*": ["app/store/*"]
+      "@components/*": ["components/*"],
+      "@assets/*": ["components/assets/*"],
+      "@styles/*": ["styles/*"],
+      "@shared/*": ["components/shared/*"],
+      "@lib/*": ["lib/*"],
+      "@hooks/*": ["hooks/*"],
+      "@store/*": ["store/*"]
     },
     "incremental": true,
     "plugins": [
@@ -44,7 +44,7 @@
     ".next/types/**/*.ts",
     "middleware",
     "app/(yellow_pages)/join-registry/context/registry-context",
-    "app/hooks/useMultiTabLogout"
+    "hooks/useMultiTabLogout"
   ],
   "exclude": ["node_modules"]
 }

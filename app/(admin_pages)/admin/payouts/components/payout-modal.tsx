@@ -2,7 +2,7 @@ import {
   useGetBanksQuery,
   useSaveAccountMutation,
   useVerifyAccountMutation,
-} from "@store/services/payouts";
+} from "store/services/payouts";
 import {
   Button,
   Form,

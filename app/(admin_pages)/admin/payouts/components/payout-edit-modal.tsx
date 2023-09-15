@@ -3,7 +3,7 @@ import {
   useGetBanksQuery,
   useSaveAccountMutation,
   useVerifyAccountMutation,
-} from "@store/services/payouts";
+} from "store/services/payouts";
 import { Button, Form, Input, Modal, Select, Space, Typography } from "antd";
 import { Fragment, useEffect, useMemo, useState } from "react";
 

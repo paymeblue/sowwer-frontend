@@ -1,15 +1,15 @@
 "use client";
-import { CheckCircleIcon } from "@components/assets/icons";
-import { useAppDispatch } from "@hooks/useStore";
-import { useUtil } from "@hooks/useUtil";
-import capitalizeFirstLetters from "@lib/capitalize";
-import { setCredentials } from "@store/reducers/authSlice";
-import { setLastVisited, setLoginCallback } from "@store/reducers/utilSlice";
+import { CheckCircleIcon } from "components/assets/icons";
+import { useAppDispatch } from "hooks/useStore";
+import { useUtil } from "hooks/useUtil";
+import capitalizeFirstLetters from "lib/capitalize";
+import { setCredentials } from "store/reducers/authSlice";
+import { setLastVisited, setLoginCallback } from "store/reducers/utilSlice";
 import {
   useDonorRegisterMutation,
   useLoginMutation,
-} from "@store/services/auth";
-import { LoginRequest } from "@store/types";
+} from "store/services/auth";
+import { LoginRequest } from "store/types";
 import { Button, Card, Form, Input, Space, Typography, message } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

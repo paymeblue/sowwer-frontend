@@ -1,6 +1,6 @@
 "use client";
-import { HeartHandIcon, LensIcon, ReceiptIcon } from "@components/assets/icons";
-import Container from "@shared/Container";
+import { HeartHandIcon, LensIcon, ReceiptIcon } from "components/assets/icons";
+import Container from "@components/shared/Container";
 import { Col, Row, Space, Typography } from "antd";
 import Image from "next/image";
 import rect from "public/assets/images/rectangle.png";

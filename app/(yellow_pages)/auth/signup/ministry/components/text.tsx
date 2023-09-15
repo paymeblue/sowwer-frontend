@@ -1,4 +1,4 @@
-import { FileUpload } from "@components/assets/icons";
+import { FileUpload } from "components/assets/icons";
 import { Upload, message } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload/interface";
 import React, { useState } from "react";

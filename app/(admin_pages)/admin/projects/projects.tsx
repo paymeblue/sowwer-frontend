@@ -1,6 +1,6 @@
 "use client";
 import { PlusOutlined } from "@ant-design/icons";
-import Container from "@shared/Container";
+import Container from "@components/shared/Container";
 import { Button, Space, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import ProjectsTable from "./components/projects-table";

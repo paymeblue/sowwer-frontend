@@ -1,8 +1,8 @@
-import { CheckCircleIcon } from "@components/assets/icons";
+import { CheckCircleIcon } from "components/assets/icons";
 import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
-} from "@store/services/user";
+} from "store/services/user";
 import {
   Button,
   Card,

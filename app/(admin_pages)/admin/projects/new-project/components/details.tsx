@@ -1,9 +1,9 @@
 import { DownloadOutlined } from "@ant-design/icons";
-import { CheckCircleIcon } from "@components/assets/icons";
-import { useAppDispatch } from "@hooks/useStore";
-import { useUtil } from "@hooks/useUtil";
-import { setProjectId } from "@store/reducers/utilSlice";
-import { usePublishOrDraftProjectMutation } from "@store/services/projects";
+import { CheckCircleIcon } from "components/assets/icons";
+import { useAppDispatch } from "hooks/useStore";
+import { useUtil } from "hooks/useUtil";
+import { setProjectId } from "store/reducers/utilSlice";
+import { usePublishOrDraftProjectMutation } from "store/services/projects";
 import { Button, QRCode, Space, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";

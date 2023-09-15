@@ -1,6 +1,6 @@
 "use client";
-import { DonateIcon } from "@components/assets/icons";
-import ResultComponent from "@shared/ResultComponent";
+import { DonateIcon } from "components/assets/icons";
+import ResultComponent from "@components/shared/ResultComponent";
 import { Typography } from "antd";
 
 const { Title, Paragraph } = Typography;

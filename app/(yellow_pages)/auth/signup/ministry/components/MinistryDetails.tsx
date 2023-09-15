@@ -1,5 +1,5 @@
-import { Christian, ChurchIcon, FileUpload } from "@components/assets/icons";
-import states from "@lib/NigeriaStates";
+import { Christian, ChurchIcon, FileUpload } from "components/assets/icons";
+import states from "lib/NigeriaStates";
 import {
   Button,
   Form,

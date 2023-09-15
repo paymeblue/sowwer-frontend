@@ -1,10 +1,10 @@
 "use client";
-import GeneralDonationCard from "@shared/GeneraDonationCard";
-import ReuseableCards from "@shared/ReuseableCards";
+import GeneralDonationCard from "@components/cards/GeneraDonationCard";
+import ReuseableCards from "@components/cards/ReuseableCards";
 import {
   useGetGeneralDonationsForDonorUserQuery,
   useGetProjectDonationsForDonorUserQuery,
-} from "@store/services/projects";
+} from "store/services/projects";
 import DonorStructure from "./donor-structure";
 
 const items = [

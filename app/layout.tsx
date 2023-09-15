@@ -9,7 +9,8 @@ import {
 } from "next/font/google";
 import localFont from "next/font/local";
 import "react-quill/dist/quill.snow.css";
-import Providers from "./providers";
+import Providers from "../providers";
+import { NextFontWithVariable } from "next/dist/compiled/@next/font";
 
 const plusJakarta = PlusJarkataSans({
   subsets: ["latin"],
@@ -24,10 +25,10 @@ const libreBaskerville = LibreBaskerville({
 });
 
 const baskerville = localFont({
-  src: "./fonts/Baskerville.ttf",
+  src: "../components/assets/fonts/Baskerville.ttf",
   weight: "400",
   variable: "--font-baskerville",
-});
+}) as NextFontWithVariable;
 export { baskerville, libreBaskerville, plusJakarta };
 
 // export const metadata: Metadata = {

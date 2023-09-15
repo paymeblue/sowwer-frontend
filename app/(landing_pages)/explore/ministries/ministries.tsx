@@ -1,8 +1,8 @@
 "use client";
-import Container from "@shared/Container";
-import ExploreMinistriesCard from "@shared/ExploreMinistriesCard";
-import TabList from "@shared/TabList";
-import { useExploreMinistriesQuery } from "@store/services/ministries";
+import Container from "@components/shared/Container";
+import ExploreMinistriesCard from "@components/cards/ExploreMinistriesCard";
+import TabList from "@components/shared/TabList";
+import { useExploreMinistriesQuery } from "store/services/ministries";
 import type { TabsProps } from "antd";
 import { Typography } from "antd";
 import { FC, Fragment } from "react";

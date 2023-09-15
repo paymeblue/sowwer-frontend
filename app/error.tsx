@@ -1,6 +1,6 @@
 "use client"; // Error components must be Client Components
 
-import ResultComponent from "@shared/ResultComponent";
+import ResultComponent from "@components/shared/ResultComponent";
 import { useEffect } from "react";
 import Layout from "./(landing_pages)/components/layout";
 

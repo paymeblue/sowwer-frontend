@@ -1,12 +1,12 @@
 "use client";
 import { CheckOutlined, CopyOutlined, EyeFilled } from "@ant-design/icons";
-import useCopyToClipboard from "@hooks/useCopyToClipboard";
-import { useUtil } from "@hooks/useUtil";
-import { truncateTextWithEllipsis } from "@lib/capitalize";
+import useCopyToClipboard from "hooks/useCopyToClipboard";
+import { useUtil } from "hooks/useUtil";
+import { truncateTextWithEllipsis } from "lib/capitalize";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import Container from "@shared/Container";
-import TabList from "@shared/TabList";
-import { useGetProjectQuery } from "@store/services/projects";
+import Container from "@components/shared/Container";
+import TabList from "@components/shared/TabList";
+import { useGetProjectQuery } from "store/services/projects";
 import {
   Button,
   Divider,

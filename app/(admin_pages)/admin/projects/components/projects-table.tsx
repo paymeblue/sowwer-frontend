@@ -7,22 +7,22 @@ import {
   MoreOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { CheckCircleIcon, EmptySpeakerIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
-import { useAppDispatch } from "@hooks/useStore";
-import capitalizeFirstLetters from "@lib/capitalize";
-import currencyFormat from "@lib/useCurrencyFormat";
-import { generateAvatar } from "@lib/user-details";
+import { CheckCircleIcon, EmptySpeakerIcon } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
+import { useAppDispatch } from "hooks/useStore";
+import capitalizeFirstLetters from "lib/capitalize";
+import currencyFormat from "lib/useCurrencyFormat";
+import { generateAvatar } from "lib/user-details";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import ResultComponent from "@shared/ResultComponent";
-import { setProjectId } from "@store/reducers/utilSlice";
+import ResultComponent from "@components/shared/ResultComponent";
+import { setProjectId } from "store/reducers/utilSlice";
 import {
   useCloseMinistryProjectMutation,
   useDeleteMinistryProjectMutation,
   useGetMinistryProjectDonorsQuery,
   useGetMinistryProjectsQuery,
-} from "@store/services/projects";
-import { ProjectData } from "@store/types";
+} from "store/services/projects";
+import { ProjectData } from "store/types";
 import type { TableProps } from "antd";
 import {
   Avatar,

@@ -1,5 +1,5 @@
-import { DonateIcon } from "@components/assets/icons";
-import ResultComponent from "@shared/ResultComponent";
+import { DonateIcon } from "components/assets/icons";
+import ResultComponent from "@components/shared/ResultComponent";
 import { Button, Checkbox, Form, FormInstance, Space, Typography } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

@@ -1,13 +1,13 @@
-import AmountInput from "@components/amountField";
-import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
-import { useAppDispatch } from "@hooks/useStore";
+import AmountInput from "@components/ui/amountField";
+import { CheckCircleIcon, FileUpload } from "components/assets/icons";
+import { useAppDispatch } from "hooks/useStore";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { setProjectId } from "@store/reducers/utilSlice";
+import { setProjectId } from "store/reducers/utilSlice";
 import {
   useCreateProjectMutation,
   useEditProjectMutation,
   useGetProjectQuery,
-} from "@store/services/projects";
+} from "store/services/projects";
 import {
   Button,
   Divider,

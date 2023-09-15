@@ -1,8 +1,8 @@
 "use client";
-import { DonorsIcon, ProjectsIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
-import userDetails from "@lib/user-details";
-import { User } from "@store/types";
+import { DonorsIcon, ProjectsIcon } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
+import userDetails from "lib/user-details";
+import { User } from "store/types";
 import { Layout, Menu, MenuProps, Tooltip, theme as antdtheme } from "antd";
 import AuthUser from "app/(donor_layout)/layout/auth-user";
 import Image from "next/image";

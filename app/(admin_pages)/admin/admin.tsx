@@ -1,8 +1,8 @@
 "use client";
-import { BankIcon, SpeakerIcon, UserIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
-import capitalizeFirstLetters from "@lib/capitalize";
-import Container from "@shared/Container";
+import { BankIcon, SpeakerIcon, UserIcon } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
+import capitalizeFirstLetters from "lib/capitalize";
+import Container from "@components/shared/Container";
 import { Button, Card, List, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import { ChevronRight } from "react-iconly";

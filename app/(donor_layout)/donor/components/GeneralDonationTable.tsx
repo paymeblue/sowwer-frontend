@@ -1,13 +1,13 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import { CheckCircleIcon } from "@components/assets/icons";
-import capitalizeFirstLetters from "@lib/capitalize";
-import currencyFormat from "@lib/useCurrencyFormat";
-import ResultComponent from "@shared/ResultComponent";
+import { CheckCircleIcon } from "components/assets/icons";
+import capitalizeFirstLetters from "lib/capitalize";
+import currencyFormat from "lib/useCurrencyFormat";
+import ResultComponent from "@components/shared/ResultComponent";
 import {
   usePauseRecurringPaymentMutation,
   useResumeRecurringPaymentMutation,
-} from "@store/services/payouts";
-import { useGetGeneralDonationsForDonorUserQuery } from "@store/services/projects";
+} from "store/services/payouts";
+import { useGetGeneralDonationsForDonorUserQuery } from "store/services/projects";
 import {
   Button,
   Empty,

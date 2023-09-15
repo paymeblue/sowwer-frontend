@@ -1,5 +1,5 @@
 "use client";
-import Container from "@shared/Container";
+import Container from "@components/shared/Container";
 import { Button, Col, Row, Space, Typography } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

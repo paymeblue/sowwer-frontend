@@ -9,9 +9,9 @@ import {
   FacebookIcon,
   MailIcon,
   PhoneIcon,
-} from "@components/assets/icons";
-import countrycodes from "@lib/CountryCode";
-import Container from "@shared/Container";
+} from "components/assets/icons";
+import countrycodes from "lib/CountryCode";
+import Container from "@components/shared/Container";
 import {
   Button,
   Card,

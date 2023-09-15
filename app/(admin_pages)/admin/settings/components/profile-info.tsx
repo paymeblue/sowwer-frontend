@@ -1,11 +1,11 @@
-import { CheckCircleIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
-import states from "@lib/NigeriaStates";
+import { CheckCircleIcon } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
+import states from "lib/NigeriaStates";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   useGetMinistryDetailsQuery,
   useUpdateMinistryProfileMutation,
-} from "@store/services/ministries";
+} from "store/services/ministries";
 import {
   Button,
   Card,

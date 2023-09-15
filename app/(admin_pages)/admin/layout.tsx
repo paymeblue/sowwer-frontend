@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@hooks/useAuth";
+import { useAuth } from "hooks/useAuth";
 import { Button, Result } from "antd";
 import Layout from "app/(landing_pages)/components/layout";
 import { useRouter } from "next/navigation";

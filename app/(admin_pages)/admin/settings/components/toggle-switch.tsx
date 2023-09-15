@@ -1,4 +1,4 @@
-import { useUpdateNotificationMutation } from "@store/services/notifications";
+import { useUpdateNotificationMutation } from "store/services/notifications";
 import { Switch } from "antd";
 
 const ToggleSwitch = ({

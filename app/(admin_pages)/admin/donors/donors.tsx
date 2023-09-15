@@ -1,6 +1,6 @@
 "use client";
-import Container from "@shared/Container";
-import TabList from "@shared/TabList";
+import Container from "@components/shared/Container";
+import TabList from "@components/shared/TabList";
 import { TabsProps, Typography } from "antd";
 import GeneralDonorsTable from "./components/general-donor-table";
 import ProjectsDonorTable from "./components/projects-donor-table";

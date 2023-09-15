@@ -1,8 +1,8 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import capitalizeFirstLetters from "@lib/capitalize";
-import currencyFormat from "@lib/useCurrencyFormat";
-import ResultComponent from "@shared/ResultComponent";
-import { useGetProjectDonationsForDonorUserQuery } from "@store/services/projects";
+import capitalizeFirstLetters from "lib/capitalize";
+import currencyFormat from "lib/useCurrencyFormat";
+import ResultComponent from "@components/shared/ResultComponent";
+import { useGetProjectDonationsForDonorUserQuery } from "store/services/projects";
 import {
   Button,
   Empty,

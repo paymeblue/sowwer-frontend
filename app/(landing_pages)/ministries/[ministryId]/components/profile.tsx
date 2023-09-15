@@ -4,12 +4,12 @@ import {
   LinkedInColorIcon,
   TwitterColorIcon,
   YoutubeColorIcon,
-} from "@components/assets/icons";
-import FbColorIcon from "@components/assets/icons/fbColor";
+} from "components/assets/icons";
+import FbColorIcon from "components/assets/icons/fbColor";
 import {
   useGetMinistryDetailsQuery,
   useGetSocialLinksQuery,
-} from "@store/services/ministries";
+} from "store/services/ministries";
 import { Alert, Button, Card, Col, Row, Space, Typography } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

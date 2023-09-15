@@ -1,10 +1,10 @@
 "use client";
-import { CheckCircleIcon } from "@components/assets/icons";
-import { useUtil } from "@hooks/useUtil";
+import { CheckCircleIcon } from "components/assets/icons";
+import { useUtil } from "hooks/useUtil";
 import {
   useForgotPasswordMutation,
   useResetPasswordMutation,
-} from "@store/services/auth";
+} from "store/services/auth";
 import { Button, Card, Form, Input, Typography, message } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Fragment } from "react";

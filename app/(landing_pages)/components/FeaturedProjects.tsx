@@ -1,5 +1,5 @@
-import { SoowerIcon } from "@components/assets/icons";
-import Container from "@shared/Container";
+import { SoowerIcon } from "components/assets/icons";
+import Container from "@components/shared/Container";
 import { Card, Col, Row, Space, Tag, Typography } from "antd";
 import Image from "next/image";
 import Link from "next/link";

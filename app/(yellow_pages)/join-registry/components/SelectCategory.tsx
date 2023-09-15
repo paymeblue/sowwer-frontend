@@ -1,4 +1,4 @@
-import FrameIcon from "@components/assets/icons/Frame";
+import FrameIcon from "components/assets/icons/Frame";
 import { Typography } from "antd";
 import { useRouter } from "next/navigation";
 import { Dispatch } from "react";

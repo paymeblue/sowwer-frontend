@@ -1,10 +1,15 @@
+import Loading from "app/loading";
 import { Metadata } from "next";
-import MinistriesPage from "./ministries";
+import dynamic from "next/dynamic";
+
+const DynamicMinistriesPage = dynamic(() => import("./ministries"), {
+  loading: () => <Loading />,
+});
 
 export const metadata: Metadata = {
   title: "Ministries | Soower",
 };
 
-const Ministries = () => <MinistriesPage />;
+const Ministries = () => <DynamicMinistriesPage />;
 
 export default Ministries;

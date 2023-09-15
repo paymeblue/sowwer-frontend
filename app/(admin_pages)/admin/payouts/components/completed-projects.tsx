@@ -1,11 +1,11 @@
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import { CheckCircleIcon, EmptyWalletIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
-import capitalizeFirstLetters from "@lib/capitalize";
-import currencyFormat from "@lib/useCurrencyFormat";
-import ResultComponent from "@shared/ResultComponent";
-import { useRequestPayoutMutation } from "@store/services/payouts";
-import { useGetMinistryProjectsQuery } from "@store/services/projects";
+import { CheckCircleIcon, EmptyWalletIcon } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
+import capitalizeFirstLetters from "lib/capitalize";
+import currencyFormat from "lib/useCurrencyFormat";
+import ResultComponent from "@components/shared/ResultComponent";
+import { useRequestPayoutMutation } from "store/services/payouts";
+import { useGetMinistryProjectsQuery } from "store/services/projects";
 import {
   Button,
   Input,

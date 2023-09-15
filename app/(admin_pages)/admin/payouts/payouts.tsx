@@ -1,8 +1,8 @@
 "use client";
-import { CheckCircleIcon } from "@components/assets/icons";
-import Container from "@shared/Container";
-import TabList from "@shared/TabList";
-import { useGetAccountInfoQuery } from "@store/services/payouts";
+import { CheckCircleIcon } from "components/assets/icons";
+import Container from "@components/shared/Container";
+import TabList from "@components/shared/TabList";
+import { useGetAccountInfoQuery } from "store/services/payouts";
 import { Alert, Button, Space, TabsProps, Typography, message } from "antd";
 import { useEffect, useState } from "react";
 import { ArrowRight, EditSquare, InfoCircle } from "react-iconly";

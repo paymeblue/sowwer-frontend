@@ -1,7 +1,7 @@
 import { MenuOutlined } from "@ant-design/icons";
-import { useAuth } from "@hooks/useAuth";
-import useNavBg from "@hooks/useNavBg";
-import userDetails from "@lib/user-details";
+import { useAuth } from "hooks/useAuth";
+import useNavBg from "hooks/useNavBg";
+import userDetails from "lib/user-details";
 import {
   Button,
   Divider,

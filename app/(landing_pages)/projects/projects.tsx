@@ -1,7 +1,7 @@
 "use client";
-import Container from "@shared/Container";
-import ExploreCards from "@shared/ExploreCards";
-import TabList from "@shared/TabList";
+import Container from "@components/shared/Container";
+import ExploreCards from "@components/cards/ExploreCards";
+import TabList from "@components/shared/TabList";
 import type { TabsProps } from "antd";
 import { Typography } from "antd";
 import { FC, Fragment } from "react";

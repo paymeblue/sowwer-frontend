@@ -1,20 +1,20 @@
 "use client";
-import PlaceholderImage from "@components/PlaceholderImage";
-import AmountInput from "@components/amountField";
-import { CheckCircleIcon } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
+import PlaceholderImage from "components/PlaceholderImage";
+import AmountInput from "@components/ui/amountField";
+import { CheckCircleIcon } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
 import useFlutterConfig, {
   useFlutterConfigReccuring,
-} from "@hooks/useFlutterConfig";
-import { useAppDispatch } from "@hooks/useStore";
-import capitalizeFirstLetters from "@lib/capitalize";
-import { setCredentials } from "@store/reducers/authSlice";
+} from "hooks/useFlutterConfig";
+import { useAppDispatch } from "hooks/useStore";
+import capitalizeFirstLetters from "lib/capitalize";
+import { setCredentials } from "store/reducers/authSlice";
 import {
   useInitiatePaymentToMinistryAuthMutation,
   useInitiatePaymentToMinistryUnauthMutation,
-} from "@store/services/auth";
-import { useGetMinistryDetailsQuery } from "@store/services/ministries";
-import { useVerifyMinistryPaymentMutation } from "@store/services/payouts";
+} from "store/services/auth";
+import { useGetMinistryDetailsQuery } from "store/services/ministries";
+import { useVerifyMinistryPaymentMutation } from "store/services/payouts";
 import {
   Alert,
   Button,

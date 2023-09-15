@@ -1,7 +1,7 @@
 "use client";
-import { CheckCircleIcon } from "@components/assets/icons";
-import FrameIcon from "@components/assets/icons/Frame";
-import { useMissionaryMutation } from "@store/services/join-soower";
+import { CheckCircleIcon } from "components/assets/icons";
+import FrameIcon from "components/assets/icons/Frame";
+import { useMissionaryMutation } from "store/services/join-soower";
 import {
   Button,
   Checkbox,

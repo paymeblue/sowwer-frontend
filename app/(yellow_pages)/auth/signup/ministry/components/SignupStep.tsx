@@ -1,9 +1,9 @@
 "use client";
-import { CheckCircleIcon } from "@components/assets/icons";
-import { useAppDispatch } from "@hooks/useStore";
-import { setCredentials } from "@store/reducers/authSlice";
-import { useMinistrySignupMutation } from "@store/services/auth";
-import { MinistrySignupRequest } from "@store/types";
+import { CheckCircleIcon } from "components/assets/icons";
+import { useAppDispatch } from "hooks/useStore";
+import { setCredentials } from "store/reducers/authSlice";
+import { useMinistrySignupMutation } from "store/services/auth";
+import { MinistrySignupRequest } from "store/types";
 import { Form, Steps, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

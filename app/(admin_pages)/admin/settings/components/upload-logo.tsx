@@ -1,6 +1,6 @@
-import { CheckCircleIcon, FileUpload } from "@components/assets/icons";
-import { useAuth } from "@hooks/useAuth";
-import { useUpdateMinistryProfileMutation } from "@store/services/ministries";
+import { CheckCircleIcon, FileUpload } from "components/assets/icons";
+import { useAuth } from "hooks/useAuth";
+import { useUpdateMinistryProfileMutation } from "store/services/ministries";
 import { Button, Form, Space, Upload, message } from "antd";
 import { RcFile, UploadProps } from "antd/es/upload";
 import { Fragment } from "react";
