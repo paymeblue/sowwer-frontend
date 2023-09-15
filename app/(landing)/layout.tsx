@@ -1,3 +1,4 @@
+import Navbar from "@components/shared/Navbar";
 import { ReactNode } from "react";
 
 export default function LandingPageLayout({
@@ -7,7 +8,10 @@ export default function LandingPageLayout({
 }) {
   return (
     <div className="h-full min-h-screen w-[100vw]">
-      {/* Top bar */}
+      {/* Nav bar */}
+      <header className="w-full">
+        <Navbar />
+      </header>
       <main>{children}</main>
       {/* Footer */}
     </div>
