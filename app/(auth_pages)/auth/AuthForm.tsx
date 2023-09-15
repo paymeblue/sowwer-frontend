@@ -72,7 +72,8 @@ const AuthForm = ({ title, link, page, donorSignin, type }: Props) => {
       dispatch(setLastVisited({ lastVisited: "" }));
     } catch (error: any) {
       messageApi.open({
-        content: `${error.message}`,
+        // content: `${error.message}`,
+        content: `Invalid credentials`,
         className: "[&>div]:bg-red-800 [&>div]:text-white",
       });
     }
