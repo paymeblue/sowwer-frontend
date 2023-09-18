@@ -49,13 +49,20 @@ const AboutsUsSection = () => {
           </div>
         </div>
 
-        <div className="relative aspect-[1/1.1] w-[40%] rounded-md bg-gray-200">
-          {/* <Image
-          src="/assets/images/united_hands.png"
-          alt="helping hands"
-          fill
-          className="object-fit w-auto"
-        /> */}
+        <div className="relative aspect-[1/1] w-[40%] rounded-md ">
+          <Image
+            src="/assets/images/hands.png"
+            alt="helping hands"
+            fill
+            className="rounded-[10px] object-cover"
+          />
+          <Image
+            src="/assets/images/statbox.png"
+            alt="stats"
+            className="absolute -left-[150px] top-1/2 -translate-y-1/2"
+            width={224}
+            height={279}
+          />
         </div>
       </section>
 
