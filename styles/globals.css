@@ -62,3 +62,13 @@
     @apply relative bg-grad text-body-1;
   }
 }
+
+@layer components {
+  .footerlink_header {
+    @apply font-sub-title text-[1rem] leading-[18.6px] text-white;
+  }
+
+  .footerlink_sub {
+    @apply text-[0.9rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white;
+  }
+}
