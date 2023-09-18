@@ -1,6 +1,6 @@
 import React from "react";
 
-const instaColor = () => {
+const InstaColor = () => {
   return (
     <svg
       width="21"
@@ -50,11 +50,11 @@ const instaColor = () => {
           <stop offset="1" stopColor="#6600FF" stopOpacity="0" />
         </radialGradient>
         <clipPath id="clip0_296_4270">
-          <rect width="21" height="21" fill="white" />
+          <rect width="21" height="21" fill="currentColor" />
         </clipPath>
       </defs>
     </svg>
   );
 };
 
-export default instaColor;
+export default InstaColor;

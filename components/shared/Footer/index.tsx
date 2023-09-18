@@ -4,7 +4,10 @@ import Link from "next/link";
 import logo from "public/assets/icons/logo-white.svg";
 import appleStore from "public/assets/icons/app-store.svg";
 import playStore from "public/assets/icons/google-play.svg";
-import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import { Instagram } from "lucide-react";
+import Facebook from "@components/assets/svg/Facebook";
+import Twitter from "@components/assets/svg/twitter";
+import YoutubeColor from "@components/assets/svg/youtubeColor";
 import Calling from "@components/assets/svg/Calling";
 import Message from "@components/assets/svg/Message";
 import SectionContainer from "@components/sections/SectionContainer";
@@ -23,11 +26,17 @@ const Footer = () => {
               The Kingdom Investment Platform. Perfectly positioned to lend a
               helping hand.
             </p>
-            <div className="mt-4 flex items-center gap-4">
-              <Twitter fill="white" />
+            <div className="mt-4 flex items-center gap-6">
+              <div className="text-white">
+                <Twitter />
+              </div>
               <Instagram fill="white" />
-              <Facebook fill="white" />
-              <Youtube fill="white" />
+              <div className="text-white">
+                <Facebook />
+              </div>
+              <div className="text-white">
+                <YoutubeColor />
+              </div>
             </div>
             <div className="mt-8 flex space-x-4">
               <Link href="#" target="_blank">
