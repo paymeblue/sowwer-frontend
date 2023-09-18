@@ -48,11 +48,11 @@ const ImageCarouselSection = () => {
       breakpoints={{
         640: {
           slidesPerView: 2,
-          spaceBetween: 20,
+          spaceBetween: 10,
         },
         1000: {
           slidesPerView: 3,
-          spaceBetween: 20,
+          spaceBetween: 10,
         },
       }}
       navigation={false}
