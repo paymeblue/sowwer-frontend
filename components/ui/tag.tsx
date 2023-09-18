@@ -19,7 +19,6 @@ const Tag = ({
   backgroundColor,
   children,
 }: TagProps) => {
-  console.log({ color });
   return (
     <div
       style={{
