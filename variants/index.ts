@@ -36,7 +36,7 @@ export const defaultVariant = ({
 
 export const cardItemVariant = {
   hidden: {
-    y: 20,
+    y: 30,
     opacity: 0,
   },
   visible: {
@@ -50,14 +50,11 @@ export const cardItemVariant = {
 
 export const cardContainerVariant = {
   hidden: {
-    y: 0,
     opacity: 1,
   },
   visible: {
-    y: 0,
     opacity: 1,
     transition: {
-      duration: 0,
       delay: 0.2,
       when: "beforeChildren",
       staggerChildren: 0.2,

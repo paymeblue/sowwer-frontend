@@ -3,6 +3,13 @@ import { Button } from "@components/ui/button";
 import Image from "next/image";
 import { ArrowRight } from "react-iconly";
 import SectionContainer from "./SectionContainer";
+import { motion } from "framer-motion";
+import {
+  DEFAULT_VIEWPORT,
+  cardContainerVariant,
+  cardItemVariant,
+  defaultVariant,
+} from "variants";
 
 const effectOfGiving = [
   {
@@ -26,7 +33,13 @@ const AboutsUsSection = () => {
   return (
     <SectionContainer>
       <section className="flex w-full items-center justify-between">
-        <div className="flex w-[45%] flex-col space-y-6">
+        <motion.div
+          variants={defaultVariant({})}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="flex w-[45%] flex-col space-y-6"
+        >
           <div className="flex flex-col space-y-4">
             <span className="font-body text-xs text-accent">ABOUT US</span>
             <h2 className="font-title text-[2.8rem] leading-[3rem] text-black">
@@ -47,15 +60,22 @@ const AboutsUsSection = () => {
               <ArrowRight set="light" size={18} />
             </Button>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="relative aspect-[1/1] w-[40%] rounded-md ">
+        <motion.div
+          variants={defaultVariant({ delay: 0.6 })}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="relative aspect-[1/1] w-[40%] rounded-md "
+        >
           <Image
             src="/assets/images/hands.png"
             alt="helping hands"
             fill
             className="rounded-[10px] object-cover"
           />
+
           <Image
             src="/assets/images/statbox.png"
             alt="stats"
@@ -63,10 +83,14 @@ const AboutsUsSection = () => {
             width={224}
             height={279}
           />
-        </div>
+        </motion.div>
       </section>
 
-      <section
+      <motion.div
+        variants={defaultVariant({ delay: 0.5 })}
+        initial="hidden"
+        whileInView="visible"
+        viewport={DEFAULT_VIEWPORT}
         className="relative mt-20 flex flex-col space-y-6 py-16"
         aria-label="Ripple Effect of Giving"
       >
@@ -76,7 +100,7 @@ const AboutsUsSection = () => {
           fill
           className="object-contain pb-10"
         />
-        <div className="flex w-[60%] flex-col space-y-4">
+        <motion.div className="flex w-[60%] flex-col space-y-4">
           <h2 className="font-title text-[2.8rem] leading-[3rem] text-black">
             The Ripple Effect of Giving
           </h2>
@@ -87,12 +111,20 @@ const AboutsUsSection = () => {
             dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
             dolor sit amet consectetur.
           </p>
-        </div>
-        <div className="grid grid-cols-3 gap-12">
+        </motion.div>
+        <motion.div
+          variants={cardContainerVariant}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="grid grid-cols-3 gap-12"
+        >
           {effectOfGiving.map((item) => {
             return (
-              <div
+              <motion.div
                 key={item.title}
+                variants={cardItemVariant}
+                viewport={DEFAULT_VIEWPORT}
                 className="flex w-full flex-col items-center"
               >
                 <div className="relative aspect-square w-full">
@@ -111,11 +143,11 @@ const AboutsUsSection = () => {
                     {item.desc}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
-      </section>
+        </motion.div>
+      </motion.div>
     </SectionContainer>
   );
 };
