@@ -13,7 +13,7 @@ export default function LandingPageLayout({
       <header className="w-full">
         <Navbar />
       </header>
-      <main className="w-full px-16">{children}</main>
+      <main className="w-full">{children}</main>
       {/* Footer */}
       <Footer />
     </div>

@@ -2,6 +2,7 @@
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import { ArrowRight } from "react-iconly";
+import SectionContainer from "./SectionContainer";
 
 const effectOfGiving = [
   {
@@ -23,7 +24,7 @@ const effectOfGiving = [
 
 const AboutsUsSection = () => {
   return (
-    <>
+    <SectionContainer>
       <section className="flex w-full items-center justify-between">
         <div className="flex w-[45%] flex-col space-y-6">
           <div className="flex flex-col space-y-4">
@@ -58,7 +59,16 @@ const AboutsUsSection = () => {
         </div>
       </section>
 
-      <section className="mt-20 flex flex-col space-y-6 py-16">
+      <section
+        className="relative mt-20 flex flex-col space-y-6 py-16"
+        aria-label="Ripple Effect of Giving"
+      >
+        <Image
+          src="/assets/images/circular_dotted_lines.svg"
+          alt="Background spiral"
+          fill
+          className="object-contain pb-10"
+        />
         <div className="flex w-[60%] flex-col space-y-4">
           <h2 className="font-title text-[2.8rem] leading-[3rem] text-black">
             The Ripple Effect of Giving
@@ -99,7 +109,7 @@ const AboutsUsSection = () => {
           })}
         </div>
       </section>
-    </>
+    </SectionContainer>
   );
 };
 
