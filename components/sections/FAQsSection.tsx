@@ -1,3 +1,4 @@
+"use client";
 import {
   Accordion,
   AccordionContent,
@@ -5,6 +6,8 @@ import {
   AccordionTrigger,
 } from "@components/ui/accordion";
 import SectionContainer from "./SectionContainer";
+import { Button } from "@components/ui/button";
+import { Heart2 } from "react-iconly";
 
 const FAQsSection = () => {
   return (
@@ -24,6 +27,22 @@ const FAQsSection = () => {
               );
             })}
           </Accordion>
+        </div>
+
+        <div className="mt-10 flex w-full flex-col items-center justify-center rounded-[30px] bg-[#FDFBF2] py-10">
+          <h2 className="w-[75%] text-center font-title text-[2.8rem] leading-[3.5rem]">
+            "Therefore, as we have opportunity, let us do good to all people,
+            especially to those who belong to the family of believers."
+          </h2>
+          <p className="mt-4 text-sm leading-[26px] text-body-1">
+            — Galatians 6:10 (NIV)
+          </p>
+          <Button className="mt-10">
+            <div className="flex items-center space-x-2">
+              <Heart2 set="bold" size={19} />
+              <span>Make a Donation</span>
+            </div>
+          </Button>
         </div>
       </SectionContainer>
     </section>
