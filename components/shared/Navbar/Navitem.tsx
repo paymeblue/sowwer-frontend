@@ -18,9 +18,10 @@ interface BaseNaveItemProps {
 
 export interface INavitem extends BaseNaveItemProps {
   child?: INavitem[];
+  isActive?: boolean;
 }
 
-const Navitem = ({ label, route, child }: INavitem) => {
+const Navitem = ({ label, route, child, isActive }: INavitem) => {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -28,7 +29,7 @@ const Navitem = ({ label, route, child }: INavitem) => {
           {!child && (
             <Link href={route} legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                {label}
+                <span className={`${isActive && "text-primary"}`}>{label}</span>
               </NavigationMenuLink>
             </Link>
           )}
@@ -41,7 +42,9 @@ const Navitem = ({ label, route, child }: INavitem) => {
                     <Link
                       key={item.label}
                       href={item.route}
-                      className="text-sm hover:text-primary"
+                      className={`text-sm hover:text-primary ${
+                        isActive && "text-primary"
+                      }`}
                     >
                       {item.label}
                     </Link>

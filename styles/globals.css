@@ -64,6 +64,26 @@
 }
 
 @layer components {
+  .text_variant_h2 {
+    @apply font-title text-[2.8rem] leading-[3rem];
+  }
+
+  .text_variant_caption {
+    @apply font-body text-sm leading-[26px] text-body-1;
+  }
+
+  .text_small_header {
+    @apply font-title text-[1.2rem] font-normal leading-[20.59px];
+  }
+
+  .text_regular_body_p {
+    @apply text-[0.8rem]  font-[300] leading-[26px] text-[#333333];
+  }
+
+  .text_small_body_p {
+    @apply text-[0.75rem]  font-[300] leading-[22px] text-[#333333];
+  }
+
   .footerlink_header {
     @apply font-sub-title text-[1rem] leading-[18.6px] text-white;
   }

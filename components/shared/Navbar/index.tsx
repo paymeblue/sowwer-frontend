@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navitem, { INavitem } from "./Navitem";
 import { Button } from "@components/ui/button";
+import { usePathname } from "next/navigation";
 
 const navItems: INavitem[] = [
   {
@@ -43,6 +44,7 @@ const navItems: INavitem[] = [
 ];
 
 const Navbar = () => {
+  const pathname = usePathname();
   const backgroundTransparent = useBgTransparentOnScroll();
   return (
     <nav
@@ -67,9 +69,13 @@ const Navbar = () => {
             <NavigationMenuList>
               {navItems.map((item) => {
                 const { label, route, child } = item;
+                const isActive =
+                  (pathname?.includes(item.route) && item.route.length > 1) ||
+                  pathname === item.route;
                 return (
                   <Navitem
                     key={item.label}
+                    isActive={isActive}
                     label={label}
                     route={route}
                     child={child}

@@ -8,7 +8,7 @@ export default function LandingPageLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen w-[100vw]">
+    <div className="flex min-h-screen w-[100vw] flex-col">
       {/* Nav bar */}
       <header className="w-full">
         <Navbar />

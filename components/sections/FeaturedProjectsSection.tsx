@@ -49,10 +49,10 @@ const FeaturedProjectSection = () => {
     <div className="w-[100vw] bg-white py-16">
       <SectionContainer>
         <div className="mx-auto flex w-[60%] flex-col space-y-4">
-          <h2 className="text-center font-title text-[2.8rem] leading-[2rem]">
+          <h2 className="text_variant_h2 text-center">
             Some of our featured projects
           </h2>
-          <p className="text-center font-body text-sm leading-[26px] text-body-1">
+          <p className="text_variant_caption text-center">
             Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
             imperdiet pellentesque. Urna eros interdum est sollicitudin
             dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
