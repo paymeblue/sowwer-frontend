@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 import { ReactNode } from "react";
 
 const tagVariants = cva(
-  "text-xs font-normal leading-none rounded-full px-4 py-2"
+  "text-[9px] font-normal leading-none rounded-full px-3 py-2"
 );
 
 export interface TagProps {
