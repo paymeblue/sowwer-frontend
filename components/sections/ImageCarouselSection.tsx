@@ -4,8 +4,6 @@ import { Autoplay } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
 
 // import Swiper core and required modules
 import Image, { StaticImageData } from "next/image";
@@ -20,7 +18,6 @@ const SwiperImage = ({ image }: { image: StaticImageData }) => (
   <div className="">
     <Image
       src={image}
-      layout="responsive"
       width={1000}
       height={1000}
       quality={50}
@@ -37,9 +34,6 @@ const ImageCarouselSection = () => {
       spaceBetween={0}
       slidesPerGroup={1}
       loop={true}
-      pagination={{
-        clickable: true,
-      }}
       autoplay={{
         delay: 2500,
         disableOnInteraction: false,
