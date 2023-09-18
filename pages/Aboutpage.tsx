@@ -5,6 +5,7 @@ import Lens from "@components/assets/svg/Lens";
 import HeartHand from "@components/assets/svg/HeartHand";
 import Receipt from "@components/assets/svg/Receipt";
 import Image from "next/image";
+import ImageCarouselSection from "@components/sections/ImageCarouselSection";
 
 const Aboutpage = () => {
   return (
@@ -24,7 +25,12 @@ const Aboutpage = () => {
             tristique est nunc.
           </p>
         </div>
+      </SectionContainer>
 
+      <div className="my-20 w-full">
+        <ImageCarouselSection />
+      </div>
+      <SectionContainer>
         <section
           aria-label="Vision and Mission"
           className="grid grid-cols-2 gap-8"
