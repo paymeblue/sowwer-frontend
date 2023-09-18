@@ -6,7 +6,9 @@ import HeartHand from "@components/assets/svg/HeartHand";
 import Receipt from "@components/assets/svg/Receipt";
 import Image from "next/image";
 import ImageCarouselSection from "@components/sections/ImageCarouselSection";
-
+import PartnersSection from "@components/sections/PartnersSection";
+// Import Swiper styles
+import "swiper/css";
 const Aboutpage = () => {
   return (
     <div className="mt-[10vh]">
@@ -114,6 +116,8 @@ const Aboutpage = () => {
           </div>
         </section>
       </SectionContainer>
+
+      <PartnersSection />
     </div>
   );
 };

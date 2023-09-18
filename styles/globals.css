@@ -72,6 +72,9 @@
     @apply font-body text-sm leading-[26px] text-body-1;
   }
 
+  .text_medium_header {
+    @apply font-title text-[1.7rem] font-normal leading-[2rem];
+  }
   .text_small_header {
     @apply font-title text-[1.2rem] font-normal leading-[20.59px];
   }
@@ -81,7 +84,7 @@
   }
 
   .text_small_body_p {
-    @apply text-[0.75rem]  font-[300] leading-[22px] text-[#333333];
+    @apply text-[0.78rem]  font-[300] leading-[22px] text-[#333333];
   }
 
   .footerlink_header {

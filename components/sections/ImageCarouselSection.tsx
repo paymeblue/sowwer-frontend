@@ -2,9 +2,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
-// Import Swiper styles
-import "swiper/css";
-
 // import Swiper core and required modules
 import Image, { StaticImageData } from "next/image";
 import image1 from "public/assets/images/children_learning.png";

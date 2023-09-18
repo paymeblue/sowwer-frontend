@@ -2,6 +2,8 @@ import Tag from "@components/ui/tag";
 import { Heart2 } from "react-iconly";
 import Soower from "@components/assets/svg/Soower";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { DEFAULT_VIEWPORT, cardItemVariant } from "variants";
 
 export interface IFeaturedProject {
   category: string;
@@ -26,7 +28,11 @@ const FeaturedProjectCard = ({
   image,
 }: IFeaturedProject) => {
   return (
-    <div className="overflow-hidden rounded-[15px] bg-white shadow-featured-project-card">
+    <motion.div
+      variants={cardItemVariant}
+      viewport={DEFAULT_VIEWPORT}
+      className="overflow-hidden rounded-[15px] bg-white shadow-featured-project-card"
+    >
       <div className="relative aspect-[1/0.6] w-full overflow-hidden">
         <Image src={image} alt="happy woman" fill className="object-cover" />
       </div>
@@ -67,7 +73,7 @@ const FeaturedProjectCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default FeaturedProjectCard;

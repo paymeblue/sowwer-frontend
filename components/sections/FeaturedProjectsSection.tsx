@@ -7,6 +7,12 @@ import FeaturedProjectCard, {
   IFeaturedProject,
 } from "@components/cards/FeaturedProjectCard";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import {
+  DEFAULT_VIEWPORT,
+  cardContainerVariant,
+  defaultVariant,
+} from "variants";
 
 const featuredProjects: IFeaturedProject[] = [
   {
@@ -48,43 +54,58 @@ const FeaturedProjectSection = () => {
   return (
     <div className="w-[100vw] bg-white py-16">
       <SectionContainer>
-        <div className="mx-auto flex w-[60%] flex-col space-y-4">
-          <h2 className="text_variant_h2 text-center">
-            Some of our featured projects
-          </h2>
-          <p className="text_variant_caption text-center">
-            Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
-            imperdiet pellentesque. Urna eros interdum est sollicitudin
-            dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
-            dolor sit amet consectetur.
-          </p>
-          <Button
-            variant="link"
-            className=" space-x-2 font-semibold text-accent"
-          >
-            <span>Explore ongoing projects</span>
-            <ArrowRight set="light" size={18} />
-          </Button>
-        </div>
-
-        <div className="mt-20 grid grid-cols-3 gap-12">
-          {featuredProjects.map((project, i) => {
-            return <FeaturedProjectCard {...project} key={project.title + i} />;
-          })}
-        </div>
-
-        <div aria-label="Some of our partners" className="mt-10">
-          <h3 className="text-center !font-normal text-accent">
-            SOME OF OUR TRUSTEES & PARTNERS
-          </h3>
-          <div className="flex w-full items-center justify-around">
-            <Image src={logo} alt="soower patners" />
-            <Image src={logo} alt="soower patners" />
-            <Image src={logo} alt="soower patners" />
-            <Image src={logo} alt="soower patners" />
-            <Image src={logo} alt="soower patners" />
+        <motion.section
+          variants={defaultVariant({ delay: 0.5 })}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+        >
+          <div className="mx-auto flex w-[60%] flex-col space-y-4">
+            <h2 className="text_variant_h2 text-center">
+              Some of our featured projects
+            </h2>
+            <p className="text_variant_caption text-center">
+              Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
+              imperdiet pellentesque. Urna eros interdum est sollicitudin
+              dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
+              dolor sit amet consectetur.
+            </p>
+            <Button
+              variant="link"
+              className=" space-x-2 font-semibold text-accent"
+            >
+              <span>Explore ongoing projects</span>
+              <ArrowRight set="light" size={18} />
+            </Button>
           </div>
-        </div>
+
+          <motion.div
+            variants={cardContainerVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={DEFAULT_VIEWPORT}
+            className="mt-20 grid grid-cols-3 gap-12"
+          >
+            {featuredProjects.map((project, i) => {
+              return (
+                <FeaturedProjectCard {...project} key={project.title + i} />
+              );
+            })}
+          </motion.div>
+
+          <div aria-label="Some of our partners" className="mt-10">
+            <h3 className="text-center !font-normal text-accent">
+              SOME OF OUR TRUSTEES & PARTNERS
+            </h3>
+            <div className="flex w-full items-center justify-around">
+              <Image src={logo} alt="soower patners" />
+              <Image src={logo} alt="soower patners" />
+              <Image src={logo} alt="soower patners" />
+              <Image src={logo} alt="soower patners" />
+              <Image src={logo} alt="soower patners" />
+            </div>
+          </div>
+        </motion.section>
       </SectionContainer>
     </div>
   );
