@@ -1,13 +1,25 @@
 "use client";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 
 import LeftCirlceArrow from "@components/assets/svg/leftCirlceArrow";
 import SectionContainer from "./SectionContainer";
 import RightCircleArrow from "@components/assets/svg/rightCircleArrow";
-import Image from "next/image";
+import { useCallback, useRef } from "react";
+import PartnerCard from "@components/cards/PartnerCard";
 
 const PartnersSection = () => {
+  const sliderRef = useRef<SwiperRef | null>(null);
+
+  const handlePrev = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slidePrev();
+  }, []);
+
+  const handleNext = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slideNext();
+  }, []);
   return (
     <section aria-label="Partners" className="w-full bg-white py-20">
       <SectionContainer>
@@ -21,18 +33,21 @@ const PartnersSection = () => {
         </div>
 
         <div className="mt-20 flex w-full items-center justify-between space-x-4">
-          <LeftCirlceArrow />
+          <div onClick={handlePrev} className="cursor-pointer">
+            <LeftCirlceArrow />
+          </div>
           <div className=" w-[85%]">
             <Swiper
               slidesPerView={1}
               spaceBetween={0}
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: true,
+              }}
+              ref={sliderRef}
               slidesPerGroup={1}
               loop={true}
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-              }}
-              modules={[Autoplay, Pagination]}
+              modules={[Pagination, Autoplay]}
               breakpoints={{
                 640: {
                   slidesPerView: 3,
@@ -43,125 +58,41 @@ const PartnersSection = () => {
                   spaceBetween: 10,
                 },
               }}
-              navigation={true}
             >
               <div>
                 <SwiperSlide>
-                  <div className="flex w-full flex-col items-center space-y-6">
-                    <div className="relative aspect-square w-full overflow-hidden rounded-[7px]">
-                      <Image
-                        src="/assets/images/partner.png"
-                        alt="Partner"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-
-                    <div className="flex flex-col items-center">
-                      <h4 className="text_medium_header">John Doe</h4>
-                      <span className="text_small_body_p text-center uppercase">
-                        CEO, NAME OF COMPANY
-                      </span>
-                    </div>
-
-                    <p className="text_small_body_p text-center">
-                      Lorem ipsum dolor sit amet consectetur. Ante gravida
-                      pellentesque vulputate risus pellentesque dui natoque
-                      tellus. In tellus ultricies consectetur cursus in. Odio
-                      nisi imperdiet in faucibus sit morbi consequat quam id.
-                      Eget aliquam dignissim auctor placerat arcu. Tellus arcu
-                      consectetur quis risus.
-                    </p>
-                  </div>
+                  <PartnerCard />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <div className="flex w-full flex-col items-center space-y-6">
-                    <div className="relative aspect-square w-full overflow-hidden rounded-[7px]">
-                      <Image
-                        src="/assets/images/partner.png"
-                        alt="Partner"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-
-                    <div className="flex flex-col items-center">
-                      <h4 className="text_medium_header">John Doe</h4>
-                      <span className="text_small_body_p text-center uppercase">
-                        CEO, NAME OF COMPANY
-                      </span>
-                    </div>
-
-                    <p className="text_small_body_p text-center">
-                      Lorem ipsum dolor sit amet consectetur. Ante gravida
-                      pellentesque vulputate risus pellentesque dui natoque
-                      tellus. In tellus ultricies consectetur cursus in. Odio
-                      nisi imperdiet in faucibus sit morbi consequat quam id.
-                      Eget aliquam dignissim auctor placerat arcu. Tellus arcu
-                      consectetur quis risus.
-                    </p>
-                  </div>
+                  <PartnerCard />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <div className="flex w-full flex-col items-center space-y-6">
-                    <div className="relative aspect-square w-full overflow-hidden rounded-[7px]">
-                      <Image
-                        src="/assets/images/partner.png"
-                        alt="Partner"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-
-                    <div className="flex flex-col items-center">
-                      <h4 className="text_medium_header">John Doe</h4>
-                      <span className="text_small_body_p text-center uppercase">
-                        CEO, NAME OF COMPANY
-                      </span>
-                    </div>
-
-                    <p className="text_small_body_p text-center">
-                      Lorem ipsum dolor sit amet consectetur. Ante gravida
-                      pellentesque vulputate risus pellentesque dui natoque
-                      tellus. In tellus ultricies consectetur cursus in. Odio
-                      nisi imperdiet in faucibus sit morbi consequat quam id.
-                      Eget aliquam dignissim auctor placerat arcu. Tellus arcu
-                      consectetur quis risus.
-                    </p>
-                  </div>
+                  <PartnerCard />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <div className="flex w-full flex-col items-center space-y-6">
-                    <div className="relative aspect-square w-full overflow-hidden rounded-[7px]">
-                      <Image
-                        src="/assets/images/partner.png"
-                        alt="Partner"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-
-                    <div className="flex flex-col items-center">
-                      <h4 className="text_medium_header">John Doe</h4>
-                      <span className="text_small_body_p text-center uppercase">
-                        CEO, NAME OF COMPANY
-                      </span>
-                    </div>
-
-                    <p className="text_small_body_p text-center">
-                      Lorem ipsum dolor sit amet consectetur. Ante gravida
-                      pellentesque vulputate risus pellentesque dui natoque
-                      tellus. In tellus ultricies consectetur cursus in. Odio
-                      nisi imperdiet in faucibus sit morbi consequat quam id.
-                      Eget aliquam dignissim auctor placerat arcu. Tellus arcu
-                      consectetur quis risus.
-                    </p>
-                  </div>
+                  <PartnerCard />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <PartnerCard />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <PartnerCard />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <PartnerCard />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <PartnerCard />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <PartnerCard />
                 </SwiperSlide>
               </div>
             </Swiper>
           </div>
-          <RightCircleArrow />
+          <div onClick={handleNext} className="cursor-pointer">
+            <RightCircleArrow />
+          </div>
         </div>
       </SectionContainer>
     </section>
