@@ -3,12 +3,13 @@ import {
   NavigationMenu,
   NavigationMenuList,
 } from "@components/ui/navigation-menu";
-import useBgTransparentOnScroll from "@hooks/useBgTransparentOnScroll";
 import Image from "next/image";
 import Link from "next/link";
 import Navitem, { INavitem } from "./Navitem";
 import { Button } from "@components/ui/button";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const navItems: INavitem[] = [
   {
@@ -45,11 +46,33 @@ const navItems: INavitem[] = [
 
 const Navbar = () => {
   const pathname = usePathname();
-  const backgroundTransparent = useBgTransparentOnScroll();
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  const handleScroll = () => {
+    setIsScrolling(window.scrollY > 50);
+  };
+
+  useEffect(() => {
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <nav
-      className={`fixed left-0 top-0  z-30 flex h-[8vh] w-full flex-row items-center justify-between px-16 ${
-        backgroundTransparent <= 0 ? "bg-transparent" : "bg-white shadow-md"
+    <motion.nav
+      animate={{
+        background: isScrolling ? "white" : "transparent",
+        backdropFilter: isScrolling ? "blur(5px)" : "blur(0px)",
+        transition: {
+          duration: 0.2,
+          type: "tween",
+        },
+      }}
+      className={`fixed left-0 top-0  z-30 flex h-[8vh] w-full flex-row items-center justify-between px-16 transition-all duration-200 ${
+        isScrolling && "shadow-md"
       }`}
     >
       <div className="flex items-center gap-8">
@@ -91,7 +114,7 @@ const Navbar = () => {
         <Button variant="outline">Login</Button>
         <Button>Join Sower's Registry</Button>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 
