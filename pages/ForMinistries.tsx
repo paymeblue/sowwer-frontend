@@ -13,7 +13,7 @@ const ForMinstriesPage = () => {
             Are you a ministry with widow, orphan or mission programs? Register
             with us today!
           </h2>
-          <p className="text_medium_body_p  mt-4 w-[65%] text-center">
+          <p className="text_medium_body_p  mt-4 w-[60%] text-center">
             Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
             imperdiet pellentesque. Urna eros interdum est sollicitudin
             dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum

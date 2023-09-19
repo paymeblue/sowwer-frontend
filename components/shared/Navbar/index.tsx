@@ -40,7 +40,7 @@ const navItems: INavitem[] = [
   },
   {
     label: "Contact us",
-    route: "/contact",
+    route: "/contact-us",
   },
 ];
 

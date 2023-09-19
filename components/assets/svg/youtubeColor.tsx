@@ -1,6 +1,6 @@
 import React from "react";
 
-const YoutubeColor = () => {
+const YoutubeColor = ({ playColor = "black" }: { playColor?: string }) => {
   return (
     <svg
       width="21"
@@ -16,7 +16,7 @@ const YoutubeColor = () => {
         />
         <path
           d="M8.40698 13.6578L13.8731 10.5096L8.40698 7.36133V13.6578Z"
-          fill="black"
+          fill={playColor}
         />
       </g>
       <defs>

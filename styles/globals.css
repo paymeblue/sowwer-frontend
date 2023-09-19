@@ -98,6 +98,9 @@
   .footerlink_sub {
     @apply text-[0.9rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white;
   }
+  .contactlink_sub {
+    @apply text-[0.9rem] text-body-1 hover:text-black;
+  }
 
   .safearea-top {
     @apply mt-[15vh];

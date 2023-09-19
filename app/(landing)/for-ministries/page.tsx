@@ -5,6 +5,6 @@ const DynamicForMinistriesPage = dynamic(() => import("pages/ForMinistries"), {
   loading: () => <Loader />,
 }) as any;
 
-export default function About() {
+export default function ForMinistries() {
   return <DynamicForMinistriesPage />;
 }

@@ -27,14 +27,14 @@ const Footer = () => {
               helping hand.
             </p>
             <div className="mt-4 flex items-center gap-6">
-              <div className="text-white">
+              <div className="cursor-pointer text-white">
                 <Twitter />
               </div>
-              <Instagram fill="white" />
-              <div className="text-white">
+              <Instagram fill="white" className="cursor-pointer" />
+              <div className="cursor-pointer text-white">
                 <Facebook />
               </div>
-              <div className="text-white">
+              <div className="cursor-pointer text-white">
                 <YoutubeColor />
               </div>
             </div>
