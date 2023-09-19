@@ -3,7 +3,7 @@ import { Heart2 } from "react-iconly";
 import Soower from "@components/assets/svg/Soower";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { DEFAULT_VIEWPORT, cardItemVariant } from "variants";
+import { DEFAULT_VIEWPORT, cardItemVariant } from "lib/variants";
 
 export interface IFeaturedProject {
   category: string;

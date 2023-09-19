@@ -12,7 +12,7 @@ import {
   DEFAULT_VIEWPORT,
   cardContainerVariant,
   defaultVariant,
-} from "variants";
+} from "lib/variants";
 
 const featuredProjects: IFeaturedProject[] = [
   {

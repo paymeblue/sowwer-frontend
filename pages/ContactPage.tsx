@@ -6,6 +6,7 @@ import YoutubeColor from "@components/assets/svg/youtubeColor";
 import Link from "next/link";
 import Calling from "@components/assets/svg/Calling";
 import Message from "@components/assets/svg/Message";
+import ContactForm from "@components/forms/ContactForm";
 
 const ContactPage = () => {
   return (
@@ -51,7 +52,9 @@ const ContactPage = () => {
         </div>
 
         <div className="min-h-[70vh] w-[35%] border border-accent bg-transparent">
-          <div className="-ml-8 -mt-8 h-full w-full bg-[#F9F9F9] shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)]"></div>
+          <div className="-ml-8 -mt-8 h-full w-full bg-[#fff] p-10 shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)]">
+            <ContactForm />
+          </div>
         </div>
       </section>
     </SectionContainer>

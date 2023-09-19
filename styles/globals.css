@@ -80,15 +80,19 @@
   }
 
   .text_medium_body_p {
-    @apply text-[0.9rem]  font-[300] leading-[28px] text-[#333333];
+    @apply text-[0.9rem]  font-[300] leading-[28px] text-body-1;
   }
 
   .text_regular_body_p {
-    @apply text-[0.8rem]  font-[300] leading-[26px] text-[#333333];
+    @apply text-[0.8rem]  font-[300] leading-[26px] text-body-1;
   }
 
   .text_small_body_p {
-    @apply text-[0.78rem]  font-[300] leading-[22px] text-[#333333];
+    @apply text-[0.78rem]  font-[300] leading-[22px] text-body-1;
+  }
+
+  .text-form-label {
+    @apply font-body text-[.8rem] font-[300] text-body-1;
   }
 
   .footerlink_header {

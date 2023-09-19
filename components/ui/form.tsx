@@ -10,7 +10,7 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-import { cn } from "utils/cn";
+import { cn } from "lib/utils/cn";
 import { Label } from "components/ui/label";
 
 const Form = FormProvider;
@@ -84,19 +84,30 @@ const FormItem = React.forwardRef<
 });
 FormItem.displayName = "FormItem";
 
+interface IFormLabelCustom {
+  required?: boolean;
+}
+
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & IFormLabelCustom
+>(({ className, required, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
   return (
-    <Label
-      ref={ref}
-      className={cn(error && "text-destructive", className)}
-      htmlFor={formItemId}
-      {...props}
-    />
+    <>
+      <Label
+        ref={ref}
+        className={cn(
+          error && "text-destructive",
+          "!text-form-label",
+          className
+        )}
+        htmlFor={formItemId}
+        {...props}
+      />
+      {required && <span className="ml-1 text-[#EB5757]">*</span>}
+    </>
   );
 });
 FormLabel.displayName = "FormLabel";

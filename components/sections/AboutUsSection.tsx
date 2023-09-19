@@ -9,7 +9,7 @@ import {
   cardContainerVariant,
   cardItemVariant,
   defaultVariant,
-} from "variants";
+} from "lib/variants";
 
 const effectOfGiving = [
   {
