@@ -2,6 +2,8 @@
 import ProjectCard, { IProject } from "@components/cards/ProjectCard";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
+import { motion } from "framer-motion";
+import { DEFAULT_VIEWPORT, cardContainerVariant } from "lib/variants";
 
 const exploreProjects: IProject[] = [
   {
@@ -63,7 +65,13 @@ const ExploreProjects = () => {
               <TabsTrigger value="missions">Missions</TabsTrigger>
             </TabsList>
           </Tabs>
-          <div className="mt-10 grid w-full grid-cols-3 gap-12">
+          <motion.div
+            variants={cardContainerVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={DEFAULT_VIEWPORT}
+            className="mt-10 grid w-full grid-cols-3 gap-12"
+          >
             {exploreProjects.map((project, i) => {
               return (
                 <ProjectCard
@@ -73,7 +81,7 @@ const ExploreProjects = () => {
                 />
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
     </SectionContainer>
