@@ -26,11 +26,11 @@ const navItems: INavitem[] = [
     child: [
       {
         label: "Projects",
-        route: "/projects",
+        route: "/explore/projects",
       },
       {
         label: "Ministries",
-        route: "/minitries",
+        route: "/explore/ministries",
       },
     ],
   },

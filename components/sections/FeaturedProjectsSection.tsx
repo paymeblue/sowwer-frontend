@@ -3,9 +3,7 @@ import { Button } from "@components/ui/button";
 import { ArrowRight } from "react-iconly";
 import logo from "public/assets/icons/logo.svg";
 import SectionContainer from "./SectionContainer";
-import FeaturedProjectCard, {
-  IFeaturedProject,
-} from "@components/cards/FeaturedProjectCard";
+import ProjectCard, { IProject } from "@components/cards/ProjectCard";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
@@ -14,7 +12,7 @@ import {
   defaultVariant,
 } from "lib/variants";
 
-const featuredProjects: IFeaturedProject[] = [
+const featuredProjects: IProject[] = [
   {
     image: "/assets/images/happy_wom.png",
     category: "widows",
@@ -88,7 +86,11 @@ const FeaturedProjectSection = () => {
           >
             {featuredProjects.map((project, i) => {
               return (
-                <FeaturedProjectCard {...project} key={project.title + i} />
+                <ProjectCard
+                  {...project}
+                  variant="featured"
+                  key={project.title + i}
+                />
               );
             })}
           </motion.div>
