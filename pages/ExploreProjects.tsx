@@ -51,29 +51,29 @@ const ExploreProjects = () => {
             donating to widows, orphans and missionaries across Nigeria.
           </p>
         </div>
-        <div className="mt-8 flex flex-col items-center space-y-4">
+        <div className="mt-8 flex w-full flex-col items-center  justify-center">
           <h3 className="text_regular_body_sb text-center">
             Browse by category
           </h3>
-          <Tabs defaultValue="all-projects" className="w-full">
+          <Tabs defaultValue="all-projects" className="mt-4">
             <TabsList className="flex items-center space-x-2">
               <TabsTrigger value="all-projects">All Projects</TabsTrigger>
               <TabsTrigger value="widows">Widows</TabsTrigger>
               <TabsTrigger value="orphans">Orphans</TabsTrigger>
               <TabsTrigger value="missions">Missions</TabsTrigger>
             </TabsList>
-            <div className="mt-10 grid w-full grid-cols-3 gap-12">
-              {exploreProjects.map((project, i) => {
-                return (
-                  <ProjectCard
-                    {...project}
-                    variant="default"
-                    key={project.title + i}
-                  />
-                );
-              })}
-            </div>
           </Tabs>
+          <div className="mt-10 grid w-full grid-cols-3 gap-12">
+            {exploreProjects.map((project, i) => {
+              return (
+                <ProjectCard
+                  {...project}
+                  variant="default"
+                  key={project.title + i}
+                />
+              );
+            })}
+          </div>
         </div>
       </section>
     </SectionContainer>
