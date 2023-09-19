@@ -51,10 +51,11 @@ const ContactPage = () => {
           </ul>
         </div>
 
-        <div className="min-h-[70vh] w-[35%] border border-accent bg-transparent">
-          <div className="-ml-8 -mt-8 h-full w-full bg-[#fff] p-10 shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)]">
+        <div className="relative w-[35%]">
+          <div className="z-20 h-full w-full bg-[#fff] p-10 shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)]">
             <ContactForm />
           </div>
+          <div className="absolute -right-8 top-8 -z-10  h-full w-full border border-accent bg-transparent" />
         </div>
       </section>
     </SectionContainer>

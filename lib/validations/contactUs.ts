@@ -8,5 +8,9 @@ export const ContactUsValidation = z.object({
     .min(3, { message: "Minimum 3 characters" })
     .max(30),
   message: z.string().min(3, { message: "Minimum 3 characters" }).max(1000),
-  phoneNumber: z.string().min(10, { message: "Minimum 10 characters" }),
+  phoneNumber: z
+    .string()
+    .min(10, { message: "Minimum 10 characters" })
+    .optional(),
+  countryCode: z.string().optional(),
 });
