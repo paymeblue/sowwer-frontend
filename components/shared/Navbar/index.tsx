@@ -36,7 +36,7 @@ const navItems: INavitem[] = [
   },
   {
     label: "For ministries",
-    route: "/ministries",
+    route: "/for-ministries",
   },
   {
     label: "Contact us",

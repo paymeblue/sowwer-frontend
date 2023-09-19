@@ -11,7 +11,7 @@ import PartnersSection from "@components/sections/PartnersSection";
 import "swiper/css";
 const Aboutpage = () => {
   return (
-    <div className="mt-[10vh]">
+    <div className="safearea-top">
       <SectionContainer>
         <div className="flex flex-col space-y-4">
           <h2 className="text_variant_h2">
