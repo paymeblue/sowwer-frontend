@@ -1,5 +1,5 @@
 import ForgotPasswordForm from "@components/forms/ForgotPasswordForm";
-import CenterLayoutMidWrapper from "@components/shared/Layouts/CenterLayoutMidWrapper";
+import CenterLayoutMidWrapper from "@components/shared/Layouts/Center/CenterLayoutMidWrapper";
 
 const ForgotPasswordPage = () => {
   return (

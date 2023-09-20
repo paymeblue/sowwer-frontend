@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
-import Logo from "../Logo";
+import Logo from "../../Logo";
 import SectionContainer from "@components/sections/SectionContainer";
 
 const CenterLayout = ({ children }: { children: ReactNode }) => {

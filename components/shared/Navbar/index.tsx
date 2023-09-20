@@ -114,7 +114,9 @@ const Navbar = () => {
         >
           Login
         </Button>
-        <Button>Join Sower's Registry</Button>
+        <Button onClick={() => router.push("/registry/join")}>
+          Join Sower's Registry
+        </Button>
       </div>
     </motion.nav>
   );
