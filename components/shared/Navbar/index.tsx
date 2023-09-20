@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import Logo from "../Logo";
+import { useRouter } from "next/navigation";
 
 const navItems: INavitem[] = [
   {
@@ -46,6 +47,7 @@ const navItems: INavitem[] = [
 
 const Navbar = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isScrolling, setIsScrolling] = useState(false);
 
   const handleScroll = () => {
@@ -106,7 +108,9 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button variant="outline">Login</Button>
+        <Button variant="outline" onClick={() => router.push("/donor/sign-in")}>
+          Login
+        </Button>
         <Button>Join Sower's Registry</Button>
       </div>
     </motion.nav>
