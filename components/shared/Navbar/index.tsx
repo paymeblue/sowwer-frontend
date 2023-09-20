@@ -108,7 +108,10 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button variant="outline" onClick={() => router.push("/donor/sign-in")}>
+        <Button
+          variant="outline"
+          onClick={() => router.push("/auth/donor/sign-in")}
+        >
           Login
         </Button>
         <Button>Join Sower's Registry</Button>

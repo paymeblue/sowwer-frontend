@@ -1,23 +1,20 @@
 import DonorSignupForm from "@components/forms/DonorSignupForm";
-import DonorAuthPagesWrapper from "./DonorAuthPagesWrapper";
+import CenterLayoutMidWrapper from "../../components/shared/Layouts/CenterLayoutMidWrapper";
 import Link from "next/link";
 
 const DonorSignupPage = () => {
   return (
-    <DonorAuthPagesWrapper>
-      <h2 className="text_medium_header mb-8 text-center">
-        Sign up as a Donor
-      </h2>
+    <CenterLayoutMidWrapper title="Sign up as a Donor">
       <DonorSignupForm />
       <p className="text_small_body_r mt-4 text-center">
         Already have an account?{" "}
-        <Link href="/donor/sign-in">
+        <Link href="/auth/donor/sign-in">
           <span className="cursor-pointer font-[600] text-accent transition-all duration-200 hover:underline">
             Sign In
           </span>
         </Link>
       </p>
-    </DonorAuthPagesWrapper>
+    </CenterLayoutMidWrapper>
   );
 };
 

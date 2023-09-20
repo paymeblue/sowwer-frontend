@@ -10,19 +10,18 @@ import {
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DonorSigninValidation } from "lib/validations/donor";
+import { ForgotPassword } from "lib/validations/auth";
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
-import Link from "next/link";
 
-const DonorSigninForm = () => {
-  const form = useForm<z.infer<typeof DonorSigninValidation>>({
-    resolver: zodResolver(DonorSigninValidation),
+const ForgotPasswordForm = () => {
+  const form = useForm<z.infer<typeof ForgotPassword>>({
+    resolver: zodResolver(ForgotPassword),
     defaultValues: {
       email: "",
     },
   });
-  const onSubmit = async (values: z.infer<typeof DonorSigninValidation>) => {
+  const onSubmit = async (values: z.infer<typeof ForgotPassword>) => {
     console.log("Submitted", { values });
     alert("Your message has been sent successfully");
   };
@@ -44,27 +43,9 @@ const DonorSigninForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem className="">
-                  <FormLabel required>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Password" type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Link href="/auth/forgot-password" className="text-right">
-              <span className="cursor-pointer text-right font-body text-[.7rem] font-[600] text-accent transition-all duration-200 hover:underline">
-                Forgot Password?
-              </span>
-            </Link>
           </div>
-          <Button type="submit" className="mt-8 w-full">
-            Sign in
+          <Button type="submit" className="mt-16 w-full">
+            Send email
           </Button>
         </form>
       </Form>
@@ -72,4 +53,4 @@ const DonorSigninForm = () => {
   );
 };
 
-export default DonorSigninForm;
+export default ForgotPasswordForm;
