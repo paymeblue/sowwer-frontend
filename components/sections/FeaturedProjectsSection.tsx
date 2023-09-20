@@ -62,7 +62,7 @@ const FeaturedProjectSection = () => {
             <h2 className="text_variant_h2 text-center">
               Some of our featured projects
             </h2>
-            <p className="text_variant_caption text-center">
+            <p className="text_medium_body_p text-center">
               Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
               imperdiet pellentesque. Urna eros interdum est sollicitudin
               dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum

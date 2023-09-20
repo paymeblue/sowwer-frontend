@@ -15,7 +15,7 @@ const Hero = () => {
             initial="hidden"
             whileInView="visible"
             viewport={DEFAULT_VIEWPORT}
-            className="text-center font-title text-[4rem] leading-[4.6rem] text-black"
+            className="text-center font-title text-[5rem] leading-[4.6rem] text-black"
           >
             Alone we can do so little; <br /> together we can do so much.
           </motion.h1>
@@ -26,13 +26,13 @@ const Hero = () => {
             viewport={DEFAULT_VIEWPORT}
             className="flex flex-col items-center"
           >
-            <p className="mt-2 text-center text-[14px] text-body-1">
+            <p className="text_large_body_r mt-2 text-center">
               "In all things I have shown you that by working hard in this way
               we must help the weak and remember the words <br /> of the Lord
               Jesus, how He himself said it is more blessed to give than to
               receive."
             </p>
-            <span className="text-center text-[13px] text-body-1">
+            <span className="text_large_body_r text-center ">
               — Acts 20:35 (ESV)
             </span>
             <Button className="mt-6">

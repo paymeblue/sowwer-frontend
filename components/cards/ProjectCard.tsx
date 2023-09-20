@@ -52,9 +52,7 @@ const ProjectCard = ({
             BY FAMILY WORSHIP CENTER
           </h5>
         )}
-        <p className="mt-3 font-body text-[.8rem] leading-[1.4rem] text-body-2">
-          {desc}
-        </p>
+        <p className="text_small_body_p">{desc}</p>
 
         {variant === "default" && (
           <div className="mt-8 flex w-full flex-col space-y-6">

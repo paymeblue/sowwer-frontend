@@ -49,9 +49,7 @@ const FAQsSection = () => {
             "Therefore, as we have opportunity, let us do good to all people,
             especially to those who belong to the family of believers."
           </h2>
-          <p className="mt-4 text-sm leading-[26px] text-body-1">
-            — Galatians 6:10 (NIV)
-          </p>
+          <p className="text_large_body_r mt-4">— Galatians 6:10 (NIV)</p>
           <Button className="mt-10">
             <div className="flex items-center space-x-2">
               <Heart2 set="bold" size={19} />

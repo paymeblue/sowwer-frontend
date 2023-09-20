@@ -46,7 +46,7 @@ const AboutsUsSection = () => {
               Perfectly positioned to lend a <br /> helping hand
             </h2>
 
-            <p className="font-body text-[.9rem] leading-[1.5rem] text-body-1">
+            <p className="text_medium_body_p">
               Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
               imperdiet pellentesque. Urna eros interdum est sollicitudin
               dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
@@ -105,7 +105,7 @@ const AboutsUsSection = () => {
             The Ripple Effect of Giving
           </h2>
 
-          <p className="font-body text-[.9rem] leading-[1.5rem] text-body-1">
+          <p className="text_medium_body_p">
             Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
             imperdiet pellentesque. Urna eros interdum est sollicitudin
             dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
@@ -139,9 +139,7 @@ const AboutsUsSection = () => {
                   <h4 className="font-title text-[24px] font-normal leading-[27px]">
                     {item.title}
                   </h4>
-                  <p className="text-center font-body text-[13px] font-normal leading-[23px] text-body-1">
-                    {item.desc}
-                  </p>
+                  <p className="text_regular_body_p text-center">{item.desc}</p>
                 </div>
               </motion.div>
             );

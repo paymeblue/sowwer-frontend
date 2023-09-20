@@ -19,7 +19,7 @@ const PartnerCard = () => {
         </span>
       </div>
 
-      <p className="text_small_body_p text-center">
+      <p className="text_small_body_p text-center ">
         Lorem ipsum dolor sit amet consectetur. Ante gravida pellentesque
         vulputate risus pellentesque dui natoque tellus. In tellus ultricies
         consectetur cursus in. Odio nisi imperdiet in faucibus sit morbi

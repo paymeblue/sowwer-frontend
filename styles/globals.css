@@ -82,6 +82,11 @@
   .text_large_body_p {
     @apply font-body text-[1.1rem] font-[300] leading-[2rem] text-body-1;
   }
+
+  .text_large_body_r {
+    @apply font-body text-[1.1rem] font-[300] leading-[2rem] text-body-1;
+  }
+
   .text_medium_body_p {
     @apply font-body text-[0.9rem] font-[300] leading-[28px] text-body-1;
   }
@@ -97,7 +102,7 @@
   }
 
   .text_small_body_p {
-    @apply font-body text-[0.78rem] font-[300] leading-[22px] text-body-1;
+    @apply font-body text-[0.78rem] font-[300] leading-[22px] text-body-2;
   }
   .text_small_body_r {
     @apply font-body text-[0.75rem] font-[400] leading-normal text-body-2;
