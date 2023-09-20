@@ -10,6 +10,7 @@ import { Button } from "@components/ui/button";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
 const navItems: INavitem[] = [
   {
@@ -63,6 +64,10 @@ const Navbar = () => {
 
   return (
     <motion.nav
+      variants={defaultVariant({})}
+      initial="hidden"
+      whileInView="visible"
+      viewport={DEFAULT_VIEWPORT}
       animate={{
         background: isScrolling ? "white" : "transparent",
         backdropFilter: isScrolling ? "blur(5px)" : "blur(0px)",

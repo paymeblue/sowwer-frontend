@@ -2,6 +2,12 @@
 import MinistryCard, { IMinistryCard } from "@components/cards/MinistryCard";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
+import { motion } from "framer-motion";
+import {
+  DEFAULT_VIEWPORT,
+  cardContainerVariant,
+  defaultVariant,
+} from "lib/variants";
 
 const exploreMinistries: IMinistryCard[] = [
   {
@@ -24,7 +30,13 @@ const exploreMinistries: IMinistryCard[] = [
 const ExploreMinistries = () => {
   return (
     <SectionContainer>
-      <section className="safearea-top mb-20 w-full">
+      <motion.section
+        variants={defaultVariant({ delay: 0.1 })}
+        initial="hidden"
+        whileInView="visible"
+        viewport={DEFAULT_VIEWPORT}
+        className="safearea-top mb-20 w-full"
+      >
         <div className="flex flex-col items-center space-y-2">
           <h2 className="text_variant_h2 text-center">Explore Ministries</h2>
           <p className="text_large_body_p w-[70%] text-center">
@@ -46,13 +58,19 @@ const ExploreMinistries = () => {
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          <div className="mt-10 grid w-full grid-cols-3 gap-12">
+          <motion.div
+            variants={cardContainerVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={DEFAULT_VIEWPORT}
+            className="mt-10 grid w-full grid-cols-3 gap-12"
+          >
             {exploreMinistries.map((ministry, i) => {
               return <MinistryCard {...ministry} key={ministry.name + i} />;
             })}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
     </SectionContainer>
   );
 };

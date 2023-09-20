@@ -3,7 +3,11 @@ import ProjectCard, { IProject } from "@components/cards/ProjectCard";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
 import { motion } from "framer-motion";
-import { DEFAULT_VIEWPORT, cardContainerVariant } from "lib/variants";
+import {
+  DEFAULT_VIEWPORT,
+  cardContainerVariant,
+  defaultVariant,
+} from "lib/variants";
 
 const exploreProjects: IProject[] = [
   {
@@ -44,7 +48,13 @@ const exploreProjects: IProject[] = [
 const ExploreProjects = () => {
   return (
     <SectionContainer>
-      <section className="safearea-top mb-20 w-full">
+      <motion.section
+        variants={defaultVariant({ delay: 0.1 })}
+        initial="hidden"
+        whileInView="visible"
+        viewport={DEFAULT_VIEWPORT}
+        className="safearea-top mb-20 w-full"
+      >
         <div className="flex flex-col items-center space-y-2">
           <h2 className="text_variant_h2 text-center">Explore Projects</h2>
           <p className="text_large_body_p w-[70%] text-center">
@@ -83,7 +93,7 @@ const ExploreProjects = () => {
             })}
           </motion.div>
         </div>
-      </section>
+      </motion.section>
     </SectionContainer>
   );
 };

@@ -8,28 +8,43 @@ import {
 import SectionContainer from "./SectionContainer";
 import { Button } from "@components/ui/button";
 import { Heart2 } from "react-iconly";
+import { motion } from "framer-motion";
+import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
 const FAQsSection = () => {
   return (
     <section aria-label="frequetly asked questions" className="py-10">
       <SectionContainer>
-        <h2 className="font-title text-[2.8rem] leading-[3rem]">
-          Frequently asked questions
-        </h2>
-        <div className="mt-10 w-full">
-          <Accordion type="single" collapsible>
-            {data.map((item) => {
-              return (
-                <AccordionItem key={item.id} value={item.id}>
-                  <AccordionTrigger>{item.header}</AccordionTrigger>
-                  <AccordionContent>{item.body}</AccordionContent>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-        </div>
+        <motion.div
+          variants={defaultVariant({})}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+        >
+          <h2 className="font-title text-[2.8rem] leading-[3rem]">
+            Frequently asked questions
+          </h2>
+          <div className="mt-10 w-full">
+            <Accordion type="single" collapsible>
+              {data.map((item) => {
+                return (
+                  <AccordionItem key={item.id} value={item.id}>
+                    <AccordionTrigger>{item.header}</AccordionTrigger>
+                    <AccordionContent>{item.body}</AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </div>
+        </motion.div>
 
-        <div className="mt-10 flex w-full flex-col items-center justify-center rounded-[30px] bg-[#FDFBF2] py-10">
+        <motion.div
+          variants={defaultVariant({})}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="mt-10 flex w-full flex-col items-center justify-center rounded-[30px] bg-[#FDFBF2] py-10"
+        >
           <h2 className="w-[75%] text-center font-title text-[2.8rem] leading-[3.5rem]">
             "Therefore, as we have opportunity, let us do good to all people,
             especially to those who belong to the family of believers."
@@ -43,7 +58,7 @@ const FAQsSection = () => {
               <span>Make a Donation</span>
             </div>
           </Button>
-        </div>
+        </motion.div>
       </SectionContainer>
     </section>
   );
