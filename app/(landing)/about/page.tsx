@@ -1,7 +1,7 @@
 import Loader from "@components/shared/Loader";
 import dynamic from "next/dynamic";
 
-const DynamicAboutpage = dynamic(() => import("pages/Aboutpage"), {
+const DynamicAboutpage = dynamic(() => import("pages/landing/Aboutpage"), {
   loading: () => <Loader />,
 }) as any;
 

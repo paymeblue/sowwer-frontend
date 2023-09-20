@@ -3,14 +3,13 @@ import {
   NavigationMenu,
   NavigationMenuList,
 } from "@components/ui/navigation-menu";
-import Image from "next/image";
-import Link from "next/link";
 import Navitem, { INavitem } from "./Navitem";
 import { Button } from "@components/ui/button";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+import Logo from "../Logo";
 
 const navItems: INavitem[] = [
   {
@@ -81,16 +80,7 @@ const Navbar = () => {
       }`}
     >
       <div className="flex items-center gap-8">
-        <Link href="/" className="">
-          <div className="relative h-[4rem] w-[8rem]">
-            <Image
-              src="/assets/icons/logo.svg"
-              alt="soower logo"
-              fill
-              className="object-contain"
-            />
-          </div>
-        </Link>
+        <Logo />
 
         <div className="flex items-center gap-16">
           <NavigationMenu>

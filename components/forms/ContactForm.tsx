@@ -165,7 +165,10 @@ const ContactForm = () => {
             )}
           />
         </div>
-        <Button type="submit" className="ml-auto mt-10 w-fit">
+        <Button
+          type="submit"
+          className="ml-auto mt-10 w-fit bg-accent text-white"
+        >
           Submit
         </Button>
       </form>

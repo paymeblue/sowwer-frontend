@@ -2,7 +2,7 @@ import Loader from "@components/shared/Loader";
 import dynamic from "next/dynamic";
 
 const DynamicExploreProjectsPage = dynamic(
-  () => import("pages/ExploreProjects"),
+  () => import("pages/landing/ExploreProjects"),
   {
     loading: () => <Loader />,
   }
