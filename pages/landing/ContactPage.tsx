@@ -22,10 +22,10 @@ const ContactPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="flex w-[40%] flex-col"
+          className="flex w-[50%] flex-col"
         >
           <h2 className="text_variant_h2">Contact us</h2>
-          <p className="text-[0.8rem] leading-[1.3rem] text-body-1">
+          <p className="font-body text-[.9rem] leading-[1.5rem] text-body-1">
             Want to make an inquiry or give us some feedback? Fill out the form
             and <br /> we’ll be in touch within 24hours.
           </p>

@@ -7,7 +7,6 @@ const ForgotPasswordPage = () => {
       title="Forgot Password?"
       subTitle="Enter your email address below and a password reset link will be sent to you."
     >
-      {/* ForgotPassword form */}
       <ForgotPasswordForm />
     </CenterLayoutMidWrapper>
   );

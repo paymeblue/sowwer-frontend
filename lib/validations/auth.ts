@@ -8,3 +8,15 @@ export const ForgotPassword = z.object({
     .max(30),
   password: z.string().min(3, { message: "Please enter a password" }),
 });
+
+export const ResetPassword = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Password should be minimum 8 characters" }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });

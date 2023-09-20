@@ -7,6 +7,7 @@ import Lens from "@components/assets/svg/Lens";
 import Receipt from "@components/assets/svg/Receipt";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Button } from "@components/ui/button";
+import Link from "next/link";
 
 const ForMinstriesPage = () => {
   return (
@@ -32,7 +33,9 @@ const ForMinstriesPage = () => {
           </p>
           <div className="mt-6 flex items-center space-x-4">
             <Button>Register as a ministry</Button>
-            <Button variant="outline">Login to ministry account</Button>
+            <Link href="/auth/ministry/sign-in">
+              <Button variant="outline">Login to ministry account</Button>
+            </Link>
           </div>
         </motion.div>
 
