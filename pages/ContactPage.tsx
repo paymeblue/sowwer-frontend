@@ -1,3 +1,8 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+
 import SectionContainer from "@components/sections/SectionContainer";
 import { Instagram } from "lucide-react";
 import Facebook from "@components/assets/svg/Facebook";
@@ -12,7 +17,13 @@ const ContactPage = () => {
   return (
     <SectionContainer>
       <section className="safearea-top my-40 flex w-full justify-around">
-        <div className="flex w-[40%] flex-col">
+        <motion.div
+          variants={defaultVariant({})}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="flex w-[40%] flex-col"
+        >
           <h2 className="text_variant_h2">Contact us</h2>
           <p className="text-[0.8rem] leading-[1.3rem] text-body-1">
             Want to make an inquiry or give us some feedback? Fill out the form
@@ -49,14 +60,20 @@ const ContactPage = () => {
               </Link>
             </li>
           </ul>
-        </div>
+        </motion.div>
 
-        <div className="relative w-[35%]">
+        <motion.div
+          variants={defaultVariant({ delay: 0.6 })}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="relative w-[35%]"
+        >
           <div className="z-20 h-full w-full bg-[#fff] p-10 shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)]">
             <ContactForm />
           </div>
           <div className="absolute -right-8 top-8 -z-10  h-full w-full border border-accent bg-transparent" />
-        </div>
+        </motion.div>
       </section>
     </SectionContainer>
   );

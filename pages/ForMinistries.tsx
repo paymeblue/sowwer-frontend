@@ -1,3 +1,7 @@
+"use client";
+import { motion } from "framer-motion";
+import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+
 import HeartHand from "@components/assets/svg/HeartHand";
 import Lens from "@components/assets/svg/Lens";
 import Receipt from "@components/assets/svg/Receipt";
@@ -8,7 +12,13 @@ const ForMinstriesPage = () => {
   return (
     <div className="safearea-top">
       <SectionContainer>
-        <div className="mx-auto flex flex-col items-center justify-center">
+        <motion.div
+          variants={defaultVariant({})}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="mx-auto flex flex-col items-center justify-center"
+        >
           <h2 className="text_variant_h2 w-[60%] text-center">
             Are you a ministry with widow, orphan or mission programs? Register
             with us today!
@@ -24,9 +34,15 @@ const ForMinstriesPage = () => {
             <Button>Register as a ministry</Button>
             <Button variant="outline">Login to ministry account</Button>
           </div>
-        </div>
+        </motion.div>
 
-        <section className="my-40 flex w-full items-center justify-between">
+        <motion.section
+          variants={defaultVariant({ delay: 0.6 })}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="my-40 flex w-full items-center justify-between"
+        >
           <div className="flex w-[40%] flex-col space-y-8">
             <h2 className="text_variant_h2">
               Lorem ipsum dolor sit amet consectetur. Nisi.
@@ -75,7 +91,7 @@ const ForMinstriesPage = () => {
             </div>
           </div>
           <div className="relative aspect-square w-[45%] bg-gray-200" />
-        </section>
+        </motion.section>
       </SectionContainer>
     </div>
   );
