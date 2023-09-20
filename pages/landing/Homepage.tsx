@@ -1,7 +1,7 @@
-import HeroSection from "@components/sections/HeroSection";
-import AboutsUsSection from "@components/sections/AboutUsSection";
-import FeaturedProjectSection from "@components/sections/FeaturedProjectsSection";
-import FAQsSection from "@components/sections/FAQsSection";
+import HeroSection from "@components/sections/landing/HeroSection";
+import AboutsUsSection from "@components/sections/landing/AboutUsSection";
+import FeaturedProjectSection from "@components/sections/landing/FeaturedProjectsSection";
+import FAQsSection from "@components/sections/landing/FAQsSection";
 
 const Homepage = () => {
   return (

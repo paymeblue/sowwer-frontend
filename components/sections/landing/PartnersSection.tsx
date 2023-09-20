@@ -4,7 +4,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
 
 import LeftCirlceArrow from "@components/assets/svg/leftCirlceArrow";
-import SectionContainer from "./SectionContainer";
+import SectionContainer from "../SectionContainer";
 import RightCircleArrow from "@components/assets/svg/rightCircleArrow";
 import { useCallback, useRef } from "react";
 import PartnerCard from "@components/cards/PartnerCard";

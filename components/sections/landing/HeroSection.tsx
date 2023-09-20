@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@components/ui/button";
 import { Heart2 } from "react-iconly";
-import SectionContainer from "./SectionContainer";
+import SectionContainer from "../SectionContainer";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 

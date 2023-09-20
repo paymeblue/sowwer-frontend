@@ -2,7 +2,7 @@
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import { ArrowRight } from "react-iconly";
-import SectionContainer from "./SectionContainer";
+import SectionContainer from "../SectionContainer";
 import { motion } from "framer-motion";
 import {
   DEFAULT_VIEWPORT,

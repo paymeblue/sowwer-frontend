@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@components/ui/accordion";
-import SectionContainer from "./SectionContainer";
+import SectionContainer from "../SectionContainer";
 import { Button } from "@components/ui/button";
 import { Heart2 } from "react-iconly";
 import { motion } from "framer-motion";

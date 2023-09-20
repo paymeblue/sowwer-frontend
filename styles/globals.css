@@ -67,6 +67,9 @@
   .text_variant_h2 {
     @apply font-title text-[2.8rem] leading-[3rem];
   }
+  .text_variant_h3 {
+    @apply font-title text-[2.2rem] leading-[3rem];
+  }
 
   .text_variant_caption {
     @apply font-body text-sm leading-[26px] text-body-1;
@@ -129,5 +132,68 @@
 
   .safearea-top {
     @apply mt-[15vh];
+  }
+
+  /* Stepper component styling */
+
+  .steps-container {
+    @apply flex w-full;
+  }
+
+  .step {
+    @apply relative w-full cursor-default;
+  }
+
+  .step .line {
+    height: 0px;
+    border-width: 0.5px;
+    border-style: solid;
+    position: absolute;
+    left: -4rem;
+    width: calc(100%);
+    z-index: -10;
+    @apply top-2.5;
+  }
+
+  .step .circle {
+    @apply h-6 w-6 rounded-full text-white;
+  }
+
+  .step-active .circle {
+    @apply relative border-[.43px] border-[#C4C4C4] bg-white text-white;
+  }
+
+  .step-active .circle::after {
+    content: "";
+    @apply absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-accent;
+  }
+
+  .step-done .circle {
+    @apply bg-accent;
+  }
+
+  .step-inactive .circle {
+    @apply border-[.43px] border-[#C4C4C4] bg-white;
+  }
+
+  .step-active .label {
+    @apply text_tiny_body_r font-[700];
+  }
+
+  .step-done .label {
+    @apply text_tiny_body_r font-[700];
+  }
+
+  .step-inactive .label {
+    @apply text_tiny_body_r font-[700];
+  }
+
+  .step-done .line {
+    @apply border-accent;
+  }
+
+  .step-inactive .line,
+  .step-active .line {
+    border-color: #c4c4c4;
   }
 }

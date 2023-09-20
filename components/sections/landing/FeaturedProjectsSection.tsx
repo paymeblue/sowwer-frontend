@@ -2,7 +2,7 @@
 import { Button } from "@components/ui/button";
 import { ArrowRight } from "react-iconly";
 import logo from "public/assets/icons/logo.svg";
-import SectionContainer from "./SectionContainer";
+import SectionContainer from "../SectionContainer";
 import ProjectCard, { IProject } from "@components/cards/ProjectCard";
 import Image from "next/image";
 import { motion } from "framer-motion";

@@ -1,6 +1,6 @@
 "use client";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
-import SectionContainer from "./SectionContainer";
+import SectionContainer from "../SectionContainer";
 import { motion } from "framer-motion";
 import ImageCarouselSection from "./ImageCarouselSection";
 
