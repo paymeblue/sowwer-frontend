@@ -70,6 +70,18 @@
 }
 
 @layer components {
+  .leftsidebar {
+    @apply sticky left-0 top-0 z-20 flex h-screen w-[22%] flex-col overflow-auto bg-secondary-black px-6 py-4 max-lg:hidden;
+  }
+
+  .topbar {
+    @apply flex h-[10vh] w-full items-center justify-between gap-4 bg-white px-6 shadow-navbar;
+  }
+
+  .main-container {
+    @apply flex flex-1 flex-col bg-transparent p-6 max-md:pb-32 sm:px-10;
+  }
+
   .text_variant_h2 {
     @apply font-title text-[2.8rem] leading-[3rem];
   }

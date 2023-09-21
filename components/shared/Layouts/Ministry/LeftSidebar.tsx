@@ -1,0 +1,69 @@
+"use client";
+
+import Donors from "@components/assets/svg/Donors";
+import Projects from "@components/assets/svg/Projects";
+import Logo from "@components/shared/Logo";
+import { usePathname, useRouter } from "next/navigation";
+import { Home, Setting, Wallet } from "react-iconly";
+
+const sidebarItems = [
+  {
+    route: "/ministry",
+    label: "Home",
+    icon: <Home set="light" />,
+  },
+  {
+    route: "/ministry/projects",
+    label: "Projects",
+    icon: <Projects />,
+  },
+  {
+    route: "/ministry/donors",
+    label: "Donors",
+    icon: <Donors />,
+  },
+  {
+    route: "/ministry/payouts",
+    label: "Payouts",
+    icon: <Wallet set="light" />,
+  },
+  {
+    route: "/ministry/projects",
+    label: "Settings",
+    icon: <Setting set="light" />,
+  },
+];
+
+const LeftSidebar = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  return (
+    <aside className="leftsidebar">
+      <div className="flex w-full items-center justify-center">
+        <Logo logoVariant="white" />
+      </div>
+      <div className="mt-10 space-y-4">
+        {sidebarItems.map((link) => {
+          const isActive =
+            (pathname?.includes(link.route) && link.route.length > 1) ||
+            pathname === link.route;
+          return (
+            <div
+              onClick={() => router.push(link.route)}
+              key={link.route}
+              className={`flex w-full cursor-pointer items-center space-x-3 rounded-[5px] px-4 py-3 text-white transition-all duration-200 hover:bg-[#FFFFFF1A] ${
+                isActive && "bg-[#FFFFFF1A]"
+              }`}
+            >
+              {link.icon}
+              <span className="text_tiny_body_r text-white">{link.label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </aside>
+  );
+};
+
+export default LeftSidebar;

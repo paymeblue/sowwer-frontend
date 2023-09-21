@@ -5,19 +5,30 @@ import { HTMLAttributes } from "react";
 
 interface Props {
   className?: HTMLAttributes<HTMLDivElement>["className"];
-  logoVariant?: "white" | "black";
+  logoVariant?: "white" | "black" | "normal";
 }
 
-const Logo = ({ className, logoVariant = "white" }: Props) => {
+const Logo = ({ className, logoVariant = "normal" }: Props) => {
+  const getLogoSrc = () => {
+    let src = "";
+    switch (logoVariant) {
+      case "white":
+        src = "/assets/icons/logo-white.svg";
+        break;
+      case "black":
+        src = "/assets/icons/logo-black.svg";
+        break;
+      default:
+        src = "/assets/icons/logo.svg";
+    }
+
+    return src;
+  };
   return (
     <Link href="/">
       <div className={cn("relative h-[4rem] w-[9rem]", className)}>
         <Image
-          src={
-            logoVariant === "white"
-              ? "/assets/icons/logo.svg"
-              : "/assets/icons/logo-black.svg"
-          }
+          src={getLogoSrc()}
           alt="soower logo"
           fill
           className="object-contain"
