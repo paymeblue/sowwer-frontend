@@ -167,7 +167,8 @@ const ContactForm = () => {
         </div>
         <Button
           type="submit"
-          className="ml-auto mt-10 w-fit bg-accent text-white"
+          variant="secondary"
+          className="ml-auto mt-10 w-fit"
         >
           Submit
         </Button>

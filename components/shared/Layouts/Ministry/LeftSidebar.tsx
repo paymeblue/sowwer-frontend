@@ -8,27 +8,27 @@ import { Home, Setting, Wallet } from "react-iconly";
 
 const sidebarItems = [
   {
-    route: "/ministry",
+    route: "/",
     label: "Home",
     icon: <Home set="light" />,
   },
   {
-    route: "/ministry/projects",
+    route: "/projects",
     label: "Projects",
     icon: <Projects />,
   },
   {
-    route: "/ministry/donors",
+    route: "/donors",
     label: "Donors",
     icon: <Donors />,
   },
   {
-    route: "/ministry/payouts",
+    route: "/payouts",
     label: "Payouts",
     icon: <Wallet set="light" />,
   },
   {
-    route: "/ministry/projects",
+    route: "/settings",
     label: "Settings",
     icon: <Setting set="light" />,
   },
@@ -50,7 +50,7 @@ const LeftSidebar = () => {
             pathname === link.route;
           return (
             <div
-              onClick={() => router.push(link.route)}
+              onClick={() => router.push(`/ministry${link.route}`)}
               key={link.route}
               className={`flex w-full cursor-pointer items-center rounded-[5px] px-4 py-3 text-white transition-all duration-200 hover:bg-[#FFFFFF1A] ${
                 isActive && "bg-[#FFFFFF1A]"

@@ -8,6 +8,6 @@ const DynamicMinistryDashboardHome = dynamic(
   }
 ) as any;
 
-export default function DonorDonations() {
+export default function MinistryDashboardHome() {
   return <DynamicMinistryDashboardHome />;
 }

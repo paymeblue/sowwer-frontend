@@ -88,7 +88,9 @@ const PasswordSettingsForm = () => {
             )}
           />
         </div>
-        <Button className="ml-auto w-fit bg-accent text-white">Save</Button>
+        <Button variant="secondary" className="ml-auto w-fit">
+          Save
+        </Button>
       </form>
     </Form>
   );

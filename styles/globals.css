@@ -75,7 +75,7 @@
   }
 
   .topbar {
-    @apply flex h-[10vh] w-full items-center justify-between gap-4 bg-white px-6 shadow-navbar;
+    @apply flex h-[8vh] w-full items-center justify-between gap-4 bg-white px-6 shadow-navbar;
   }
 
   .main-container {

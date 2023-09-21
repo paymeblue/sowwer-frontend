@@ -209,7 +209,8 @@ const ExistingMissionaryForm = () => {
         </div>
         <Button
           type="submit"
-          className="ml-auto mt-10 w-fit space-x-2 bg-accent text-white"
+          variant="secondary"
+          className="ml-auto mt-10 w-fit space-x-2"
         >
           <span>Submit</span>
           <ArrowRight set="light" size={18} />

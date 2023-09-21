@@ -208,8 +208,9 @@ const Registration = () => {
           />
         </div>
         <Button
+          variant="secondary"
           type="submit"
-          className="ml-auto mt-10 w-fit space-x-2 bg-accent text-white"
+          className="ml-auto mt-10 w-fit space-x-2"
         >
           <span>Submit</span>
           <ArrowRight set="light" size={18} />
