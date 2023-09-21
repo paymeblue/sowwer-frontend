@@ -7,6 +7,7 @@ import {
 } from "@components/ui/dropdown-menu";
 import { setMockAuthetnication } from "@lib/constants";
 import { LogOut, Settings } from "lucide-react";
+import Link from "next/link";
 import { ChevronDown } from "react-iconly";
 
 const ProfileMenuCard = () => {
@@ -31,7 +32,9 @@ const ProfileMenuCard = () => {
         <DropdownMenuContent className="min-w-[10rem]">
           <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
-            <span className="font-body">Settings</span>
+            <Link href="/donor/settings">
+              <span className="font-body">Settings</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <LogOut className="mr-2 h-4 w-4" />
