@@ -17,7 +17,7 @@ export interface IProject {
   raised: string;
   image: string;
   subTitle: string;
-  variant?: "default" | "featured";
+  variant?: "default" | "featured" | "general";
 }
 
 const ProjectCard = ({
@@ -47,7 +47,7 @@ const ProjectCard = ({
         <h3 className="mb-0 mt-3 font-title text-[1.6rem] font-normal leading-[1.8rem] text-black">
           {title}
         </h3>
-        {variant === "default" && (
+        {(variant === "default" || variant === "general") && (
           <h5 className="text_tiny_body_r uppercase">
             BY FAMILY WORSHIP CENTER
           </h5>

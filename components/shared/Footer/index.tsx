@@ -12,7 +12,28 @@ import Calling from "@components/assets/svg/Calling";
 import Message from "@components/assets/svg/Message";
 import SectionContainer from "@components/sections/SectionContainer";
 
-const Footer = () => {
+interface Props {
+  variant?: "default" | "minimal";
+}
+
+const Footer = ({ variant = "default" }: Props) => {
+  if (variant === "minimal") {
+    return (
+      <footer className="flex w-full justify-between border-t-[.3px] border-body-2 px-4 py-4">
+        <span className="text_small_body_sb">
+          © 2023 Soower. All rights reserved.
+        </span>
+        <div className="flex items-center space-x-2">
+          <Link href="#">
+            <span className="text_small_body_r">Terms of Use</span>
+          </Link>
+          <Link href="#">
+            <span className="text_small_body_r">Privacy Policy</span>
+          </Link>
+        </div>
+      </footer>
+    );
+  }
   return (
     <footer className="mt-auto min-h-[40vh] w-full bg-secondary-black py-8">
       <SectionContainer>

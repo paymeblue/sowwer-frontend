@@ -45,7 +45,11 @@ const navItems: INavitem[] = [
   },
 ];
 
-const Navbar = () => {
+interface Props {
+  variant?: "landing" | "donor";
+}
+
+const Navbar = ({ variant = "landing" }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isScrolling, setIsScrolling] = useState(false);
@@ -84,27 +88,29 @@ const Navbar = () => {
       <div className="flex items-center gap-8">
         <Logo />
 
-        <div className="flex items-center gap-16">
-          <NavigationMenu>
-            <NavigationMenuList>
-              {navItems.map((item) => {
-                const { label, route, child } = item;
-                const isActive =
-                  (pathname?.includes(item.route) && item.route.length > 1) ||
-                  pathname === item.route;
-                return (
-                  <Navitem
-                    key={item.label}
-                    isActive={isActive}
-                    label={label}
-                    route={route}
-                    child={child}
-                  />
-                );
-              })}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
+        {variant === "landing" && (
+          <div className="flex items-center gap-16">
+            <NavigationMenu>
+              <NavigationMenuList>
+                {navItems.map((item) => {
+                  const { label, route, child } = item;
+                  const isActive =
+                    (pathname?.includes(item.route) && item.route.length > 1) ||
+                    pathname === item.route;
+                  return (
+                    <Navitem
+                      key={item.label}
+                      isActive={isActive}
+                      label={label}
+                      route={route}
+                      child={child}
+                    />
+                  );
+                })}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-4">

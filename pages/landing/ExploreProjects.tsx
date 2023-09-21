@@ -9,7 +9,7 @@ import {
   defaultVariant,
 } from "lib/variants";
 
-const exploreProjects: IProject[] = [
+export const exploreProjects: IProject[] = [
   {
     image: "/assets/images/happy_wom.png",
     category: "widows",
