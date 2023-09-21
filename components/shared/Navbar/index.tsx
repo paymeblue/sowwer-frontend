@@ -11,6 +11,8 @@ import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import Logo from "../Logo";
 import { useRouter } from "next/navigation";
+import { IS_AUTHENTICATED } from "@lib/constants";
+import ProfileMenuCard from "@components/cards/ProfileMenuCard";
 
 const navItems: INavitem[] = [
   {
@@ -113,16 +115,26 @@ const Navbar = ({ variant = "landing" }: Props) => {
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outline"
-          onClick={() => router.push("/auth/donor/sign-in")}
-        >
-          Login
-        </Button>
-        <Button onClick={() => router.push("/registry/join")}>
-          Join Sower's Registry
-        </Button>
+      <div
+        className={`flex items-center gap-4 ${
+          IS_AUTHENTICATED && "flex-row-reverse"
+        }`}
+      >
+        {IS_AUTHENTICATED ? (
+          <ProfileMenuCard />
+        ) : (
+          <Button
+            variant="outline"
+            onClick={() => router.push("/auth/donor/sign-in")}
+          >
+            Login
+          </Button>
+        )}
+        {variant === "landing" && (
+          <Button onClick={() => router.push("/registry/join")}>
+            Join Sower's Registry
+          </Button>
+        )}
       </div>
     </motion.nav>
   );
