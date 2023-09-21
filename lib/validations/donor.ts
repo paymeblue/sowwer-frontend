@@ -60,14 +60,19 @@ export const DonorPersonalDetailsValidation = z.object({
   phoneNumber: z.string(),
 });
 
-export const DonorPasswordSettingsValidation = z.object({
-  currentPassword: z.string(),
-  newPassword: z
-    .string()
-    .min(3, { message: "Minimum 3 characters" })
-    .refine(isValidPassword, {
-      message:
-        "Password must contain at least one number and one special character",
-    }),
-  confirmNewPassword: z.string().min(3, { message: "Minimum 3 characters" }),
-});
+export const DonorPasswordSettingsValidation = z
+  .object({
+    currentPassword: z.string(),
+    newPassword: z
+      .string()
+      .min(3, { message: "Minimum 3 characters" })
+      .refine(isValidPassword, {
+        message:
+          "Password must contain at least one number and one special character",
+      }),
+    confirmNewPassword: z.string().min(3, { message: "Minimum 3 characters" }),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "Passwords do not match",
+    path: ["confirmNewPassword"],
+  });
