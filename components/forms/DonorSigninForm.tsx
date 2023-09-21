@@ -12,8 +12,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DonorSigninValidation } from "lib/validations/donor";
 import { Button } from "@components/ui/button";
-import { Input } from "@components/ui/input";
 import Link from "next/link";
+import { Input as InputV2 } from "@components/ui/input-with-icon";
+import { Input } from "@components/ui/input";
 
 const DonorSigninForm = () => {
   const form = useForm<z.infer<typeof DonorSigninValidation>>({
@@ -51,7 +52,11 @@ const DonorSigninForm = () => {
                 <FormItem className="">
                   <FormLabel required>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Password" type="password" {...field} />
+                    <InputV2
+                      placeholder="Password"
+                      type="password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

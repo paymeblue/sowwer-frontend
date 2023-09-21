@@ -21,7 +21,9 @@ const ProfileMenuCard = () => {
                 <AvatarFallback>SY</AvatarFallback>
               </Avatar>
               <div className="flex flex-col space-y-0">
-                <h5 className="text_small_body_sb">Semira Yesufu</h5>
+                <h5 className="text_small_body_sb text-[.8rem]">
+                  Semira Yesufu
+                </h5>
                 <span className="text_tiny_body_r">ysemiraefe@gmail.com</span>
               </div>
             </div>

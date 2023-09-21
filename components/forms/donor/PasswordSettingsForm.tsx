@@ -10,7 +10,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Input } from "@components/ui/input";
+import { Input } from "@components/ui/input-with-icon";
 import { DonorPasswordSettingsValidation } from "lib/validations/donor";
 import { Button } from "@components/ui/button";
 
