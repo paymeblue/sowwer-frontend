@@ -3,11 +3,11 @@ import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   setActiveStep: Dispatch<SetStateAction<number>>;
-  setSelectedCategory: Dispatch<SetStateAction<"Widow" | "Missinoary" | null>>;
+  setSelectedCategory: Dispatch<SetStateAction<"Widow" | "Missionary" | null>>;
 }
 
 const SelectCategory = ({ setActiveStep, setSelectedCategory }: Props) => {
-  const handleClick = (category: "Widow" | "Missinoary") => {
+  const handleClick = (category: "Widow" | "Missionary") => {
     setSelectedCategory(category);
     setActiveStep(1);
   };
@@ -25,7 +25,7 @@ const SelectCategory = ({ setActiveStep, setSelectedCategory }: Props) => {
         />
         <CardSelector
           title="Missionary"
-          onClick={() => handleClick("Missinoary")}
+          onClick={() => handleClick("Missionary")}
           desc=" Lorem ipsum dolor sit amet consectetur."
         />
       </div>

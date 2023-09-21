@@ -100,7 +100,7 @@ const FormLabel = React.forwardRef<
         ref={ref}
         className={cn(
           error && "text-destructive",
-          "!text-form-label",
+          "!text-form-label leading-[1.3rem]",
           className
         )}
         htmlFor={formItemId}

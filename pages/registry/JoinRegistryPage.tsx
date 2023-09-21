@@ -8,7 +8,7 @@ import { useState } from "react";
 const JoinRegistryPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<
-    null | "Widow" | "Missinoary"
+    null | "Widow" | "Missionary"
   >(null);
   const steps = ["Select Category", "Personal Information"];
 

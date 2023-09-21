@@ -1,9 +1,10 @@
+import MissionaryRegistrationForm from "@components/forms/join-registry/MissionaryRegistrationForm";
 import WidowRegistrationForm from "@components/forms/join-registry/WidowRegistrationForm";
 import { CardSelector } from "@components/ui/card-selector";
 import { Dispatch, SetStateAction } from "react";
 
 interface Props {
-  selectedCategory: "Widow" | "Missinoary" | null;
+  selectedCategory: "Widow" | "Missionary" | null;
   setActiveStep: Dispatch<SetStateAction<number>>;
 }
 
@@ -24,7 +25,8 @@ const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
       />
 
       <div className="mt-8 w-full">
-        <WidowRegistrationForm />
+        {selectedCategory === "Widow" && <WidowRegistrationForm />}
+        {selectedCategory === "Missionary" && <MissionaryRegistrationForm />}
       </div>
     </section>
   );
