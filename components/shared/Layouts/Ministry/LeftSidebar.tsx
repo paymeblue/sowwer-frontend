@@ -52,12 +52,14 @@ const LeftSidebar = () => {
             <div
               onClick={() => router.push(link.route)}
               key={link.route}
-              className={`flex w-full cursor-pointer items-center space-x-3 rounded-[5px] px-4 py-3 text-white transition-all duration-200 hover:bg-[#FFFFFF1A] ${
+              className={`flex w-full cursor-pointer items-center rounded-[5px] px-4 py-3 text-white transition-all duration-200 hover:bg-[#FFFFFF1A] ${
                 isActive && "bg-[#FFFFFF1A]"
               }`}
             >
-              {link.icon}
-              <span className="text_tiny_body_r text-white">{link.label}</span>
+              <div className="w-[18%]">{link.icon}</div>
+              <span className="text_tiny_body_r text-[0.78rem] text-white">
+                {link.label}
+              </span>
             </div>
           );
         })}

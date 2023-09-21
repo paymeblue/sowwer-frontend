@@ -14,8 +14,10 @@ import { MinistrySigninValidation } from "lib/validations/ministry";
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const MinistrySigninForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof MinistrySigninValidation>>({
     resolver: zodResolver(MinistrySigninValidation),
     defaultValues: {
@@ -24,7 +26,7 @@ const MinistrySigninForm = () => {
   });
   const onSubmit = async (values: z.infer<typeof MinistrySigninValidation>) => {
     console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    router.push("/ministry");
   };
   return (
     <div className="w-full">
