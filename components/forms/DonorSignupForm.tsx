@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DonorSignupValidation } from "lib/validations/donor";
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
+import { Input as InputV2 } from "@components/ui/input-with-icon";
 
 const DonorSignupForm = () => {
   const form = useForm<z.infer<typeof DonorSignupValidation>>({
@@ -103,7 +104,7 @@ const DonorSignupForm = () => {
                   <FormItem className="">
                     <FormLabel required>Password</FormLabel>
                     <FormControl>
-                      <Input
+                      <InputV2
                         placeholder="Password"
                         type="password"
                         {...field}
@@ -120,7 +121,7 @@ const DonorSignupForm = () => {
                   <FormItem className="">
                     <FormLabel required>Confirm Password</FormLabel>
                     <FormControl>
-                      <Input
+                      <InputV2
                         placeholder="Confirm password"
                         type="password"
                         {...field}

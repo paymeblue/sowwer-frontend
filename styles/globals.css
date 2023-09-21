@@ -97,7 +97,7 @@
   }
 
   .text_medium_body_p {
-    @apply font-body text-[0.9rem] font-[300] leading-[28px] text-body-1;
+    @apply font-body text-[0.9rem] font-[300] leading-[2rem] text-body-1;
   }
 
   .text_regular_body_p {

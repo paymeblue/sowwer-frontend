@@ -83,7 +83,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
           type: "tween",
         },
       }}
-      className={`fixed left-0 top-0  z-30 flex h-[8vh] w-full flex-row items-center justify-between px-16 transition-all duration-200 ${
+      className={`fixed left-0 top-0  z-30 flex h-[10vh] w-full flex-row items-center justify-between px-16 transition-all duration-200 ${
         isScrolling && "shadow-md"
       }`}
     >
@@ -125,6 +125,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
         ) : (
           <Button
             variant="outline"
+            className="px-9"
             onClick={() => router.push("/auth/donor/sign-in")}
           >
             Login

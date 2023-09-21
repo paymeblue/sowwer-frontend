@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResetPassword } from "lib/validations/auth";
 import { Button } from "@components/ui/button";
-import { Input } from "@components/ui/input";
+import { Input } from "@components/ui/input-with-icon";
 
 const ResetPasswordForm = () => {
   const form = useForm<z.infer<typeof ResetPassword>>({

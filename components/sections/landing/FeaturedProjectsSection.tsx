@@ -82,7 +82,7 @@ const FeaturedProjectSection = () => {
             initial="hidden"
             whileInView="visible"
             viewport={DEFAULT_VIEWPORT}
-            className="mt-20 grid grid-cols-3 gap-12"
+            className="mt-20 grid grid-cols-3 gap-6"
           >
             {featuredProjects.map((project, i) => {
               return (
@@ -95,11 +95,11 @@ const FeaturedProjectSection = () => {
             })}
           </motion.div>
 
-          <div aria-label="Some of our partners" className="mt-10">
-            <h3 className="text-center !font-normal text-accent">
+          <div aria-label="Some of our partners" className="mt-16">
+            <h3 className="text-center !font-[300] text-accent">
               SOME OF OUR TRUSTEES & PARTNERS
             </h3>
-            <div className="flex w-full items-center justify-around">
+            <div className="mt-8 flex w-full items-center justify-around">
               <Image src={logo} alt="soower patners" />
               <Image src={logo} alt="soower patners" />
               <Image src={logo} alt="soower patners" />

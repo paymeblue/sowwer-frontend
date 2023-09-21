@@ -50,7 +50,7 @@ const FAQsSection = () => {
             especially to those who belong to the family of believers."
           </h2>
           <p className="text_large_body_r mt-4">— Galatians 6:10 (NIV)</p>
-          <Button className="mt-10">
+          <Button className="mt-10 px-12 py-7">
             <div className="flex items-center space-x-2">
               <Heart2 set="bold" size={19} />
               <span>Make a Donation</span>

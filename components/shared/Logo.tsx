@@ -11,7 +11,7 @@ interface Props {
 const Logo = ({ className, logoVariant = "white" }: Props) => {
   return (
     <Link href="/">
-      <div className={cn("relative h-[4rem] w-[8rem]", className)}>
+      <div className={cn("relative h-[4rem] w-[9rem]", className)}>
         <Image
           src={
             logoVariant === "white"

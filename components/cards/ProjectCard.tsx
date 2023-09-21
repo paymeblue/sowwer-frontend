@@ -80,11 +80,11 @@ const ProjectCard = ({
             <div className="flex w-fit items-center space-x-2">
               <Heart2 set="light" primaryColor="#FFC629" />
               <p className="font-body  text-xs text-body-2">
-                <strong className="laptop:text-[15px] font-sub-title text-[12.39px] font-bold leading-[15.36px] text-black">
+                <strong className="font-sub-title text-[.85rem] font-bold leading-[15.36px] text-black">
                   ₦{raised}
                 </strong>
                 <br />
-                <small className="laptop:text-xs laptop:leading-[15.12px] font-body text-[9.91px] leading-[12.49px] text-body-2">
+                <small className="font-body text-[.7rem] leading-[12.49px] text-body-2">
                   money raised
                 </small>
               </p>
@@ -92,11 +92,11 @@ const ProjectCard = ({
             <div className="flex w-fit items-center space-x-2">
               <Soower />
               <p className="font-body  text-xs text-body-2">
-                <strong className="laptop:text-[15px] font-sub-title text-[12.39px] font-bold leading-[15.36px] text-black">
+                <strong className="font-sub-title text-[.85rem] font-bold leading-[15.36px] text-black">
                   {impacted}
                 </strong>
                 <br />
-                <small className="laptop:text-xs laptop:leading-[15.12px] font-body text-[9.91px] leading-[12.49px] text-body-2">
+                <small className="font-body text-[.7rem] leading-[12.49px] text-body-2">
                   widows impacted
                 </small>
               </p>

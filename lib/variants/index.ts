@@ -5,7 +5,7 @@ interface Viewport {
 }
 
 export const ANIMATE_ONCE =
-  process.env.NODE_ENV === "development" ? false : true;
+  process.env.NODE_ENV === "development" ? true : true;
 export const DEFAULT_VIEWPORT: Viewport = {
   once: ANIMATE_ONCE,
   amount: "some",

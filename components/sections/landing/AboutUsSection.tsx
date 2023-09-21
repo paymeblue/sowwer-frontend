@@ -38,15 +38,15 @@ const AboutsUsSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="flex w-[45%] flex-col space-y-6"
+          className="flex w-[50%] flex-col space-y-6"
         >
           <div className="flex flex-col space-y-4">
             <span className="font-body text-xs text-accent">ABOUT US</span>
             <h2 className="font-title text-[2.8rem] leading-[3rem] text-black">
-              Perfectly positioned to lend a <br /> helping hand
+              Perfectly positioned to lend <br /> a helping hand
             </h2>
 
-            <p className="text_medium_body_p">
+            <p className="text_medium_body_p w-[76%]">
               Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
               imperdiet pellentesque. Urna eros interdum est sollicitudin
               dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
@@ -67,7 +67,7 @@ const AboutsUsSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="relative aspect-[1/1] w-[40%] rounded-md "
+          className="relative aspect-[1/1] w-[35%] rounded-md "
         >
           <Image
             src="/assets/images/hands.png"
@@ -91,7 +91,7 @@ const AboutsUsSection = () => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="relative mt-20 flex flex-col space-y-6 py-16"
+        className="relative mt-20 flex flex-col space-y-16 py-16"
         aria-label="Ripple Effect of Giving"
       >
         <Image
@@ -127,7 +127,7 @@ const AboutsUsSection = () => {
                 viewport={DEFAULT_VIEWPORT}
                 className="flex w-full flex-col items-center"
               >
-                <div className="relative aspect-square w-full">
+                <div className="relative aspect-square w-[75%]">
                   <Image
                     src={item.image}
                     alt={item.title}
@@ -135,7 +135,7 @@ const AboutsUsSection = () => {
                     className="object-fit"
                   />
                 </div>
-                <div className="mt-6 flex flex-col items-center space-y-4">
+                <div className="mt-10 flex flex-col items-center space-y-4">
                   <h4 className="font-title text-[24px] font-normal leading-[27px]">
                     {item.title}
                   </h4>
