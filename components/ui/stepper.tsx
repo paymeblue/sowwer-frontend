@@ -24,11 +24,11 @@ const Stepper = ({ steps, activeStep }: Props) => {
       {steps.map((label, index) => (
         <div className={getStepClass(index)} key={index}>
           <div
-            className={`flex w-fit flex-col items-center justify-between space-y-2 ${
+            className={`z-20 flex w-fit flex-col items-center justify-between space-y-2 ${
               index !== 0 ? "ml-auto" : "mr-auto"
             }`}
           >
-            <div>
+            <div className="z-20">
               <div className="circle flex items-center justify-center">
                 {index < activeStep && <Check size={12} />}
               </div>

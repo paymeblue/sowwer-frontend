@@ -37,10 +37,8 @@ const JoinRegistryPage = () => {
       title="Are you a widow or a missionary? We’d love to know more about you!"
       desc="Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitudin dignissim."
     >
-      <div className="w-full">
-        <div className="w-full ">
-          <Stepper steps={steps} activeStep={activeStep} />
-        </div>
+      <div className="w-full overflow-hidden">
+        <Stepper steps={steps} activeStep={activeStep} />
         {getSectionComponent()}
       </div>
     </SideLayoutWrapper>

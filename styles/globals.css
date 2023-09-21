@@ -63,6 +63,12 @@
   }
 }
 
+.body_on_center_layout {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vw;
+}
+
 @layer components {
   .text_variant_h2 {
     @apply font-title text-[2.8rem] leading-[3rem];
@@ -156,12 +162,12 @@
     position: absolute;
     left: -4rem;
     width: calc(100%);
-    z-index: -10;
+    z-index: 10;
     @apply top-2.5;
   }
 
   .step .circle {
-    @apply h-6 w-6 rounded-full text-white;
+    @apply z-20 h-6 w-6 rounded-full bg-white text-white;
   }
 
   .step-active .circle {
@@ -170,11 +176,11 @@
 
   .step-active .circle::after {
     content: "";
-    @apply absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-accent;
+    @apply absolute left-1/2 top-1/2 z-[15] h-4 w-4 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-accent;
   }
 
   .step-done .circle {
-    @apply bg-accent;
+    @apply z-20 bg-accent;
   }
 
   .step-inactive .circle {
