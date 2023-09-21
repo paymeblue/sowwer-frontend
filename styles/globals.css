@@ -85,15 +85,15 @@
     @apply font-title text-[1.7rem] font-normal leading-[2rem];
   }
   .text_small_header {
-    @apply font-title text-[1.2rem] font-normal leading-[20.59px];
+    @apply font-title text-[1.3rem] font-normal leading-[20.59px];
   }
 
   .text_large_body_p {
-    @apply font-body text-[1.1rem] font-[300] leading-[2rem] text-body-1;
+    @apply font-body text-[1rem] font-[300] leading-[2rem] text-body-1;
   }
 
   .text_large_body_r {
-    @apply font-body text-[1.1rem] font-[300] leading-[2rem] text-body-1;
+    @apply font-body text-[1rem] font-[300] leading-[2rem] text-body-1;
   }
 
   .text_medium_body_p {
@@ -116,7 +116,7 @@
   }
 
   .text_small_body_p {
-    @apply font-body text-[0.78rem] font-[300] leading-[22px] text-body-2;
+    @apply font-body text-[0.8rem] font-[300] leading-[22px] text-body-2;
   }
   .text_small_body_r {
     @apply font-body text-[0.75rem] font-[400] leading-normal text-body-2;

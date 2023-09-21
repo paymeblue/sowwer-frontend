@@ -20,9 +20,11 @@ const AboutMidSection = () => {
           Make kingdom investments in just a few minutes.
         </h2>
 
-        <div className="flex flex-col space-y-8">
-          <div className="flex space-x-4">
-            <Lens />
+        <div className="flex flex-col space-y-10">
+          <div className="flex space-x-6">
+            <div>
+              <Lens />
+            </div>
             <div className="flex flex-col space-y-2">
               <h3 className="text_small_header">
                 Explore projects and ministries
@@ -34,8 +36,10 @@ const AboutMidSection = () => {
               </p>
             </div>
           </div>
-          <div className="flex space-x-4">
-            <HeartHand />
+          <div className="flex space-x-6">
+            <div className="">
+              <HeartHand />
+            </div>
             <div className="flex flex-col space-y-2">
               <h3 className="text_small_header">Make a donation</h3>
               <p className="text_small_body_p">
@@ -45,8 +49,10 @@ const AboutMidSection = () => {
               </p>
             </div>
           </div>
-          <div className="flex space-x-4">
-            <Receipt />
+          <div className="flex space-x-6">
+            <div>
+              <Receipt />
+            </div>
             <div className="flex flex-col space-y-2">
               <h3 className="text_small_header">Get audit reports</h3>
               <p className="text_small_body_p">
@@ -63,7 +69,7 @@ const AboutMidSection = () => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="relative h-[90vh] w-[55%]"
+        className="relative h-[100vh] w-[55%]"
       >
         <Image
           src="/assets/images/coin_tree_jar.png"

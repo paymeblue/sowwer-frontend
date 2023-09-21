@@ -132,7 +132,7 @@ const DonorSignupForm = () => {
                 )}
               />
             </div>
-            <span className="font-body text-[.7rem] text-body-2">
+            <span className="-mt-1 font-body text-[.7rem] text-body-2">
               Password must be at least 8 characters
             </span>
           </div>

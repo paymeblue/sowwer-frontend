@@ -43,7 +43,7 @@ const FAQsSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="mt-10 flex w-full flex-col items-center justify-center rounded-[30px] bg-[#FDFBF2] py-10"
+          className="mb-16 mt-20 flex w-full flex-col items-center justify-center rounded-[30px] bg-[#FDFBF2] py-10"
         >
           <h2 className="w-[75%] text-center font-title text-[2.8rem] leading-[3.5rem]">
             "Therefore, as we have opportunity, let us do good to all people,

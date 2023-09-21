@@ -24,7 +24,7 @@ const ForMinstriesPage = () => {
             Are you a ministry with widow, orphan or mission programs? Register
             with us today!
           </h2>
-          <p className="text_medium_body_p  mt-4 w-[60%] text-center">
+          <p className="text_medium_body_p  mt-4 w-[70%] text-center">
             Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
             imperdiet pellentesque. Urna eros interdum est sollicitudin
             dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
@@ -51,9 +51,11 @@ const ForMinstriesPage = () => {
               Lorem ipsum dolor sit amet consectetur. Nisi.
             </h2>
 
-            <div className="flex flex-col space-y-8">
+            <div className="flex flex-col space-y-10">
               <div className="flex space-x-4">
-                <Lens />
+                <div>
+                  <Lens />
+                </div>
                 <div className="flex flex-col space-y-2">
                   <h3 className="text_small_header">
                     Lorem ipsum dolor sit amet
@@ -66,7 +68,9 @@ const ForMinstriesPage = () => {
                 </div>
               </div>
               <div className="flex space-x-4">
-                <HeartHand />
+                <div>
+                  <HeartHand />
+                </div>
                 <div className="flex flex-col space-y-2">
                   <h3 className="text_small_header">
                     Lorem ipsum dolor sit amet
@@ -79,7 +83,9 @@ const ForMinstriesPage = () => {
                 </div>
               </div>
               <div className="flex space-x-4">
-                <Receipt />
+                <div>
+                  <Receipt />
+                </div>
                 <div className="flex flex-col space-y-2">
                   <h3 className="text_small_header">
                     Lorem ipsum dolor sit amet

@@ -56,7 +56,9 @@ const ExploreProjects = () => {
         className="safearea-top mb-20 w-full"
       >
         <div className="flex flex-col items-center space-y-2">
-          <h2 className="text_variant_h2 text-center">Explore Projects</h2>
+          <h2 className="text_variant_h2 text-center text-[2.5rem]">
+            Explore Projects
+          </h2>
           <p className="text_large_body_p w-[70%] text-center">
             Explore different projects being organized by Churches and other
             Christian Organizations on Soower. Make a kingdom investment by
@@ -80,7 +82,7 @@ const ExploreProjects = () => {
             initial="hidden"
             whileInView="visible"
             viewport={DEFAULT_VIEWPORT}
-            className="mt-10 grid w-full grid-cols-3 gap-12"
+            className="mt-10 grid w-full grid-cols-3 gap-6"
           >
             {exploreProjects.map((project, i) => {
               return (

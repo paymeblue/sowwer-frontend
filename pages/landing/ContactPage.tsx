@@ -16,7 +16,7 @@ import ContactForm from "@components/forms/ContactForm";
 const ContactPage = () => {
   return (
     <SectionContainer>
-      <section className="safearea-top my-40 flex w-full justify-around">
+      <section className="safearea-top my-40 flex w-full justify-between">
         <motion.div
           variants={defaultVariant({})}
           initial="hidden"
@@ -67,7 +67,7 @@ const ContactPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="relative w-[35%]"
+          className="relative mr-14 w-[35%]"
         >
           <div className="z-20 h-full w-full bg-[#fff] p-10 shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)]">
             <ContactForm />
