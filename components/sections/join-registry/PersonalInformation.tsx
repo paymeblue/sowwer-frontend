@@ -1,3 +1,4 @@
+import WidowRegistrationForm from "@components/forms/join-registry/WidowRegistrationForm";
 import { CardSelector } from "@components/ui/card-selector";
 import { Dispatch, SetStateAction } from "react";
 
@@ -21,6 +22,10 @@ const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
           </span>
         }
       />
+
+      <div className="mt-8 w-full">
+        <WidowRegistrationForm />
+      </div>
     </section>
   );
 };

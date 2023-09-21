@@ -12,14 +12,14 @@ interface Props {
 
 const SideLayoutWrapper = ({ children, title, desc }: Props) => {
   return (
-    <div className="flex h-full w-full">
+    <div className="flex h-screen w-screen overflow-hidden">
       <SideLeft title={title} desc={desc} />
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="flex-1 p-10"
+        className="w-1/2 overflow-y-scroll bg-white p-10"
       >
         {children}
       </motion.div>

@@ -97,6 +97,11 @@
   .text_regular_body_p {
     @apply font-body text-[0.8rem] font-[300] leading-[26px] text-body-1;
   }
+
+  .text_regular_body_b {
+    @apply font-body text-[0.8rem] font-[700] leading-[26px] text-body-1;
+  }
+
   .text_regular_body_sb {
     @apply font-body text-[0.8rem] font-[600] leading-[26px] -tracking-[0.28px] text-body-1;
   }

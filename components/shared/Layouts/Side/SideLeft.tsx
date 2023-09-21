@@ -11,13 +11,13 @@ interface Props {
 
 const SideLeft = ({ title, desc }: Props) => {
   return (
-    <div className="h-full w-[50%] bg-primary p-10">
+    <div className="h-screen max-h-screen w-1/2 overflow-hidden bg-primary p-10">
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="w-full max-w-[1500px]"
+        className="w-full"
       >
         <Logo logoVariant="black" />
 
