@@ -1,42 +1,33 @@
 "use client";
+import PersonalInformation from "@components/sections/join-registry/PersonalInformation";
 import SelectCategory from "@components/sections/join-registry/SelectCategory";
 import SideLayoutWrapper from "@components/shared/Layouts/Side/SideLayoutWrapper";
 import Stepper from "@components/ui/stepper";
 import { useState } from "react";
 
-function Payment() {
-  return <h2>Payment information</h2>;
-}
-
-function Confirmation() {
-  return <h2>Booking is confirmed</h2>;
-}
-
 const JoinRegistryPage = () => {
-  const [activeStep] = useState(0);
-
+  const [activeStep, setActiveStep] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<
+    null | "Widow" | "Missinoary"
+  >(null);
   const steps = ["Select Category", "Personal Information"];
-
-  // const nextStep = () => {
-  //   if (activeStep < steps.length) {
-  //     setActiveStep(activeStep + 1);
-  //   }
-  // };
-
-  // const prevStep = () => {
-  //   if (activeStep > 1) {
-  //     setActiveStep(activeStep - 1);
-  //   }
-  // };
 
   function getSectionComponent() {
     switch (activeStep) {
       case 0:
-        return <SelectCategory />;
+        return (
+          <SelectCategory
+            setActiveStep={setActiveStep}
+            setSelectedCategory={setSelectedCategory}
+          />
+        );
       case 1:
-        return <Payment />;
-      case 2:
-        return <Confirmation />;
+        return (
+          <PersonalInformation
+            setActiveStep={setActiveStep}
+            selectedCategory={selectedCategory}
+          />
+        );
       default:
         return null;
     }
