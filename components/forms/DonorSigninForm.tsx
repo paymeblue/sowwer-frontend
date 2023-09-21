@@ -15,8 +15,10 @@ import { Button } from "@components/ui/button";
 import Link from "next/link";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import { Input } from "@components/ui/input";
+import { useRouter } from "next/navigation";
 
 const DonorSigninForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof DonorSigninValidation>>({
     resolver: zodResolver(DonorSigninValidation),
     defaultValues: {
@@ -25,7 +27,7 @@ const DonorSigninForm = () => {
   });
   const onSubmit = async (values: z.infer<typeof DonorSigninValidation>) => {
     console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    router.push("/donor");
   };
   return (
     <div className="w-full">

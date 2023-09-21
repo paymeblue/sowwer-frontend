@@ -11,7 +11,6 @@ import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import Logo from "../Logo";
 import { useRouter } from "next/navigation";
-import { IS_AUTHENTICATED } from "@lib/constants";
 import ProfileMenuCard from "@components/cards/ProfileMenuCard";
 
 const navItems: INavitem[] = [
@@ -49,9 +48,11 @@ const navItems: INavitem[] = [
 
 interface Props {
   variant?: "landing" | "donor";
+  // TODO: remove when backend integration comes in
+  authenticated?: boolean;
 }
 
-const Navbar = ({ variant = "landing" }: Props) => {
+const Navbar = ({ variant = "landing", authenticated }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isScrolling, setIsScrolling] = useState(false);
@@ -117,10 +118,10 @@ const Navbar = ({ variant = "landing" }: Props) => {
 
       <div
         className={`flex items-center gap-4 ${
-          IS_AUTHENTICATED && "flex-row-reverse"
+          authenticated && "flex-row-reverse"
         }`}
       >
-        {IS_AUTHENTICATED ? (
+        {authenticated ? (
           <ProfileMenuCard />
         ) : (
           <Button

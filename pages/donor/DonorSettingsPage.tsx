@@ -2,11 +2,23 @@ import SectionContainer from "@components/sections/SectionContainer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 import PersonalDetails from "@components/sections/donor/PersonalDetails";
 import PasswordSettings from "@components/sections/donor/PasswordSettings";
+import { Button } from "@components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 const DonorDashboardPage = () => {
   return (
     <SectionContainer>
       <section className="safearea-top">
+        <Link href="/donor">
+          <Button
+            variant="link"
+            className="space-x-2 px-0 font-[400] text-accent"
+          >
+            <ArrowLeft size={14} />
+            <span>Back to dashboard</span>
+          </Button>
+        </Link>
         <h3 className="text_variant_h3">Account Settings</h3>
         <Tabs defaultValue="personal-details" className="mt-4">
           <TabsList className="flex items-center space-x-2">

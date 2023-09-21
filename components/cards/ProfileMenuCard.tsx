@@ -5,7 +5,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
-import { setMockAuthetnication } from "@lib/constants";
 import { LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { ChevronDown } from "react-iconly";
@@ -40,12 +39,9 @@ const ProfileMenuCard = () => {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <LogOut className="mr-2 h-4 w-4" />
-            <span
-              className="cursor-pointer font-body"
-              onClick={() => setMockAuthetnication(false)}
-            >
-              Log out
-            </span>
+            <Link href="/">
+              <span className="cursor-pointer font-body">Log out</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </div>

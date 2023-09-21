@@ -30,9 +30,9 @@ const PasswordSettingsForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full flex-col space-y-6"
+        className="flex w-full flex-col space-y-10"
       >
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-6">
           <FormField
             control={form.control}
             name="currentPassword"
