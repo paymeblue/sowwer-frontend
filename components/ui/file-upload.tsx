@@ -1,15 +1,24 @@
 import FileUploadIcon from "@components/assets/svg/FileUpload";
+import { cn } from "@lib/cn";
 import { Trash } from "lucide-react";
 import Image from "next/image";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, HTMLAttributes } from "react";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
 interface Props {
   onFileChange?: (file: string) => void;
+  containerClassname?: HTMLAttributes<HTMLDivElement>["className"];
+  title: string;
+  desc: string;
 }
 
-const FileUpload = ({ onFileChange }: Props) => {
+const FileUpload = ({
+  onFileChange,
+  containerClassname,
+  title,
+  desc,
+}: Props) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -76,7 +85,10 @@ const FileUpload = ({ onFileChange }: Props) => {
   return (
     <div className="p-0">
       <div
-        className="mb-4 flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary py-10"
+        className={cn(
+          "mb-4 flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary py-10",
+          containerClassname
+        )}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         onClick={openFileInput}
@@ -89,11 +101,9 @@ const FileUpload = ({ onFileChange }: Props) => {
           onChange={handleFileChange}
         />
         <FileUploadIcon />
-        <h4 className="font-body text-[.8rem] text-primary">
-          Upload Cover Photo
-        </h4>
-        <p className="font-body text-[.7rem] text-[#848484]">
-          (.jpg, .jpeg, or .png file format supported, max 5MB)
+        <h4 className="font-body text-[.8rem] text-primary">{title}</h4>
+        <p className="text-center font-body text-[.7rem] text-[#848484]">
+          {desc}
         </p>
       </div>
       {selectedFile && (

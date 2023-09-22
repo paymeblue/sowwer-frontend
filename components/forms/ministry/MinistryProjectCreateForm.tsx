@@ -144,6 +144,8 @@ export const UploadCoverPhoto = ({ form }: Props) => {
                 onFileChange={(file: string) => {
                   field.onChange(file);
                 }}
+                title="Upload Cover Photo"
+                desc="(.jpg, .jpeg or .png file format supported)"
               />
             </FormControl>
             <FormMessage />

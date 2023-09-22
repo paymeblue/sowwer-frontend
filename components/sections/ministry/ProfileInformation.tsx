@@ -1,5 +1,6 @@
 import MinistryGeneralDetailsForm from "@components/forms/ministry/MinistryGeneralDetailsForm";
 import TabSectionWrapper, { TabWrapper } from "./TabContentWrapper";
+import MinistryUploadLogo from "@components/forms/ministry/MinistryUploadLogo";
 
 const ProfileInformation = () => {
   return (
@@ -14,6 +15,15 @@ const ProfileInformation = () => {
         }
       >
         <MinistryGeneralDetailsForm />
+      </TabSectionWrapper>
+
+      <TabSectionWrapper
+        title="Logo"
+        spaceTop
+        contentClassname="w-[50%]"
+        desc="Add your logo for easy identification."
+      >
+        <MinistryUploadLogo />
       </TabSectionWrapper>
     </TabWrapper>
   );
