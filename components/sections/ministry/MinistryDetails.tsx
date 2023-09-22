@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 import ProfileInformation from "./ProfileInformation";
+import ContactsSocial from "./ContactsSocial";
 
 const MinistryDetails = () => {
   return (
@@ -15,6 +16,9 @@ const MinistryDetails = () => {
         </TabsList>
         <TabsContent value="profile-information" orientation="vertical">
           <ProfileInformation />
+        </TabsContent>
+        <TabsContent value="contacts-social" orientation="vertical">
+          <ContactsSocial />
         </TabsContent>
       </Tabs>
     </div>

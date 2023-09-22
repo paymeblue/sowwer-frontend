@@ -39,6 +39,7 @@ export const MinistryGeneralLogoValidation = z.object({
 
 export const MinistryContactDetailsValidation = z.object({
   email: z.string().email(),
+  phone: z.string(),
 });
 
 export const MinistrySocialAccountsValidation = z.object({
