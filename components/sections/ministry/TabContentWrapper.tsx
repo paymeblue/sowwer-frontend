@@ -4,7 +4,7 @@ import { HTMLAttributes, ReactNode } from "react";
 interface Props {
   children: ReactNode;
   title: string | ReactNode;
-  desc: string;
+  desc: string | ReactNode;
   className?: HTMLAttributes<HTMLDivElement>["className"];
   orientation?: "horizontal" | "vertical";
   spaceTop?: boolean;

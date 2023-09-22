@@ -120,7 +120,7 @@ export const ProjectDescription = ({ form }: Props) => {
           <FormItem className="">
             <FormLabel required>What is this project about?</FormLabel>
             <FormControl>
-              <Textarea rows={6} {...field} />
+              <Textarea rows={20} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

@@ -30,6 +30,7 @@ const Overview = () => {
     <Form {...form}>
       <TabWrapper>
         <TabSectionWrapper
+          contentClassname="w-[50%]"
           title="Main Details"
           desc="Choose a title, goal and category for your project.
 "
@@ -38,6 +39,7 @@ const Overview = () => {
         </TabSectionWrapper>
 
         <TabSectionWrapper
+          contentClassname="w-[50%]"
           title="Cover Photo"
           desc="Add a cover photo to your project."
           spaceTop

@@ -38,7 +38,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <input
               type={showPassword ? "text" : type}
               className={cn(
-                "flex h-12 w-full rounded-md bg-grey px-3 py-2 font-body text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-body placeholder:text-[.8rem] placeholder:font-[300] placeholder:leading-none placeholder:leading-none placeholder:text-body-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:border-[.5px] disabled:border-[#C4C4C4] disabled:opacity-50",
+                "flex h-12 w-full rounded-md bg-grey px-3 py-2 font-body text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-body placeholder:text-[.8rem] placeholder:font-[300] placeholder:leading-none placeholder:text-body-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:border-[.5px] disabled:border-[#C4C4C4] disabled:opacity-50",
                 className,
                 iconPosition !== "right" && icon ? "pl-10 pr-4" : "pr-10"
               )}

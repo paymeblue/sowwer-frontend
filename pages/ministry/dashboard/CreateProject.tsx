@@ -7,6 +7,7 @@ import { Copy, Eye } from "lucide-react";
 import { ArrowLeft } from "react-iconly";
 import { useRouter } from "next/navigation";
 import Overview from "@components/sections/ministry/Overview";
+import SharingDetails from "@components/sections/ministry/SharingDetails";
 
 const RightContent = () => {
   return (
@@ -58,6 +59,9 @@ const CreateProject = () => {
         </TabsList>
         <TabsContent value="overview">
           <Overview />
+        </TabsContent>
+        <TabsContent value="sharing-details">
+          <SharingDetails />
         </TabsContent>
       </Tabs>
     </MainContentWrapper>
