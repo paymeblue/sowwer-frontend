@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { isValidPassword } from "./auth";
 
 export const MinistrySigninValidation = z.object({
   email: z
@@ -50,3 +51,27 @@ export const MinistrySocialAccountsValidation = z.object({
   linkedIn: z.string().optional(),
   youtube: z.string().optional(),
 });
+
+export const MinistryPersonalDetailsValidation = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  phone: z.string(),
+});
+
+export const MinistryPasswordSettingsValidation = z
+  .object({
+    currentPassword: z.string(),
+    newPassword: z
+      .string()
+      .min(3, { message: "Minimum 3 characters" })
+      .refine(isValidPassword, {
+        message:
+          "Password must contain at least one number and one special character",
+      }),
+    confirmNewPassword: z.string().min(3, { message: "Minimum 3 characters" }),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "Passwords do not match",
+    path: ["confirmNewPassword"],
+  });

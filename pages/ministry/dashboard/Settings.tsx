@@ -1,4 +1,6 @@
 import MinistryDetails from "@components/sections/ministry/MinistryDetails";
+import PasswordSettings from "@components/sections/ministry/PasswordSettings";
+import PersonalDetails from "@components/sections/ministry/PersonalDetails";
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 
@@ -14,6 +16,12 @@ const SettingsPage = () => {
         </TabsList>
         <TabsContent value="ministry-details">
           <MinistryDetails />
+        </TabsContent>
+        <TabsContent value="personal-details">
+          <PersonalDetails />
+        </TabsContent>
+        <TabsContent value="password-settings">
+          <PasswordSettings />
         </TabsContent>
       </Tabs>
     </MainContentWrapper>

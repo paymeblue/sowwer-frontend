@@ -1,24 +1,5 @@
 import * as z from "zod";
-
-// Custom password validation function
-export const isValidPassword = (password: string) => {
-  // Minimum length of 3 characters
-  if (password.length < 3) {
-    return false;
-  }
-
-  // At least one number
-  if (!/\d/.test(password)) {
-    return false;
-  }
-
-  // At least one special character (e.g., !@#$%^&*)
-  if (!/[!@#$%^&*]/.test(password)) {
-    return false;
-  }
-
-  return true;
-};
+import { isValidPassword } from "./auth";
 
 export const DonorSignupValidation = z
   .object({
