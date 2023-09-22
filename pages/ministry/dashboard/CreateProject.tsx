@@ -2,10 +2,11 @@
 
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
 import { Button } from "@components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 import { Copy, Eye } from "lucide-react";
 import { ArrowLeft } from "react-iconly";
 import { useRouter } from "next/navigation";
+import Overview from "@components/sections/ministry/Overview";
 
 const RightContent = () => {
   return (
@@ -50,11 +51,14 @@ const CreateProject = () => {
       }
       right={<RightContent />}
     >
-      <Tabs defaultValue="overview">
+      <Tabs defaultValue="overview" className="w-full">
         <TabsList className="mt-4 flex items-center space-x-2">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="sharing-details">Sharing Details</TabsTrigger>
         </TabsList>
+        <TabsContent value="overview">
+          <Overview />
+        </TabsContent>
       </Tabs>
     </MainContentWrapper>
   );
