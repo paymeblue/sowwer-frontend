@@ -4,7 +4,7 @@ import Loader from "@components/shared/Loader";
 const DynamicMinistryDonors = dynamic(
   () => import("pages/ministry/dashboard/Donors"),
   {
-    loading: () => <Loader />,
+    loading: () => <Loader className="h-[80vh]" />,
   }
 ) as any;
 

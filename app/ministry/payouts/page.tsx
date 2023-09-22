@@ -4,7 +4,7 @@ import Loader from "@components/shared/Loader";
 const DynamicMinistryPayouts = dynamic(
   () => import("pages/ministry/dashboard/Payouts"),
   {
-    loading: () => <Loader />,
+    loading: () => <Loader className="h-[80vh]" />,
   }
 ) as any;
 
