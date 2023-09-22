@@ -1,6 +1,6 @@
 import Link from "next/link";
 import CenterLayoutMidWrapper from "../../components/shared/Layouts/Center/CenterLayoutMidWrapper";
-import DonorSigninForm from "@components/forms/DonorSigninForm";
+import DonorSigninForm from "@components/forms/donor/DonorSigninForm";
 
 const DonorSigninPage = () => {
   return (

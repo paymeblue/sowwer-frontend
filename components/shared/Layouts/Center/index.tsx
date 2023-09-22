@@ -15,6 +15,7 @@ const CenterLayout = ({ children }: { children: ReactNode }) => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
+        className="mt-6"
       >
         <Logo />
       </motion.header>
@@ -23,7 +24,7 @@ const CenterLayout = ({ children }: { children: ReactNode }) => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="my-4 flex w-full items-center justify-center"
+        className="my-8 flex w-full items-center justify-center"
       >
         {children}
       </motion.main>

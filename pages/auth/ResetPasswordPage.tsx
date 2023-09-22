@@ -1,5 +1,5 @@
 import CenterLayoutMidWrapper from "@components/shared/Layouts/Center/CenterLayoutMidWrapper";
-import ResetPasswordForm from "@components/forms/ResetPasswordForm";
+import ResetPasswordForm from "@components/forms/auth/ResetPasswordForm";
 
 const ResetPasswordPage = () => {
   return (

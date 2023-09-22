@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MinistrySigninValidation } from "lib/validations/ministry";
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
+import { Input as InputV2 } from "@components/ui/input-with-icon";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -53,7 +54,11 @@ const MinistrySigninForm = () => {
                 <FormItem className="">
                   <FormLabel required>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Password" type="password" {...field} />
+                    <InputV2
+                      placeholder="Password"
+                      type="password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -83,14 +83,14 @@
   }
 
   .text_variant_h2 {
-    @apply font-title text-[2.8rem] leading-[3rem];
+    @apply font-title text-[2.8rem] leading-[3rem] text-black;
   }
   .text_variant_h3 {
     @apply font-title text-[2.2rem] leading-[3rem];
   }
 
   .text_large_header_b {
-    @apply font-body text-[1.5rem] font-[700];
+    @apply font-body text-[1.5rem] font-[700] text-black;
     letter-spacing: -0.48px;
   }
 
@@ -152,14 +152,14 @@
   }
 
   .footerlink_sub {
-    @apply text-[0.9rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white;
+    @apply font-body text-[0.9rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white;
   }
   .contactlink_sub {
     @apply text-[0.9rem] text-body-1 hover:text-black;
   }
 
   .safearea-top {
-    @apply mt-[15vh];
+    @apply mt-[18vh];
   }
 
   /* Stepper component styling */

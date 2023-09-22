@@ -1,4 +1,4 @@
-import DonorSignupForm from "@components/forms/DonorSignupForm";
+import DonorSignupForm from "@components/forms/donor/DonorSignupForm";
 import CenterLayoutMidWrapper from "../../components/shared/Layouts/Center/CenterLayoutMidWrapper";
 import Link from "next/link";
 

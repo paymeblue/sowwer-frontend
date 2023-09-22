@@ -1,3 +1,4 @@
+import MinistryProjectCreateForm from "@components/forms/ministry/MinistryProjectCreateForm";
 import TabSectionWrapper, { TabWrapper } from "./TabContentWrapper";
 
 const Overview = () => {
@@ -8,7 +9,7 @@ const Overview = () => {
         desc="Choose a title, goal and category for your project.
 "
       >
-        form
+        <MinistryProjectCreateForm />
       </TabSectionWrapper>
     </TabWrapper>
   );

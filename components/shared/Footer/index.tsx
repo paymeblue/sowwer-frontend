@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import logo from "public/assets/icons/logo-white.svg";
 import appleStore from "public/assets/icons/app-store.svg";
 import playStore from "public/assets/icons/google-play.svg";
 import { Instagram } from "lucide-react";
@@ -11,6 +10,7 @@ import YoutubeColor from "@components/assets/svg/youtubeColor";
 import Calling from "@components/assets/svg/Calling";
 import Message from "@components/assets/svg/Message";
 import SectionContainer from "@components/sections/SectionContainer";
+import Logo from "../Logo";
 
 interface Props {
   variant?: "default" | "minimal";
@@ -40,10 +40,8 @@ const Footer = ({ variant = "default" }: Props) => {
         <div className="flex w-full justify-between">
           {/* left */}
           <div className="flex flex-col">
-            <Link href="/">
-              <Image src={logo} alt="Soower logo" className="w-auto" />
-            </Link>
-            <p className="mb-0 mt-2 max-w-sm text-start text-[12px] leading-[20px] text-[rgba(255,_255,_255,_0.8)]">
+            <Logo logoVariant="white" />
+            <p className="mb-0 mt-0 max-w-sm text-start font-body text-[14px] leading-[22px] text-[rgba(255,_255,_255,_0.8)]">
               The Kingdom Investment Platform. Perfectly positioned to lend a
               helping hand.
             </p>

@@ -85,7 +85,7 @@ const Navbar = ({ variant = "landing", authenticated }: Props) => {
         },
       }}
       className={`fixed left-0 top-0  z-30 flex h-[10vh] w-full flex-row items-center justify-between px-16 transition-all duration-200 ${
-        isScrolling && "shadow-md"
+        isScrolling && "shadow-navbar"
       }`}
     >
       <div className="flex items-center gap-8">
@@ -134,7 +134,7 @@ const Navbar = ({ variant = "landing", authenticated }: Props) => {
         )}
         {variant === "landing" && (
           <Button onClick={() => router.push("/registry/join")}>
-            Join Sower's Registry
+            Join Soower's Registry
           </Button>
         )}
       </div>
