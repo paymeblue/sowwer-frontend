@@ -8,8 +8,7 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { UseFormReturn } from "react-hook-form";
 import { MinistryCreateProjectValidation } from "lib/validations/ministry";
 import { Input } from "@components/ui/input";
 import {
@@ -19,13 +18,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui/select";
+import { Textarea } from "@components/ui/textarea";
 
-const MinistryProjectCreateForm = () => {
-  // const router = useRouter();
-  const form = useForm<z.infer<typeof MinistryCreateProjectValidation>>({
-    resolver: zodResolver(MinistryCreateProjectValidation),
-  });
+interface Props {
+  form: UseFormReturn<z.infer<typeof MinistryCreateProjectValidation>>;
+}
 
+const MinistryProjectCreateForm = ({ form }: Props) => {
   return (
     <div className="w-full">
       <Form {...form}>
@@ -110,6 +109,28 @@ const MinistryProjectCreateForm = () => {
         </form>
       </Form>
     </div>
+  );
+};
+
+export const ProjectDescription = ({ form }: Props) => {
+  return (
+    <Form {...form}>
+      <form>
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="">
+              <FormLabel required>What is this project about?</FormLabel>
+              <FormControl>
+                <Textarea rows={6} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
   );
 };
 

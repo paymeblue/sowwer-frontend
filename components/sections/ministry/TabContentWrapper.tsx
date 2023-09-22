@@ -3,26 +3,50 @@ import { HTMLAttributes, ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
-  title: string;
+  title: string | ReactNode;
   desc: string;
   className?: HTMLAttributes<HTMLDivElement>["className"];
+  orientation?: "horizontal" | "vertical";
+  spaceTop?: boolean;
+  contentClassname?: HTMLAttributes<HTMLDivElement>["className"];
 }
 
 export const TabWrapper = ({ children }: { children: ReactNode }) => {
-  return <div className="w-full rounded-[10px] bg-white p-6">{children}</div>;
+  return <div className="w-full rounded-[10px] bg-white p-8">{children}</div>;
 };
 
-const TabSectionWrapper = ({ children, title, desc, className }: Props) => {
+const TabSectionWrapper = ({
+  children,
+  title,
+  desc,
+  className,
+  orientation = "horizontal",
+  spaceTop = false,
+  contentClassname,
+}: Props) => {
   return (
     <section
-      className={cn("flex w-full items-start justify-between", className)}
+      className={cn(
+        "flex w-full items-start justify-between",
+        orientation === "vertical" && "flex-col justify-normal space-y-4",
+        spaceTop && "mt-6 border-t-[.3px] border-[#C4C4C4] py-10",
+        className
+      )}
     >
       <div className="flex flex-col">
         <h4 className="text_medium_body_p font-[600]">{title}</h4>
         <p className="text_regular_body_p ">{desc}</p>
       </div>
 
-      <div className="w-[40%]">{children}</div>
+      <div
+        className={cn(
+          "w-[40%]",
+          orientation === "vertical" && "w-full",
+          contentClassname
+        )}
+      >
+        {children}
+      </div>
     </section>
   );
 };
