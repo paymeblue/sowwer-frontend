@@ -1,5 +1,6 @@
 import ContactDetailsForm from "@components/forms/ministry/ContactDetailsForm";
 import TabSectionWrapper, { TabWrapper } from "./TabContentWrapper";
+import SocialAccountsForm from "@components/forms/ministry/SocialAccountsForm";
 
 const ContactsSocial = () => {
   return (
@@ -13,7 +14,6 @@ const ContactsSocial = () => {
           </span>
         }
       >
-        {/* <MinistryGeneralDetailsForm /> */}
         <ContactDetailsForm />
       </TabSectionWrapper>
 
@@ -23,8 +23,7 @@ const ContactsSocial = () => {
         contentClassname="w-[50%]"
         desc="Add your social links for visibilty."
       >
-        {/* <MinistryUploadLogo /> */}
-        form
+        <SocialAccountsForm />
       </TabSectionWrapper>
     </TabWrapper>
   );

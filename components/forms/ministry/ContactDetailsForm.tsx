@@ -33,7 +33,7 @@ const ContactDetailsForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex w-full flex-col"
       >
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 gap-2">
           <FormField
             control={form.control}
             name="email"

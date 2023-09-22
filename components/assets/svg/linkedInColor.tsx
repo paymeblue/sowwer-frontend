@@ -1,6 +1,6 @@
 import React from "react";
 
-const linkedInColor = () => {
+const LinkedInColor = () => {
   return (
     <svg
       width="21"
@@ -24,4 +24,4 @@ const linkedInColor = () => {
   );
 };
 
-export default linkedInColor;
+export default LinkedInColor;
