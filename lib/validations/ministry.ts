@@ -12,7 +12,7 @@ export const MinistrySigninValidation = z.object({
 export const MinistryCreateProjectValidation = z.object({
   amount: z.string().min(1),
   category: z.string(),
-  // cover_photo: z.string(),
+  cover_photo: z.string().min(1, "Please upload a cover photo"),
   description: z.string().min(100, {
     message: "Please provide more information about your project",
   }),

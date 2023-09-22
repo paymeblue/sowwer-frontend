@@ -27,9 +27,9 @@ const TabSectionWrapper = ({
   return (
     <section
       className={cn(
-        "flex w-full items-start justify-between",
+        "flex w-full items-start justify-between pb-10",
         orientation === "vertical" && "flex-col justify-normal space-y-4",
-        spaceTop && "mt-6 border-t-[.3px] border-[#C4C4C4] py-10",
+        spaceTop && "mt-6 border-t-[.3px] border-[#C4C4C4] pt-10",
         className
       )}
     >

@@ -6,11 +6,13 @@ import { MinistryCreateProjectValidation } from "lib/validations/ministry";
 
 import MinistryProjectCreateForm, {
   ProjectDescription,
+  UploadCoverPhoto,
 } from "@components/forms/ministry/MinistryProjectCreateForm";
 import TabSectionWrapper, { TabWrapper } from "./TabContentWrapper";
 import QuestionRounded from "@components/assets/svg/QuestionRounded";
 import { Button } from "@components/ui/button";
 import { ArrowRight } from "react-iconly";
+import { Form } from "@components/ui/form";
 
 const Overview = () => {
   const form = useForm<z.infer<typeof MinistryCreateProjectValidation>>({
@@ -25,7 +27,7 @@ const Overview = () => {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <Form {...form}>
       <TabWrapper>
         <TabSectionWrapper
           title="Main Details"
@@ -34,6 +36,15 @@ const Overview = () => {
         >
           <MinistryProjectCreateForm form={form} />
         </TabSectionWrapper>
+
+        <TabSectionWrapper
+          title="Cover Photo"
+          desc="Add a cover photo to your project."
+          spaceTop
+        >
+          <UploadCoverPhoto form={form} />
+        </TabSectionWrapper>
+
         <TabSectionWrapper
           spaceTop
           orientation="vertical"
@@ -51,7 +62,7 @@ const Overview = () => {
 
         <div className="flex self-end">
           <Button
-            type="submit"
+            onClick={form.handleSubmit(onSubmit)}
             className="ml-auto space-x-2"
             variant="secondary"
           >
@@ -60,7 +71,7 @@ const Overview = () => {
           </Button>
         </div>
       </TabWrapper>
-    </form>
+    </Form>
   );
 };
 
