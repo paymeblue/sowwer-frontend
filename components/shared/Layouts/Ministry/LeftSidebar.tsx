@@ -6,9 +6,10 @@ import Logo from "@components/shared/Logo";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Setting, Wallet } from "react-iconly";
 
+const base = "/ministry";
 const sidebarItems = [
   {
-    route: "/",
+    route: "",
     label: "Home",
     icon: <Home set="light" />,
   },
@@ -46,11 +47,11 @@ const LeftSidebar = () => {
       <div className="mt-10 space-y-4">
         {sidebarItems.map((link) => {
           const isActive =
-            (pathname?.includes(link.route) && link.route.length > 1) ||
-            pathname === link.route;
+            (pathname?.includes(base + link.route) && link.route.length > 1) ||
+            pathname === base + link.route;
           return (
             <div
-              onClick={() => router.push(`/ministry${link.route}`)}
+              onClick={() => router.push(`${base}${link.route}`)}
               key={link.route}
               className={`flex w-full cursor-pointer items-center rounded-[5px] px-4 py-3 text-white transition-all duration-200 hover:bg-[#FFFFFF1A] ${
                 isActive && "bg-[#FFFFFF1A]"
