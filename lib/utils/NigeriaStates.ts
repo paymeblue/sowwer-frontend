@@ -13,7 +13,7 @@ const statesInNigeria = [
   "Edo",
   "Ekiti",
   "Enugu",
-  "FCT",
+  "Federal Capital Territory",
   "Gombe",
   "Imo",
   "Jigawa",

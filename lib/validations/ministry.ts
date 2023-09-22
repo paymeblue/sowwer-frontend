@@ -25,3 +25,27 @@ export const MinistryCreateProjectValidation = z.object({
       message: "Please provide a project title less than 50 characters",
     }),
 });
+
+export const MinistryGeneralDetailsValidation = z.object({
+  name: z.string(),
+  addressLine: z.string(),
+  state: z.string(),
+  about: z.string(),
+});
+
+export const MinistryGeneralLogoValidation = z.object({
+  logo: z.string(),
+});
+
+export const MinistryContactDetailsValidation = z.object({
+  email: z.string().email(),
+});
+
+export const MinistrySocialAccountsValidation = z.object({
+  website: z.string().optional(),
+  facebook: z.string().optional(),
+  instagram: z.string().optional(),
+  twitter: z.string().optional(),
+  linkedIn: z.string().optional(),
+  youtube: z.string().optional(),
+});
