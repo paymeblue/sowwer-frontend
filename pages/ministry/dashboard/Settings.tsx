@@ -1,4 +1,5 @@
 import MinistryDetails from "@components/sections/ministry/MinistryDetails";
+import Notifications from "@components/sections/ministry/Notifications";
 import PasswordSettings from "@components/sections/ministry/PasswordSettings";
 import PersonalDetails from "@components/sections/ministry/PersonalDetails";
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
@@ -22,6 +23,9 @@ const SettingsPage = () => {
         </TabsContent>
         <TabsContent value="password-settings">
           <PasswordSettings />
+        </TabsContent>
+        <TabsContent value="notifications">
+          <Notifications />
         </TabsContent>
       </Tabs>
     </MainContentWrapper>
