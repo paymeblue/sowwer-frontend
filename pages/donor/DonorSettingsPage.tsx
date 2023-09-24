@@ -5,6 +5,7 @@ import PasswordSettings from "@components/sections/donor/PasswordSettings";
 import { Button } from "@components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import DonationHistory from "@components/sections/donor/DontationHistory";
 
 const DonorDashboardPage = () => {
   return (
@@ -33,6 +34,9 @@ const DonorDashboardPage = () => {
           </TabsContent>
           <TabsContent value="password-settings">
             <PasswordSettings />
+          </TabsContent>
+          <TabsContent value="donation-history">
+            <DonationHistory />
           </TabsContent>
         </Tabs>
       </section>
