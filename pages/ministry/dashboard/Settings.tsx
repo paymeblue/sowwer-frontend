@@ -8,8 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 const SettingsPage = () => {
   return (
     <MainContentWrapper title="Settings">
-      <Tabs defaultValue="ministry-details" className="w-full">
-        <TabsList className="mt-4 flex items-center space-x-2">
+      <Tabs defaultValue="ministry-details" className="mt-4 w-full">
+        <TabsList>
           <TabsTrigger value="ministry-details">Ministry Details</TabsTrigger>
           <TabsTrigger value="personal-details">Personal Details</TabsTrigger>
           <TabsTrigger value="password-settings">Password Settings</TabsTrigger>
