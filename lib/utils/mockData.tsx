@@ -2,6 +2,10 @@ import { GeneralDonor } from "@components/tables/ministry/MinistryGeneralDonorsT
 import { ProjectDonor } from "@components/tables/ministry/MinistryProjectDonorsTable";
 import { MinistryProject } from "@components/tables/ministry/MinistryProjectsTable";
 import { Status } from "./constants";
+import {
+  CompletedProject,
+  PayoutHistory,
+} from "@components/tables/ministry/MinistryPayoutsTables";
 
 export const generalDonors: GeneralDonor[] = [
   {
@@ -296,5 +300,64 @@ export const ministryProjects: MinistryProject[] = [
     numOfDonors: 53,
     status: Status.completed,
     title: "The Widows Project",
+  },
+];
+
+export const completedProjects: CompletedProject[] = [
+  {
+    id: "123",
+    title: "The Widows Project",
+    goal: 500000,
+    category: "widow",
+    numOfDonors: 53,
+    amountRaised: 153000,
+  },
+  {
+    id: "123",
+    title: "The Widows Project",
+    goal: 500000,
+    category: "widow",
+    numOfDonors: 53,
+    amountRaised: 153000,
+  },
+  {
+    id: "123",
+    title: "The Widows Project",
+    goal: 500000,
+    category: "widow",
+    numOfDonors: 53,
+    amountRaised: 153000,
+  },
+  {
+    id: "123",
+    title: "The Widows Project",
+    goal: 500000,
+    category: "widow",
+    numOfDonors: 53,
+    amountRaised: 153000,
+  },
+];
+
+export const payoutHistory: PayoutHistory[] = [
+  {
+    id: "123",
+    amountPaid: 135000,
+    title: "The Widows Project",
+    referenceNo: "#ABC1234567",
+    payoutDate: "21st March 2023; 4:45pm",
+  },
+  {
+    id: "123",
+    amountPaid: 135000,
+    title: "The Widows Project",
+    referenceNo: "#ABC1234567",
+    payoutDate: "21st March 2023; 4:45pm",
+  },
+  {
+    id: "123",
+    amountPaid: 135000,
+    title: "The Widows Project",
+    referenceNo: "#ABC1234567",
+    payoutDate: "21st March 2023; 4:45pm",
   },
 ];

@@ -94,9 +94,10 @@ export default function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      {/* <div className="flex items-center justify-end space-x-10 py-4">
         <Button
-          variant="outline"
+          variant="link"
+          className="px-0 text-body-2"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
@@ -104,14 +105,37 @@ export default function DataTable<TData, TValue>({
           Previous
         </Button>
         <Button
-          variant="outline"
+          variant="link"
+          className="px-0 text-body-2"
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
           Next
         </Button>
-      </div>
+      </div> */}
+      {!table.getCanPreviousPage() && !table.getCanNextPage() ? null : (
+        <div className="flex items-center justify-end space-x-10 py-4">
+          <Button
+            variant="link"
+            className="px-0 text-body-2"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="link"
+            className="px-0 text-body-2"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
