@@ -1,9 +1,8 @@
-import EmptyState from "@components/shared/EmptyState";
-import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import { Button } from "@components/ui/button";
 import { Plus } from "lucide-react";
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
 import Link from "next/link";
+import MinistryProjectsTable from "@components/tables/ministry/MinistryProjectsTable";
 
 const ProjectsPage = () => {
   return (
@@ -21,11 +20,14 @@ const ProjectsPage = () => {
         </Link>
       }
     >
-      <EmptyState
+      {/* <EmptyState
         image={<EmptySpeaker />}
         title="No projects yet"
         desc="Create a new project and manage all your projects from here."
-      />
+      /> */}
+      <div className="mt-8 w-full">
+        <MinistryProjectsTable />
+      </div>
     </MainContentWrapper>
   );
 };

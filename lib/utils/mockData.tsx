@@ -1,5 +1,7 @@
 import { GeneralDonor } from "@components/tables/ministry/MinistryGeneralDonorsTable";
 import { ProjectDonor } from "@components/tables/ministry/MinistryProjectDonorsTable";
+import { MinistryProject } from "@components/tables/ministry/MinistryProjectsTable";
+import { Status } from "./constants";
 
 export const generalDonors: GeneralDonor[] = [
   {
@@ -228,5 +230,71 @@ export const projectDonors: ProjectDonor[] = [
     amount: 135000,
     datetime: "21st March 2023; 4:45pm",
     id: "123",
+  },
+];
+
+export const ministryProjects: MinistryProject[] = [
+  {
+    id: "123",
+    amountRaised: 135000,
+    category: "widows",
+    goal: 500000,
+    numOfDonors: 53,
+    status: Status.active,
+    title: "The Widows Project",
+  },
+  {
+    id: "123",
+    amountRaised: 135000,
+    category: "widows",
+    goal: 500000,
+    numOfDonors: 53,
+    status: Status.active,
+    title: "The Widows Project",
+  },
+  {
+    id: "123",
+    amountRaised: 135000,
+    category: "widows",
+    goal: 500000,
+    numOfDonors: 53,
+    status: Status.active,
+    title: "The Widows Project",
+  },
+  {
+    id: "123",
+    amountRaised: 135000,
+    category: "widows",
+    goal: 500000,
+    numOfDonors: 53,
+    status: Status.drafted,
+    title: "The Widows Project",
+  },
+  {
+    id: "123",
+    amountRaised: 135000,
+    category: "widows",
+    goal: 500000,
+    numOfDonors: 53,
+    status: Status.drafted,
+    title: "The Widows Project",
+  },
+  {
+    id: "123",
+    amountRaised: 135000,
+    category: "widows",
+    goal: 500000,
+    numOfDonors: 53,
+    status: Status.completed,
+    title: "The Widows Project",
+  },
+  {
+    id: "123",
+    amountRaised: 135000,
+    category: "widows",
+    goal: 500000,
+    numOfDonors: 53,
+    status: Status.completed,
+    title: "The Widows Project",
   },
 ];

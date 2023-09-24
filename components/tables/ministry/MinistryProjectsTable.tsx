@@ -1,0 +1,164 @@
+"use client";
+import { Button } from "@components/ui/button";
+import DataTable from "@components/ui/data-table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@components/ui/dropdown-menu";
+import { Status } from "@lib/constants";
+import { ministryProjects } from "@lib/mockData";
+import { ColumnDef } from "@tanstack/react-table";
+import { Eye, MoreHorizontal, PenLine, QrCode, Trash, X } from "lucide-react";
+
+export type MinistryProject = {
+  id: string;
+  title: string;
+  goal: number;
+  category: string;
+  numOfDonors: number;
+  amountRaised: number;
+  status: Status;
+};
+
+const columns: ColumnDef<MinistryProject>[] = [
+  {
+    accessorKey: "title",
+    header: "Title",
+    cell: ({ row }) => {
+      return <span className="capitalize">{row.getValue("title")}</span>;
+    },
+  },
+  {
+    accessorKey: "goal",
+    header: "Goal",
+    cell: ({ row }) => {
+      const value = row.getValue("goal") as string;
+      const formattedValue = new Intl.NumberFormat("en-US").format(
+        parseInt(value || "0", 10)
+      );
+      return value ? (
+        <span className="capitalize">₦{formattedValue}</span>
+      ) : (
+        "-"
+      );
+    },
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => {
+      return <span className="capitalize">{row.getValue("category")}</span>;
+    },
+  },
+  {
+    accessorKey: "numOfDonors",
+    header: "No. of Donors",
+    cell: ({ row }) => {
+      return <span>{row.getValue("numOfDonors")}</span>;
+    },
+  },
+  {
+    accessorKey: "amountRaised",
+    header: "Amount raised",
+    cell: ({ row }) => {
+      const value = row.getValue("amountRaised") as string;
+      const formattedValue = new Intl.NumberFormat("en-US").format(
+        parseInt(value || "0", 10)
+      );
+      return value ? (
+        <span className="capitalize">₦{formattedValue}</span>
+      ) : (
+        "-"
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as Status;
+      const statusColors = {
+        [Status.active]: "bg-[#3466FF]",
+        [Status.drafted]: "bg-[#FFCD39]",
+        [Status.completed]: "bg-[#4FAE64]",
+      };
+      const color = statusColors[status];
+
+      return (
+        <div className="flex items-center space-x-2 capitalize">
+          <div className={`h-2 w-2 rounded-full ${color}`} />
+          <span>{status}</span>
+        </div>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const project = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-grey">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          {project.status === Status.drafted && (
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                <PenLine size={14} />{" "}
+                <span className="text_tiny_body_r">Edit</span>{" "}
+              </DropdownMenuItem>
+              <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
+                <Trash size={14} />{" "}
+                <span className="text_tiny_body_r text-[#EB5757]">Delete</span>{" "}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+          {project.status === Status.active && (
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                <PenLine size={14} />{" "}
+                <span className="text_tiny_body_r">Edit</span>{" "}
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                <QrCode size={14} />{" "}
+                <span className="text_tiny_body_r">Download QR</span>{" "}
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                <Eye size={14} />{" "}
+                <span className="text_tiny_body_r">View donors</span>{" "}
+              </DropdownMenuItem>
+              <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
+                <X size={14} />{" "}
+                <span className="text_tiny_body_r text-[#EB5757]">Close</span>{" "}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+          {project.status === Status.completed && (
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                <Eye size={14} />{" "}
+                <span className="text_tiny_body_r">View donors</span>{" "}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+        </DropdownMenu>
+      );
+    },
+  },
+];
+
+const MinistryProjectsTable = () => {
+  return (
+    <div className="w-full">
+      <DataTable columns={columns} data={ministryProjects} />
+    </div>
+  );
+};
+
+export default MinistryProjectsTable;
