@@ -1,4 +1,5 @@
 import { GeneralDonor } from "@components/tables/ministry/MinistryGeneralDonorsTable";
+import { ProjectDonor } from "@components/tables/ministry/MinistryProjectDonorsTable";
 
 export const generalDonors: GeneralDonor[] = [
   {
@@ -35,7 +36,7 @@ export const generalDonors: GeneralDonor[] = [
   },
   {
     name: "Semira Yesufu",
-    type: "one-time",
+    type: "recurring",
     frequency: null,
     amount: 135000,
     datetime: "21st March 2023; 4:45pm",
@@ -141,6 +142,89 @@ export const generalDonors: GeneralDonor[] = [
     name: "Semira Yesufu",
     type: "one-time",
     frequency: "monthly",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+];
+
+export const projectDonors: ProjectDonor[] = [
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
+    amount: 135000,
+    datetime: "21st March 2023; 4:45pm",
+    id: "123",
+  },
+  {
+    name: "Semira Yesufu",
+    title: "The Widows Project",
+    category: "widows",
     amount: 135000,
     datetime: "21st March 2023; 4:45pm",
     id: "123",

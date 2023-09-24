@@ -1,35 +1,35 @@
 "use client";
 import DataTable from "@components/ui/data-table";
-import { generalDonors } from "@lib/mockData";
+import { projectDonors } from "@lib/mockData";
 import { ColumnDef } from "@tanstack/react-table";
 
-export type GeneralDonor = {
+export type ProjectDonor = {
   id: string;
   name: string;
-  type: "one-time" | "recurring";
-  frequency: "monthly" | "daily" | null;
+  title: string;
+  category: "widows" | "orphans";
   amount: number;
   datetime: string;
 };
 
-const columns: ColumnDef<GeneralDonor>[] = [
+const columns: ColumnDef<ProjectDonor>[] = [
   {
     accessorKey: "name",
     header: "Donor's name",
   },
   {
-    accessorKey: "type",
-    header: "Donation Type",
+    accessorKey: "title",
+    header: "Project Title",
     cell: ({ row }) => {
-      const value = row.getValue("type") as string;
-      return <span className="capitalize">{value} donation</span>;
+      const value = row.getValue("title") as string;
+      return <span className="capitalize">{value}</span>;
     },
   },
   {
-    accessorKey: "frequency",
-    header: "Frequency",
+    accessorKey: "category",
+    header: "Project Category",
     cell: ({ row }) => {
-      const value = row.getValue("frequency") as string;
+      const value = row.getValue("category") as string;
       return value ? <span className="capitalize">{value}</span> : "-";
     },
   },
@@ -54,12 +54,12 @@ const columns: ColumnDef<GeneralDonor>[] = [
   },
 ];
 
-const MinistryGeneralDonorsTable = () => {
+const MinistryProjectDonorsTable = () => {
   return (
     <div className="w-full">
-      <DataTable columns={columns} data={generalDonors} />
+      <DataTable columns={columns} data={projectDonors} />
     </div>
   );
 };
 
-export default MinistryGeneralDonorsTable;
+export default MinistryProjectDonorsTable;

@@ -1,5 +1,6 @@
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
 import MinistryGeneralDonorsTable from "@components/tables/ministry/MinistryGeneralDonorsTable";
+import MinistryProjectDonorsTable from "@components/tables/ministry/MinistryProjectDonorsTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 
 const DonorsPage = () => {
@@ -18,6 +19,9 @@ const DonorsPage = () => {
 
         <TabsContent value="general-donors">
           <MinistryGeneralDonorsTable />
+        </TabsContent>
+        <TabsContent value="project-donors">
+          <MinistryProjectDonorsTable />
         </TabsContent>
       </Tabs>
     </MainContentWrapper>
