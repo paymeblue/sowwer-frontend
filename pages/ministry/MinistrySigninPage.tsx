@@ -1,11 +1,14 @@
 import Link from "next/link";
 import CenterLayoutMidWrapper from "../../components/shared/Layouts/Center/CenterLayoutMidWrapper";
 import MinistrySigninForm from "@components/forms/ministry/MinistrySigninForm";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 
 const MinistrySigninPage = () => {
   return (
     <CenterLayoutMidWrapper title="Ministry Sign In">
-      <MinistrySigninForm />
+      <NoSSRWrapper>
+        <MinistrySigninForm />
+      </NoSSRWrapper>
       <p className="text_small_body_r mt-4 text-center">
         Don't have an account?{" "}
         <Link href="#">

@@ -15,10 +15,10 @@ import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import useMinistrySignin from "@hooks/ministry/useMinistrySignin";
 
 const MinistrySigninForm = () => {
-  const router = useRouter();
+  const { loading, loginMinistry } = useMinistrySignin();
   const form = useForm<z.infer<typeof MinistrySigninValidation>>({
     resolver: zodResolver(MinistrySigninValidation),
     defaultValues: {
@@ -26,8 +26,7 @@ const MinistrySigninForm = () => {
     },
   });
   const onSubmit = async (values: z.infer<typeof MinistrySigninValidation>) => {
-    console.log("Submitted", { values });
-    router.push("/ministry");
+    loginMinistry(values);
   };
   return (
     <div className="w-full">
@@ -70,7 +69,7 @@ const MinistrySigninForm = () => {
               </span>
             </Link>
           </div>
-          <Button type="submit" className="mt-8 w-full">
+          <Button loading={loading} type="submit" className="mt-8 w-full">
             Sign in
           </Button>
         </form>
