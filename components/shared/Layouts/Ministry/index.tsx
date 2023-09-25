@@ -8,7 +8,7 @@ const MinistryLayout = ({ children }: { children: ReactNode }) => {
       <LeftSidebar />
       <main className="relative flex w-full flex-col">
         <Topbar />
-        <div className="flex h-full max-h-[90vh] flex-row">
+        <div className="flex h-full max-h-[92vh] flex-row bg-[#F7F8FA]">
           <section className="main-container custom-scrollbar overflow-y-scroll">
             <div className="z-10 h-full w-full self-center">{children}</div>
           </section>

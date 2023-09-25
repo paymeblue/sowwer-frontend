@@ -127,12 +127,12 @@ const Footer = ({ variant = "default" }: Props) => {
               © 2023 Soower. All rights reserved.
             </span>
             <Link href="/">
-              <span className="text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
+              <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
                 Terms of use
               </span>
             </Link>
             <Link href="/">
-              <span className="text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
+              <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
                 Privacy policy
               </span>
             </Link>

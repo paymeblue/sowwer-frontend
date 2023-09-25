@@ -79,7 +79,7 @@
   }
 
   .main-container {
-    @apply flex flex-1 flex-col bg-transparent p-6 max-md:pb-32 sm:px-10;
+    @apply flex flex-1 flex-col bg-[#F7F8FA] p-6 max-md:pb-32 sm:px-10;
   }
 
   .text_variant_h2 {

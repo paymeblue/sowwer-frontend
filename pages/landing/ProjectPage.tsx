@@ -1,4 +1,5 @@
 "use client";
+import DonationCard from "@components/cards/DonationCard";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Button } from "@components/ui/button";
 import { Progress } from "@components/ui/progress";
@@ -9,7 +10,7 @@ import { Heart2 } from "react-iconly";
 const ProjectPage = () => {
   return (
     <SectionContainer>
-      <div className="safearea-top w-full">
+      <div className="safearea-top mb-20 w-full">
         {/* Top Section */}
         <section className="grid grid-cols-2 gap-10">
           {/* Image goes here */}
@@ -63,7 +64,61 @@ const ProjectPage = () => {
         </section>
 
         {/* Bottom Section */}
-        <section className="w-full"></section>
+        <section className="mt-10 grid grid-cols-2 gap-10">
+          <div className="flex flex-col space-y-3">
+            <h3 className="text_variant_h2 text-[2rem]">Story</h3>
+            <div className="felx flex-col space-y-10">
+              <p className="text_regular_body_p">
+                Lorem ipsum dolor sit amet consectetur. Sed sit consequat quis
+                habitant massa. Commodo turpis tempor ipsum libero ut semper
+                dapibus dolor. Viverra cras consequat tincidunt nibh ut vitae
+                maecenas quis. Blandit molestie est semper nunc id curabitur a
+                amet. At aliquet facilisi vestibulum congue aliquam elementum.
+                Vulputate venenatis vehicula sem fusce at cursus aliquet eget.
+                Proin enim quis aliquet nulla. Risus nam in donec iaculis
+                suspendisse nunc arcu. Mattis vitae massa tincidunt feugiat nisi
+                ante nulla blandit. Sed nulla neque turpis tellus lorem vitae
+                venenatis. Nunc nisi nibh massa elementum. In risus semper
+                dapibus tristique massa eu tempor.
+              </p>
+              <p className="text_regular_body_p">
+                Volutpat tincidunt amet pellentesque varius. Nam aliquam duis
+                urna id. Accumsan quis sapien habitant dui egestas facilisis
+                purus. Quis quis egestas aliquet sollicitudin. Tellus cras urna
+                habitant imperdiet id ut arcu commodo elementum. Cras ultricies
+                ultrices eget dignissim pellentesque tortor. Faucibus velit
+                luctus odio nibh nulla. Bibendum sagittis massa praesent tortor
+                lobortis porttitor tellus. Volutpat integer ipsum dolor mattis
+                viverra dui tempus. Tortor habitasse facilisis sapien ornare a
+                semper orci. Non mauris eget lacus mauris eu nunc in vestibulum.
+                Nunc egestas tristique volutpat viverra nibh..
+              </p>
+              <p className="text_regular_body_p">
+                Mattis vitae massa tincidunt feugiat nisi ante nulla blandit.
+                Sed nulla neque turpis tellus lorem vitae venenatis. Nunc nisi
+                nibh massa elementum. In risus semper dapibus tristique massa eu
+                tempor.
+              </p>
+            </div>
+          </div>
+
+          <div className=" flex w-full justify-center">
+            <div className="h-fit w-[70%] rounded-[15px] bg-white p-[2rem]">
+              <h3 className="text_variant_h2 text-[2rem]">Donations</h3>
+              <div className="mt-6 w-full space-y-10">
+                <DonationCard />
+                <DonationCard />
+                <DonationCard />
+              </div>
+              <Button
+                variant="outline"
+                className="mt-10 w-full border-accent text-accent"
+              >
+                View more donations
+              </Button>
+            </div>
+          </div>
+        </section>
       </div>
     </SectionContainer>
   );
