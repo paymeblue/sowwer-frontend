@@ -85,11 +85,12 @@ const DonorSignupForm = () => {
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem className="">
-                    <FormLabel required>Email address</FormLabel>
+                    <FormLabel required>Phone number</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Phone number"
                         type="number"
+                        inputMode="numeric"
                         {...field}
                       />
                     </FormControl>
