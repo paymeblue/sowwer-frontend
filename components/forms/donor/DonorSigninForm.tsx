@@ -17,27 +17,28 @@ import { Input as InputV2 } from "@components/ui/input-with-icon";
 import { Input } from "@components/ui/input";
 import { useRouter } from "next/navigation";
 // import { useRouter } from "next/navigation";
-// import { useLoginMutation } from "services/auth";
+import { useLoginMutation } from "services/auth";
 
 const DonorSigninForm = () => {
   const router = useRouter();
-  // const [login, result] = useLoginMutation();
+  const [login, { isSuccess }] = useLoginMutation();
   const form = useForm<z.infer<typeof DonorSigninValidation>>({
     resolver: zodResolver(DonorSigninValidation),
     defaultValues: {
       email: "",
     },
   });
-  const onSubmit = async (values: z.infer<typeof DonorSigninValidation>) => {
-    console.log("Submitted", { values });
-    // const { email, password } = values;
-    // await login({
-    //   identifier: email,
-    //   password,
-    //   type: "donor",
-    // });
-    // console.log(result);
-    router.push("/donor");
+  const onSubmit = (values: z.infer<typeof DonorSigninValidation>) => {
+    const { email, password } = values;
+    login({
+      identifier: email,
+      password,
+      type: "donor",
+    });
+
+    if (isSuccess) {
+      router.push("/donor");
+    }
   };
   return (
     <div className="w-full">

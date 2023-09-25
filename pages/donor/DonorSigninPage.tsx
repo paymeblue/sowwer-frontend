@@ -1,11 +1,20 @@
 import Link from "next/link";
 import CenterLayoutMidWrapper from "../../components/shared/Layouts/Center/CenterLayoutMidWrapper";
-import DonorSigninForm from "@components/forms/donor/DonorSigninForm";
+import dynamic from "next/dynamic";
+// import DonorSigninForm from "@components/forms/donor/DonorSigninForm";
+import Loader from "@components/shared/Loader";
+const DynamicDonorSigninFrom = dynamic(
+  () => import("@components/forms/donor/DonorSigninForm"),
+  {
+    loading: () => <Loader />,
+    ssr: false,
+  }
+) as any;
 
 const DonorSigninPage = () => {
   return (
     <CenterLayoutMidWrapper title="Donor Sign In">
-      <DonorSigninForm />
+      <DynamicDonorSigninFrom />
       <p className="text_small_body_r mt-4 text-center">
         Don't have an account?{" "}
         <Link href="/auth/donor/sign-up">

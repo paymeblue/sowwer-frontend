@@ -9,6 +9,7 @@ import {
   REHYDRATE,
   persistStore,
 } from "redux-persist";
+import {} from "next-redux-wrapper";
 import api from "services/api/apiSlice";
 import rootReducer from "./rootReducer";
 
@@ -31,6 +32,3 @@ setupListeners(store.dispatch);
 export default store;
 
 export const persistor = persistStore(store);
-// export const wrapper = createWrapper(() => {
-//   return store;
-// });
