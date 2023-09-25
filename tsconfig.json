@@ -28,7 +28,8 @@
       "@shared/*": ["components/shared/*"],
       "@lib/*": ["lib/utils/*"],
       "@hooks/*": ["hooks/*"],
-      "@store/*": ["store/*"]
+      "@store/*": ["store/*"],
+      "react": ["./node_modules/@types/react"]
     },
     "incremental": true,
     "plugins": [

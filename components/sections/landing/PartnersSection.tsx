@@ -51,7 +51,7 @@ const PartnersSection = () => {
           <div onClick={handlePrev} className="cursor-pointer">
             <LeftCirlceArrow />
           </div>
-          <div className=" w-[85%]">
+          <div className="w-[85%]">
             <Swiper
               slidesPerView={1}
               spaceBetween={0}
