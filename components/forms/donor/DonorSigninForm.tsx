@@ -15,30 +15,18 @@ import { Button } from "@components/ui/button";
 import Link from "next/link";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import { Input } from "@components/ui/input";
-import { useRouter } from "next/navigation";
-// import { useRouter } from "next/navigation";
-import { useLoginMutation } from "services/auth";
+import useDonorSignin from "@hooks/donor/useDonorSignin";
 
 const DonorSigninForm = () => {
-  const router = useRouter();
-  const [login, { isSuccess }] = useLoginMutation();
+  const { loading, loginDonor } = useDonorSignin();
   const form = useForm<z.infer<typeof DonorSigninValidation>>({
     resolver: zodResolver(DonorSigninValidation),
     defaultValues: {
       email: "",
     },
   });
-  const onSubmit = (values: z.infer<typeof DonorSigninValidation>) => {
-    const { email, password } = values;
-    login({
-      identifier: email,
-      password,
-      type: "donor",
-    });
-
-    if (isSuccess) {
-      router.push("/donor");
-    }
+  const onSubmit = async (values: z.infer<typeof DonorSigninValidation>) => {
+    await loginDonor(values);
   };
   return (
     <div className="w-full">
@@ -81,7 +69,7 @@ const DonorSigninForm = () => {
               </span>
             </Link>
           </div>
-          <Button type="submit" className="mt-8 w-full">
+          <Button loading={loading} type="submit" className="mt-8 w-full">
             Sign in
           </Button>
         </form>

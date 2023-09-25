@@ -7,6 +7,7 @@ import localFont from "next/font/local";
 import "react-quill/dist/quill.snow.css";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
 import ReduxProvider from "redux/ReduxProvider";
+import { Toaster } from "@components/ui/toaster";
 
 const plusJakarta = PlusJarkataSans({
   subsets: ["latin"],
@@ -38,6 +39,7 @@ export default function RootLayout({
         className={`${libreBaskerville.variable} ${baskerville.variable} ${plusJakarta.variable}`}
       >
         <ReduxProvider>{children}</ReduxProvider>
+        <Toaster />
       </body>
     </html>
   );
