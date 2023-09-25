@@ -31,3 +31,6 @@ setupListeners(store.dispatch);
 export default store;
 
 export const persistor = persistStore(store);
+// export const wrapper = createWrapper(() => {
+//   return store;
+// });

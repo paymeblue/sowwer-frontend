@@ -1,6 +1,8 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "./typings";
+import storage from "redux/sync_storage";
+import { persistReducer } from "redux-persist";
 
 type AuthState = {
   user: User | null;
@@ -39,9 +41,15 @@ const authSlice = createSlice({
 
 export const { setCredentials, logout } = authSlice.actions;
 
+const persistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["user", "token", "refreshToken"],
+};
+
 const authReducer = authSlice.reducer;
 
-export default authReducer;
+export default persistReducer(persistConfig, authReducer);
 
 // export const selectCurrentUser = (state: RootState) => state.auth.user;
 // export const selectCurrentUserToken = (state: RootState) => state.auth.token;
