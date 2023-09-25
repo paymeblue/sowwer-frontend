@@ -123,7 +123,7 @@ const Footer = ({ variant = "default" }: Props) => {
         </div>
         <div className="mt-10 border-t-[0.3px] border-[#C4C4C4] py-8">
           <div className="flex items-center space-x-6">
-            <span className="text-[0.8rem] text-[rgba(255,_255,_255,_0.8)]">
+            <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)]">
               © 2023 Soower. All rights reserved.
             </span>
             <Link href="/">
