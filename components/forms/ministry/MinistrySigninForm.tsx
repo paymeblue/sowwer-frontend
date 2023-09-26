@@ -15,7 +15,7 @@ import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import Link from "next/link";
-import useMinistrySignin from "@hooks/ministry/useMinistrySignin";
+import useMinistrySignin from "@hooks/auth/useMinistrySignin";
 
 const MinistrySigninForm = () => {
   const { loading, loginMinistry } = useMinistrySignin();

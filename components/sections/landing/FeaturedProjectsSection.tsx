@@ -12,39 +12,51 @@ import {
   defaultVariant,
 } from "lib/variants";
 
-const featuredProjects: IProject[] = [
+export const featuredProjects: IProject[] = [
   {
     image: "/assets/images/happy_wom.png",
     category: "widows",
-    tagColor: "#9B51E0",
-    bgColor: "#9747FF24",
+    id: "db7e493b-fe92-4a11-b0e5-505943300ssa2",
+    targetAmount: "1000000.00",
+
     title: "Name of project",
-    subTitle: "BY FAMILY WORSHIP CENTER",
-    desc: "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
-    raised: "2 million",
-    impacted: "52,000",
-  },
-  {
-    image: "/assets/images/children_running.png",
-    category: "orphans",
-    tagColor: "#F2994A",
-    bgColor: "#F2994A24",
-    title: "Name of project",
-    subTitle: "BY FAMILY WORSHIP CENTER",
-    desc: "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
-    raised: "2 million",
-    impacted: "52,000",
+    organisedBy: "BY FAMILY WORSHIP CENTER",
+    description:
+      "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
+    amountRaised: "2 million",
+    createdAt: "2023-08-31T14:37:36.000Z",
+    donors: 12,
+    donationPercent: "67.94",
   },
   {
     image: "/assets/images/wom_busy.png",
-    category: "missions",
-    tagColor: "#2F80ED",
-    bgColor: "#2F80ED24",
+    category: "orphans",
+    id: "db7e493b-fe92-4a11-b0e5-505943300ssa2",
+    targetAmount: "1000000.00",
+
     title: "Name of project",
-    subTitle: "BY FAMILY WORSHIP CENTER",
-    desc: "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
-    raised: "2 million",
-    impacted: "52,000",
+    organisedBy: "BY FAMILY WORSHIP CENTER",
+    description:
+      "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
+    amountRaised: "2 million",
+    createdAt: "2023-08-31T14:37:36.000Z",
+    donors: 12,
+    donationPercent: "67.94",
+  },
+  {
+    image: "/assets/images/children_running.png",
+    category: "missions",
+    id: "db7e493b-fe92-4a11-b0e5-505943300ssa2",
+    targetAmount: "1000000.00",
+
+    title: "Name of project",
+    organisedBy: "BY FAMILY WORSHIP CENTER",
+    description:
+      "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
+    amountRaised: "2 million",
+    createdAt: "2023-08-31T14:37:36.000Z",
+    donors: 12,
+    donationPercent: "67.94",
   },
 ];
 

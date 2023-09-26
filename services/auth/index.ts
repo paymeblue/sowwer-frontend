@@ -13,7 +13,7 @@ import {
   RegisterDonorRequest,
   ResetPassowrdRequest,
   SignupResponse,
-} from "./typings";
+} from "../typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
 

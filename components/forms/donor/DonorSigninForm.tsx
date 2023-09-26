@@ -15,7 +15,7 @@ import { Button } from "@components/ui/button";
 import Link from "next/link";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import { Input } from "@components/ui/input";
-import useDonorSignin from "@hooks/donor/useDonorSignin";
+import useDonorSignin from "@hooks/auth/useDonorSignin";
 
 const DonorSigninForm = () => {
   const { loading, loginDonor } = useDonorSignin();

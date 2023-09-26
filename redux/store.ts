@@ -9,7 +9,6 @@ import {
   REHYDRATE,
   persistStore,
 } from "redux-persist";
-import {} from "next-redux-wrapper";
 import api from "services/api/apiSlice";
 import rootReducer from "./rootReducer";
 
