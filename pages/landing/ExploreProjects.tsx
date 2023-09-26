@@ -1,7 +1,7 @@
 "use client";
 import SectionContainer from "@components/sections/SectionContainer";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
-import ExploreProjectsTab from "@components/tabs/landing/ExplorePorjectsTab";
+import ExploreProjectsTab from "@components/tabs/landing/ExploreProjectsTab";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 

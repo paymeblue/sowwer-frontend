@@ -35,7 +35,7 @@ const Footer = ({ variant = "default" }: Props) => {
     );
   }
   return (
-    <footer className="mt-auto min-h-[40vh] w-full bg-secondary-black py-8">
+    <footer className="mt-auto min-h-[40vh] w-full bg-secondary-black pt-8">
       <SectionContainer>
         <div className="flex w-full justify-between">
           {/* left */}

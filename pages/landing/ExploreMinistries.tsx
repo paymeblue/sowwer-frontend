@@ -1,31 +1,9 @@
 "use client";
-import MinistryCard, { IMinistryCard } from "@components/cards/MinistryCard";
 import SectionContainer from "@components/sections/SectionContainer";
-import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import ExploreMinistriesTab from "@components/tabs/landing/ExploreMinistriesTab";
 import { motion } from "framer-motion";
-import {
-  DEFAULT_VIEWPORT,
-  cardContainerVariant,
-  defaultVariant,
-} from "lib/variants";
-
-const exploreMinistries: IMinistryCard[] = [
-  {
-    name: "Family Worship Centre",
-    location: "Abuja, Nigeria",
-    logoUrl: "",
-  },
-  {
-    name: "The Bible Society of Nigeria",
-    location: "Abuja, Nigeria",
-    logoUrl: "",
-  },
-  {
-    name: "Reedemed Christian Church of God",
-    location: "Abuja, Nigeria",
-    logoUrl: "",
-  },
-];
+import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
 const ExploreMinistries = () => {
   return (
@@ -47,31 +25,9 @@ const ExploreMinistries = () => {
             different ministries across Nigeria and supporting their projects.
           </p>
         </div>
-        <div className="mt-8 flex w-full flex-col items-center  justify-center">
-          <h3 className="text_regular_body_sb text-center">
-            Browse by category
-          </h3>
-          <Tabs defaultValue="all-ministries" className="mt-4">
-            <TabsList className="flex items-center space-x-2">
-              <TabsTrigger value="all-ministries">All Ministries</TabsTrigger>
-              <TabsTrigger value="churches">Churches</TabsTrigger>
-              <TabsTrigger value="christian-organizations">
-                Christian Organizations
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-          <motion.div
-            variants={cardContainerVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={DEFAULT_VIEWPORT}
-            className="mt-10 grid w-full grid-cols-3 gap-6"
-          >
-            {exploreMinistries.map((ministry, i) => {
-              return <MinistryCard {...ministry} key={ministry.name + i} />;
-            })}
-          </motion.div>
-        </div>
+        <NoSSRWrapper>
+          <ExploreMinistriesTab />
+        </NoSSRWrapper>
       </motion.section>
     </SectionContainer>
   );
