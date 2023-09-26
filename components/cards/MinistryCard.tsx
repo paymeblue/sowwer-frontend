@@ -15,7 +15,7 @@ const MinistryCard = ({ name, location, logoUrl }: IMinistryCard) => {
         {!logoUrl ? (
           <div className="h-20 w-20 rounded-full bg-gray-300" />
         ) : (
-          <div className="relative h-20 w-20 overflow-hidden rounded-full bg-gray-300">
+          <div className="relative h-20 w-20 overflow-hidden rounded-full">
             <Image
               src={logoUrl}
               alt="ministry logo"
