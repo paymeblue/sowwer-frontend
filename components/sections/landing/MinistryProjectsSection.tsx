@@ -34,7 +34,7 @@ const MinistryProjectsSection = ({ ministryId }: Props) => {
   }
 
   return (
-    <div className="grid w-full grid-cols-3">
+    <div className="grid w-full grid-cols-3 gap-8">
       {ministryProjects?.data.map((project) => {
         return <ProjectCard variant="default" {...project} key={project.id} />;
       })}
