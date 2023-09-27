@@ -19,7 +19,8 @@ const MinistryProjectsSection = ({ ministryId }: Props) => {
     isFetching,
   } = useGetMinistryProjectsQuery({ id: ministryId, page: pagination.current });
 
-  if (!ministryProjects?.data && (isLoading || isFetching)) return <Loader />;
+  if (!ministryProjects?.data && (isLoading || isFetching))
+    return <Loader className="h-[50vh]" />;
 
   if (!ministryProjects?.data.length && !(isLoading || isFetching)) {
     return (
