@@ -1,12 +1,29 @@
 "use client";
-import SelectMinistryCategory from "@components/sections/auth/SelectMinistryCategory";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import MinistryDetails from "@components/sections/auth/MinistryDetails";
 import SideLayoutWrapper from "@components/shared/Layouts/Side/SideLayoutWrapper";
 import Stepper from "@components/ui/stepper";
-import { useState } from "react";
+import { MinistrySignupMinistryDetailsValidation } from "lib/validations/auth";
 
 const MinistrySignupPage = () => {
   const [activeStep, setActiveStep] = useState(0);
-
+  const [selectedCategory, setSelectedCategory] = useState<
+    null | "church" | "christian organization"
+  >(null);
+  const ministryDetailsForm = useForm<
+    z.infer<typeof MinistrySignupMinistryDetailsValidation>
+  >({
+    resolver: zodResolver(MinistrySignupMinistryDetailsValidation),
+  });
+  // const personInformationForm = useForm<
+  //   z.infer<typeof MinistrySignupPersonalInformationValidation>
+  // >({
+  //   resolver: zodResolver(MinistrySignupPersonalInformationValidation),
+  // });
   const steps = [
     "Ministry Details",
     "Personal Information",
@@ -15,7 +32,14 @@ const MinistrySignupPage = () => {
   function getSectionComponent() {
     switch (activeStep) {
       case 0:
-        return <SelectMinistryCategory setActiveStep={setActiveStep} />;
+        return (
+          <MinistryDetails
+            setActiveStep={setActiveStep}
+            form={ministryDetailsForm}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        );
       default:
         return null;
     }

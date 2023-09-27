@@ -7,6 +7,7 @@ interface ICardSelector
   desc?: string;
   containerClassname?: HTMLAttributes<HTMLDivElement>["className"];
   right?: ReactNode;
+  left?: ReactNode;
 }
 
 const CardSelector = ({
@@ -14,6 +15,7 @@ const CardSelector = ({
   desc,
   containerClassname,
   right,
+  left,
   ...props
 }: ICardSelector) => {
   return (
@@ -26,7 +28,9 @@ const CardSelector = ({
     >
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center space-x-2">
-          <div className="aspect-square w-10 rounded-full bg-[#FFF8D9]" />
+          <div className="flex aspect-square w-10 items-center justify-center rounded-full bg-[#FFF8D9]">
+            {left && left}
+          </div>
           <div className="flex flex-col space-y-0">
             <h4 className="text_large_body_r text-[1rem] font-[600] capitalize">
               {title}
