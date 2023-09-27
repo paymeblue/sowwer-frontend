@@ -32,7 +32,9 @@ const ForMinstriesPage = () => {
             pellentesque.
           </p>
           <div className="mt-6 flex items-center space-x-4">
-            <Button>Register as a ministry</Button>
+            <Link href="/auth/ministry/sign-up">
+              <Button>Register as a ministry</Button>
+            </Link>
             <Link href="/auth/ministry/sign-in">
               <Button variant="outline">Login to ministry account</Button>
             </Link>

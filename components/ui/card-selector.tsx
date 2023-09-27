@@ -28,7 +28,7 @@ const CardSelector = ({
         <div className="flex items-center space-x-2">
           <div className="aspect-square w-10 rounded-full bg-[#FFF8D9]" />
           <div className="flex flex-col space-y-0">
-            <h4 className="text_large_body_r text-[1rem] font-[600]">
+            <h4 className="text_large_body_r text-[1rem] font-[600] capitalize">
               {title}
             </h4>
             {desc && <p className="text_small_body_r">{desc}</p>}
