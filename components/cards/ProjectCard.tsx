@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@components/ui/button";
 import { Progress } from "@components/ui/progress";
 import { truncateTextWithEllipsis } from "@lib/capitalize";
+import Link from "next/link";
 
 export interface IProject {
   id: string;
@@ -30,6 +31,7 @@ const ProjectCard = ({
   donationPercent,
   targetAmount,
   organisedBy,
+  id,
   variant = "default",
 }: IProject) => {
   const getColorForTag = (category: string) => {
@@ -92,10 +94,12 @@ const ProjectCard = ({
               </div>
               <Progress value={Number(donationPercent) ?? 0} className="h-2" />
             </div>
-            <Button className="space-x-2">
-              <Heart2 set="bold" size={19} />
-              <span>Make a donation</span>
-            </Button>
+            <Link href={`/projects/${id}`}>
+              <Button className="w-full space-x-2">
+                <Heart2 set="bold" size={19} />
+                <span>Make a donation</span>
+              </Button>
+            </Link>
           </div>
         )}
 

@@ -32,6 +32,7 @@ const Logo = ({ className, logoVariant = "normal" }: Props) => {
           alt="soower logo"
           fill
           className="object-contain"
+          priority
         />
       </div>
     </Link>
