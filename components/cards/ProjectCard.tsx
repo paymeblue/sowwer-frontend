@@ -7,6 +7,7 @@ import { Progress } from "@components/ui/progress";
 import { truncateTextWithEllipsis } from "@lib/capitalize";
 import Link from "next/link";
 import { ImageIcon } from "lucide-react";
+import { formatCurrency } from "@lib/functions";
 
 export interface IProject {
   id: string;
@@ -100,13 +101,13 @@ const ProjectCard = ({
             <div className="flex w-full flex-col space-y-2">
               <div className="flex items-center justify-between">
                 <h5 className="font-sub-title text-[.8rem] font-bold">
-                  ₦{amountRaised}{" "}
+                  ₦{formatCurrency(amountRaised)}{" "}
                   <span className="font-body text-[.7rem] font-[400]">
                     raised
                   </span>
                 </h5>
                 <h5 className="font-title text-[1rem] font-bold">
-                  ₦{targetAmount}
+                  ₦{formatCurrency(targetAmount)}
                 </h5>
               </div>
               <Progress value={Number(donationPercent) ?? 0} className="h-2" />
