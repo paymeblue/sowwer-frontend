@@ -271,10 +271,11 @@ export type MinistryProjectsResponse = TResponse<{
   category: "widows" | "orphans" | "missions";
   amountRaised: string;
   status: string;
-  image: string | null;
+  image: string | null | undefined;
   donors: number;
   request_payout: boolean;
   paid: boolean;
+  donationPercent: string;
 }>;
 
 export type MinistryGeneralDonationsResponse = TResponse<{

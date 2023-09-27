@@ -6,17 +6,18 @@ import { Button } from "@components/ui/button";
 import { Progress } from "@components/ui/progress";
 import { truncateTextWithEllipsis } from "@lib/capitalize";
 import Link from "next/link";
+import { ImageIcon } from "lucide-react";
 
 export interface IProject {
   id: string;
   title: string;
   targetAmount: string;
-  image: string | null;
-  description: string | null;
+  image: string | null | undefined;
+  description?: string | null;
   createdAt: string;
   category: "widows" | "orphans" | "missions" | string;
   amountRaised: string;
-  organisedBy: string;
+  organisedBy?: string;
   donationPercent: string;
   donors: number;
   variant?: "default" | "featured" | "general";
@@ -50,10 +51,24 @@ const ProjectCard = ({
   };
 
   return (
-    <div className="overflow-hidden rounded-[15px] bg-white shadow-featured-project-card">
-      <div className="relative aspect-[1/0.5] w-full overflow-hidden">
-        {image && (
-          <Image src={image} alt="happy woman" fill className="object-cover" />
+    <div className="group overflow-hidden rounded-[15px] bg-white shadow-featured-project-card">
+      <div
+        className={`relative aspect-[1/0.5] w-full overflow-hidden ${
+          !image && "flex items-center justify-center bg-gray-200"
+        }`}
+      >
+        {image ? (
+          <Image
+            src={image}
+            alt="happy woman"
+            fill
+            className="object-cover transition-all duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="spae-y-2 flex flex-col items-center text-gray-400">
+            <ImageIcon />
+            <p className="text_tiny_body_r text-gray-400">No cover photo</p>
+          </div>
         )}
       </div>
       <div className="px-6 py-6 ">
@@ -67,7 +82,9 @@ const ProjectCard = ({
           {title}
         </h3>
         {(variant === "default" || variant === "general") && (
-          <h5 className="text_tiny_body_r uppercase">BY {organisedBy}</h5>
+          <h5 className="text_tiny_body_r uppercase">
+            {organisedBy && <span>BY {organisedBy}</span>}
+          </h5>
         )}
         <p className="text_small_body_p mt-2 h-[70px]">
           {description

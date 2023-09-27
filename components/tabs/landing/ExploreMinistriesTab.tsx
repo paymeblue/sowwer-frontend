@@ -61,6 +61,7 @@ const ExploreMinistriesTab = () => {
                   location={state}
                   logoUrl={logo}
                   name={name}
+                  id={id}
                 />
               );
             })

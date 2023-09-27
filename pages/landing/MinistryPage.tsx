@@ -17,6 +17,7 @@ import { useGetMinistryDetailsQuery } from "services/ministry";
 import Loader from "@components/shared/Loader";
 import EmptyState from "@components/shared/EmptyState";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
+import MinistryProjectsSection from "@components/sections/landing/MinistryProjectsSection";
 
 interface Props {
   ministryId: string;
@@ -43,6 +44,7 @@ const MinistryPageComp = ({ ministryId }: Props) => {
   }
 
   const { about, state, website, name } = ministryDetails?.data!;
+
   return (
     <SectionContainer>
       <motion.div
@@ -121,6 +123,9 @@ const MinistryPageComp = ({ ministryId }: Props) => {
                 </Button>
               </div>
             </div>
+          </TabsContent>
+          <TabsContent value="ministry-projects">
+            <MinistryProjectsSection ministryId={ministryId} />
           </TabsContent>
         </Tabs>
       </motion.div>

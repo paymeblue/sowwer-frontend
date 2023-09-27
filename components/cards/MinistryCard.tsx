@@ -1,14 +1,16 @@
 import { Button } from "@components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import { Heart2, Location } from "react-iconly";
 
 export interface IMinistryCard {
   name: string;
   location: string;
   logoUrl: string | null;
+  id: string;
 }
 
-const MinistryCard = ({ name, location, logoUrl }: IMinistryCard) => {
+const MinistryCard = ({ name, location, logoUrl, id }: IMinistryCard) => {
   return (
     <div className="overflow-hidden rounded-[15px] bg-white p-6 shadow-featured-project-card">
       <div className="mb-10 flex flex-col items-center justify-between space-y-8">
@@ -32,10 +34,12 @@ const MinistryCard = ({ name, location, logoUrl }: IMinistryCard) => {
           </div>
         </div>
       </div>
-      <Button className="w-full space-x-2">
-        <Heart2 set="bold" size={19} />
-        <span>Make a donation</span>
-      </Button>
+      <Link href={`/ministries/${id}`}>
+        <Button className="w-full space-x-2">
+          <Heart2 set="bold" size={19} />
+          <span>Make a donation</span>
+        </Button>
+      </Link>
     </div>
   );
 };
