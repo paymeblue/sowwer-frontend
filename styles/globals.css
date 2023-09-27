@@ -97,7 +97,7 @@ input[type="number"] {
     @apply font-title text-[2.8rem] leading-[3rem] text-black;
   }
   .text_variant_h3 {
-    @apply font-title text-[2.2rem] leading-[3rem];
+    @apply font-title text-[2.2rem] leading-[3rem] text-black;
   }
 
   .text_large_header_b {

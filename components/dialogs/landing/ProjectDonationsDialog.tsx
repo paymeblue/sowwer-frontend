@@ -86,7 +86,7 @@ const ProjectDonationsDialog = ({ projectId, title }: Props) => {
               })}
             </div>
             <Pagination
-              containerClassname="mt-0"
+              containerClassname="mt-0 justify-center"
               handleNext={handleNext}
               handlePrevious={handlePrevious}
               hasNext={

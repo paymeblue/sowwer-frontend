@@ -20,12 +20,12 @@ const Pagination = ({
 }: Props) => {
   if (!hasNext && !hasPrevious) return null;
   return (
-    <div className={cn("mt-10 flex items-center gap-x-4", containerClassname)}>
+    <div className={cn("mt-10 flex items-center gap-x-10", containerClassname)}>
       <Button
         variant="link"
         disabled={!hasPrevious}
         onClick={handlePrevious}
-        className="space-x-2 text-body-2"
+        className="space-x-2 px-0 text-body-2"
       >
         <ArrowLeft size={20} /> <span>Previous</span>
       </Button>
@@ -33,7 +33,7 @@ const Pagination = ({
         variant="link"
         disabled={!hasNext}
         onClick={handleNext}
-        className="space-x-2 text-body-2"
+        className="space-x-2 px-0 text-body-2"
       >
         <span>Next</span> <ArrowRight size={20} />
       </Button>
