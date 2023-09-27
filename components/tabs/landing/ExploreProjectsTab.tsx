@@ -3,18 +3,16 @@ import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import ProjectCard from "@components/cards/ProjectCard";
 import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
+import Pagination from "@components/shared/Pagination";
 import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
+import usePagination from "@hooks/general/usePagination";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import { useState } from "react";
 import { useExploreProjectsQuery } from "services/projects";
 
 const ExploreProjectsTab = () => {
-  const [pagination] = useState({
-    current: 1,
-    pageSize: 6,
-    total: 6,
-  });
+  const { pagination, handleNext, handlePrevious } = usePagination();
   const [category, setCategory] = useState<
     "all" | "widows" | "orphans" | "missions"
   >("all");
@@ -69,6 +67,12 @@ const ExploreProjectsTab = () => {
           )}
         </motion.div>
       )}
+      <Pagination
+        handleNext={handleNext}
+        handlePrevious={handlePrevious}
+        hasNext={data?.paginationInfo.hasNext || false}
+        hasPrevious={data?.paginationInfo.hasPrevious || false}
+      />
     </div>
   );
 };

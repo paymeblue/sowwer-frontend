@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 
-import DonationCard from "@components/cards/DonationCard";
 import SectionContainer from "@components/sections/SectionContainer";
 import Loader from "@components/shared/Loader";
 import { Button } from "@components/ui/button";
@@ -12,10 +11,7 @@ import { Link as LinkIcon } from "lucide-react";
 import { Heart2 } from "react-iconly";
 import { motion } from "framer-motion";
 
-import {
-  useGetProjectDetailsQuery,
-  useGetMinistryProjectDonorsQuery,
-} from "services/projects";
+import { useGetProjectDetailsQuery } from "services/projects";
 import Image from "next/image";
 import EmptyState from "@components/shared/EmptyState";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
@@ -23,6 +19,7 @@ import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import useCopyToClipboard from "@hooks/general/useCopyToClipboard";
 import { useToast } from "@components/ui/use-toast";
+import ProjectDonationsDialog from "@components/dialogs/landing/ProjectDonationsDialog";
 
 interface Props {
   projectId: string;
@@ -54,13 +51,7 @@ const PageComp = ({ projectId }: Props) => {
     isFetching,
   } = useGetProjectDetailsQuery(projectId);
 
-  const { data: projectDonors } = useGetMinistryProjectDonorsQuery(projectId);
-  const sortedProjectDonors = projectDonors?.data
-    ?.map((item) => ({ ...item }))
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-
-  if (!projectDetails?.data && (isLoading || isFetching))
-    return <Loader showLogo />;
+  if (!projectDetails?.data && (isLoading || isFetching)) return <Loader />;
 
   if (!projectDetails?.data && !(isLoading || isFetching)) {
     return (
@@ -175,34 +166,7 @@ const PageComp = ({ projectId }: Props) => {
           </div>
 
           <div className=" flex w-full justify-center">
-            <div className="h-fit w-[70%] rounded-[15px] bg-white p-[2rem]">
-              <h3 className="text_variant_h2 text-[2rem]">Donations</h3>
-              <div className="mt-6 min-h-[10rem] w-full space-y-10">
-                {sortedProjectDonors && sortedProjectDonors.length ? (
-                  sortedProjectDonors.slice(0, 3).map((donor) => {
-                    const { amount, name, createdAt, id } = donor;
-                    return (
-                      <DonationCard
-                        key={id}
-                        name={name}
-                        amount={amount}
-                        createdAt={createdAt}
-                      />
-                    );
-                  })
-                ) : (
-                  <p className="text-regular-body-p text-center ">
-                    No donations yet for this project
-                  </p>
-                )}
-              </div>
-              <Button
-                variant="outline"
-                className="mt-10 w-full border-accent text-accent"
-              >
-                View more donations
-              </Button>
-            </div>
+            <ProjectDonationsDialog projectId={projectId} title={title} />
           </div>
         </section>
       </motion.div>

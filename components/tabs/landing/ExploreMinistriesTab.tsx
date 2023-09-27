@@ -3,20 +3,16 @@ import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import MinistryCard from "@components/cards/MinistryCard";
 import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
-import { Button } from "@components/ui/button";
+import Pagination from "@components/shared/Pagination";
 import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
+import usePagination from "@hooks/general/usePagination";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useExploreMinistriesQuery } from "services/ministry";
 
 const ExploreMinistriesTab = () => {
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 6,
-    total: 6,
-  });
+  const { pagination, handleNext, handlePrevious } = usePagination();
   const [category, setCategory] = useState<"all" | "church" | "organisation">(
     "all"
   );
@@ -79,34 +75,12 @@ const ExploreMinistriesTab = () => {
           )}
         </motion.div>
       )}
-      <div className="mt-10 flex items-center gap-x-4">
-        <Button
-          variant="link"
-          disabled={!data?.paginationInfo.hasPrevious}
-          onClick={() => {
-            setPagination((prev) => ({
-              ...prev,
-              current: prev.current - 1,
-            }));
-          }}
-          className="space-x-2 text-body-2"
-        >
-          <ArrowLeft size={20} /> <span>Previous</span>
-        </Button>
-        <Button
-          variant="link"
-          disabled={!data?.paginationInfo.hasNext}
-          onClick={() => {
-            setPagination((prev) => ({
-              ...prev,
-              current: prev.current + 1,
-            }));
-          }}
-          className="space-x-2 text-body-2"
-        >
-          <span>Next</span> <ArrowRight size={20} />
-        </Button>
-      </div>
+      <Pagination
+        handleNext={handleNext}
+        handlePrevious={handlePrevious}
+        hasNext={data?.paginationInfo.hasNext || false}
+        hasPrevious={data?.paginationInfo.hasPrevious || false}
+      />
     </div>
   );
 };

@@ -177,9 +177,9 @@ const projects = api.injectEndpoints({
     }),
     getMinistryProjectDonors: build.query<
       GetDonorsForProjectResponse,
-      string | undefined
+      { id: string | undefined; page: number }
     >({
-      query: (id) => `donors/project/${id}?page=1&limit=10`,
+      query: (body) => `donors/project/${body.id}?page=${body.page}&limit=6`,
       // Invalidate cache tags specific to ministry projects
       providesTags: cacher.providesNestedList("Projects") as any,
       // Transform response and error
