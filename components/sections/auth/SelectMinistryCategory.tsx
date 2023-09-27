@@ -7,7 +7,7 @@ interface Props {
 
 const SelectMinistryCategory = ({}: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<
-    null | "church" | "christian-organization"
+    null | "church" | "christian organization"
   >(null);
   return (
     <section className="p-8">
@@ -25,7 +25,7 @@ const SelectMinistryCategory = ({}: Props) => {
             />
             <CardSelector
               title="Christian Organization"
-              onClick={() => setSelectedCategory("christian-organization")}
+              onClick={() => setSelectedCategory("christian organization")}
               desc="A registered Christian institution or organization in Nigeria."
             />
           </div>
