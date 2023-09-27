@@ -21,12 +21,33 @@ import EmptyState from "@components/shared/EmptyState";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import useCopyToClipboard from "@hooks/general/useCopyToClipboard";
+import { useToast } from "@components/ui/use-toast";
 
 interface Props {
   projectId: string;
 }
 
 const PageComp = ({ projectId }: Props) => {
+  const { toast } = useToast();
+  const { copyToClipboard } = useCopyToClipboard({
+    onSuccess: () => {
+      toast({
+        variant: "default",
+        title: "Project link copied successfully",
+        description: "You can now share this link with friends and family",
+      });
+    },
+    onFailure: () => {
+      toast({
+        variant: "destructive",
+        title: "Error occured copying link",
+        description:
+          "There seems to be an error copying project link, please try again later",
+      });
+    },
+  });
+
   const {
     data: projectDetails,
     isLoading,
@@ -63,6 +84,7 @@ const PageComp = ({ projectId }: Props) => {
     donors,
     image,
     donationPercent,
+    link,
   } = projectDetails?.data!;
 
   return (
@@ -130,7 +152,11 @@ const PageComp = ({ projectId }: Props) => {
                   <Heart2 set="bold" size={19} />
                   <span>Donate</span>
                 </Button>
-                <Button variant="link" className="space-x-2 text-accent">
+                <Button
+                  variant="link"
+                  className="space-x-2 text-accent"
+                  onClick={() => copyToClipboard(link)}
+                >
                   <LinkIcon size={19} />
                   <span>Share this project</span>
                 </Button>
