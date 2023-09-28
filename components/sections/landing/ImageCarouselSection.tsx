@@ -28,7 +28,7 @@ const ImageCarouselSection = () => {
   return (
     <Swiper
       slidesPerView={2}
-      spaceBetween={0}
+      spaceBetween={5}
       slidesPerGroup={1}
       loop={true}
       autoplay={{

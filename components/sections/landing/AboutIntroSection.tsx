@@ -15,7 +15,7 @@ const AboutIntroSection = () => {
           viewport={DEFAULT_VIEWPORT}
           className="flex flex-col space-y-4"
         >
-          <h2 className="text_variant_h2 text-[2.6rem] leading-[3.3rem]">
+          <h2 className="text_variant_h2 max-lg:text-[2.6rem] max-lg:leading-[3.3rem]">
             The Kingdom Investment Platform. <br /> Perfectly positioned to lend
             a helping hand.
           </h2>
