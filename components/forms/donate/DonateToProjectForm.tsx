@@ -358,7 +358,7 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
           type="submit"
           className="ml-auto mt-8 w-fit space-x-2"
         >
-          {(!isLoading || !verifyingPayment) && <Heart2 set="bold" size={19} />}
+          {!isLoading && !verifyingPayment && <Heart2 set="bold" size={19} />}
           <span>Donate now</span>
         </Button>
       </form>

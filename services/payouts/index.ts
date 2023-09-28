@@ -19,9 +19,11 @@ const payouts = api.injectEndpoints({
         method: "POST",
         body,
       }),
+      // invalidatesTags: cacher.cacheByIdArgProperty("Projects"),
       transformResponse: (response: AccountResponse, meta, arg): any => {
         return response;
       },
+      invalidatesTags: ["Projects"],
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
