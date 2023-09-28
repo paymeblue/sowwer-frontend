@@ -170,7 +170,7 @@ input[type="number"] {
   }
 
   .safearea-top {
-    @apply mt-[18vh];
+    @apply mt-[16vh] lg:mt-[18vh];
   }
 
   /* Stepper component styling */

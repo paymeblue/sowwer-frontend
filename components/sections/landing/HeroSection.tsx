@@ -15,7 +15,7 @@ const Hero = () => {
             initial="hidden"
             whileInView="visible"
             viewport={DEFAULT_VIEWPORT}
-            className="text-center font-title text-[2.5rem] leading-[3rem] text-black lg:text-[4.6rem] lg:leading-[4.6rem]"
+            className="text-center font-title text-[2.6rem] leading-[3.3rem] text-black lg:text-[4.6rem] lg:leading-[4.6rem]"
           >
             Alone we can do so little; <br /> together we can do so much.
           </motion.h1>

@@ -16,18 +16,21 @@ import ContactForm from "@components/forms/ContactForm";
 const ContactPage = () => {
   return (
     <SectionContainer>
-      <section className="safearea-top my-40 flex w-full justify-between">
+      <section className="safearea-top mb-20 flex w-full flex-col justify-between lg:mb-40 lg:flex-row">
         <motion.div
           variants={defaultVariant({})}
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="flex w-[50%] flex-col"
+          className="flex w-full flex-col lg:w-[50%]"
         >
-          <h2 className="text_variant_h2">Contact us</h2>
-          <p className="font-body text-[.9rem] leading-[1.5rem] text-body-1">
+          <h2 className="text_variant_h2 max-lg:text-[2.6rem] max-lg:leading-[3.3rem]">
+            Contact us
+          </h2>
+          <p className="font-body text-[.9rem] leading-[1.5rem] text-body-2">
             Want to make an inquiry or give us some feedback? Fill out the form
-            and <br /> we’ll be in touch within 24hours.
+            and <br className="hidden lg:inline" /> we’ll be in touch within
+            24hours.
           </p>
           <div className="mt-8 flex items-center gap-6">
             <div className="cursor-pointer text-black">
@@ -67,12 +70,12 @@ const ContactPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="relative mr-14 w-[35%]"
+          className="relative mr-0 mt-10 w-full lg:mr-14 lg:mt-0 lg:w-[35%]"
         >
-          <div className="z-20 h-full w-full bg-[#fff] p-10 shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)]">
+          <div className="z-20 h-full w-full bg-[#fff] p-8 shadow-[-18px_10px_30px_-4px_rgba(0,_0,_0,_0.05),_-3px_0px_15px_-15px_rgba(0,_0,_0,_0.15),_5px_0px_20px_0px_rgba(0,_0,_0,_0.05)] lg:p-10">
             <ContactForm />
           </div>
-          <div className="absolute -right-8 top-8 -z-10  h-full w-full border border-accent bg-transparent" />
+          <div className="absolute -right-4 top-4 -z-10 h-full w-full  border border-accent bg-transparent lg:-right-8 lg:top-8" />
         </motion.div>
       </section>
     </SectionContainer>

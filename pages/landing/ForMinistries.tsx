@@ -20,11 +20,11 @@ const ForMinstriesPage = () => {
           viewport={DEFAULT_VIEWPORT}
           className="mx-auto flex flex-col items-center justify-center"
         >
-          <h2 className="text_variant_h2 w-[60%] text-center">
+          <h2 className="text_variant_h2 w-full text-center max-lg:text-[2.6rem] max-lg:leading-[3.3rem] lg:w-[60%]">
             Are you a ministry with widow, orphan or mission programs? Register
             with us today!
           </h2>
-          <p className="text_medium_body_p  mt-4 w-[70%] text-center">
+          <p className="text_medium_body_p  mt-4 w-full text-center lg:w-[70%]">
             Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
             imperdiet pellentesque. Urna eros interdum est sollicitudin
             dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
@@ -35,7 +35,7 @@ const ForMinstriesPage = () => {
             <Link href="/auth/ministry/sign-up">
               <Button>Register as a ministry</Button>
             </Link>
-            <Link href="/auth/ministry/sign-in">
+            <Link href="/auth/ministry/sign-in" className="hidden lg:inline">
               <Button variant="outline">Login to ministry account</Button>
             </Link>
           </div>
@@ -46,9 +46,9 @@ const ForMinstriesPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="my-40 flex w-full items-center justify-between"
+          className="my-32 flex w-full flex-col items-center justify-between lg:my-40 lg:flex-row"
         >
-          <div className="flex w-[40%] flex-col space-y-8">
+          <div className="flex w-full flex-col space-y-8 lg:w-[40%]">
             <h2 className="text_variant_h2">
               Lorem ipsum dolor sit amet consectetur. Nisi.
             </h2>
@@ -101,7 +101,7 @@ const ForMinstriesPage = () => {
               </div>
             </div>
           </div>
-          <div className="relative aspect-square w-[45%] bg-gray-200" />
+          <div className="relative mt-10 aspect-square w-full bg-gray-200 lg:mt-0 lg:w-[45%]" />
         </motion.section>
       </SectionContainer>
     </div>
