@@ -53,7 +53,7 @@ export const MinistrySignupMinistryDetailsValidation = z.object({
   phoneNumber: z.string().min(10, { message: "Minimum 10 characters" }),
   address: z.string().min(3),
   state: z.string(),
-  websiteLink: z.string(),
+  websiteLink: z.string().optional(),
   cacDocument: z.string(),
   description: z.string(),
 });

@@ -12,6 +12,7 @@ import {
   MinistrySignupPersonalInformationValidation,
 } from "lib/validations/auth";
 import MinistryPersonalInformation from "@components/sections/auth/MinistryPersonalInformation";
+import MinistryTermsAndConditions from "@components/sections/auth/MinstryTermsAndConditions";
 
 const MinistrySignupPage = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -33,6 +34,12 @@ const MinistrySignupPage = () => {
     "Personal Information",
     "Terms and Conditions",
   ];
+
+  const submitForm = () => {
+    // TODO: Implememt form submission
+    console.log("Submitting");
+  };
+
   function getSectionComponent() {
     switch (activeStep) {
       case 0:
@@ -49,6 +56,13 @@ const MinistrySignupPage = () => {
           <MinistryPersonalInformation
             setActiveStep={setActiveStep}
             form={personInformationForm}
+          />
+        );
+      case 2:
+        return (
+          <MinistryTermsAndConditions
+            setActiveStep={setActiveStep}
+            submitForm={submitForm}
           />
         );
       default:

@@ -24,7 +24,6 @@ const FileUpload = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  console.log({ file });
 
   useEffect(() => {
     if (!onFileChange) return;
