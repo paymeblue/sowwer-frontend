@@ -32,13 +32,13 @@ const effectOfGiving = [
 const AboutsUsSection = () => {
   return (
     <SectionContainer>
-      <section className="flex w-full items-center justify-between">
+      <section className="flex w-full flex-col lg:flex-row lg:items-center lg:justify-between">
         <motion.div
           variants={defaultVariant({})}
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="flex w-[50%] flex-col space-y-6"
+          className="flex w-full flex-col space-y-6 lg:w-[50%]"
         >
           <div className="flex flex-col space-y-4">
             <span className="font-body text-xs text-accent">ABOUT US</span>
@@ -67,7 +67,7 @@ const AboutsUsSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="relative aspect-[1/1] w-[35%] rounded-md "
+          className="relative aspect-[1/1.3] w-full rounded-md lg:aspect-[1/1] lg:w-[35%] "
         >
           <Image
             src="/assets/images/hands.png"
@@ -79,7 +79,7 @@ const AboutsUsSection = () => {
           <Image
             src="/assets/images/statbox.png"
             alt="stats"
-            className="absolute -left-[150px] top-1/2 -translate-y-1/2"
+            className="absolute -right-5 top-1/2 -translate-y-1/2 lg:-left-[150px]"
             width={224}
             height={279}
           />
@@ -100,7 +100,7 @@ const AboutsUsSection = () => {
           fill
           className="object-contain pb-10"
         />
-        <motion.div className="flex w-[60%] flex-col space-y-4">
+        <motion.div className="flex w-full flex-col space-y-4 lg:w-[60%]">
           <h2 className="font-title text-[2.8rem] leading-[3rem] text-black">
             The Ripple Effect of Giving
           </h2>
@@ -117,7 +117,7 @@ const AboutsUsSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="grid grid-cols-3 gap-12"
+          className="grid grid-cols-1 gap-12 lg:grid-cols-3"
         >
           {effectOfGiving.map((item) => {
             return (

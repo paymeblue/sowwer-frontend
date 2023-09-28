@@ -84,7 +84,7 @@ const Navbar = ({ variant = "landing", authenticated }: Props) => {
           type: "tween",
         },
       }}
-      className={`fixed left-0 top-0  z-30 flex h-[10vh] w-full flex-row items-center justify-between px-16 transition-all duration-200 ${
+      className={`fixed left-0 top-0  z-30 flex h-[10vh] w-full flex-row items-center justify-between px-8 transition-all duration-200 lg:px-16 ${
         isScrolling && "shadow-navbar"
       }`}
     >
@@ -92,7 +92,7 @@ const Navbar = ({ variant = "landing", authenticated }: Props) => {
         <Logo />
 
         {variant === "landing" && (
-          <div className="flex items-center gap-16">
+          <div className="hidden items-center gap-16 lg:flex">
             <NavigationMenu>
               <NavigationMenuList>
                 {navItems.map((item) => {
@@ -117,7 +117,7 @@ const Navbar = ({ variant = "landing", authenticated }: Props) => {
       </div>
 
       <div
-        className={`flex items-center gap-4 ${
+        className={`hidden items-center gap-4 lg:flex ${
           authenticated && "flex-row-reverse"
         }`}
       >

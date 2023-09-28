@@ -19,7 +19,7 @@ interface Props {
 const Footer = ({ variant = "default" }: Props) => {
   if (variant === "minimal") {
     return (
-      <footer className="flex w-full justify-between border-t-[.3px] border-body-2 px-4 py-4">
+      <footer className="flex w-full flex-col justify-between border-t-[.3px] border-body-2 px-4 py-4 lg:flex-row">
         <span className="text_small_body_sb">
           © 2023 Soower. All rights reserved.
         </span>
@@ -35,13 +35,13 @@ const Footer = ({ variant = "default" }: Props) => {
     );
   }
   return (
-    <footer className="mt-auto min-h-[40vh] w-full bg-secondary-black pt-8">
+    <footer className="mt-auto min-h-[40vh] w-full flex-col bg-secondary-black pt-8 lg:flex-row">
       <SectionContainer>
-        <div className="flex w-full justify-between">
+        <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
           {/* left */}
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center lg:items-start">
             <Logo logoVariant="white" />
-            <p className="mb-0 mt-0 max-w-sm text-start font-body text-[14px] leading-[22px] text-[rgba(255,_255,_255,_0.8)]">
+            <p className="mb-0 mt-0 max-w-sm text-center font-body text-[14px] leading-[22px] text-[rgba(255,_255,_255,_0.8)] lg:text-start">
               The Kingdom Investment Platform. Perfectly positioned to lend a
               helping hand.
             </p>
@@ -57,7 +57,7 @@ const Footer = ({ variant = "default" }: Props) => {
                 <YoutubeColor />
               </div>
             </div>
-            <div className="mt-8 flex space-x-4">
+            <div className="mt-8 flex flex-col space-y-2 lg:flex-row lg:space-x-4 lg:space-y-0">
               <Link href="#" target="_blank">
                 <Image
                   src={appleStore}
@@ -74,11 +74,11 @@ const Footer = ({ variant = "default" }: Props) => {
           </div>
 
           {/* right */}
-          <div className="flex space-x-40">
+          <div className="mt-6 flex flex-col space-y-6 lg:mt-0 lg:flex-row lg:space-x-40 lg:space-y-0">
             {/* Quick Links */}
-            <div className="flex flex-col space-y-6">
+            <div className="flex flex-col items-center space-y-6 lg:items-start">
               <h5 className="footerlink_header">Quick Links</h5>
-              <ul className="flex flex-col space-y-4">
+              <ul className="flex flex-col items-center space-y-4 lg:items-start">
                 <li>
                   <Link href={`/`} className="footerlink_sub">
                     About us
@@ -100,7 +100,7 @@ const Footer = ({ variant = "default" }: Props) => {
             {/* Contact Us */}
             <div className="flex flex-col space-y-6">
               <h5 className="footerlink_header">Contact Us</h5>
-              <ul className="flex flex-col space-y-4">
+              <ul className="flex flex-col items-center space-y-4 lg:items-start">
                 <li>
                   <Link
                     href={`/`}
@@ -122,8 +122,8 @@ const Footer = ({ variant = "default" }: Props) => {
           </div>
         </div>
         <div className="mt-10 border-t-[0.3px] border-[#C4C4C4] py-8">
-          <div className="flex items-center space-x-6">
-            <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)]">
+          <div className="flex flex-col items-center space-x-6 lg:flex-row">
+            <span className="lg: text-center font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] lg:text-start">
               © 2023 Soower. All rights reserved.
             </span>
             <Link href="/">

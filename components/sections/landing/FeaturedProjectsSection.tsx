@@ -70,7 +70,7 @@ const FeaturedProjectSection = () => {
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
         >
-          <div className="mx-auto flex w-[60%] flex-col space-y-4">
+          <div className="mx-auto flex w-full flex-col space-y-4 lg:w-[60%]">
             <h2 className="text_variant_h2 text-center">
               Some of our featured projects
             </h2>
@@ -94,7 +94,7 @@ const FeaturedProjectSection = () => {
             initial="hidden"
             whileInView="visible"
             viewport={DEFAULT_VIEWPORT}
-            className="mt-20 grid grid-cols-3 gap-6"
+            className="mt-20 grid grid-cols-1 gap-6 lg:grid-cols-3"
           >
             {featuredProjects.map((project, i) => {
               return (
@@ -107,7 +107,10 @@ const FeaturedProjectSection = () => {
             })}
           </motion.div>
 
-          <div aria-label="Some of our partners" className="mt-16">
+          <div
+            aria-label="Some of our partners"
+            className="mt-16 hidden lg:block"
+          >
             <h3 className="text-center !font-[300] text-accent">
               SOME OF OUR TRUSTEES & PARTNERS
             </h3>

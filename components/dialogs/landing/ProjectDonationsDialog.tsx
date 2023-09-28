@@ -11,6 +11,7 @@ import {
 import { useGetMinistryProjectDonorsQuery } from "services/projects";
 import usePagination from "@hooks/general/usePagination";
 import Pagination from "@components/shared/Pagination";
+import { useEffect, useState } from "react";
 
 interface Props {
   projectId: string;
@@ -18,6 +19,15 @@ interface Props {
 }
 const ProjectDonationsDialog = ({ projectId, title }: Props) => {
   const { pagination, handleNext, handlePrevious } = usePagination();
+  const [firstSetDonations, setFirstSetDonations] = useState<
+    {
+      createdAt: string;
+      id: string;
+      name: string;
+      amount: string;
+      time: string;
+    }[]
+  >([]);
   const {
     data: projectDonors,
     isLoading,
@@ -30,6 +40,18 @@ const ProjectDonationsDialog = ({ projectId, title }: Props) => {
     ?.map((item) => ({ ...item, time: moment(item.createdAt).fromNow() }))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
+  useEffect(() => {
+    if (firstSetDonations.length) return;
+    if (!isLoading && !isFetching && projectDonors?.data) {
+      setFirstSetDonations(
+        projectDonors.data
+          .map((item) => ({ ...item, time: moment(item.createdAt).fromNow() }))
+          .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+          .slice(0, 3)
+      );
+    }
+  }, [isLoading, isFetching, projectDonors?.data, firstSetDonations.length]);
+
   if (!projectDonors?.data.length && (isLoading || isFetching)) {
     return <div className="min-h-[30rem] w-[70%] animate-pulse bg-gray-200" />;
   }
@@ -38,8 +60,8 @@ const ProjectDonationsDialog = ({ projectId, title }: Props) => {
     <div className="h-fit w-[70%] rounded-[15px] bg-white p-[2rem]">
       <h3 className="text_variant_h2 text-[2rem]">Donations</h3>
       <div className="mt-6 min-h-[10rem] w-full space-y-10">
-        {sortedProjectDonors && sortedProjectDonors.length ? (
-          sortedProjectDonors.slice(0, 3).map((donor) => {
+        {firstSetDonations.length ? (
+          firstSetDonations.map((donor) => {
             const { amount, name, id, time } = donor;
             return (
               <DonationCard

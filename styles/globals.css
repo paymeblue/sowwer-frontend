@@ -159,11 +159,11 @@ input[type="number"] {
   }
 
   .footerlink_header {
-    @apply font-sub-title text-[1rem] leading-[18.6px] text-white;
+    @apply text-center font-sub-title text-[1rem] leading-[18.6px] text-white lg:text-start;
   }
 
   .footerlink_sub {
-    @apply font-body text-[0.9rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white;
+    @apply text-center font-body text-[0.9rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white lg:text-start;
   }
   .contactlink_sub {
     @apply text-[0.9rem] text-body-1 hover:text-black;
