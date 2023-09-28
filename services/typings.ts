@@ -202,6 +202,7 @@ export type InitiateDonationToProjectRequest = {
   createAccount: boolean;
   confirm_password: string;
   amount: number;
+  currency: "NGN" | "USD";
 };
 
 export type InitiateDonation = Response<{

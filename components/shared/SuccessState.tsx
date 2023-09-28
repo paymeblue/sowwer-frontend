@@ -1,15 +1,15 @@
 import { cn } from "@lib/cn";
 import { HTMLAttributes, ReactNode } from "react";
+import Donate from "@components/assets/svg/Donate";
 
 interface Props {
-  image: ReactNode;
   title: string;
   desc: string;
   className?: HTMLAttributes<HTMLDivElement>["className"];
   action?: ReactNode;
 }
 
-const EmptyState = ({ image, title, desc, className, action }: Props) => {
+const SuccessState = ({ title, desc, className, action }: Props) => {
   return (
     <div
       className={cn(
@@ -17,11 +17,9 @@ const EmptyState = ({ image, title, desc, className, action }: Props) => {
         className
       )}
     >
-      {image}
+      <Donate />
 
-      <h4 className="text_small_header mt-8 text-center font-body font-[700]">
-        {title}
-      </h4>
+      <h4 className="text_variant_h3 mt-8 text-center ">{title}</h4>
       <desc className="text_small_body_r mt-2 max-w-[30vw] text-center">
         {desc}
       </desc>
@@ -30,4 +28,4 @@ const EmptyState = ({ image, title, desc, className, action }: Props) => {
   );
 };
 
-export default EmptyState;
+export default SuccessState;

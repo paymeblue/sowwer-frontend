@@ -8,6 +8,7 @@ const DynamicDonateProjetPage = dynamic(
   }
 ) as any;
 
-export default function DonateProject() {
-  return <DynamicDonateProjetPage />;
+export default function DonateProject({ params }: { params: { id: string } }) {
+  const { id } = params;
+  return <DynamicDonateProjetPage projectId={id} />;
 }

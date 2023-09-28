@@ -3,6 +3,11 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DonateToProjectValidation } from "lib/validations/donate";
 import { useForm } from "react-hook-form";
+import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
+
+import { useInitiatePaymentToProjectUnauthMutation } from "services/auth";
+import { useVerifyProjectPaymentMutation } from "services/payouts";
+import useFlutterConfig, { IConfig } from "@hooks/payments/useFlutterConfig";
 
 import { Checkbox } from "@components/ui/checkbox";
 import {
@@ -24,8 +29,35 @@ import {
 } from "@components/ui/select";
 import { Button } from "@components/ui/button";
 import { Heart2 } from "react-iconly";
+import { useToast } from "@components/ui/use-toast";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const DonateToProjectForm = () => {
+const DEFAULT_CONFIG = {
+  public_key: "",
+  tx_ref: "",
+  amount: 0,
+  currency: "NGN",
+  payment_options: "card,mobilemoney,ussd",
+  customer: {
+    email: "",
+    name: "",
+    phone_number: "",
+  },
+  customizations: {
+    title: "Soower Donations",
+    description: `Project Donation`,
+    logo: "",
+  },
+};
+
+interface Props {
+  id: string;
+  title: string;
+  setPaymentSuccessful: Dispatch<SetStateAction<boolean>>;
+}
+
+const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof DonateToProjectValidation>>({
     resolver: zodResolver(DonateToProjectValidation),
     defaultValues: {
@@ -34,11 +66,89 @@ const DonateToProjectForm = () => {
       isAnonymous: false,
     },
   });
+  const [initiatePaymentToProjectUnauth, { isLoading }] =
+    useInitiatePaymentToProjectUnauthMutation();
+  const { getConfig } = useFlutterConfig();
+  const [verifyProjectPayment, { isLoading: verifyingPayment }] =
+    useVerifyProjectPaymentMutation();
+  const [config, setConfig] = useState<IConfig>(DEFAULT_CONFIG);
+  const handleFlutterwavePayment = useFlutterwave(config);
+
+  /* eslint-disable */
+  useEffect(() => {
+    if (config.public_key === "" && config.tx_ref === "") return; // it's the default config
+
+    handleFlutterwavePayment({
+      callback: async (response) => {
+        try {
+          await verifyProjectPayment({
+            txn_id: response.transaction_id.toString(),
+            txn_reference: response.tx_ref,
+          });
+
+          setPaymentSuccessful(true);
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Payment failed",
+            description:
+              "Unfortunately, we couldn't process your payment. Please try again later.",
+          });
+        }
+        closePaymentModal();
+      },
+      onClose: () => {},
+    });
+  }, [config]);
+  /* eslint-enable */
 
   const onSubmit = async (
     values: z.infer<typeof DonateToProjectValidation>
   ) => {
-    console.log("Submitted", { values });
+    const {
+      firstName,
+      lastName,
+      email,
+      amount,
+      currency,
+      isAnonymous,
+      phoneNumber,
+      shouldSignup,
+    } = values;
+    try {
+      const res = await initiatePaymentToProjectUnauth({
+        id,
+        firstName,
+        lastName,
+        email,
+        anonymous: isAnonymous,
+        amount: Number(amount.replace(/,/g, "")),
+        createAccount: shouldSignup,
+        phone: phoneNumber,
+        password: "",
+        confirm_password: "",
+        currency,
+      }).unwrap();
+
+      const { txn_reference: txnRef, amount: amn } = res.data.donation;
+      const config = getConfig({
+        amount: amn,
+        currency,
+        desc: title || "Project Donation",
+        txnRef,
+        customer: {
+          email,
+          name: `${firstName} ${lastName}`,
+          phone_number: phoneNumber,
+        },
+      });
+      setConfig(config);
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Error occured initiating payment, please try again later",
+      });
+    }
   };
 
   return (
@@ -243,8 +353,12 @@ const DonateToProjectForm = () => {
           </label>
         </div>
 
-        <Button type="submit" className="ml-auto mt-8 w-fit space-x-2">
-          <Heart2 set="bold" size={19} />
+        <Button
+          loading={isLoading || verifyingPayment}
+          type="submit"
+          className="ml-auto mt-8 w-fit space-x-2"
+        >
+          {(!isLoading || !verifyingPayment) && <Heart2 set="bold" size={19} />}
           <span>Donate now</span>
         </Button>
       </form>
