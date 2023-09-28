@@ -43,7 +43,7 @@ const DonateToMinistryForm = () => {
     if (donationType === "recurring") {
       form.setValue("shouldSignup", true);
     }
-  }, [donationType]);
+  }, [donationType, form]);
 
   const onSubmit = async (
     values: z.infer<typeof DonateToMinistryValidation>
