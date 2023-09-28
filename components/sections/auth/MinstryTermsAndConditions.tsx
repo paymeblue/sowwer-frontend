@@ -22,6 +22,8 @@ const MinistryTermsAndConditions = ({ submitForm, setActiveStep }: Props) => {
         description:
           "You need to accept our terms and conditions inorder to create a ministry account",
       });
+    } else {
+      submitForm();
     }
   };
 

@@ -10,7 +10,7 @@ const DonateLayout = ({ children }: { children: ReactNode }) => {
         <DonateLayoutNavbar />
       </header>
 
-      <main className="flex min-h-[90vh] w-full items-center justify-center py-[10vh]">
+      <main className="flex min-h-[90vh] w-full items-center justify-center py-[15vh]">
         {children}
       </main>
       <SectionContainer className="mt-auto">
