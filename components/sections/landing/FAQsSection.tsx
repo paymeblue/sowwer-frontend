@@ -21,9 +21,7 @@ const FAQsSection = () => {
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
         >
-          <h2 className="font-title text-[2.8rem] leading-[3rem]">
-            Frequently asked questions
-          </h2>
+          <h2 className="text_variant_h2">Frequently asked questions</h2>
           <div className="mt-10 w-full">
             <Accordion type="single" collapsible>
               {data.map((item) => {
@@ -43,13 +41,15 @@ const FAQsSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="mb-16 mt-20 flex w-full flex-col items-center justify-center rounded-[30px] bg-[#FDFBF2] py-4 lg:py-10"
+          className="mb-16 mt-20 flex w-full flex-col items-center justify-center rounded-[30px] bg-[#FDFBF2] py-8 lg:py-10"
         >
           <h2 className="w-[90%] text-center font-title text-[1.7rem] leading-[2.2rem] lg:w-[75%] lg:text-[2.8rem] lg:leading-[3.5rem]">
             "Therefore, as we have opportunity, let us do good to all people,
             especially to those who belong to the family of believers."
           </h2>
-          <p className="text_large_body_r mt-4">— Galatians 6:10 (NIV)</p>
+          <p className="text_large_body_r mt-2 lg:mt-4">
+            — Galatians 6:10 (NIV)
+          </p>
           <Button className="mt-10 px-9 py-7">
             <div className="flex items-center space-x-2">
               <Heart2 set="bold" size={19} />

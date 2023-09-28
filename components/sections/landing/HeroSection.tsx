@@ -9,13 +9,13 @@ const Hero = () => {
   return (
     <SectionContainer>
       <section className="flex min-h-screen w-full items-center justify-center">
-        <div className="flex w-[80%] flex-col items-center space-y-6">
+        <div className="flex w-[80%] flex-col items-center space-y-2 lg:space-y-6">
           <motion.h1
             variants={defaultVariant({})}
             initial="hidden"
             whileInView="visible"
             viewport={DEFAULT_VIEWPORT}
-            className="text-center font-title text-[4.6rem] leading-[4.6rem] text-black"
+            className="text-center font-title text-[2.5rem] leading-[3rem] text-black lg:text-[4.6rem] lg:leading-[4.6rem]"
           >
             Alone we can do so little; <br /> together we can do so much.
           </motion.h1>
@@ -26,12 +26,12 @@ const Hero = () => {
             viewport={DEFAULT_VIEWPORT}
             className="flex flex-col items-center"
           >
-            <p className="text_large_body_r mt-2 w-[75%] text-center">
+            <p className="text_large_body_r mt-2 w-full text-center lg:w-[75%]">
               "In all things I have shown you that by working hard in this way
               we must help the weak and remember the words of the Lord Jesus,
               how He himself said it is more blessed to give than to receive."
             </p>
-            <span className="text_large_body_r mt-2 text-center">
+            <span className="text_large_body_r mt-2 text-center text-[.8rem]">
               — Acts 20:35 (ESV)
             </span>
             <Button className="mt-6 px-8">

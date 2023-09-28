@@ -74,7 +74,7 @@ const Footer = ({ variant = "default" }: Props) => {
           </div>
 
           {/* right */}
-          <div className="mt-6 flex flex-col space-y-6 lg:mt-0 lg:flex-row lg:space-x-40 lg:space-y-0">
+          <div className="mt-12 flex flex-col space-y-12 lg:mt-0 lg:flex-row lg:space-x-40 lg:space-y-0">
             {/* Quick Links */}
             <div className="flex flex-col items-center space-y-6 lg:items-start">
               <h5 className="footerlink_header">Quick Links</h5>

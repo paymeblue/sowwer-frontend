@@ -42,11 +42,11 @@ const AboutsUsSection = () => {
         >
           <div className="flex flex-col space-y-4">
             <span className="font-body text-xs text-accent">ABOUT US</span>
-            <h2 className="font-title text-[2.8rem] leading-[3rem] text-black">
+            <h2 className="font-title text-[1.8rem] leading-[2.2rem] text-black lg:text-[2.8rem] lg:leading-[3rem]">
               Perfectly positioned to lend <br /> a helping hand
             </h2>
 
-            <p className="text_medium_body_p w-[76%]">
+            <p className="text_medium_body_p w-full lg:w-[76%]">
               Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
               imperdiet pellentesque. Urna eros interdum est sollicitudin
               dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
@@ -67,7 +67,7 @@ const AboutsUsSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="relative aspect-[1/1.3] w-full rounded-md lg:aspect-[1/1] lg:w-[35%] "
+          className="relative mt-14 aspect-[1/1.3] w-full rounded-md lg:mt-0 lg:aspect-[1/1] lg:w-[35%] "
         >
           <Image
             src="/assets/images/hands.png"
@@ -91,7 +91,7 @@ const AboutsUsSection = () => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="relative mt-20 flex flex-col space-y-16 py-16"
+        className="relative mt-12 flex flex-col space-y-16 py-16 lg:mt-20"
         aria-label="Ripple Effect of Giving"
       >
         <Image
@@ -101,7 +101,7 @@ const AboutsUsSection = () => {
           className="object-contain pb-10"
         />
         <motion.div className="flex w-full flex-col space-y-4 lg:w-[60%]">
-          <h2 className="font-title text-[2.8rem] leading-[3rem] text-black">
+          <h2 className="font-title text-[1.8rem] leading-[2.2rem] text-black lg:text-[2.8rem] lg:leading-[3rem]">
             The Ripple Effect of Giving
           </h2>
 
