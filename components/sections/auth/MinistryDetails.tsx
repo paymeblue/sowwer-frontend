@@ -21,12 +21,12 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { Button } from "@components/ui/button";
-import { ArrowRight } from "lucide-react";
 import statesInNigeria from "@lib/NigeriaStates";
 import FileUpload from "@components/ui/file-upload";
 import { Textarea } from "@components/ui/textarea";
 import Church from "@components/assets/svg/Church";
 import Christian from "@components/assets/svg/Christian";
+import { ArrowRight } from "react-iconly";
 
 interface Props {
   setActiveStep: Dispatch<SetStateAction<number>>;
@@ -41,11 +41,10 @@ const MinistryDetails = ({
   form,
   selectedCategory,
   setSelectedCategory,
+  setActiveStep,
 }: Props) => {
-  const onSubmit = async (
-    values: z.infer<typeof MinistrySignupMinistryDetailsValidation>
-  ) => {
-    console.log("submitted", values);
+  const onSubmit = () => {
+    setActiveStep((step) => step + 1);
   };
   return (
     <section className="p-8">
@@ -191,7 +190,7 @@ const MinistryDetails = ({
                 />
                 <FormField
                   control={form.control}
-                  name="phoneNumber"
+                  name="websiteLink"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Website or Social link</FormLabel>
@@ -219,6 +218,7 @@ const MinistryDetails = ({
                           }}
                           title="Upload CAC Document"
                           desc="(.jpg, .png or .pdf file format supported)"
+                          file={field.value}
                         />
                       </FormControl>
                       <FormMessage />

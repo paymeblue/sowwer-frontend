@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const DynamicMinistrySignupPage = dynamic(
   () => import("pages/auth/MinistrySignupPage"),
   {
-    loading: () => <Loader />,
+    loading: () => <Loader showLogo />,
   }
 ) as any;
 

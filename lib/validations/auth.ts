@@ -58,23 +58,17 @@ export const MinistrySignupMinistryDetailsValidation = z.object({
   description: z.string(),
 });
 
-export const MinistrySignupPersonalInformationValidation = z
-  .object({
-    firstName: z.string(),
-    lastName: z.string(),
-    role: z.string(),
-    email: z
-      .string()
-      .email("Please enter a valid email address")
-      .min(3, { message: "Minimum 3 characters" })
-      .max(30),
-    phoneNumber: z.string().min(10, { message: "Minimum 10 characters" }),
-    password: z
-      .string()
-      .min(8, { message: "Password should be minimum 8 characters" }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+export const MinistrySignupPersonalInformationValidation = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  role: z.string(),
+  email: z
+    .string()
+    .email("Please enter a valid email address")
+    .min(3, { message: "Minimum 3 characters" })
+    .max(30),
+  phoneNumber: z.string().min(10, { message: "Minimum 10 characters" }),
+  password: z
+    .string()
+    .min(8, { message: "Password should be minimum 8 characters" }),
+});

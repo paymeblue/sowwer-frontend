@@ -7,7 +7,11 @@ import * as z from "zod";
 import MinistryDetails from "@components/sections/auth/MinistryDetails";
 import SideLayoutWrapper from "@components/shared/Layouts/Side/SideLayoutWrapper";
 import Stepper from "@components/ui/stepper";
-import { MinistrySignupMinistryDetailsValidation } from "lib/validations/auth";
+import {
+  MinistrySignupMinistryDetailsValidation,
+  MinistrySignupPersonalInformationValidation,
+} from "lib/validations/auth";
+import MinistryPersonalInformation from "@components/sections/auth/MinistryPersonalInformation";
 
 const MinistrySignupPage = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -19,11 +23,11 @@ const MinistrySignupPage = () => {
   >({
     resolver: zodResolver(MinistrySignupMinistryDetailsValidation),
   });
-  // const personInformationForm = useForm<
-  //   z.infer<typeof MinistrySignupPersonalInformationValidation>
-  // >({
-  //   resolver: zodResolver(MinistrySignupPersonalInformationValidation),
-  // });
+  const personInformationForm = useForm<
+    z.infer<typeof MinistrySignupPersonalInformationValidation>
+  >({
+    resolver: zodResolver(MinistrySignupPersonalInformationValidation),
+  });
   const steps = [
     "Ministry Details",
     "Personal Information",
@@ -38,6 +42,13 @@ const MinistrySignupPage = () => {
             form={ministryDetailsForm}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
+          />
+        );
+      case 1:
+        return (
+          <MinistryPersonalInformation
+            setActiveStep={setActiveStep}
+            form={personInformationForm}
           />
         );
       default:

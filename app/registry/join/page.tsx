@@ -4,7 +4,7 @@ import Loader from "@components/shared/Loader";
 const DynamicJoinRegistryPage = dynamic(
   () => import("pages/registry/JoinRegistryPage"),
   {
-    loading: () => <Loader />,
+    loading: () => <Loader showLogo />,
   }
 ) as any;
 

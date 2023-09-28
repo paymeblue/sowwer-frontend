@@ -4,7 +4,7 @@ import Loader from "@components/shared/Loader";
 const DynamicDonorSignupPage = dynamic(
   () => import("pages/auth/DonorSignupPage"),
   {
-    loading: () => <Loader />,
+    loading: () => <Loader showLogo />,
   }
 ) as any;
 

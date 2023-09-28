@@ -8,6 +8,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
 interface Props {
   onFileChange?: (file: string) => void;
+  file?: string;
   containerClassname?: HTMLAttributes<HTMLDivElement>["className"];
   title: string;
   desc: string;
@@ -15,6 +16,7 @@ interface Props {
 
 const FileUpload = ({
   onFileChange,
+  file,
   containerClassname,
   title,
   desc,
@@ -22,6 +24,7 @@ const FileUpload = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  console.log({ file });
 
   useEffect(() => {
     if (!onFileChange) return;
@@ -30,6 +33,27 @@ const FileUpload = ({
     }
   }, [imageBase64, onFileChange]);
 
+  useEffect(() => {
+    if (file && !imageBase64) {
+      // Remove the data URL prefix (e.g., "data:image/png;base64,")
+      const base64StringWithoutPrefix = file.replace(
+        /^data:image\/[a-z]+;base64,/,
+        ""
+      );
+
+      // Convert the base64 string to a Uint8Array
+      const byteCharacters = atob(base64StringWithoutPrefix);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "application/octet-stream" });
+      const newFile = new File([blob], "CAC_Document"); // You can set the desired file name
+      setSelectedFile(newFile);
+    }
+  }, [file, imageBase64]);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
@@ -37,7 +61,11 @@ const FileUpload = ({
         // File size exceeds the limit, you can display an error message or take appropriate action
         alert("File size exceeds the maximum limit of 5MB.");
       } else {
-        setSelectedFile(file);
+        // Create a new File object with the desired name "CAC_Document"
+        const newFileName = "CAC_Document";
+        const newFile = new File([file], newFileName, { type: file.type });
+
+        setSelectedFile(newFile);
         // Read the file as a Base64 string
         const reader = new FileReader();
         reader.onload = () => {
@@ -64,7 +92,11 @@ const FileUpload = ({
         // File size exceeds the limit, you can display an error message or take appropriate action
         alert("File size exceeds the maximum limit of 5MB.");
       } else {
-        setSelectedFile(file);
+        // Create a new File object with the desired name "CAC_Document"
+        const newFileName = "CAC_Document";
+        const newFile = new File([file], newFileName, { type: file.type });
+
+        setSelectedFile(newFile);
         // Read the file as a Base64 string
         const reader = new FileReader();
         reader.onload = () => {
