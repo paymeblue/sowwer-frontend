@@ -57,31 +57,34 @@ interface IPropsReccuring extends IProps {
   paymentPlan?: string;
 }
 
-interface IConfigReccuring extends IConfig {
+export interface IConfigReccuring extends IConfig {
   payment_plan?: string;
 }
 
-export const useFlutterConfigReccuring = ({
-  customer,
-  amount,
-  currency,
-  desc,
-  txnRef,
-  paymentPlan,
-}: IPropsReccuring): IConfigReccuring => {
-  const config: IConfigReccuring = {
-    public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
-    tx_ref: txnRef,
+export const useFlutterConfigReccuring = () => {
+  const getConfig = ({
+    customer,
     amount,
     currency,
-    payment_options: "card",
-    payment_plan: paymentPlan,
-    customer,
-    customizations: {
-      title: "Soower Donations",
-      description: `Donation made for ${desc}`,
-      logo: "",
-    },
+    desc,
+    txnRef,
+    paymentPlan,
+  }: IPropsReccuring) => {
+    const config: IConfigReccuring = {
+      public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
+      tx_ref: txnRef,
+      amount,
+      currency,
+      payment_options: "card",
+      payment_plan: paymentPlan,
+      customer,
+      customizations: {
+        title: "Soower Donations",
+        description: `Donation made for ${desc}`,
+        logo: "",
+      },
+    };
+    return config;
   };
-  return config;
+  return { getConfig };
 };

@@ -28,14 +28,14 @@ const DonateProjectComp = ({ projectId }: Props) => {
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
   if (!projectData?.data && (isLoading || isFetching)) {
-    return <Loader />;
+    return <Loader className="h-[70vh]" />;
   }
 
   if ((!projectData?.data && !(isLoading || isFetching)) || isError) {
     return (
       <EmptyState
         image={<EmptySpeaker />}
-        title="Unable to get project details"
+        title="Unable to get the project details"
         desc="Unfortunaly, we couldn't find details for this project. There was an error fetching or it may have been removed by the ministry."
         action={
           <Link href="/projects">

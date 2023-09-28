@@ -51,8 +51,9 @@ export const DonateToMinistryValidation = z
     frequency: z.enum(["monthly", "quarterly", "yearly"]).optional(),
     password: z
       .string()
-      .min(8, { message: "Password should be minimum 8 characters" }),
-    confirmPassword: z.string(),
+      .min(8, { message: "Password should be minimum 8 characters" })
+      .optional(),
+    confirmPassword: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",

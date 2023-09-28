@@ -1,8 +1,18 @@
 "use client";
 import * as z from "zod";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DonateToMinistryValidation } from "lib/validations/donate";
 import { useForm } from "react-hook-form";
+import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
+import useFlutterConfig, {
+  useFlutterConfigReccuring,
+  IConfig,
+  IConfigReccuring,
+} from "@hooks/payments/useFlutterConfig";
+
+import { useVerifyMinistryPaymentMutation } from "services/payouts";
+import { useInitiatePaymentToMinistryUnauthMutation } from "services/auth";
 
 import { Checkbox } from "@components/ui/checkbox";
 import {
@@ -26,9 +36,34 @@ import {
 import { Button } from "@components/ui/button";
 import { Heart2, InfoCircle } from "react-iconly";
 import { Toggle } from "@components/ui/toggle";
-import { useEffect } from "react";
+import { useToast } from "@components/ui/use-toast";
 
-const DonateToMinistryForm = () => {
+interface Props {
+  id: string;
+  title: string;
+  setPaymentSuccessful: Dispatch<SetStateAction<boolean>>;
+}
+
+const DEFAULT_CONFIG = {
+  public_key: "",
+  tx_ref: "",
+  amount: 0,
+  currency: "NGN",
+  payment_options: "card,mobilemoney,ussd",
+  customer: {
+    email: "",
+    name: "",
+    phone_number: "",
+  },
+  customizations: {
+    title: "Soower Donations",
+    description: `Ministry Donation`,
+    logo: "",
+  },
+};
+
+const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof DonateToMinistryValidation>>({
     resolver: zodResolver(DonateToMinistryValidation),
     defaultValues: {
@@ -37,8 +72,46 @@ const DonateToMinistryForm = () => {
       isAnonymous: false,
     },
   });
-  const donationType = form.watch("donationType");
+  const { getConfig } = useFlutterConfig();
+  const { getConfig: getRecuringConfig } = useFlutterConfigReccuring();
+  const [initiatePaymentToMinistryUnauth, { isLoading: paymentAuthLoading }] =
+    useInitiatePaymentToMinistryUnauthMutation();
+  const [verifyProjectPayment, { isLoading: verifyingPayment }] =
+    useVerifyMinistryPaymentMutation();
+  const [config, setConfig] = useState<IConfig | IConfigReccuring>(
+    DEFAULT_CONFIG
+  );
+  const handleFlutterwavePayment = useFlutterwave(config);
 
+  /* eslint-disable */
+  useEffect(() => {
+    if (config.public_key === "" && config.tx_ref === "") return; // it's the default config
+
+    handleFlutterwavePayment({
+      callback: async (response) => {
+        try {
+          await verifyProjectPayment({
+            txn_id: response.transaction_id.toString(),
+            txn_reference: response.tx_ref,
+          });
+
+          setPaymentSuccessful(true);
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Payment failed",
+            description:
+              "Unfortunately, we couldn't process your payment. Please try again later.",
+          });
+        }
+        closePaymentModal();
+      },
+      onClose: () => {},
+    });
+  }, [config]);
+  /* eslint-enable */
+
+  const donationType = form.watch("donationType");
   useEffect(() => {
     if (donationType === "recurring") {
       form.setValue("shouldSignup", true);
@@ -48,7 +121,75 @@ const DonateToMinistryForm = () => {
   const onSubmit = async (
     values: z.infer<typeof DonateToMinistryValidation>
   ) => {
-    console.log("Submitted", { values });
+    const {
+      amount,
+      confirmPassword,
+      currency,
+      donationType,
+      email,
+      firstName,
+      isAnonymous,
+      lastName,
+      password,
+      phoneNumber,
+      shouldSignup,
+      frequency,
+    } = values;
+
+    try {
+      const res = await initiatePaymentToMinistryUnauth({
+        amount: Number(amount.replace(/,/g, "")),
+        id,
+        firstName,
+        lastName,
+        anonymous: isAnonymous,
+        payment_mode: donationType,
+        createAccount: shouldSignup,
+        confirm_password: confirmPassword || "",
+        password: password || "",
+        currency,
+        email,
+        interval: frequency!,
+        phone: phoneNumber,
+      }).unwrap();
+
+      const { txn_reference: txnRef, amount: amn } = res.data.donation;
+      if (donationType === "one-time") {
+        const config = getConfig({
+          amount: amn,
+          currency,
+          desc: title || "Ministry Donation",
+          txnRef,
+          customer: {
+            email,
+            name: `${firstName} ${lastName}`,
+            phone_number: phoneNumber,
+          },
+        });
+        setConfig(config);
+      }
+
+      if (donationType === "recurring") {
+        const config = getRecuringConfig({
+          amount: amn,
+          currency,
+          desc: title || "Ministry Donation",
+          txnRef,
+          customer: {
+            email,
+            name: `${firstName} ${lastName}`,
+            phone_number: phoneNumber,
+          },
+          paymentPlan: frequency,
+        });
+        setConfig(config);
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error occured initiating payment, please try again later",
+      });
+    }
   };
 
   return (
@@ -91,30 +232,39 @@ const DonateToMinistryForm = () => {
         />
         {form.watch("donationType") === "recurring" && (
           <div className="mt-3 flex items-center">
-            <Toggle
-              variant="outline"
-              className="rounded-r-none"
-              pressed={form.watch("frequency") === "monthly"}
-              onClick={() => form.setValue("frequency", "monthly")}
-            >
-              Monthly
-            </Toggle>
-            <Toggle
-              variant="outline"
-              pressed={form.watch("frequency") === "quarterly"}
-              onClick={() => form.setValue("frequency", "quarterly")}
-              className="rounded-none border-b border-t"
-            >
-              Quaterly
-            </Toggle>
-            <Toggle
-              variant="outline"
-              className="rounded-l-none"
-              pressed={form.watch("frequency") === "yearly"}
-              onClick={() => form.setValue("frequency", "yearly")}
-            >
-              Yearly
-            </Toggle>
+            <FormField
+              control={form.control}
+              name="frequency"
+              render={() => (
+                <FormItem>
+                  <Toggle
+                    variant="outline"
+                    className="rounded-r-none"
+                    pressed={form.watch("frequency") === "monthly"}
+                    onClick={() => form.setValue("frequency", "monthly")}
+                  >
+                    Monthly
+                  </Toggle>
+                  <Toggle
+                    variant="outline"
+                    pressed={form.watch("frequency") === "quarterly"}
+                    onClick={() => form.setValue("frequency", "quarterly")}
+                    className="rounded-none border-b border-t"
+                  >
+                    Quaterly
+                  </Toggle>
+                  <Toggle
+                    variant="outline"
+                    className="rounded-l-none"
+                    pressed={form.watch("frequency") === "yearly"}
+                    onClick={() => form.setValue("frequency", "yearly")}
+                  >
+                    Yearly
+                  </Toggle>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         )}
 
@@ -195,14 +345,14 @@ const DonateToMinistryForm = () => {
           ) : (
             <div className="mt-2 flex items-center space-x-2">
               <Checkbox
-                id="terms"
+                id="shoudSignup"
                 className=""
                 checked={form.watch("shouldSignup")}
                 onClick={() =>
                   form.setValue("shouldSignup", !form.watch("shouldSignup"))
                 }
               />
-              <label htmlFor="terms" className="text_small_body_r">
+              <label htmlFor="shoudSignup" className="text_small_body_r">
                 I would like to sign up on Soower.
               </label>
             </div>
@@ -325,8 +475,14 @@ const DonateToMinistryForm = () => {
           </label>
         </div>
 
-        <Button type="submit" className="ml-auto mt-8 w-fit space-x-2">
-          <Heart2 set="bold" size={19} />
+        <Button
+          loading={paymentAuthLoading || verifyingPayment}
+          type="submit"
+          className="ml-auto mt-8 w-fit space-x-2"
+        >
+          {!paymentAuthLoading && !verifyingPayment && (
+            <Heart2 set="bold" size={19} />
+          )}
           <span>Donate now</span>
         </Button>
       </form>

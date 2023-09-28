@@ -8,6 +8,7 @@ const DynamicDonateMinistryPage = dynamic(
   }
 ) as any;
 
-export default function DonateMinistry() {
-  return <DynamicDonateMinistryPage />;
+export default function DonateMinistry({ params }: { params: { id: string } }) {
+  const { id } = params;
+  return <DynamicDonateMinistryPage ministryId={id} />;
 }
