@@ -1,7 +1,7 @@
 "use client";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DonateToMinistryValidation } from "lib/validations/donate";
+import { DonateToProjectValidation } from "lib/validations/donate";
 import { useForm } from "react-hook-form";
 
 import { Checkbox } from "@components/ui/checkbox";
@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
 import { Input } from "@components/ui/input";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import {
@@ -24,29 +23,20 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { Button } from "@components/ui/button";
-import { Heart2, InfoCircle } from "react-iconly";
-import { Toggle } from "@components/ui/toggle";
-import { useEffect } from "react";
+import { Heart2 } from "react-iconly";
 
-const DonateToMinistryForm = () => {
-  const form = useForm<z.infer<typeof DonateToMinistryValidation>>({
-    resolver: zodResolver(DonateToMinistryValidation),
+const DonateToProjectForm = () => {
+  const form = useForm<z.infer<typeof DonateToProjectValidation>>({
+    resolver: zodResolver(DonateToProjectValidation),
     defaultValues: {
       currency: "NGN",
       shouldSignup: false,
       isAnonymous: false,
     },
   });
-  const donationType = form.watch("donationType");
-
-  useEffect(() => {
-    if (donationType === "recurring") {
-      form.setValue("shouldSignup", true);
-    }
-  }, [donationType]);
 
   const onSubmit = async (
-    values: z.infer<typeof DonateToMinistryValidation>
+    values: z.infer<typeof DonateToProjectValidation>
   ) => {
     console.log("Submitted", { values });
   };
@@ -57,68 +47,7 @@ const DonateToMinistryForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex w-full flex-col"
       >
-        {/* Donation type */}
-        <FormField
-          control={form.control}
-          name="donationType"
-          render={({ field }) => (
-            <FormItem className="col-span-2">
-              <FormLabel required className="!text_regular_body_b font-[600]">
-                Donation Type
-              </FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  className="flex items-center space-x-2"
-                >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="one-time" />
-                    </FormControl>
-                    <FormLabel className="font-normal">One-Time</FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="recurring" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Recurring</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {form.watch("donationType") === "recurring" && (
-          <div className="mt-3 flex items-center">
-            <Toggle
-              variant="outline"
-              className="rounded-r-none"
-              pressed={form.watch("frequency") === "monthly"}
-              onClick={() => form.setValue("frequency", "monthly")}
-            >
-              Monthly
-            </Toggle>
-            <Toggle
-              variant="outline"
-              pressed={form.watch("frequency") === "quarterly"}
-              onClick={() => form.setValue("frequency", "quarterly")}
-              className="rounded-none border-b border-t"
-            >
-              Quaterly
-            </Toggle>
-            <Toggle
-              variant="outline"
-              className="rounded-l-none"
-              pressed={form.watch("frequency") === "yearly"}
-              onClick={() => form.setValue("frequency", "yearly")}
-            >
-              Yearly
-            </Toggle>
-          </div>
-        )}
-
-        <div className="my-10 space-y-1">
+        <div className="mb-10 space-y-1">
           <FormLabel required>Enter donation amount</FormLabel>
           <div className="flex w-full items-start">
             <FormField
@@ -181,32 +110,21 @@ const DonateToMinistryForm = () => {
           </div>
         </div>
 
-        {/* Personal Information */}
         <div className="text_regular_body_b">
           <h4>Personal Information</h4>
-          {form.watch("donationType") === "recurring" ? (
-            <div className="flex items-center space-x-2 text-accent">
-              <InfoCircle />
-              <span className="font-body text-[.8rem] font-[300]">
-                You are required to create an account on Soower for recurring
-                donations.
-              </span>
-            </div>
-          ) : (
-            <div className="mt-2 flex items-center space-x-2">
-              <Checkbox
-                id="terms"
-                className=""
-                checked={form.watch("shouldSignup")}
-                onClick={() =>
-                  form.setValue("shouldSignup", !form.watch("shouldSignup"))
-                }
-              />
-              <label htmlFor="terms" className="text_small_body_r">
-                I would like to sign up on Soower.
-              </label>
-            </div>
-          )}
+          <div className="mt-2 flex items-center space-x-2">
+            <Checkbox
+              id="terms"
+              className=""
+              checked={form.watch("shouldSignup")}
+              onClick={() =>
+                form.setValue("shouldSignup", !form.watch("shouldSignup"))
+              }
+            />
+            <label htmlFor="terms" className="text_small_body_r">
+              I would like to sign up on Soower.
+            </label>
+          </div>
         </div>
         <div className="mt-6 grid grid-cols-2 gap-x-2 gap-y-4">
           <FormField
@@ -334,4 +252,4 @@ const DonateToMinistryForm = () => {
   );
 };
 
-export default DonateToMinistryForm;
+export default DonateToProjectForm;

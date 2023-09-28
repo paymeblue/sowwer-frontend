@@ -18,6 +18,7 @@ import Loader from "@components/shared/Loader";
 import EmptyState from "@components/shared/EmptyState";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import MinistryProjectsSection from "@components/sections/landing/MinistryProjectsSection";
+import Link from "next/link";
 
 interface Props {
   ministryId: string;
@@ -43,7 +44,7 @@ const MinistryPageComp = ({ ministryId }: Props) => {
     );
   }
 
-  const { about, state, website, name } = ministryDetails?.data!;
+  const { about, state, website, name, id } = ministryDetails?.data!;
 
   return (
     <SectionContainer>
@@ -117,10 +118,12 @@ const MinistryPageComp = ({ ministryId }: Props) => {
                   </div>
                 </div>
 
-                <Button className="mt-6 w-full space-x-2">
-                  <Heart2 set="bold" size={19} />
-                  <span>Make a donation</span>
-                </Button>
+                <Link href={`/donate/ministries/${id}`}>
+                  <Button className="mt-6 w-full space-x-2">
+                    <Heart2 set="bold" size={19} />
+                    <span>Make a donation</span>
+                  </Button>
+                </Link>
               </div>
             </div>
           </TabsContent>

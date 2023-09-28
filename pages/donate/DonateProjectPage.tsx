@@ -1,12 +1,10 @@
-import DonateToMinistryForm from "@components/forms/donate/DonateToMinistryForm";
+"use client";
+import DonateToProjectForm from "@components/forms/donate/DonateToProjectForm";
+import DonateLayoutWrapper from "@components/shared/Layouts/Donate/DonateLayoutWrapper";
 
 const DonateProjectPage = () => {
   return (
-    <div className="w-[40%] rounded-[15px] bg-white p-8">
-      {/* Top section */}
-      <h3 className="font-body text-[.75rem] font-[600] uppercase text-body-1">
-        YOU ARE MAKING A DONATION TO
-      </h3>
+    <DonateLayoutWrapper>
       <div className="mt-4 flex items-center space-x-4">
         <div className="aspect-[1/0.6] w-40 bg-gray-200" />
         <div className="flex flex-col">
@@ -16,9 +14,9 @@ const DonateProjectPage = () => {
       </div>
 
       <div className="mt-10">
-        <DonateToMinistryForm />
+        <DonateToProjectForm />
       </div>
-    </div>
+    </DonateLayoutWrapper>
   );
 };
 

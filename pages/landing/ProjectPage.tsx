@@ -76,6 +76,7 @@ const PageComp = ({ projectId }: Props) => {
     image,
     donationPercent,
     link,
+    id,
   } = projectDetails?.data!;
 
   return (
@@ -139,10 +140,12 @@ const PageComp = ({ projectId }: Props) => {
                 </p>
               </div>
               <div className="mb-10 mt-6 flex space-x-2">
-                <Button className="space-x-2">
-                  <Heart2 set="bold" size={19} />
-                  <span>Donate</span>
-                </Button>
+                <Link href={`/donate/projects/${id}`}>
+                  <Button className="space-x-2">
+                    <Heart2 set="bold" size={19} />
+                    <span>Donate</span>
+                  </Button>
+                </Link>
                 <Button
                   variant="link"
                   className="space-x-2 text-accent"

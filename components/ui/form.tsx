@@ -106,7 +106,11 @@ const FormLabel = React.forwardRef<
         htmlFor={formItemId}
         {...props}
       />
-      {required && <span className="ml-1 text-[#EB5757]">*</span>}
+      {required && (
+        <span className="text-form-label ml-1 leading-none text-[#EB5757]">
+          *
+        </span>
+      )}
     </>
   );
 });
