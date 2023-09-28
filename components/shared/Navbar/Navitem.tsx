@@ -23,7 +23,7 @@ export interface INavitem extends BaseNaveItemProps {
 
 const Navitem = ({ label, route, child, isActive }: INavitem) => {
   return (
-    <NavigationMenu>
+    <NavigationMenu className={`${child && "z-30"}`}>
       <NavigationMenuList>
         <NavigationMenuItem className="relative">
           {!child && (
@@ -35,8 +35,8 @@ const Navitem = ({ label, route, child, isActive }: INavitem) => {
           )}
           {child && <NavigationMenuTrigger>{label}</NavigationMenuTrigger>}
           {child && (
-            <NavigationMenuContent>
-              <ul className="flex w-[10rem] flex-col space-y-4 p-4">
+            <NavigationMenuContent className="z-[100]">
+              <ul className="z-[90] flex w-[10rem] flex-col space-y-4 p-4">
                 {child.map((item) => {
                   return (
                     <Link
