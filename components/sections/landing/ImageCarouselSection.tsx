@@ -27,7 +27,7 @@ const SwiperImage = ({ image }: { image: StaticImageData }) => (
 const ImageCarouselSection = () => {
   return (
     <Swiper
-      slidesPerView={1}
+      slidesPerView={2}
       spaceBetween={0}
       slidesPerGroup={1}
       loop={true}

@@ -117,7 +117,7 @@ input[type="number"] {
   }
 
   .text_large_body_p {
-    @apply font-body text-[1rem] font-[300] leading-[2rem] text-body-1;
+    @apply font-body text-[.9rem] font-[300] leading-[1.8rem] text-body-1 lg:text-[1rem] lg:leading-[2rem];
   }
 
   .text_large_body_r {

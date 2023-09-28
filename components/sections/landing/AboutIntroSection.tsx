@@ -35,7 +35,7 @@ const AboutIntroSection = () => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="my-20 w-full"
+        className="my-10 w-full lg:my-20"
       >
         <ImageCarouselSection />
       </motion.div>

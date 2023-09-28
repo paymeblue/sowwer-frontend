@@ -8,13 +8,13 @@ import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
 const AboutMidSection = () => {
   return (
-    <section className="mt-20 flex w-full items-center justify-between">
+    <section className="mt-20 flex w-full flex-col lg:flex-row lg:items-center lg:justify-between">
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="flex w-[40%] flex-col space-y-8"
+        className="flex w-full flex-col space-y-8 lg:w-[40%]"
       >
         <h2 className="text_variant_h2">
           Make kingdom investments in just a few minutes.
@@ -69,7 +69,7 @@ const AboutMidSection = () => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="relative h-[100vh] w-[55%]"
+        className="relative h-[60vh] w-full lg:h-[100vh] lg:w-[55%]"
       >
         <Image
           src="/assets/images/coin_tree_jar.png"

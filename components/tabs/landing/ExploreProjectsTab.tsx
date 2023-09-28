@@ -25,7 +25,7 @@ const ExploreProjectsTab = () => {
     <div className="mt-8 flex w-full flex-col items-center  justify-center">
       <h3 className="text_regular_body_sb text-center">Browse by category</h3>
       <Tabs defaultValue="all-projects" className="mt-4">
-        <TabsList className="flex items-center space-x-2">
+        <TabsList className="flex items-center space-x-0 lg:space-x-2">
           <TabsTrigger value="all-projects" onClick={() => setCategory("all")}>
             All Projects
           </TabsTrigger>
@@ -48,7 +48,7 @@ const ExploreProjectsTab = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="mt-10 grid w-full grid-cols-3 gap-6"
+          className="mt-10 grid w-full grid-cols-1 gap-6 lg:grid-cols-3"
         >
           {data?.data.length ? (
             data?.data.map((project, i) => {

@@ -18,7 +18,7 @@ const AboutMissionVisionSection = () => {
       whileInView="visible"
       viewport={DEFAULT_VIEWPORT}
       aria-label="Vision and Mission"
-      className="grid grid-cols-2 gap-8"
+      className="grid grid-cols-1 gap-8 lg:grid-cols-2"
     >
       <motion.div
         variants={cardItemVariant}

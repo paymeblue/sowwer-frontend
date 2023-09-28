@@ -19,10 +19,10 @@ const EmptyState = ({ image, title, desc, className, action }: Props) => {
     >
       {image}
 
-      <h4 className="text_small_header mt-8 text-center font-body font-[700]">
+      <h4 className="text_small_header mt-8 text-center font-body font-[700] leading-[1.8rem]">
         {title}
       </h4>
-      <desc className="text_small_body_r mt-2 max-w-[30vw] text-center">
+      <desc className="text_small_body_r mt-2 max-w-[70vw] text-center lg:max-w-[30vw]">
         {desc}
       </desc>
       {action}

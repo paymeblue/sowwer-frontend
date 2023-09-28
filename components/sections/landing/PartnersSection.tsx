@@ -29,7 +29,7 @@ const PartnersSection = () => {
       whileInView="visible"
       viewport={DEFAULT_VIEWPORT}
       aria-label="Partners"
-      className="w-full bg-white py-20"
+      className="hidden w-full bg-white py-20 lg:block"
     >
       <SectionContainer>
         <div className="mx-auto flex flex-col items-center space-y-4">

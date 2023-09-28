@@ -16,10 +16,10 @@ const ExploreMinistries = () => {
         className="safearea-top mb-20 w-full"
       >
         <div className="flex flex-col items-center space-y-2">
-          <h2 className="text_variant_h2 text-center text-[2.5rem]">
+          <h2 className="text_variant_h2 text-center text-[2rem] lg:text-[2.5rem]">
             Explore Ministries
           </h2>
-          <p className="text_large_body_p w-[60%] text-center">
+          <p className="text_large_body_p w-full text-center lg:w-[60%]">
             Explore different ministries i.e, Churches and other Christian
             Organizations on Soower. Make a kingdom investment by donating to
             different ministries across Nigeria and supporting their projects.
