@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+import { useMinistrySignupMutation } from "services/auth";
+
 import MinistryDetails from "@components/sections/auth/MinistryDetails";
 import SideLayoutWrapper from "@components/shared/Layouts/Side/SideLayoutWrapper";
 import Stepper from "@components/ui/stepper";
@@ -13,12 +15,19 @@ import {
 } from "lib/validations/auth";
 import MinistryPersonalInformation from "@components/sections/auth/MinistryPersonalInformation";
 import MinistryTermsAndConditions from "@components/sections/auth/MinstryTermsAndConditions";
+import { useToast } from "@components/ui/use-toast";
+import SuccessState from "@components/shared/SuccessState";
+import { Button } from "@components/ui/button";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 
-const MinistrySignupPage = () => {
+const MinistrySignupPageComp = () => {
+  const { toast } = useToast();
+  const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<
     null | "church" | "christian organization"
   >(null);
+  const [ministrySignup, { isLoading }] = useMinistrySignupMutation();
   const ministryDetailsForm = useForm<
     z.infer<typeof MinistrySignupMinistryDetailsValidation>
   >({
@@ -35,9 +44,64 @@ const MinistrySignupPage = () => {
     "Terms and Conditions",
   ];
 
-  const submitForm = () => {
-    // TODO: Implememt form submission
-    console.log("Submitting");
+  const submitForm = async () => {
+    const {
+      address,
+      cacDocument,
+      description,
+      email,
+      name,
+      phoneNumber,
+      state,
+      websiteLink,
+    } = ministryDetailsForm.getValues();
+    const {
+      email: adminEmail,
+      firstName,
+      lastName,
+      password,
+      phoneNumber: adminPhoneNumber,
+      role,
+    } = personInformationForm.getValues();
+
+    if (!selectedCategory) {
+      toast({
+        variant: "destructive",
+        title: "Please select a ministry type",
+      });
+      return;
+    }
+
+    try {
+      await ministrySignup({
+        cacDocument,
+        ministryEmail: email,
+        email: adminEmail,
+        firstName,
+        lastName,
+        ministryAddress: address,
+        ministryName: name,
+        ministryPhone: phoneNumber,
+        ministrySocialLink: websiteLink || "",
+        ministryState: state,
+        ministryType:
+          selectedCategory === "christian organization"
+            ? "organisation"
+            : selectedCategory,
+        password,
+        phone: adminPhoneNumber,
+        projectDescription: description,
+        role,
+      }).unwrap();
+      setRegistrationSuccessful(true);
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Error occured creating a ministry",
+        description:
+          "We were unable to create this ministry. Please try again later or contact support",
+      });
+    }
   };
 
   function getSectionComponent() {
@@ -63,11 +127,22 @@ const MinistrySignupPage = () => {
           <MinistryTermsAndConditions
             setActiveStep={setActiveStep}
             submitForm={submitForm}
+            isLoading={isLoading}
           />
         );
       default:
         return null;
     }
+  }
+
+  if (registrationSuccessful) {
+    return (
+      <SuccessState
+        title="We’ve received your application!"
+        desc="Thank you for registering your ministry on Soower. Your application has been received and you’ll be able to start creating projects and receiving donations once your details are verified. This should typically take 24-48 hours. In the meantime you can proceed to your dashboard to set up your remaining account details."
+        action={<Button variant="secondary">Go to Dashboard</Button>}
+      />
+    );
   }
   return (
     <SideLayoutWrapper
@@ -79,6 +154,14 @@ const MinistrySignupPage = () => {
         {getSectionComponent()}
       </div>
     </SideLayoutWrapper>
+  );
+};
+
+const MinistrySignupPage = () => {
+  return (
+    <NoSSRWrapper>
+      <MinistrySignupPageComp />
+    </NoSSRWrapper>
   );
 };
 

@@ -7,9 +7,14 @@ import { ArrowLeft } from "react-iconly";
 interface Props {
   setActiveStep: Dispatch<SetStateAction<number>>;
   submitForm: () => void;
+  isLoading: boolean;
 }
 
-const MinistryTermsAndConditions = ({ submitForm, setActiveStep }: Props) => {
+const MinistryTermsAndConditions = ({
+  submitForm,
+  setActiveStep,
+  isLoading,
+}: Props) => {
   const [checked, setChecked] = useState(false);
   const { toast } = useToast();
 
@@ -71,6 +76,7 @@ const MinistryTermsAndConditions = ({ submitForm, setActiveStep }: Props) => {
           variant="secondary"
           className="space-x-2"
           onClick={handleSubmit}
+          loading={isLoading}
         >
           Submit
         </Button>
