@@ -19,6 +19,7 @@ import { useToast } from "@components/ui/use-toast";
 import SuccessState from "@components/shared/SuccessState";
 import { Button } from "@components/ui/button";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import { MinistrySignupRequest } from "services/typings";
 
 const MinistrySignupPageComp = () => {
   const { toast } = useToast();
@@ -73,7 +74,7 @@ const MinistrySignupPageComp = () => {
     }
 
     try {
-      await ministrySignup({
+      const credentials: MinistrySignupRequest = {
         cacDocument,
         ministryEmail: email,
         email: adminEmail,
@@ -92,13 +93,15 @@ const MinistrySignupPageComp = () => {
         phone: adminPhoneNumber,
         projectDescription: description,
         role,
-      }).unwrap();
+      };
+      await ministrySignup(credentials).unwrap();
       setRegistrationSuccessful(true);
-    } catch (err) {
+    } catch (err: any) {
       toast({
         variant: "destructive",
         title: "Error occured creating a ministry",
         description:
+          err?.message ||
           "We were unable to create this ministry. Please try again later or contact support",
       });
     }
@@ -135,15 +138,6 @@ const MinistrySignupPageComp = () => {
     }
   }
 
-  if (registrationSuccessful) {
-    return (
-      <SuccessState
-        title="We’ve received your application!"
-        desc="Thank you for registering your ministry on Soower. Your application has been received and you’ll be able to start creating projects and receiving donations once your details are verified. This should typically take 24-48 hours. In the meantime you can proceed to your dashboard to set up your remaining account details."
-        action={<Button variant="secondary">Go to Dashboard</Button>}
-      />
-    );
-  }
   return (
     <SideLayoutWrapper
       title="Are you a ministry with widow, orphan or mission programs? Register with us today!"
@@ -151,7 +145,17 @@ const MinistrySignupPageComp = () => {
     >
       <div className="w-full overflow-hidden">
         <Stepper steps={steps} activeStep={activeStep} />
-        {getSectionComponent()}
+        {registrationSuccessful ? (
+          <div className="mt-10">
+            <SuccessState
+              title="We’ve received your application!"
+              desc="Thank you for registering your ministry on Soower. Your application has been received and you’ll be able to start creating projects and receiving donations once your details are verified. This should typically take 24-48 hours. In the meantime you can proceed to your dashboard to set up your remaining account details."
+              action={<Button variant="secondary">Go to Dashboard</Button>}
+            />
+          </div>
+        ) : (
+          <>{getSectionComponent()}</>
+        )}
       </div>
     </SideLayoutWrapper>
   );

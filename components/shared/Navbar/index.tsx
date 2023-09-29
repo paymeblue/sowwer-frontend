@@ -5,8 +5,11 @@ import {
 } from "@components/ui/navigation-menu";
 import Navitem, { INavitem } from "./Navitem";
 import { Button } from "@components/ui/button";
-import { usePathname } from "next/navigation";
+
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import useUserAuth from "@hooks/auth/useUserAuth";
+
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import Logo from "../Logo";
@@ -50,13 +53,12 @@ const navItems: INavitem[] = [
 
 interface Props {
   variant?: "landing" | "donor";
-  // TODO: remove when backend integration comes in
-  authenticated?: boolean;
 }
 
-const Navbar = ({ variant = "landing", authenticated }: Props) => {
+const Navbar = ({ variant = "landing" }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
+  const { isAuthenticated } = useUserAuth();
   const [isScrolling, setIsScrolling] = useState(false);
 
   const handleScroll = () => {
@@ -120,10 +122,10 @@ const Navbar = ({ variant = "landing", authenticated }: Props) => {
 
       <div
         className={`hidden items-center gap-4 lg:flex ${
-          authenticated && "flex-row-reverse"
+          isAuthenticated && "flex-row-reverse"
         }`}
       >
-        {authenticated ? (
+        {isAuthenticated ? (
           <ProfileMenuCard />
         ) : (
           <Button
@@ -171,10 +173,10 @@ const Navbar = ({ variant = "landing", authenticated }: Props) => {
 
               <div
                 className={`flex flex-col items-center gap-4 ${
-                  authenticated && "flex-row-reverse"
+                  isAuthenticated && "flex-row-reverse"
                 }`}
               >
-                {authenticated ? (
+                {isAuthenticated ? (
                   <ProfileMenuCard />
                 ) : (
                   <Button

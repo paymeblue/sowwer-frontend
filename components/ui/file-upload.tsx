@@ -71,7 +71,7 @@ const FileUpload = ({
           const base64String = reader.result as string;
           setImageBase64(base64String);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(newFile);
       }
     }
   };
@@ -102,7 +102,7 @@ const FileUpload = ({
           const base64String = reader.result as string;
           setImageBase64(base64String);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(newFile);
       }
     }
   };

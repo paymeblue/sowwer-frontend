@@ -7,7 +7,7 @@ const DonorLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="flex min-h-screen w-[100vw] flex-col">
       <header className="w-full">
-        <Navbar variant="donor" authenticated />
+        <Navbar variant="donor" />
       </header>
       <main className="mb-10 w-full">{children}</main>
       <SectionContainer className="mt-auto">
