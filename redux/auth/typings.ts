@@ -8,6 +8,7 @@ type BasicUserInfo = {
   role: string;
   type: string;
   createdAt: string;
+  ministry?: Ministry;
 };
 
 export type Ministry = {

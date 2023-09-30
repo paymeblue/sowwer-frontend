@@ -1,4 +1,6 @@
 "use client";
+import { useState } from "react";
+
 import {
   ColumnDef,
   flexRender,
@@ -18,16 +20,24 @@ import {
   TableRow,
 } from "@components/ui/table";
 import { Button } from "./button";
-import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isLoading?: boolean;
+  paginationInfo?: {
+    hasNext: boolean;
+    hasPrevious: boolean;
+    handleNext: () => void;
+    handlePrevious: () => void;
+  } | null;
 }
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
+  paginationInfo = null,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
@@ -94,47 +104,58 @@ export default function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {/* <div className="flex items-center justify-end space-x-10 py-4">
-        <Button
-          variant="link"
-          className="px-0 text-body-2"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="link"
-          className="px-0 text-body-2"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div> */}
-      {!table.getCanPreviousPage() && !table.getCanNextPage() ? null : (
-        <div className="flex items-center justify-end space-x-10 py-4">
-          <Button
-            variant="link"
-            className="px-0 text-body-2"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="link"
-            className="px-0 text-body-2"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+      {!paginationInfo ? (
+        <>
+          {!table.getCanPreviousPage() && !table.getCanNextPage() ? null : (
+            <div className="flex items-center justify-end space-x-10 py-4">
+              <Button
+                variant="link"
+                className="px-0 text-body-2"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="link"
+                className="px-0 text-body-2"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {!paginationInfo.hasPrevious && !paginationInfo.hasPrevious ? null : (
+            <div className="flex items-center justify-end space-x-10 py-4">
+              <Button
+                variant="link"
+                className="px-0 text-body-2"
+                size="sm"
+                onClick={paginationInfo.handlePrevious}
+                disabled={!paginationInfo.handlePrevious}
+                loading={isLoading}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="link"
+                className="px-0 text-body-2"
+                size="sm"
+                onClick={paginationInfo.handleNext}
+                disabled={!paginationInfo.hasNext}
+                loading={isLoading}
+              >
+                Next
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

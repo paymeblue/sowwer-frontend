@@ -1,4 +1,6 @@
 "use client";
+import { useGetMinistryProjectsQuery } from "services/projects";
+
 import { Button } from "@components/ui/button";
 import DataTable from "@components/ui/data-table";
 import {
@@ -8,19 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import { Status } from "@lib/constants";
-import { ministryProjects } from "@lib/mockData";
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye, MoreHorizontal, PenLine, QrCode, Trash, X } from "lucide-react";
-
-export type MinistryProject = {
-  id: string;
-  title: string;
-  goal: number;
-  category: string;
-  numOfDonors: number;
-  amountRaised: number;
-  status: Status;
-};
+import usePagination from "@hooks/general/usePagination";
+import { MinistryProject } from "services/typings";
 
 const columns: ColumnDef<MinistryProject>[] = [
   {
@@ -31,10 +24,10 @@ const columns: ColumnDef<MinistryProject>[] = [
     },
   },
   {
-    accessorKey: "goal",
+    accessorKey: "targetAmount",
     header: "Goal",
     cell: ({ row }) => {
-      const value = row.getValue("goal") as string;
+      const value = row.getValue("targetAmount") as string;
       const formattedValue = new Intl.NumberFormat("en-US").format(
         parseInt(value || "0", 10)
       );
@@ -53,10 +46,10 @@ const columns: ColumnDef<MinistryProject>[] = [
     },
   },
   {
-    accessorKey: "numOfDonors",
+    accessorKey: "donors",
     header: "No. of Donors",
     cell: ({ row }) => {
-      return <span>{row.getValue("numOfDonors")}</span>;
+      return <span>{row.getValue("donors")}</span>;
     },
   },
   {
@@ -153,10 +146,30 @@ const columns: ColumnDef<MinistryProject>[] = [
   },
 ];
 
-const MinistryProjectsTable = () => {
+interface Props {
+  ministryId: string;
+}
+
+const MinistryProjectsTable = ({ ministryId }: Props) => {
+  const { handleNext, handlePrevious, pagination } = usePagination();
+  const { data: projects, isFetching } = useGetMinistryProjectsQuery({
+    id: ministryId,
+    page: pagination.current,
+  });
+
   return (
     <div className="w-full">
-      <DataTable columns={columns} data={ministryProjects} />
+      <DataTable
+        columns={columns}
+        data={projects?.data || []}
+        isLoading={isFetching}
+        paginationInfo={{
+          handleNext: handleNext,
+          handlePrevious: handlePrevious,
+          hasNext: projects?.paginationInfo.hasNext || false,
+          hasPrevious: projects?.paginationInfo.hasPrevious || false,
+        }}
+      />
     </div>
   );
 };

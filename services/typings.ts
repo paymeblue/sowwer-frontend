@@ -1,3 +1,5 @@
+import { Status } from "@lib/constants";
+
 type BasicUserInfo = {
   id: string;
   firstName: string;
@@ -264,6 +266,21 @@ export type ResultResponse = Response<{
 //   | MinistryCompletedProjects
 //   | MinistryGeneralProjects;
 
+export type MinistryProject = {
+  id: string;
+  title: string;
+  targetAmount: string;
+  createdAt: string;
+  category: "widows" | "orphans" | "missions";
+  amountRaised: string;
+  status: Status;
+  image: string | null | undefined;
+  donors: number;
+  request_payout: boolean;
+  paid: boolean;
+  donationPercent: string;
+};
+
 export type MinistryProjectsResponse = TResponse<{
   id: string;
   title: string;
@@ -271,7 +288,7 @@ export type MinistryProjectsResponse = TResponse<{
   createdAt: string;
   category: "widows" | "orphans" | "missions";
   amountRaised: string;
-  status: string;
+  status: Status;
   image: string | null | undefined;
   donors: number;
   request_payout: boolean;
