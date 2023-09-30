@@ -67,8 +67,14 @@ const FileUpload = ({
         setSelectedFile(newFile);
         // Read the file as a Base64 string
         const reader = new FileReader();
-        reader.onload = () => {
-          const base64String = reader.result as string;
+        // reader.onload = () => {
+        //   const base64String = reader.result as string;
+        //   setImageBase64(base64String);
+        // };
+
+        reader.onloadend = (e) => {
+          const base64String = e.target?.result as string;
+          console.log({ base64String });
           setImageBase64(base64String);
         };
         reader.readAsDataURL(newFile);
@@ -98,8 +104,10 @@ const FileUpload = ({
         setSelectedFile(newFile);
         // Read the file as a Base64 string
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onloadend = () => {
           const base64String = reader.result as string;
+          console.log({ base64String });
+
           setImageBase64(base64String);
         };
         reader.readAsDataURL(newFile);

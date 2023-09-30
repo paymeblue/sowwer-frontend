@@ -1,10 +1,19 @@
-import { ReactNode } from "react";
+"use client";
+import { ReactNode, useEffect } from "react";
 import LeftSidebar from "./LeftSidebar";
 import Topbar from "./Topbar";
 
 const MinistryLayout = ({ children }: { children: ReactNode }) => {
+  useEffect(() => {
+    document.body.classList.add("body_on_center_layout");
+
+    // Remove the class from the body element when the component unmounts
+    return () => {
+      document.body.classList.remove("body_on_center_layout");
+    };
+  }, []);
   return (
-    <div className="flex w-screen flex-row">
+    <div className="flex h-screen w-screen flex-row overflow-y-hidden">
       <LeftSidebar />
       <main className="relative flex w-full flex-col">
         <Topbar />

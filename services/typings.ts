@@ -319,8 +319,8 @@ export type CreateProjectRequest = {
   amount: number;
   category: string;
   title: string;
-  // cover_photo: string;
-  // description: string;
+  cover_photo: string;
+  description: string;
 };
 export type CreateProjectResponse = Response<{
   id: string;

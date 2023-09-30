@@ -117,10 +117,10 @@ export const ProjectDescription = ({ form }: Props) => {
         control={form.control}
         name="description"
         render={({ field }) => (
-          <FormItem className="">
+          <FormItem>
             <FormLabel required>What is this project about?</FormLabel>
             <FormControl>
-              <Textarea rows={20} {...field} />
+              <Textarea rows={16} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

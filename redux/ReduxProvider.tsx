@@ -9,7 +9,7 @@ import store, { persistor } from "redux/store";
 const ReduxProvider = ({ children }: { children: ReactNode }) => {
   return (
     <Provider store={store}>
-      <PersistGate persistor={persistor} loading={<Loader />}>
+      <PersistGate persistor={persistor} loading={<Loader showLogo />}>
         {children}
       </PersistGate>
     </Provider>

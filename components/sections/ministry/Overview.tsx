@@ -3,6 +3,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MinistryCreateProjectValidation } from "lib/validations/ministry";
+import { useCreateProjectMutation } from "services/projects";
 
 import MinistryProjectCreateForm, {
   ProjectDescription,
@@ -13,17 +14,44 @@ import QuestionRounded from "@components/assets/svg/QuestionRounded";
 import { Button } from "@components/ui/button";
 import { ArrowRight } from "react-iconly";
 import { Form } from "@components/ui/form";
+import { useToast } from "@components/ui/use-toast";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 
-const Overview = () => {
+const OverviewComp = () => {
   const form = useForm<z.infer<typeof MinistryCreateProjectValidation>>({
     resolver: zodResolver(MinistryCreateProjectValidation),
   });
+  const { toast } = useToast();
+  const [createProject, { isLoading }] = useCreateProjectMutation();
 
   const onSubmit = async (
     values: z.infer<typeof MinistryCreateProjectValidation>
   ) => {
-    console.log("Submitted", { values });
-    alert("Form submited");
+    const {
+      amount,
+      category,
+      cover_photo: coverPhoto,
+      description,
+      title,
+    } = values;
+    console.log({ amount });
+    try {
+      await createProject({
+        amount: Number(amount.replace(/[₦,]/g, "")),
+        category,
+        title,
+        cover_photo: coverPhoto,
+        description,
+      }).unwrap();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to create project",
+        description:
+          error?.message ||
+          "A problem occured when creating the project, please try again later.",
+      });
+    }
   };
 
   return (
@@ -65,6 +93,7 @@ const Overview = () => {
         <div className="flex self-end">
           <Button
             onClick={form.handleSubmit(onSubmit)}
+            loading={isLoading}
             className="ml-auto space-x-2"
             variant="secondary"
           >
@@ -74,6 +103,14 @@ const Overview = () => {
         </div>
       </TabWrapper>
     </Form>
+  );
+};
+
+const Overview = () => {
+  return (
+    <NoSSRWrapper>
+      <OverviewComp />
+    </NoSSRWrapper>
   );
 };
 

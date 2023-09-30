@@ -77,7 +77,7 @@ input[type="number"] {
 .body_on_center_layout {
   overflow: hidden;
   width: 100vw;
-  height: 100vw;
+  height: 100vh;
 }
 
 @layer components {
