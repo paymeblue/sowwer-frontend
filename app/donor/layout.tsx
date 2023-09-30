@@ -8,7 +8,7 @@ export default function DonorDonationsPageLayout({
   children: ReactNode;
 }) {
   return (
-    <PrivateRoute>
+    <PrivateRoute type="ministry-donor">
       <DonorLayout>{children}</DonorLayout>
     </PrivateRoute>
   );

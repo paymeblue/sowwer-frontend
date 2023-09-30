@@ -8,9 +8,13 @@ import {
 import useUserAuth from "@hooks/auth/useUserAuth";
 import { LogOut, Settings } from "lucide-react";
 import Link from "next/link";
-import { ChevronDown } from "react-iconly";
+import { ChevronDown, User } from "react-iconly";
 
-const ProfileMenuCard = () => {
+interface Props {
+  variant?: "donor" | "landing" | "ministry";
+}
+
+const ProfileMenuCard = ({ variant = "landing" }: Props) => {
   const { user, isAuthenticated, logout } = useUserAuth();
 
   if (!isAuthenticated || !user) {
@@ -23,6 +27,14 @@ const ProfileMenuCard = () => {
       </p>
     );
   }
+
+  const getAccountUrl = () => {
+    const userType = user.type as string;
+
+    if (userType === "ministry-donor") return "/donor";
+    if (userType === "ministry") return "ministry";
+    return "/";
+  };
 
   const { firstName, lastName, email } = user;
   return (
@@ -46,12 +58,24 @@ const ProfileMenuCard = () => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="min-w-[10rem]">
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
+          {variant === "donor" && (
             <Link href="/donor/settings">
-              <span className="font-body">Settings</span>
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                <span className="font-body">Settings</span>
+              </DropdownMenuItem>
             </Link>
-          </DropdownMenuItem>
+          )}
+          {variant === "landing" && (
+            <Link href={getAccountUrl()}>
+              <DropdownMenuItem>
+                <div className="mr-2">
+                  <User size={18} />
+                </div>
+                <span className="font-body">Go to account</span>
+              </DropdownMenuItem>
+            </Link>
+          )}
           <DropdownMenuItem onClick={() => logout()}>
             <LogOut className="mr-2 h-4 w-4" />
             <span className="cursor-pointer font-body">Log out</span>

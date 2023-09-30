@@ -4,19 +4,31 @@ import useUserAuth from "@hooks/auth/useUserAuth";
 import { redirect } from "next/navigation";
 import { Fragment, ReactNode } from "react";
 
-const PrivateRouteComp = ({ children }: { children: ReactNode }) => {
-  const { isAuthenticated, token } = useUserAuth();
-  const auth = !!(isAuthenticated && token);
+const PrivateRouteComp = ({
+  children,
+  type = "ministry-donor",
+}: {
+  children: ReactNode;
+  type?: "ministry" | "ministry-donor";
+}) => {
+  const { isAuthenticated, token, user } = useUserAuth();
+  const auth = !!(isAuthenticated && token && user?.type === type);
   if (!auth) {
     redirect("/");
   }
   return <Fragment>{children}</Fragment>;
 };
 
-const PrivateRoute = ({ children }: { children: ReactNode }) => {
+const PrivateRoute = ({
+  children,
+  type = "ministry-donor",
+}: {
+  children: ReactNode;
+  type?: "ministry" | "ministry-donor";
+}) => {
   return (
     <NoSSRWrapper>
-      <PrivateRouteComp>{children}</PrivateRouteComp>
+      <PrivateRouteComp type={type}>{children}</PrivateRouteComp>
     </NoSSRWrapper>
   );
 };

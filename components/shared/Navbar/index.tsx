@@ -126,7 +126,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
         }`}
       >
         {isAuthenticated ? (
-          <ProfileMenuCard />
+          <ProfileMenuCard variant={variant} />
         ) : (
           <Button
             variant="outline"
@@ -177,7 +177,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
                 }`}
               >
                 {isAuthenticated ? (
-                  <ProfileMenuCard />
+                  <ProfileMenuCard variant={variant} />
                 ) : (
                   <Button
                     variant="outline"

@@ -5,7 +5,7 @@ const Topbar = () => {
   return (
     <nav className="topbar">
       <div className="ml-auto">
-        <ProfileMenuCard />
+        <ProfileMenuCard variant="ministry" />
       </div>
     </nav>
   );
