@@ -1,35 +1,48 @@
 "use client";
+import Loader from "@components/shared/Loader";
 import DataTable from "@components/ui/data-table";
-import { generalDonors } from "@lib/mockData";
+import useUserAuth from "@hooks/auth/useUserAuth";
+import usePagination from "@hooks/general/usePagination";
+import moment from "moment";
 import { ColumnDef } from "@tanstack/react-table";
+import { useGetDonationsForMinistryUserQuery } from "services/projects";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 
 export type GeneralDonor = {
   id: string;
-  name: string;
-  type: "one-time" | "recurring";
-  frequency: "monthly" | "daily" | null;
-  amount: number;
-  datetime: string;
+  amount: string;
+  donorName: string;
+  donorType: string | null;
+  donorInterval: string | null;
+  createdAt: string;
 };
 
 const columns: ColumnDef<GeneralDonor>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "donorName",
     header: "Donor's name",
-  },
-  {
-    accessorKey: "type",
-    header: "Donation Type",
     cell: ({ row }) => {
-      const value = row.getValue("type") as string;
-      return <span className="capitalize">{value} donation</span>;
+      const value = row.getValue("donorName") as string;
+      return <span className="capitalize">{value}</span>;
     },
   },
   {
-    accessorKey: "frequency",
+    accessorKey: "donorType",
+    header: "Donation Type",
+    cell: ({ row }) => {
+      const value = row.getValue("donorType") as string | null;
+      return value ? (
+        <span className="capitalize">{value} donation</span>
+      ) : (
+        <span className="capitalize">One-time Donation</span>
+      );
+    },
+  },
+  {
+    accessorKey: "donorInterval",
     header: "Frequency",
     cell: ({ row }) => {
-      const value = row.getValue("frequency") as string;
+      const value = row.getValue("donorInterval") as string;
       return value ? <span className="capitalize">{value}</span> : "-";
     },
   },
@@ -49,16 +62,53 @@ const columns: ColumnDef<GeneralDonor>[] = [
     },
   },
   {
-    accessorKey: "datetime",
+    accessorKey: "createdAt",
     header: "Date Donated",
+    cell: ({ row }) => {
+      const value = row.getValue("createdAt") as string;
+      return <span>{moment(value).format("Do MMMM YYYY; h:mm:ss a")}</span>;
+    },
   },
 ];
 
-const MinistryGeneralDonorsTable = () => {
+const MinistryGeneralDonorsTableComp = () => {
+  const { user } = useUserAuth();
+  const { handleNext, handlePrevious, pagination } = usePagination();
+  const {
+    data: donors,
+    isLoading,
+    isFetching,
+  } = useGetDonationsForMinistryUserQuery({
+    id: user?.ministry?.id,
+    page: pagination?.current,
+    type: "ministry",
+  });
+
+  if (!donors?.data && isLoading) {
+    return <Loader className="h-[50vh]" />;
+  }
   return (
     <div className="w-full">
-      <DataTable columns={columns} data={generalDonors} />
+      <DataTable
+        columns={columns}
+        data={donors?.data || []}
+        isLoading={isFetching}
+        paginationInfo={{
+          handleNext,
+          handlePrevious,
+          hasNext: donors?.paginationInfo?.hasNext || false,
+          hasPrevious: donors?.paginationInfo?.hasPrevious || false,
+        }}
+      />
     </div>
+  );
+};
+
+const MinistryGeneralDonorsTable = () => {
+  return (
+    <NoSSRWrapper>
+      <MinistryGeneralDonorsTableComp />
+    </NoSSRWrapper>
   );
 };
 

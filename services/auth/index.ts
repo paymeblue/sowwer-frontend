@@ -20,11 +20,25 @@ import { cacher } from "services/api/rtkQueryCacheUtils";
 const auth = api.injectEndpoints({
   endpoints: (build) => ({
     ministrySignup: build.mutation<SignupResponse, MinistrySignupRequest>({
-      query: (credentials) => ({
-        url: "users/register",
-        method: "POST",
-        body: credentials,
-      }),
+      query: (credentials) => {
+        const formData = new FormData();
+
+        for (const key in credentials) {
+          if (credentials.hasOwnProperty(key)) {
+            formData.append(key, credentials[key]);
+          }
+        }
+
+        return {
+          url: "users/register",
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          mode: "no-cors",
+        };
+      },
       transformResponse: (response: SignupResponse, meta, arg): any => {
         const { message, data } = response;
         return { message, data };

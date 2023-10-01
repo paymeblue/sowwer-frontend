@@ -8,6 +8,7 @@ const MinistryRouteComp = ({ children }: { children: ReactNode }) => {
   const { user } = useUserAuth();
   const auth = !!(user?.ministry?.id || user?.type === "ministry");
   if (!auth) {
+    console.log("I am false");
     redirect("/");
   }
   return <Fragment>{children}</Fragment>;

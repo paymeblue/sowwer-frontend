@@ -1,3 +1,4 @@
+import { GeneralDonor } from "@components/tables/ministry/MinistryGeneralDonorsTable";
 import { Status } from "@lib/constants";
 
 type BasicUserInfo = {
@@ -176,6 +177,7 @@ export type MinistryProfileResponse = Response<{
 }>;
 
 export type MinistrySignupRequest = {
+  [key: string]: string;
   ministryType: string;
   ministryPhone: string;
   ministryEmail: string;
@@ -661,14 +663,7 @@ export type PayoutHistoryResponse = TResponse<{
   createdAt: string;
   updatedAt: string;
 }>;
-export type MinistryDonationResponse = TResponse<{
-  id: string;
-  amount: string;
-  donorName: string;
-  donorType: string | null;
-  donorInterval: string | null;
-  createdAt: string;
-}>;
+export type MinistryDonationResponse = TResponse<GeneralDonor>;
 export type CoverPhotoRequest = {
   id?: string | null;
   cover_photo: FormData;

@@ -131,15 +131,15 @@ export default function DataTable<TData, TValue>({
         </>
       ) : (
         <>
-          {!paginationInfo.hasPrevious && !paginationInfo.hasPrevious ? null : (
+          {!paginationInfo.hasPrevious && !paginationInfo.hasNext ? null : (
             <div className="flex items-center justify-end space-x-10 py-4">
               <Button
                 variant="link"
                 className="px-0 text-body-2"
                 size="sm"
                 onClick={paginationInfo.handlePrevious}
-                disabled={!paginationInfo.handlePrevious}
-                loading={isLoading}
+                disabled={!paginationInfo.hasPrevious}
+                loading={isLoading && paginationInfo.hasPrevious}
               >
                 Previous
               </Button>
@@ -149,7 +149,7 @@ export default function DataTable<TData, TValue>({
                 size="sm"
                 onClick={paginationInfo.handleNext}
                 disabled={!paginationInfo.hasNext}
-                loading={isLoading}
+                loading={isLoading && paginationInfo.hasNext}
               >
                 Next
               </Button>
