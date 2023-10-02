@@ -29,7 +29,7 @@ const useMinistrySignin = () => {
         token: res.data.token.accessToken,
         refreshToken: res.data.token.refreshToken,
       };
-      dispatch(setCredentials(payload));
+      await dispatch(setCredentials(payload));
       router.push("/ministry");
     } catch (error: any) {
       toast({

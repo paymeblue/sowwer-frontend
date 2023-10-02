@@ -6,11 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 const DonorsPage = () => {
   return (
     <MainContentWrapper title="Donors">
-      {/* <EmptyState
-        image={<Emptydonor />}
-        title="No donors yet"
-        desc="Once you start receiving donations your list of donors will appear here."
-      /> */}
       <Tabs defaultValue="general-donors" className="mt-4 w-full">
         <TabsList>
           <TabsTrigger value="general-donors">General Donors</TabsTrigger>

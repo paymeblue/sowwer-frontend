@@ -278,25 +278,12 @@ export type MinistryProject = {
   status: Status;
   image: string | null | undefined;
   donors: number;
-  request_payout: boolean;
+  request_payout: number;
   paid: boolean;
   donationPercent: string;
 };
 
-export type MinistryProjectsResponse = TResponse<{
-  id: string;
-  title: string;
-  targetAmount: string;
-  createdAt: string;
-  category: "widows" | "orphans" | "missions";
-  amountRaised: string;
-  status: Status;
-  image: string | null | undefined;
-  donors: number;
-  request_payout: boolean;
-  paid: boolean;
-  donationPercent: string;
-}>;
+export type MinistryProjectsResponse = TResponse<MinistryProject>;
 
 export type MinistryGeneralDonationsResponse = TResponse<{
   id: string;

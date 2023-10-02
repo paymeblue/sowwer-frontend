@@ -1,8 +1,12 @@
 import { Button } from "@components/ui/button";
 import DataTable from "@components/ui/data-table";
+import useUserAuth from "@hooks/auth/useUserAuth";
+import usePagination from "@hooks/general/usePagination";
 import { formatCurrency } from "@lib/functions";
-import { completedProjects, payoutHistory } from "@lib/mockData";
+import { payoutHistory } from "@lib/mockData";
 import { ColumnDef } from "@tanstack/react-table";
+import { useGetMinistryProjectsQuery } from "services/projects";
+import { MinistryProject } from "services/typings";
 
 export type CompletedProject = {
   id: string;
@@ -21,7 +25,7 @@ export type PayoutHistory = {
   payoutDate: string;
 };
 
-const completeProjectColumns: ColumnDef<CompletedProject>[] = [
+const completeProjectColumns: ColumnDef<MinistryProject>[] = [
   {
     accessorKey: "title",
     header: "Project Title",
@@ -32,10 +36,10 @@ const completeProjectColumns: ColumnDef<CompletedProject>[] = [
     },
   },
   {
-    accessorKey: "goal",
+    accessorKey: "targetAmount",
     header: "Goal",
     cell: ({ row }) => {
-      const value = row.getValue("goal") as string;
+      const value = row.getValue("targetAmount") as string;
       return <span className="capitalize">₦{formatCurrency(value)}</span>;
     },
   },
@@ -47,10 +51,10 @@ const completeProjectColumns: ColumnDef<CompletedProject>[] = [
     },
   },
   {
-    accessorKey: "numOfDonors",
+    accessorKey: "donors",
     header: "No. of Donors",
     cell: ({ row }) => {
-      return <span>{row.getValue("numOfDonors")}</span>;
+      return <span>{row.getValue("donors")}</span>;
     },
   },
   {
@@ -64,15 +68,20 @@ const completeProjectColumns: ColumnDef<CompletedProject>[] = [
   },
   {
     id: "actions",
-    cell: () => {
+    cell: ({ row }) => {
+      const project = row.original;
+      const disabled = !!project.request_payout;
       return (
-        <Button
-          size="sm"
-          variant="outline"
-          className=" ml-auto w-full border-accent px-3 text-[.75rem] text-accent"
-        >
-          Request payout
-        </Button>
+        <div className="flex w-full">
+          <Button
+            size="sm"
+            disabled={disabled}
+            variant="outline"
+            className="ml-auto w-fit border-accent text-[.75rem] text-accent"
+          >
+            Request payout
+          </Button>
+        </div>
       );
     },
   },
@@ -113,8 +122,26 @@ const payoutHistoryColumns: ColumnDef<PayoutHistory>[] = [
 ];
 
 export const MinistryCompletedProjectsTable = () => {
+  const { user } = useUserAuth();
+  const { pagination, handleNext, handlePrevious } = usePagination();
+  const { data: completedProjects, isFetching } = useGetMinistryProjectsQuery({
+    id: user?.ministry?.id || "",
+    page: pagination.current,
+    status: "completed",
+  });
+
   return (
-    <DataTable data={completedProjects} columns={completeProjectColumns} />
+    <DataTable
+      data={completedProjects?.data || []}
+      columns={completeProjectColumns}
+      isLoading={isFetching}
+      paginationInfo={{
+        handleNext,
+        handlePrevious,
+        hasNext: completedProjects?.paginationInfo?.hasNext || false,
+        hasPrevious: completedProjects?.paginationInfo?.hasPrevious || false,
+      }}
+    />
   );
 };
 
