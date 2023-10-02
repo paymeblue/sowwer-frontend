@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+import { useDispatch } from "react-redux";
+import { setCredentials } from "redux/auth/reducer";
 import { useMinistrySignupMutation } from "services/auth";
 
 import MinistryDetails from "@components/sections/auth/MinistryDetails";
@@ -20,9 +22,12 @@ import SuccessState from "@components/shared/SuccessState";
 import { Button } from "@components/ui/button";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { MinistrySignupRequest } from "services/typings";
+import { convertBase64toFile } from "@lib/functions";
+import Link from "next/link";
 
 const MinistrySignupPageComp = () => {
   const { toast } = useToast();
+  const dispatch = useDispatch();
   const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<
@@ -75,7 +80,11 @@ const MinistrySignupPageComp = () => {
 
     try {
       const credentials: MinistrySignupRequest = {
-        cacDocument,
+        cacDocument: convertBase64toFile(
+          cacDocument,
+          "CAC_document",
+          "image/png"
+        ),
         ministryEmail: email,
         email: adminEmail,
         firstName,
@@ -94,7 +103,15 @@ const MinistrySignupPageComp = () => {
         projectDescription: description,
         role,
       };
-      await ministrySignup(credentials).unwrap();
+      const res = await ministrySignup(credentials).unwrap();
+      dispatch(
+        setCredentials({
+          user: res.data.user,
+          token: res.data.token.accessToken,
+          refreshToken: res.data.token.refreshToken,
+          context: "ministry",
+        })
+      );
       setRegistrationSuccessful(true);
     } catch (err: any) {
       toast({
@@ -150,7 +167,11 @@ const MinistrySignupPageComp = () => {
             <SuccessState
               title="We’ve received your application!"
               desc="Thank you for registering your ministry on Soower. Your application has been received and you’ll be able to start creating projects and receiving donations once your details are verified. This should typically take 24-48 hours. In the meantime you can proceed to your dashboard to set up your remaining account details."
-              action={<Button variant="secondary">Go to Dashboard</Button>}
+              action={
+                <Link href="/ministry">
+                  <Button variant="secondary">Go to Dashboard</Button>
+                </Link>
+              }
             />
           </div>
         ) : (

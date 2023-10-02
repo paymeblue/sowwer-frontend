@@ -33,10 +33,10 @@ const auth = api.injectEndpoints({
           url: "users/register",
           method: "POST",
           body: formData,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          mode: "no-cors",
+          // headers: {
+          //   "Content-Type": "multipart/form-data",
+          // },
+          // mode: "no-cors",
         };
       },
       transformResponse: (response: SignupResponse, meta, arg): any => {
