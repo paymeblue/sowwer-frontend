@@ -94,7 +94,7 @@ export type LoginData = {
 
 export type PublishOrDraftRequest = {
   id: string | null;
-  query: string;
+  query: "active" | "drafted";
 };
 export type PublishOrDraftResponse = Response<{
   id: string;
@@ -305,10 +305,11 @@ export type ProjectResult = {
   isSuccess: boolean;
 };
 export type CreateProjectRequest = {
+  [key: string]: any;
   amount: number;
   category: string;
   title: string;
-  cover_photo: string;
+  cover_photo: File;
   description: string;
 };
 export type CreateProjectResponse = Response<{

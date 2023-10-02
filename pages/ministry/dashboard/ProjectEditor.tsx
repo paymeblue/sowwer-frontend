@@ -8,6 +8,8 @@ import { ArrowLeft } from "react-iconly";
 import { useRouter } from "next/navigation";
 import Overview from "@components/sections/ministry/Overview";
 import SharingDetails from "@components/sections/ministry/SharingDetails";
+import EmptyState from "@components/shared/EmptyState";
+import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 
 const RightContent = () => {
   return (
@@ -35,7 +37,11 @@ const RightContent = () => {
   );
 };
 
-const CreateProject = () => {
+interface Props {
+  id?: string;
+}
+
+const ProjectEditor = ({ id }: Props) => {
   const router = useRouter();
   return (
     <MainContentWrapper
@@ -61,11 +67,19 @@ const CreateProject = () => {
           <Overview />
         </TabsContent>
         <TabsContent value="sharing-details">
-          <SharingDetails />
+          {!id ? (
+            <EmptyState
+              image={<EmptySpeaker />}
+              title="Publish a project"
+              desc="Once you publish you project, you'll see your sharing details and can download the QR code."
+            />
+          ) : (
+            <SharingDetails />
+          )}
         </TabsContent>
       </Tabs>
     </MainContentWrapper>
   );
 };
 
-export default CreateProject;
+export default ProjectEditor;

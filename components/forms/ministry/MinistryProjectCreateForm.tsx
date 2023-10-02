@@ -146,6 +146,7 @@ export const UploadCoverPhoto = ({ form }: Props) => {
                 }}
                 title="Upload Cover Photo"
                 desc="(.jpg, .jpeg or .png file format supported)"
+                fileName="cover_photo"
               />
             </FormControl>
             <FormMessage />

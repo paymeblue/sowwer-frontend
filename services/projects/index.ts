@@ -26,11 +26,21 @@ import { cacher } from "services/api/rtkQueryCacheUtils";
 const projects = api.injectEndpoints({
   endpoints: (build) => ({
     createProject: build.mutation<CreateProjectResponse, CreateProjectRequest>({
-      query: (credentials) => ({
-        url: "projects/create",
-        method: "POST",
-        body: credentials,
-      }),
+      query: (credentials) => {
+        const formData = new FormData();
+
+        for (const key in credentials) {
+          if (credentials.hasOwnProperty(key)) {
+            formData.append(key, credentials[key]);
+          }
+        }
+
+        return {
+          url: "projects/create",
+          method: "POST",
+          body: formData,
+        };
+      },
       // Invalidate cache tags for 'Projects' on successful project creation
       invalidatesTags: cacher.invalidatesList("Projects"),
       // Pick out data and prevent nested properties in a hook or selector

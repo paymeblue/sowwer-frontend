@@ -12,6 +12,7 @@ interface Props {
   containerClassname?: HTMLAttributes<HTMLDivElement>["className"];
   title: string;
   desc: string;
+  fileName: string;
 }
 
 const FileUpload = ({
@@ -20,6 +21,7 @@ const FileUpload = ({
   containerClassname,
   title,
   desc,
+  fileName,
 }: Props) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
@@ -48,10 +50,10 @@ const FileUpload = ({
       }
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: "application/octet-stream" });
-      const newFile = new File([blob], "CAC_Document"); // You can set the desired file name
+      const newFile = new File([blob], fileName); // You can set the desired file name
       setSelectedFile(newFile);
     }
-  }, [file, imageBase64]);
+  }, [file, imageBase64, fileName]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -61,7 +63,7 @@ const FileUpload = ({
         alert("File size exceeds the maximum limit of 5MB.");
       } else {
         // Create a new File object with the desired name "CAC_Document"
-        const newFileName = "CAC_Document";
+        const newFileName = fileName;
         const newFile = new File([file], newFileName, { type: file.type });
 
         setSelectedFile(newFile);
@@ -98,7 +100,7 @@ const FileUpload = ({
         alert("File size exceeds the maximum limit of 5MB.");
       } else {
         // Create a new File object with the desired name "CAC_Document"
-        const newFileName = "CAC_Document";
+        const newFileName = fileName;
         const newFile = new File([file], newFileName, { type: file.type });
 
         setSelectedFile(newFile);

@@ -219,6 +219,7 @@ const MinistryDetails = ({
                           title="Upload CAC Document"
                           desc="(.jpg, .png or .pdf file format supported)"
                           file={field.value}
+                          fileName="CAC_Document"
                         />
                       </FormControl>
                       <FormMessage />

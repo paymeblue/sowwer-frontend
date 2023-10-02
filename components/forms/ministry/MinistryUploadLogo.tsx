@@ -44,6 +44,7 @@ export const MinistryUploadLogo = () => {
                   title="Upload Logo"
                   desc="(.jpg, .jpeg or .png file format supported)"
                   containerClassname="w-[50%] aspect-square"
+                  fileName="logo"
                 />
               </FormControl>
               <FormMessage />
