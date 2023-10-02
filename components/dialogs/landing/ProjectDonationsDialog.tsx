@@ -78,7 +78,7 @@ const ProjectDonationsDialog = ({ projectId, title }: Props) => {
           </p>
         )}
       </div>
-      {sortedProjectDonors && sortedProjectDonors.length && (
+      {sortedProjectDonors && sortedProjectDonors.length ? (
         <Dialog>
           <DialogTrigger asChild>
             <Button
@@ -126,7 +126,7 @@ const ProjectDonationsDialog = ({ projectId, title }: Props) => {
             />
           </DialogContent>
         </Dialog>
-      )}
+      ) : null}
     </div>
   );
 };

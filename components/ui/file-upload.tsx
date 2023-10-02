@@ -13,6 +13,8 @@ interface Props {
   title: string;
   desc: string;
   fileName: string;
+  fileUrl?: string;
+  editMode?: boolean;
 }
 
 const FileUpload = ({
@@ -22,9 +24,12 @@ const FileUpload = ({
   title,
   desc,
   fileName,
+  fileUrl,
+  editMode = false,
 }: Props) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [editModeState, setEditModeState] = useState(editMode);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -125,29 +130,31 @@ const FileUpload = ({
 
   return (
     <div className="p-0">
-      <div
-        className={cn(
-          "mb-4 flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary py-10",
-          containerClassname
-        )}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        onClick={openFileInput}
-      >
-        <input
-          type="file"
-          accept=".jpg, .jpeg, .png"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-        <FileUploadIcon />
-        <h4 className="font-body text-[.8rem] text-primary">{title}</h4>
-        <p className="text-center font-body text-[.7rem] text-[#848484]">
-          {desc}
-        </p>
-      </div>
-      {selectedFile && (
+      {!editModeState && (
+        <div
+          className={cn(
+            "mb-4 flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary py-10",
+            containerClassname
+          )}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onClick={openFileInput}
+        >
+          <input
+            type="file"
+            accept=".jpg, .jpeg, .png"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+          <FileUploadIcon />
+          <h4 className="font-body text-[.8rem] text-primary">{title}</h4>
+          <p className="text-center font-body text-[.7rem] text-[#848484]">
+            {desc}
+          </p>
+        </div>
+      )}
+      {selectedFile && !editModeState && (
         <div className="flex w-full items-center justify-between rounded-lg border-[.5px] border-gray-300 p-4">
           <div className="flex items-center space-x-2">
             <div className="relative h-6 w-6 rounded-md border border-gray-300">
@@ -165,6 +172,28 @@ const FileUpload = ({
 
           <div
             onClick={() => setSelectedFile(null)}
+            className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:bg-grey"
+          >
+            <Trash size={14} />
+          </div>
+        </div>
+      )}
+      {editModeState && (
+        <div className="flex w-full items-center justify-between rounded-lg border-[.5px] border-gray-300 p-4">
+          <div className="flex items-center space-x-2">
+            <div className="relative h-6 w-6 rounded-md border border-gray-300">
+              <Image
+                src={fileUrl || ""}
+                alt="Selected File"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <p className="text_regular_body_p text-[.75rem]">{fileName}</p>
+          </div>
+
+          <div
+            onClick={() => setEditModeState(false)}
             className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:bg-grey"
           >
             <Trash size={14} />

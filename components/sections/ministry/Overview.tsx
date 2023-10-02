@@ -3,8 +3,12 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MinistryCreateProjectValidation } from "lib/validations/ministry";
-import { useCreateProjectMutation } from "services/projects";
-import { usePublishOrDraftProjectMutation } from "services/projects";
+import {
+  useGetProjectQuery,
+  // useEditProjectMutation,
+  usePublishOrDraftProjectMutation,
+  useCreateProjectMutation,
+} from "services/projects";
 
 import MinistryProjectCreateForm, {
   ProjectDescription,
@@ -16,13 +20,15 @@ import { Button } from "@components/ui/button";
 import { Form } from "@components/ui/form";
 import { useToast } from "@components/ui/use-toast";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
-import { convertBase64toFile } from "@lib/functions";
+import { convertBase64toFile, formatCurrency } from "@lib/functions";
+import { useEffect } from "react";
 
 interface Props {
-  id?: string;
+  id?: string | null;
 }
 
 const OverviewComp = ({ id }: Props) => {
+  const { data: project } = useGetProjectQuery(id);
   const form = useForm<z.infer<typeof MinistryCreateProjectValidation>>({
     resolver: zodResolver(MinistryCreateProjectValidation),
   });
@@ -30,6 +36,22 @@ const OverviewComp = ({ id }: Props) => {
   const [createProject, { isLoading }] = useCreateProjectMutation();
   const [publishOrDraftProject, { isLoading: togglingProject }] =
     usePublishOrDraftProjectMutation();
+
+  useEffect(() => {
+    if (!project?.data) return;
+    const {
+      category,
+      cover_photo: coverPhoto,
+      description,
+      targetAmount,
+      title,
+    } = project.data;
+    form.setValue("title", title);
+    form.setValue("cover_photo", coverPhoto || "");
+    form.setValue("category", category);
+    form.setValue("description", description || "");
+    form.setValue("amount", `₦ ${formatCurrency(targetAmount)}`);
+  }, [project, form]);
 
   const handleProjectCreate = async (
     values: z.infer<typeof MinistryCreateProjectValidation>
@@ -133,7 +155,11 @@ const OverviewComp = ({ id }: Props) => {
           desc="Add a cover photo to your project."
           spaceTop
         >
-          <UploadCoverPhoto form={form} />
+          <UploadCoverPhoto
+            form={form}
+            id={id || undefined}
+            fileUrl={project?.data?.cover_photo || undefined}
+          />
         </TabSectionWrapper>
 
         <TabSectionWrapper
@@ -151,23 +177,45 @@ const OverviewComp = ({ id }: Props) => {
           </div>
         </TabSectionWrapper>
 
-        <div className="ml-auto flex w-fit space-x-4">
-          <Button
-            onClick={form.handleSubmit(saveDraft)}
-            variant="outline"
-            className="w-fit border-accent text-accent"
-            loading={togglingProject || isLoading}
-          >
-            Save as draft
-          </Button>
-          <Button
-            onClick={form.handleSubmit(publishProject)}
-            variant="secondary"
-            loading={togglingProject || isLoading}
-          >
-            Publish
-          </Button>
-        </div>
+        {!id ? (
+          <div className="ml-auto flex w-fit space-x-4">
+            <Button
+              onClick={form.handleSubmit(saveDraft)}
+              variant="outline"
+              className="w-fit border-accent text-accent"
+              loading={togglingProject || isLoading}
+            >
+              Save as draft
+            </Button>
+            <Button
+              onClick={form.handleSubmit(publishProject)}
+              variant="secondary"
+              loading={togglingProject || isLoading}
+            >
+              Publish
+            </Button>
+          </div>
+        ) : (
+          <div className="ml-auto flex w-fit space-x-4">
+            {project?.data.status === "drafted" && (
+              <Button
+                onClick={() => toggleProjectStatus(id, "active")}
+                variant="outline"
+                className="w-fit border-accent text-accent"
+                loading={togglingProject || isLoading}
+              >
+                Publish project
+              </Button>
+            )}
+            <Button
+              onClick={form.handleSubmit(publishProject)}
+              variant="secondary"
+              loading={togglingProject || isLoading}
+            >
+              Update changes
+            </Button>
+          </div>
+        )}
       </TabWrapper>
     </Form>
   );

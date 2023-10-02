@@ -68,7 +68,15 @@ const projects = api.injectEndpoints({
         response.data.message,
     }),
     getProject: build.query<ResultResponse, string | null | undefined>({
-      query: (id) => `projects/${id}`,
+      query: (id) => {
+        if (id) {
+          // If id is provided and not null or undefined, run the query
+          return `projects/${id}`;
+        } else {
+          // If id is not provided or is null/undefined, return an empty string
+          return "";
+        }
+      },
       // Cache tags for individual project retrieval
       providesTags: cacher.providesProperty("Projects"),
       // Pick out data and prevent nested properties in a hook or selector

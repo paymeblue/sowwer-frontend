@@ -14,6 +14,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Eye, MoreHorizontal, PenLine, QrCode, Trash, X } from "lucide-react";
 import usePagination from "@hooks/general/usePagination";
 import { MinistryProject } from "services/typings";
+import Link from "next/link";
 
 const columns: ColumnDef<MinistryProject>[] = [
   {
@@ -102,10 +103,12 @@ const columns: ColumnDef<MinistryProject>[] = [
           </DropdownMenuTrigger>
           {project.status === Status.drafted && (
             <DropdownMenuContent align="end">
-              <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                <PenLine size={14} />{" "}
-                <span className="text_tiny_body_r">Edit</span>{" "}
-              </DropdownMenuItem>
+              <Link href={`/ministry/projects/${project.id}`}>
+                <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                  <PenLine size={14} />{" "}
+                  <span className="text_tiny_body_r">Edit</span>{" "}
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
                 <Trash size={14} />{" "}
                 <span className="text_tiny_body_r text-[#EB5757]">Delete</span>{" "}
@@ -114,10 +117,12 @@ const columns: ColumnDef<MinistryProject>[] = [
           )}
           {project.status === Status.active && (
             <DropdownMenuContent align="end">
-              <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                <PenLine size={14} />{" "}
-                <span className="text_tiny_body_r">Edit</span>{" "}
-              </DropdownMenuItem>
+              <Link href={`/ministry/projects/${project.id}`}>
+                <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                  <PenLine size={14} />{" "}
+                  <span className="text_tiny_body_r">Edit</span>{" "}
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem className="text_tiny_body_r space-x-2">
                 <QrCode size={14} />{" "}
                 <span className="text_tiny_body_r">Download QR</span>{" "}

@@ -22,6 +22,8 @@ import FileUpload from "@components/ui/file-upload";
 
 interface Props {
   form: UseFormReturn<z.infer<typeof MinistryCreateProjectValidation>>;
+  id?: string;
+  fileUrl?: string;
 }
 
 const MinistryProjectCreateForm = ({ form }: Props) => {
@@ -54,7 +56,7 @@ const MinistryProjectCreateForm = ({ form }: Props) => {
                 <FormLabel required className="">
                   Category
                 </FormLabel>
-                <Select onValueChange={field.onChange}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="--Select--" />
@@ -130,7 +132,7 @@ export const ProjectDescription = ({ form }: Props) => {
   );
 };
 
-export const UploadCoverPhoto = ({ form }: Props) => {
+export const UploadCoverPhoto = ({ form, id, fileUrl }: Props) => {
   return (
     <form>
       <FormField
@@ -147,6 +149,8 @@ export const UploadCoverPhoto = ({ form }: Props) => {
                 title="Upload Cover Photo"
                 desc="(.jpg, .jpeg or .png file format supported)"
                 fileName="cover_photo"
+                editMode={id ? true : false}
+                fileUrl={fileUrl}
               />
             </FormControl>
             <FormMessage />
