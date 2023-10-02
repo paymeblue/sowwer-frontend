@@ -3,26 +3,23 @@ import DataTable from "@components/ui/data-table";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import usePagination from "@hooks/general/usePagination";
 import { formatCurrency } from "@lib/functions";
-import { payoutHistory } from "@lib/mockData";
 import { ColumnDef } from "@tanstack/react-table";
 import { useGetMinistryProjectsQuery } from "services/projects";
 import { MinistryProject } from "services/typings";
-
-export type CompletedProject = {
-  id: string;
-  title: string;
-  goal: number;
-  category: string;
-  numOfDonors: number;
-  amountRaised: number;
-};
+import { usePayoutHistoryQuery } from "services/payouts";
+import Loader from "@components/shared/Loader";
+import EmptyState from "@components/shared/EmptyState";
+import EmptyWallet from "@components/assets/svg/emptyWallet";
+import moment from "moment";
 
 export type PayoutHistory = {
   id: string;
-  referenceNo: string;
-  title: string;
-  amountPaid: number;
-  payoutDate: string;
+  user_id: string;
+  reference: string;
+  project_title: string;
+  amount: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 const completeProjectColumns: ColumnDef<MinistryProject>[] = [
@@ -89,35 +86,41 @@ const completeProjectColumns: ColumnDef<MinistryProject>[] = [
 
 const payoutHistoryColumns: ColumnDef<PayoutHistory>[] = [
   {
-    accessorKey: "referenceNo",
+    accessorKey: "reference",
     header: "Reference No.",
     cell: ({ row }) => {
       return (
         <span className="font-[600] uppercase">
-          {row.getValue("referenceNo")}
+          {row.getValue("reference")}
         </span>
       );
     },
   },
   {
-    accessorKey: "title",
+    accessorKey: "project_title",
     header: "Title",
     cell: ({ row }) => {
-      return <span className="capitalize">{row.getValue("title")}</span>;
+      return (
+        <span className="capitalize">{row.getValue("project_title")}</span>
+      );
     },
   },
   {
-    accessorKey: "amountPaid",
+    accessorKey: "amount",
     header: "Amount Paid",
     cell: ({ row }) => {
-      const value = row.getValue("amountPaid") as string;
+      const value = row.getValue("amount") as string;
 
       return <span className="capitalize">₦{formatCurrency(value)}</span>;
     },
   },
   {
-    accessorKey: "payoutDate",
+    accessorKey: "updatedAt",
     header: "Payout Date",
+    cell: ({ row }) => {
+      const value = row.getValue("updatedAt") as string;
+      return <span>{moment(value).format("Do MMMM YYYY; h:mm:ss a")}</span>;
+    },
   },
 ];
 
@@ -146,5 +149,40 @@ export const MinistryCompletedProjectsTable = () => {
 };
 
 export const MinistryPayoutHistryTable = () => {
-  return <DataTable data={payoutHistory} columns={payoutHistoryColumns} />;
+  const { pagination, handleNext, handlePrevious } = usePagination();
+  const {
+    data: payoutHistory,
+    isFetching,
+    isLoading,
+  } = usePayoutHistoryQuery({
+    page: pagination.current,
+  });
+
+  if (isLoading) {
+    return <Loader className="h-[40vh]" />;
+  }
+
+  if (!payoutHistory?.data?.length) {
+    return (
+      <EmptyState
+        image={<EmptyWallet />}
+        title="No payouts yet"
+        desc="Once we have paid out proceeds from completed projects, you'll be able to see the history here."
+      />
+    );
+  }
+
+  return (
+    <DataTable
+      data={payoutHistory?.data || []}
+      columns={payoutHistoryColumns}
+      isLoading={isFetching}
+      paginationInfo={{
+        handleNext,
+        handlePrevious,
+        hasNext: payoutHistory?.paginationInfo?.hasNext || false,
+        hasPrevious: payoutHistory?.paginationInfo?.hasPrevious || false,
+      }}
+    />
+  );
 };
