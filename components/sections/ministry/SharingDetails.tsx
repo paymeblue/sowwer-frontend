@@ -27,13 +27,6 @@ const SharingDetails = () => {
           </div>
         </TabSectionWrapper>
       </TabWrapper>
-
-      <div className="ml-auto flex w-fit space-x-4">
-        <Button variant="outline" className="w-fit border-accent text-accent">
-          Save as draft
-        </Button>
-        <Button variant="secondary">Publish</Button>
-      </div>
     </div>
   );
 };

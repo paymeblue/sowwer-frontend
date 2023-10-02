@@ -24,9 +24,10 @@ interface Props {
   form: UseFormReturn<z.infer<typeof MinistryCreateProjectValidation>>;
   id?: string;
   fileUrl?: string;
+  status?: string;
 }
 
-const MinistryProjectCreateForm = ({ form }: Props) => {
+const MinistryProjectCreateForm = ({ form, id, status }: Props) => {
   return (
     <div className="w-full">
       <form>
@@ -81,6 +82,7 @@ const MinistryProjectCreateForm = ({ form }: Props) => {
                 <FormControl>
                   <Input
                     placeholder="₦ 0.00"
+                    disabled={!!(id && status === "active")}
                     type="text"
                     value={form.watch("amount")}
                     onChange={(event) => {

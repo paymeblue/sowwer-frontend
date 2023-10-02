@@ -89,8 +89,13 @@ const projects = api.injectEndpoints({
     }),
     editProject: build.mutation<ResultResponse, EditProjectRequest>({
       query: (body) => {
-        const { id, ...rest } = body;
-        return { url: `projects/${id}`, method: "PATCH", body: rest };
+        const formData = new FormData();
+        for (const key in body) {
+          if (body.hasOwnProperty(key)) {
+            formData.append(key, body[key]);
+          }
+        }
+        return { url: `projects/${body.id}`, method: "PATCH", body: formData };
       },
       // Cache tags for individual project retrieval
       invalidatesTags: cacher.providesProperty("Projects"),

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MinistryCreateProjectValidation } from "lib/validations/ministry";
 import {
   useGetProjectQuery,
-  // useEditProjectMutation,
+  useEditProjectMutation,
   usePublishOrDraftProjectMutation,
   useCreateProjectMutation,
 } from "services/projects";
@@ -34,6 +34,8 @@ const OverviewComp = ({ id }: Props) => {
   });
   const { toast } = useToast();
   const [createProject, { isLoading }] = useCreateProjectMutation();
+  const [editProject, { isLoading: updatingProject }] =
+    useEditProjectMutation();
   const [publishOrDraftProject, { isLoading: togglingProject }] =
     usePublishOrDraftProjectMutation();
 
@@ -96,7 +98,7 @@ const OverviewComp = ({ id }: Props) => {
       await publishOrDraftProject({
         id,
         query: status,
-      });
+      }).unwrap();
       toast({
         variant: "default",
         title: `Project successfully set to ${status}`,
@@ -137,6 +139,48 @@ const OverviewComp = ({ id }: Props) => {
     }
   };
 
+  const updateProject = async (
+    values: z.infer<typeof MinistryCreateProjectValidation>
+  ) => {
+    if (!id) return;
+    const {
+      amount,
+      category,
+      description,
+      title,
+      cover_photo: coverPhoto,
+    } = values;
+    try {
+      const payload: {
+        [key: string]: any;
+      } = {
+        id,
+        amount: Number(amount.replace(/[₦,]/g, "")) as number,
+        description,
+        category,
+      };
+
+      if (title !== project?.data?.title) {
+        payload["title"] = title;
+      }
+
+      if (coverPhoto !== project?.data?.cover_photo && coverPhoto.length > 10) {
+        payload["cover_photo"] = convertBase64toFile(coverPhoto, "cover_photo");
+      }
+      await editProject(payload).unwrap();
+      toast({
+        title: "Project updated successfully",
+      });
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to update project",
+        description:
+          "A problem occured when updating the project, please try again later.",
+      });
+    }
+  };
+
   return (
     <Form {...form}>
       <TabWrapper>
@@ -146,7 +190,11 @@ const OverviewComp = ({ id }: Props) => {
           desc="Choose a title, goal and category for your project.
 "
         >
-          <MinistryProjectCreateForm form={form} />
+          <MinistryProjectCreateForm
+            form={form}
+            id={id || undefined}
+            status={project?.data.status || undefined}
+          />
         </TabSectionWrapper>
 
         <TabSectionWrapper
@@ -208,9 +256,9 @@ const OverviewComp = ({ id }: Props) => {
               </Button>
             )}
             <Button
-              onClick={form.handleSubmit(publishProject)}
+              onClick={form.handleSubmit(updateProject)}
               variant="secondary"
-              loading={togglingProject || isLoading}
+              loading={updatingProject}
             >
               Update changes
             </Button>

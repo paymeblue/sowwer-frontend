@@ -657,6 +657,7 @@ export type CoverPhotoRequest = {
   cover_photo: FormData;
 };
 export type EditProjectRequest = {
+  [key: string]: any;
   id?: string | null;
   title?: string;
   amount?: number;
