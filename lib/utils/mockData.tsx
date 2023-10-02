@@ -1,4 +1,3 @@
-import { ProjectDonor } from "@components/tables/ministry/MinistryProjectDonorsTable";
 import {
   CompletedProject,
   PayoutHistory,
@@ -122,90 +121,6 @@ export const projectDonations: ProjectDonation[] = [
 ];
 
 // MINISTRY MOCKS
-
-export const projectDonors: ProjectDonor[] = [
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-  {
-    name: "Semira Yesufu",
-    title: "The Widows Project",
-    category: "widows",
-    amount: 135000,
-    datetime: "21st March 2023; 4:45pm",
-    id: "123",
-  },
-];
-
 export const completedProjects: CompletedProject[] = [
   {
     id: "123",

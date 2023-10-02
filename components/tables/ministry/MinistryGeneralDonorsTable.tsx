@@ -7,6 +7,8 @@ import moment from "moment";
 import { ColumnDef } from "@tanstack/react-table";
 import { useGetDonationsForMinistryUserQuery } from "services/projects";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import EmptyState from "@components/shared/EmptyState";
+import Emptydonor from "@components/assets/svg/emptyDonor";
 
 export type GeneralDonor = {
   id: string;
@@ -84,8 +86,18 @@ const MinistryGeneralDonorsTableComp = () => {
     type: "ministry",
   });
 
-  if (!donors?.data && isLoading) {
+  if (!donors?.data?.length && isLoading) {
     return <Loader className="h-[50vh]" />;
+  }
+
+  if (!donors?.data?.length && !isLoading) {
+    return (
+      <EmptyState
+        image={<Emptydonor />}
+        title="No general donors yet"
+        desc="Once you start receiving general donations your list of donors will appear here."
+      />
+    );
   }
   return (
     <div className="w-full">
