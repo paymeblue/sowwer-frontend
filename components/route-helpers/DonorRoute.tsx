@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { Fragment, ReactNode } from "react";
 
 const DonorRouteComp = ({ children }: { children: ReactNode }) => {
-  const { user } = useUserAuth();
-  const auth = !!(user?.type === "ministry-donor");
+  const { user, context } = useUserAuth();
+  const auth = !!(user?.type === "ministry-donor" && context === "donor");
   if (!auth) {
     redirect("/");
   }

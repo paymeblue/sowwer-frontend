@@ -22,12 +22,14 @@ const useDonorSignin = () => {
         password,
         type: "donor",
       }).unwrap();
-      const payload = {
-        user: res.data.user,
-        token: res.data.token.accessToken,
-        refreshToken: res.data.token.refreshToken,
-      };
-      dispatch(setCredentials(payload));
+      dispatch(
+        setCredentials({
+          user: res.data.user,
+          token: res.data.token.accessToken,
+          refreshToken: res.data.token.refreshToken,
+          context: "donor",
+        })
+      );
       router.push("/donor");
     } catch (error: any) {
       toast({

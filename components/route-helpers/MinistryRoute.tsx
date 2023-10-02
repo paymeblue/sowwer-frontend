@@ -5,8 +5,11 @@ import { redirect } from "next/navigation";
 import { Fragment, ReactNode } from "react";
 
 const MinistryRouteComp = ({ children }: { children: ReactNode }) => {
-  const { user } = useUserAuth();
-  const auth = !!(user?.ministry?.id || user?.type === "ministry");
+  const { user, context } = useUserAuth();
+  const auth = !!(
+    (user?.ministry?.id || user?.type === "ministry") &&
+    context === "ministry"
+  );
   if (!auth) {
     console.log("I am false");
     redirect("/");

@@ -4,13 +4,19 @@ import { User } from "./typings";
 import storage from "redux/sync_storage";
 import { persistReducer } from "redux-persist";
 
-type AuthState = {
+export type AuthState = {
   user: User | null;
   token: string | null;
   refreshToken?: string | null;
+  context?: "ministry" | "donor" | null;
 };
 
-const initialState: AuthState = { user: null, token: null, refreshToken: null };
+const initialState: AuthState = {
+  user: null,
+  token: null,
+  refreshToken: null,
+  context: null,
+};
 
 const authSlice = createSlice({
   name: "auth",
@@ -19,16 +25,13 @@ const authSlice = createSlice({
     setCredentials: (
       state,
       {
-        payload: { user, token, refreshToken },
-      }: PayloadAction<{
-        user: User | null;
-        token: string | null;
-        refreshToken?: string | null;
-      }>
+        payload: { user, token, refreshToken, context },
+      }: PayloadAction<AuthState>
     ) => {
       state.user = user;
       state.token = token;
       state.refreshToken = refreshToken;
+      state.context = context;
     },
     logout: (state) => {
       state.user = null;
@@ -44,14 +47,9 @@ export const { setCredentials, logout } = authSlice.actions;
 const persistConfig = {
   key: "auth",
   storage,
-  whitelist: ["user", "token", "refreshToken"],
+  whitelist: ["user", "token", "refreshToken", "context"],
 };
 
 const authReducer = authSlice.reducer;
 
 export default persistReducer(persistConfig, authReducer);
-
-// export const selectCurrentUser = (state: RootState) => state.auth.user;
-// export const selectCurrentUserToken = (state: RootState) => state.auth.token;
-// export const selectCurrentUserRefreshToken = (state: RootState) =>
-//   state.auth.refreshToken;

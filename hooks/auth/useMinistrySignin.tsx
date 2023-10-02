@@ -24,12 +24,14 @@ const useMinistrySignin = () => {
         password,
         type: "ministry",
       }).unwrap();
-      const payload = {
-        user: res.data.user,
-        token: res.data.token.accessToken,
-        refreshToken: res.data.token.refreshToken,
-      };
-      await dispatch(setCredentials(payload));
+      await dispatch(
+        setCredentials({
+          user: res.data.user,
+          token: res.data.token.accessToken,
+          refreshToken: res.data.token.refreshToken,
+          context: "ministry",
+        })
+      );
       router.push("/ministry");
     } catch (error: any) {
       toast({

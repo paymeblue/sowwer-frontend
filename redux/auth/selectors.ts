@@ -12,3 +12,8 @@ export const selectAccessToken = createSelector(
   [selectAuth],
   (auth) => auth.token
 );
+
+export const selectAuthContext = createSelector(
+  [selectAuth],
+  (auth) => auth.context
+);

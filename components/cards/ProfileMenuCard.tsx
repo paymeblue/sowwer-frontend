@@ -15,7 +15,7 @@ interface Props {
 }
 
 const ProfileMenuCard = ({ variant = "landing" }: Props) => {
-  const { user, isAuthenticated, logout } = useUserAuth();
+  const { user, isAuthenticated, logout, context } = useUserAuth();
 
   if (!isAuthenticated || !user) {
     return (
@@ -29,10 +29,8 @@ const ProfileMenuCard = ({ variant = "landing" }: Props) => {
   }
 
   const getAccountUrl = () => {
-    const userType = user.type as string;
-
-    if (userType === "ministry-donor") return "/donor";
-    if (userType === "ministry") return "ministry";
+    if (context === "donor") return "/donor";
+    if (context === "ministry") return "ministry";
     return "/";
   };
 
