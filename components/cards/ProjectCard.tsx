@@ -12,15 +12,15 @@ import { formatCurrency } from "@lib/functions";
 export interface IProject {
   id: string;
   title: string;
-  targetAmount: string;
-  image: string | null | undefined;
+  targetAmount?: string;
+  image?: string | null | undefined;
   description?: string | null;
-  createdAt: string;
-  category: "widows" | "orphans" | "missions" | string;
-  amountRaised: string;
+  createdAt?: string;
+  category?: "widows" | "orphans" | "missions" | string;
+  amountRaised?: string;
   organisedBy?: string;
-  donationPercent: string;
-  donors: number;
+  donationPercent?: string;
+  donors?: number;
   variant?: "default" | "featured" | "general";
 }
 
@@ -36,7 +36,8 @@ const ProjectCard = ({
   id,
   variant = "default",
 }: IProject) => {
-  const getColorForTag = (category: string) => {
+  const getColorForTag = (category: string | null | undefined) => {
+    if (!category) return;
     switch (category) {
       case "widows":
         return { bgColor: "#9747FF24", tagColor: "#9B51E0" };
@@ -74,12 +75,12 @@ const ProjectCard = ({
       </div>
       <div className="px-6 py-6 ">
         <Tag
-          color={getColorForTag(category).tagColor}
-          backgroundColor={getColorForTag(category).bgColor}
+          color={getColorForTag(category)?.tagColor || ""}
+          backgroundColor={getColorForTag(category)?.bgColor}
         >
-          {category.toUpperCase()}
+          {category?.toUpperCase()}
         </Tag>
-        <h3 className="mb-0 mt-3 font-title text-[1.6rem] font-normal leading-[1.8rem] text-black">
+        <h3 className="mb-0 mt-3 font-title text-[1.6rem] font-normal capitalize leading-[1.8rem] text-black">
           {title}
         </h3>
         {(variant === "default" || variant === "general") && (
@@ -101,13 +102,13 @@ const ProjectCard = ({
             <div className="flex w-full flex-col space-y-2">
               <div className="flex items-center justify-between">
                 <h5 className="font-sub-title text-[.8rem] font-bold">
-                  ₦{formatCurrency(amountRaised)}{" "}
+                  ₦{formatCurrency(amountRaised || "0")}{" "}
                   <span className="font-body text-[.7rem] font-[400]">
                     raised
                   </span>
                 </h5>
                 <h5 className="font-title text-[1rem] font-bold">
-                  ₦{formatCurrency(targetAmount)}
+                  ₦{formatCurrency(targetAmount || "0")}
                 </h5>
               </div>
               <Progress value={Number(donationPercent) ?? 0} className="h-2" />
