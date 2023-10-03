@@ -16,9 +16,10 @@ import usePagination from "@hooks/general/usePagination";
 import { MinistryProject } from "services/typings";
 import Link from "next/link";
 import ViewProjectDonorsDialog from "@components/dialogs/ministry/ViewProjectDonorsDialog";
-import { Dialog, DialogTrigger } from "@components/ui/dialog";
+import { Dialog } from "@components/ui/dialog";
 import DeleteProjectDialog from "@components/dialogs/ministry/DeleteProjectDialog";
 import { useState } from "react";
+import CloseProjectDialog from "@components/dialogs/ministry/CloseProjectDialog";
 
 interface Props {
   ministryId: string;
@@ -107,88 +108,117 @@ const columns: ColumnDef<MinistryProject>[] = [
 ];
 
 const ActionDialog = ({ project }: { project: MinistryProject }) => {
-  const [open, setOpen] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [openCloseModal, setOpenCloseModal] = useState(false);
+
+  const closeAllModal = () => {
+    setOpenDeleteModal(false);
+    setOpenCloseModal(false);
+    setOpenViewModal(false);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-grey">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        {project.status === Status.drafted && (
-          <DropdownMenuContent align="end">
-            <Link href={`/ministry/projects/${project.id}`}>
-              <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                <PenLine size={14} />{" "}
-                <span className="text_tiny_body_r">Edit</span>{" "}
-              </DropdownMenuItem>
-            </Link>
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <DialogTrigger asChild>
+    <>
+      <Dialog
+        open={openDeleteModal || openViewModal || openCloseModal}
+        onOpenChange={closeAllModal}
+      >
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-grey">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          {project.status === Status.drafted && (
+            <DropdownMenuContent align="end">
+              <Link href={`/ministry/projects/${project.id}`}>
+                <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                  <PenLine size={14} />{" "}
+                  <span className="text_tiny_body_r">Edit</span>{" "}
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                onClick={() => setOpenDeleteModal(true)}
+              >
                 <div className=" flex items-center space-x-2 text-[#EB5757]">
                   <Trash size={14} />
                   <span className="text_tiny_body_r text-[#EB5757]">
                     Delete
                   </span>
                 </div>
-              </DialogTrigger>
-              <DeleteProjectDialog id={project.id} setOpen={setOpen} />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        )}
-        {project.status === Status.active && (
-          <DropdownMenuContent align="end">
-            <Link href={`/ministry/projects/${project.id}`}>
-              <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                <PenLine size={14} />{" "}
-                <span className="text_tiny_body_r">Edit</span>{" "}
               </DropdownMenuItem>
-            </Link>
-            <DropdownMenuItem className="text_tiny_body_r space-x-2">
-              <QrCode size={14} />{" "}
-              <span className="text_tiny_body_r">Download QR</span>{" "}
-            </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+          {project.status === Status.active && (
+            <DropdownMenuContent align="end">
+              <Link href={`/ministry/projects/${project.id}`}>
+                <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                  <PenLine size={14} />{" "}
+                  <span className="text_tiny_body_r">Edit</span>{" "}
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                <QrCode size={14} />{" "}
+                <span className="text_tiny_body_r">Download QR</span>{" "}
+              </DropdownMenuItem>
 
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <DialogTrigger asChild>
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                onClick={() => setOpenViewModal(true)}
+              >
                 <div className="text_tiny_body_r flex items-center space-x-2">
                   <Eye size={14} />{" "}
                   <span className="text_tiny_body_r">View donors</span>{" "}
                 </div>
-              </DialogTrigger>
-              <ViewProjectDonorsDialog
-                projectId={project.id}
-                title={project.title}
-              />
-            </DropdownMenuItem>
+              </DropdownMenuItem>
 
-            <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
-              <X size={14} />{" "}
-              <span className="text_tiny_body_r text-[#EB5757]">Close</span>{" "}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        )}
-        {project.status === Status.completed && (
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <DialogTrigger asChild>
+              <DropdownMenuItem
+                className=" space-x-2 text-[#EB5757]"
+                onSelect={(e) => e.preventDefault()}
+                onClick={() => setOpenCloseModal(true)}
+              >
+                <div className="flex items-center space-x-2">
+                  <X size={14} />{" "}
+                  <span className="text_tiny_body_r text-[#EB5757]">Close</span>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+          {project.status === Status.completed && (
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                onClick={() => setOpenViewModal(true)}
+              >
                 <div className="text_tiny_body_r flex items-center space-x-2">
                   <Eye size={14} />{" "}
                   <span className="text_tiny_body_r">View donors</span>{" "}
                 </div>
-              </DialogTrigger>
-              <ViewProjectDonorsDialog
-                projectId={project.id}
-                title={project.title}
-              />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        )}
-      </DropdownMenu>
-    </Dialog>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+        </DropdownMenu>
+        {openDeleteModal ? (
+          <DeleteProjectDialog id={project.id} setOpen={setOpenDeleteModal} />
+        ) : null}
+        {openViewModal ? (
+          <ViewProjectDonorsDialog
+            projectId={project.id}
+            title={project.title}
+          />
+        ) : null}
+        {openCloseModal ? (
+          <CloseProjectDialog
+            id={project.id}
+            title={project.title}
+            setOpen={setOpenCloseModal}
+          />
+        ) : null}
+      </Dialog>
+    </>
   );
 };
 

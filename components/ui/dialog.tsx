@@ -119,4 +119,5 @@ export {
   DialogTitle,
   DialogDescription,
   close,
+  DialogPortal,
 };

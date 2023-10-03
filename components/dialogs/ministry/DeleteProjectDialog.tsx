@@ -5,7 +5,7 @@ import { Button } from "@components/ui/button";
 import { DialogContent } from "@components/ui/dialog";
 import { InfoCircle } from "react-iconly";
 import { useToast } from "@components/ui/use-toast";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 interface Props {
   id: string;
@@ -31,6 +31,12 @@ const DeleteProjectDialog = ({ id, setOpen }: Props) => {
       });
     }
   };
+
+  useEffect(() => {
+    return () => {
+      document.body.classList.add("activate-cursor");
+    };
+  }, []);
   return (
     <DialogContent className="h-[40vh]">
       <div className="flex h-full w-full items-center justify-center px-10">

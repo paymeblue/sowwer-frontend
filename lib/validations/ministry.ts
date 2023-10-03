@@ -75,3 +75,7 @@ export const MinistryPasswordSettingsValidation = z
     message: "Passwords do not match",
     path: ["confirmNewPassword"],
   });
+
+export const MinistryCloseProjectValidation = z.object({
+  password: z.string(),
+});

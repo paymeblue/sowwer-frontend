@@ -8,6 +8,7 @@ import {
 import { useGetMinistryProjectDonorsQuery } from "services/projects";
 import usePagination from "@hooks/general/usePagination";
 import Pagination from "@components/shared/Pagination";
+import { useEffect } from "react";
 
 interface Props {
   projectId: string;
@@ -26,6 +27,12 @@ const ViewProjectDonorsDialog = ({ projectId, title }: Props) => {
   const sortedProjectDonors = projectDonors?.data
     ?.map((item) => ({ ...item, time: moment(item.createdAt).fromNow() }))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+  useEffect(() => {
+    return () => {
+      document.body.classList.add("activate-cursor");
+    };
+  }, []);
 
   return (
     <DialogContent>
