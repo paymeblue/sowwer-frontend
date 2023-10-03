@@ -12,6 +12,8 @@ import EmptyState from "@components/shared/EmptyState";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import Loader from "@components/shared/Loader";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import useCopyToClipboard from "@hooks/general/useCopyToClipboard";
+import { useToast } from "@components/ui/use-toast";
 
 const RightContent = ({
   id,
@@ -20,6 +22,24 @@ const RightContent = ({
   id?: string;
   status: "drafted" | "active" | string;
 }) => {
+  const { toast } = useToast();
+  const { copyToClipboard } = useCopyToClipboard({
+    onSuccess: () => {
+      toast({
+        variant: "default",
+        title: "Project link copied successfully",
+        description: "You can now share this link with the public.",
+      });
+    },
+    onFailure: () => {
+      toast({
+        variant: "destructive",
+        title: "Error occured copying link",
+        description:
+          "There seems to be an error copying project link, please try again later",
+      });
+    },
+  });
   const openLinkInNewTab = (link: string) => {
     window.open(link, "_blank");
   };
@@ -28,13 +48,16 @@ const RightContent = ({
     <div className="flex w-fit max-w-[50%] items-center space-x-3 rounded-full bg-[#EBEFFF] p-1">
       <span className="text_small_body_sb ml-4 truncate text-[.8rem] text-accent">
         {id && status === "active"
-          ? `https://soower.com/projects/${id}`
-          : "https://soower.com/title-of-project"}
+          ? `${window.location.origin}/projects/${id}`
+          : "Publish to get shareable link"}
       </span>
       <div className="flex items-center">
         <Button
           size="sm"
           disabled={!id || status !== "active"}
+          onClick={() =>
+            copyToClipboard(`${window.location.origin}/projects/${id}`)
+          }
           className="space-x-2 rounded-br-none rounded-tr-none border-r-[.3px] border-[#C4C4C4] bg-white px-3 text-accent hover:bg-white/80"
         >
           <span className="whitespace-nowrap font-body text-[.75rem] font-[600]">
@@ -109,7 +132,7 @@ const ProjectEditorComp = ({ id }: Props) => {
           <Overview id={project?.data?.id || null} />
         </TabsContent>
         <TabsContent value="sharing-details">
-          {!id ? (
+          {!id || project?.data.status !== "active" ? (
             <EmptyState
               image={<EmptySpeaker />}
               title="Publish a project"

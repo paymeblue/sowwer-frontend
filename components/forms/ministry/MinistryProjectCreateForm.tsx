@@ -66,7 +66,7 @@ const MinistryProjectCreateForm = ({ form, id, status }: Props) => {
                   <SelectContent>
                     <SelectItem value="widows">Widows</SelectItem>
                     <SelectItem value="orphans">Orphans</SelectItem>
-                    <SelectItem value="missionary">Missionary</SelectItem>
+                    <SelectItem value="missions">Missionary</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

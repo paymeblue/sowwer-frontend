@@ -22,6 +22,7 @@ import { useToast } from "@components/ui/use-toast";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { convertBase64toFile, formatCurrency } from "@lib/functions";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   id?: string | null;
@@ -29,6 +30,7 @@ interface Props {
 
 const OverviewComp = ({ id }: Props) => {
   const { data: project } = useGetProjectQuery(id);
+  const router = useRouter();
   const form = useForm<z.infer<typeof MinistryCreateProjectValidation>>({
     resolver: zodResolver(MinistryCreateProjectValidation),
   });
@@ -120,6 +122,7 @@ const OverviewComp = ({ id }: Props) => {
       const result = await handleProjectCreate(values);
       if (result?.id) {
         await toggleProjectStatus(result.id, "drafted");
+        router.push("/ministry/projects");
       }
     } else {
       await toggleProjectStatus(id, "drafted");
@@ -133,6 +136,7 @@ const OverviewComp = ({ id }: Props) => {
       const result = await handleProjectCreate(values);
       if (result?.id) {
         await toggleProjectStatus(result.id, "active");
+        router.push("/ministry/projects");
       }
     } else {
       await toggleProjectStatus(id, "active");
