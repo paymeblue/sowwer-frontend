@@ -17,6 +17,12 @@ import { MinistryProject } from "services/typings";
 import Link from "next/link";
 import ViewProjectDonorsDialog from "@components/dialogs/ministry/ViewProjectDonorsDialog";
 import { Dialog, DialogTrigger } from "@components/ui/dialog";
+import DeleteProjectDialog from "@components/dialogs/ministry/DeleteProjectDialog";
+import { useState } from "react";
+
+interface Props {
+  ministryId: string;
+}
 
 const columns: ColumnDef<MinistryProject>[] = [
   {
@@ -95,89 +101,96 @@ const columns: ColumnDef<MinistryProject>[] = [
     cell: ({ row }) => {
       const project = row.original;
 
-      return (
-        <Dialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-grey">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            {project.status === Status.drafted && (
-              <DropdownMenuContent align="end">
-                <Link href={`/ministry/projects/${project.id}`}>
-                  <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                    <PenLine size={14} />{" "}
-                    <span className="text_tiny_body_r">Edit</span>{" "}
-                  </DropdownMenuItem>
-                </Link>
-                <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
-                  <Trash size={14} />{" "}
-                  <span className="text_tiny_body_r text-[#EB5757]">
-                    Delete
-                  </span>{" "}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            )}
-            {project.status === Status.active && (
-              <DropdownMenuContent align="end">
-                <Link href={`/ministry/projects/${project.id}`}>
-                  <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                    <PenLine size={14} />{" "}
-                    <span className="text_tiny_body_r">Edit</span>{" "}
-                  </DropdownMenuItem>
-                </Link>
-                <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                  <QrCode size={14} />{" "}
-                  <span className="text_tiny_body_r">Download QR</span>{" "}
-                </DropdownMenuItem>
-
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  <DialogTrigger asChild>
-                    <div className="text_tiny_body_r flex items-center space-x-2">
-                      <Eye size={14} />{" "}
-                      <span className="text_tiny_body_r">View donors</span>{" "}
-                    </div>
-                  </DialogTrigger>
-                  <ViewProjectDonorsDialog
-                    projectId={project.id}
-                    title={project.title}
-                  />
-                </DropdownMenuItem>
-
-                <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
-                  <X size={14} />{" "}
-                  <span className="text_tiny_body_r text-[#EB5757]">Close</span>{" "}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            )}
-            {project.status === Status.completed && (
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  <DialogTrigger asChild>
-                    <div className="text_tiny_body_r flex items-center space-x-2">
-                      <Eye size={14} />{" "}
-                      <span className="text_tiny_body_r">View donors</span>{" "}
-                    </div>
-                  </DialogTrigger>
-                  <ViewProjectDonorsDialog
-                    projectId={project.id}
-                    title={project.title}
-                  />
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            )}
-          </DropdownMenu>
-        </Dialog>
-      );
+      return <ActionDialog project={project} />;
     },
   },
 ];
 
-interface Props {
-  ministryId: string;
-}
+const ActionDialog = ({ project }: { project: MinistryProject }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-grey">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        {project.status === Status.drafted && (
+          <DropdownMenuContent align="end">
+            <Link href={`/ministry/projects/${project.id}`}>
+              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                <PenLine size={14} />{" "}
+                <span className="text_tiny_body_r">Edit</span>{" "}
+              </DropdownMenuItem>
+            </Link>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <DialogTrigger asChild>
+                <div className=" flex items-center space-x-2 text-[#EB5757]">
+                  <Trash size={14} />
+                  <span className="text_tiny_body_r text-[#EB5757]">
+                    Delete
+                  </span>
+                </div>
+              </DialogTrigger>
+              <DeleteProjectDialog id={project.id} setOpen={setOpen} />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        )}
+        {project.status === Status.active && (
+          <DropdownMenuContent align="end">
+            <Link href={`/ministry/projects/${project.id}`}>
+              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                <PenLine size={14} />{" "}
+                <span className="text_tiny_body_r">Edit</span>{" "}
+              </DropdownMenuItem>
+            </Link>
+            <DropdownMenuItem className="text_tiny_body_r space-x-2">
+              <QrCode size={14} />{" "}
+              <span className="text_tiny_body_r">Download QR</span>{" "}
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <DialogTrigger asChild>
+                <div className="text_tiny_body_r flex items-center space-x-2">
+                  <Eye size={14} />{" "}
+                  <span className="text_tiny_body_r">View donors</span>{" "}
+                </div>
+              </DialogTrigger>
+              <ViewProjectDonorsDialog
+                projectId={project.id}
+                title={project.title}
+              />
+            </DropdownMenuItem>
+
+            <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
+              <X size={14} />{" "}
+              <span className="text_tiny_body_r text-[#EB5757]">Close</span>{" "}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        )}
+        {project.status === Status.completed && (
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <DialogTrigger asChild>
+                <div className="text_tiny_body_r flex items-center space-x-2">
+                  <Eye size={14} />{" "}
+                  <span className="text_tiny_body_r">View donors</span>{" "}
+                </div>
+              </DialogTrigger>
+              <ViewProjectDonorsDialog
+                projectId={project.id}
+                title={project.title}
+              />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        )}
+      </DropdownMenu>
+    </Dialog>
+  );
+};
 
 const MinistryProjectsTable = ({ ministryId }: Props) => {
   const { handleNext, handlePrevious, pagination } = usePagination();
