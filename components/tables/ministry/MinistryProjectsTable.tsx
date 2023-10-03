@@ -15,6 +15,8 @@ import { Eye, MoreHorizontal, PenLine, QrCode, Trash, X } from "lucide-react";
 import usePagination from "@hooks/general/usePagination";
 import { MinistryProject } from "services/typings";
 import Link from "next/link";
+import ViewProjectDonorsDialog from "@components/dialogs/ministry/ViewProjectDonorsDialog";
+import { Dialog, DialogTrigger } from "@components/ui/dialog";
 
 const columns: ColumnDef<MinistryProject>[] = [
   {
@@ -94,58 +96,80 @@ const columns: ColumnDef<MinistryProject>[] = [
       const project = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-grey">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          {project.status === Status.drafted && (
-            <DropdownMenuContent align="end">
-              <Link href={`/ministry/projects/${project.id}`}>
-                <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                  <PenLine size={14} />{" "}
-                  <span className="text_tiny_body_r">Edit</span>{" "}
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-grey">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            {project.status === Status.drafted && (
+              <DropdownMenuContent align="end">
+                <Link href={`/ministry/projects/${project.id}`}>
+                  <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                    <PenLine size={14} />{" "}
+                    <span className="text_tiny_body_r">Edit</span>{" "}
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
+                  <Trash size={14} />{" "}
+                  <span className="text_tiny_body_r text-[#EB5757]">
+                    Delete
+                  </span>{" "}
                 </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
-                <Trash size={14} />{" "}
-                <span className="text_tiny_body_r text-[#EB5757]">Delete</span>{" "}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          )}
-          {project.status === Status.active && (
-            <DropdownMenuContent align="end">
-              <Link href={`/ministry/projects/${project.id}`}>
+              </DropdownMenuContent>
+            )}
+            {project.status === Status.active && (
+              <DropdownMenuContent align="end">
+                <Link href={`/ministry/projects/${project.id}`}>
+                  <DropdownMenuItem className="text_tiny_body_r space-x-2">
+                    <PenLine size={14} />{" "}
+                    <span className="text_tiny_body_r">Edit</span>{" "}
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                  <PenLine size={14} />{" "}
-                  <span className="text_tiny_body_r">Edit</span>{" "}
+                  <QrCode size={14} />{" "}
+                  <span className="text_tiny_body_r">Download QR</span>{" "}
                 </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                <QrCode size={14} />{" "}
-                <span className="text_tiny_body_r">Download QR</span>{" "}
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                <Eye size={14} />{" "}
-                <span className="text_tiny_body_r">View donors</span>{" "}
-              </DropdownMenuItem>
-              <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
-                <X size={14} />{" "}
-                <span className="text_tiny_body_r text-[#EB5757]">Close</span>{" "}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          )}
-          {project.status === Status.completed && (
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem className="text_tiny_body_r space-x-2">
-                <Eye size={14} />{" "}
-                <span className="text_tiny_body_r">View donors</span>{" "}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          )}
-        </DropdownMenu>
+
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <DialogTrigger asChild>
+                    <div className="text_tiny_body_r flex items-center space-x-2">
+                      <Eye size={14} />{" "}
+                      <span className="text_tiny_body_r">View donors</span>{" "}
+                    </div>
+                  </DialogTrigger>
+                  <ViewProjectDonorsDialog
+                    projectId={project.id}
+                    title={project.title}
+                  />
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className=" space-x-2 text-[#EB5757]">
+                  <X size={14} />{" "}
+                  <span className="text_tiny_body_r text-[#EB5757]">Close</span>{" "}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            )}
+            {project.status === Status.completed && (
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <DialogTrigger asChild>
+                    <div className="text_tiny_body_r flex items-center space-x-2">
+                      <Eye size={14} />{" "}
+                      <span className="text_tiny_body_r">View donors</span>{" "}
+                    </div>
+                  </DialogTrigger>
+                  <ViewProjectDonorsDialog
+                    projectId={project.id}
+                    title={project.title}
+                  />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            )}
+          </DropdownMenu>
+        </Dialog>
       );
     },
   },
