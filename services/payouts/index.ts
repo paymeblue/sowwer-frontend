@@ -49,7 +49,7 @@ const payouts = api.injectEndpoints({
     }),
     verifyAccount: build.mutation<AccountResponse, VerifyAccountRequest>({
       query: (body) => ({ url: `accounts/verify`, method: "POST", body }),
-      invalidatesTags: cacher.providesProperty("Account"),
+      // invalidatesTags: cacher.providesProperty("Account"),
       transformResponse: (response: AccountResponse, meta, arg): any => {
         return response;
       },

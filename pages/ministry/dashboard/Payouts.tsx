@@ -15,9 +15,13 @@ import useUserAuth from "@hooks/auth/useUserAuth";
 import EmptyState from "@components/shared/EmptyState";
 import EmptyWallet from "@components/assets/svg/emptyWallet";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import { Dialog, DialogTrigger } from "@components/ui/dialog";
+import ConnectBankAccountDialog from "@components/dialogs/ministry/ConnectBankAccountDialog";
+import { useState } from "react";
 
 const PayoutsPageComp = () => {
   const { data: accountInfo, isLoading } = useGetAccountInfoQuery();
+  const [open, setOpen] = useState(false);
   const { user } = useUserAuth();
   const { pagination } = usePagination();
   const { data: completedProjects, isLoading: loadingMinistryProjects } =
@@ -45,13 +49,18 @@ const PayoutsPageComp = () => {
                   behalf <br /> and transfer the funds you raise to your bank
                   account.
                 </p>
-                <Button
-                  variant="link"
-                  className="h-6 w-fit space-x-2 px-0 py-0 text-[.8rem] text-accent"
-                >
-                  <span>Connect your Bank Account</span>
-                  <ArrowRight size={18} />
-                </Button>
+                <Dialog open={open} onOpenChange={setOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="link"
+                      className="h-6 w-fit space-x-2 px-0 py-0 text-[.8rem] text-accent"
+                    >
+                      <span>Connect your Bank Account</span>
+                      <ArrowRight size={18} />
+                    </Button>
+                  </DialogTrigger>
+                  <ConnectBankAccountDialog setOpen={setOpen} />
+                </Dialog>
               </div>
             </div>
           </div>

@@ -79,3 +79,11 @@ export const MinistryPasswordSettingsValidation = z
 export const MinistryCloseProjectValidation = z.object({
   password: z.string(),
 });
+
+export const MinistryConnectBankAccount = z.object({
+  bank: z.string(),
+  accountNumber: z
+    .string()
+    .min(10, { message: "Account number must be 10 characters" })
+    .max(10, { message: "Account number must not exceed 10 characters" }),
+});
