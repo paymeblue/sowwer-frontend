@@ -2,15 +2,21 @@ import { Button } from "@components/ui/button";
 import DataTable from "@components/ui/data-table";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import usePagination from "@hooks/general/usePagination";
+import { useRequestPayoutMutation } from "services/payouts";
+
 import { formatCurrency } from "@lib/functions";
 import { ColumnDef } from "@tanstack/react-table";
 import { useGetMinistryProjectsQuery } from "services/projects";
-import { MinistryProject } from "services/typings";
+import { AccountResponse, MinistryProject } from "services/typings";
 import { usePayoutHistoryQuery } from "services/payouts";
 import Loader from "@components/shared/Loader";
 import EmptyState from "@components/shared/EmptyState";
 import EmptyWallet from "@components/assets/svg/emptyWallet";
 import moment from "moment";
+import { useToast } from "@components/ui/use-toast";
+import { Dialog } from "@components/ui/dialog";
+import ConnectBankAccountDialog from "@components/dialogs/ministry/ConnectBankAccountDialog";
+import { useState } from "react";
 
 export type PayoutHistory = {
   id: string;
@@ -22,67 +28,110 @@ export type PayoutHistory = {
   updatedAt: string;
 };
 
-const completeProjectColumns: ColumnDef<MinistryProject>[] = [
-  {
-    accessorKey: "title",
-    header: "Project Title",
-    cell: ({ row }) => {
-      return (
-        <span className="font-[600] capitalize">{row.getValue("title")}</span>
-      );
+const getCompletedProjectColumn = (
+  accountInfo: AccountResponse | undefined
+) => {
+  const completeProjectColumns: ColumnDef<MinistryProject>[] = [
+    {
+      accessorKey: "title",
+      header: "Project Title",
+      cell: ({ row }) => {
+        return (
+          <span className="font-[600] capitalize">{row.getValue("title")}</span>
+        );
+      },
     },
-  },
-  {
-    accessorKey: "targetAmount",
-    header: "Goal",
-    cell: ({ row }) => {
-      const value = row.getValue("targetAmount") as string;
-      return <span className="capitalize">₦{formatCurrency(value)}</span>;
+    {
+      accessorKey: "targetAmount",
+      header: "Goal",
+      cell: ({ row }) => {
+        const value = row.getValue("targetAmount") as string;
+        return <span className="capitalize">₦{formatCurrency(value)}</span>;
+      },
     },
-  },
-  {
-    accessorKey: "category",
-    header: "Category",
-    cell: ({ row }) => {
-      return <span className="capitalize">{row.getValue("category")}</span>;
+    {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) => {
+        return <span className="capitalize">{row.getValue("category")}</span>;
+      },
     },
-  },
-  {
-    accessorKey: "donors",
-    header: "No. of Donors",
-    cell: ({ row }) => {
-      return <span>{row.getValue("donors")}</span>;
+    {
+      accessorKey: "donors",
+      header: "No. of Donors",
+      cell: ({ row }) => {
+        return <span>{row.getValue("donors")}</span>;
+      },
     },
-  },
-  {
-    accessorKey: "amountRaised",
-    header: "Amount Raised",
-    cell: ({ row }) => {
-      const value = row.getValue("amountRaised") as string;
+    {
+      accessorKey: "amountRaised",
+      header: "Amount Raised",
+      cell: ({ row }) => {
+        const value = row.getValue("amountRaised") as string;
 
-      return <span className="capitalize">₦{formatCurrency(value)}</span>;
+        return <span className="capitalize">₦{formatCurrency(value)}</span>;
+      },
     },
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const project = row.original;
-      const disabled = !!project.request_payout;
-      return (
-        <div className="flex w-full">
-          <Button
-            size="sm"
-            disabled={disabled}
-            variant="outline"
-            className="ml-auto w-fit border-accent text-[.75rem] text-accent"
-          >
-            Request payout
-          </Button>
-        </div>
-      );
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const project = row.original;
+
+        return <ActionComp project={project} accountInfo={accountInfo} />;
+      },
     },
-  },
-];
+  ];
+  return completeProjectColumns;
+};
+
+const ActionComp = ({
+  project,
+  accountInfo,
+}: {
+  project: MinistryProject;
+  accountInfo: AccountResponse | undefined;
+}) => {
+  const disabled = !!project.request_payout || project.amountRaised === "0.00";
+  const [open, setOpen] = useState(false);
+  const { toast } = useToast();
+  const [requestPayout, { isLoading }] = useRequestPayoutMutation();
+  const handleRequest = async () => {
+    try {
+      await requestPayout(project.id).unwrap();
+      toast({
+        title: "Payout successfully requested",
+      });
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Unable to request payment",
+      });
+    }
+  };
+  return (
+    <div className="flex w-full">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <Button
+          size="sm"
+          disabled={disabled}
+          variant="outline"
+          loading={isLoading}
+          onClick={() => {
+            if (!accountInfo?.data) {
+              setOpen(true);
+            } else {
+              handleRequest();
+            }
+          }}
+          className="ml-auto w-fit border-accent text-[.75rem] text-accent"
+        >
+          Request payout
+        </Button>
+        <ConnectBankAccountDialog setOpen={setOpen} defaultStep={1} />
+      </Dialog>
+    </div>
+  );
+};
 
 const payoutHistoryColumns: ColumnDef<PayoutHistory>[] = [
   {
@@ -124,7 +173,11 @@ const payoutHistoryColumns: ColumnDef<PayoutHistory>[] = [
   },
 ];
 
-export const MinistryCompletedProjectsTable = () => {
+interface Props {
+  accountInfo: AccountResponse | undefined;
+}
+
+export const MinistryCompletedProjectsTable = ({ accountInfo }: Props) => {
   const { user } = useUserAuth();
   const { pagination, handleNext, handlePrevious } = usePagination();
   const { data: completedProjects, isFetching } = useGetMinistryProjectsQuery({
@@ -136,7 +189,7 @@ export const MinistryCompletedProjectsTable = () => {
   return (
     <DataTable
       data={completedProjects?.data || []}
-      columns={completeProjectColumns}
+      columns={getCompletedProjectColumn(accountInfo)}
       isLoading={isFetching}
       paginationInfo={{
         handleNext,

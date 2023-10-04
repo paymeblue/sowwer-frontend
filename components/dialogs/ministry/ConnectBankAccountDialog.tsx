@@ -48,9 +48,10 @@ const FList = List as any;
 
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
+  defaultStep: number;
 }
 
-const ConnectBankAccountDialog = ({ setOpen }: Props) => {
+const ConnectBankAccountDialog = ({ setOpen, defaultStep }: Props) => {
   const { toast } = useToast();
   const [verified, setVerified] = useState(false);
   const [verifiedName, setVerifiedName] = useState<null | string>(null);
@@ -58,7 +59,7 @@ const ConnectBankAccountDialog = ({ setOpen }: Props) => {
   const { data: banks, isLoading } = useGetBanksQuery();
   const [verifyAccount, { isLoading: verifying }] = useVerifyAccountMutation();
   const [saveAccount, { isLoading: saving }] = useSaveAccountMutation();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(defaultStep);
   const form = useForm<z.infer<typeof MinistryConnectBankAccount>>({
     resolver: zodResolver(MinistryConnectBankAccount),
   });
@@ -79,6 +80,9 @@ const ConnectBankAccountDialog = ({ setOpen }: Props) => {
       toast({
         title: "Account connected successfully",
       });
+      setVerified(false);
+      setVerifiedName(null);
+      setOpen(false);
     } catch (err) {
       toast({
         variant: "destructive",

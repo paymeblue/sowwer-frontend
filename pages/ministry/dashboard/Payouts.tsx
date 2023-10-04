@@ -1,5 +1,6 @@
 "use client";
 import { useGetAccountInfoQuery } from "services/payouts";
+
 import { useGetMinistryProjectsQuery } from "services/projects";
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
 import {
@@ -34,6 +35,7 @@ const PayoutsPageComp = () => {
   if (isLoading) {
     return <Loader />;
   }
+
   return (
     <MainContentWrapper title="Payouts">
       <div className="mt-4 flex h-full w-full flex-col">
@@ -59,7 +61,7 @@ const PayoutsPageComp = () => {
                       <ArrowRight size={18} />
                     </Button>
                   </DialogTrigger>
-                  <ConnectBankAccountDialog setOpen={setOpen} />
+                  <ConnectBankAccountDialog setOpen={setOpen} defaultStep={1} />
                 </Dialog>
               </div>
             </div>
@@ -71,12 +73,17 @@ const PayoutsPageComp = () => {
                 Payout Information
               </h4>
 
-              <Button
-                variant="link"
-                className="space-x-1.5 px-0 py-0 text-[.75rem] text-body-2"
-              >
-                <EditSquare size={15} /> <span>Edit</span>
-              </Button>
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="link"
+                    className="space-x-1.5 px-0 py-0 text-[.75rem] text-body-2"
+                  >
+                    <EditSquare size={15} /> <span>Edit</span>
+                  </Button>
+                </DialogTrigger>
+                <ConnectBankAccountDialog setOpen={setOpen} defaultStep={2} />
+              </Dialog>
             </div>
             <div className="flex flex-col space-y-2">
               <p className="font-body text-[.8rem] font-[600]">
@@ -125,7 +132,7 @@ const PayoutsPageComp = () => {
                   </TabsList>
 
                   <TabsContent value="completed-projects">
-                    <MinistryCompletedProjectsTable />
+                    <MinistryCompletedProjectsTable accountInfo={accountInfo} />
                   </TabsContent>
                   <TabsContent value="payout-history">
                     <MinistryPayoutHistryTable />
