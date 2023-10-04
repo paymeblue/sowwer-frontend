@@ -33,6 +33,12 @@ export const DonateToProjectValidation = z
     path: ["confirmPassword"],
   });
 
+export const DonateToProjectAuthValidation = z.object({
+  amount: z.string(),
+  currency: z.enum(["USD", "NGN"]),
+  isAnonymous: z.boolean(),
+});
+
 export const DonateToMinistryValidation = z
   .object({
     amount: z.string(),

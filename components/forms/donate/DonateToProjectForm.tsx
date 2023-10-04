@@ -2,11 +2,17 @@
 import * as z from "zod";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DonateToProjectValidation } from "lib/validations/donate";
+import {
+  DonateToProjectAuthValidation,
+  DonateToProjectValidation,
+} from "lib/validations/donate";
 import { useForm } from "react-hook-form";
 import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 
-import { useInitiatePaymentToProjectUnauthMutation } from "services/auth";
+import {
+  useInitiatePaymentToProjectUnauthMutation,
+  useInitiatePaymentToProjectAuthMutation,
+} from "services/auth";
 import { useVerifyProjectPaymentMutation } from "services/payouts";
 import useFlutterConfig, { IConfig } from "@hooks/payments/useFlutterConfig";
 
@@ -31,6 +37,7 @@ import {
 import { Button } from "@components/ui/button";
 import { Heart2 } from "react-iconly";
 import { useToast } from "@components/ui/use-toast";
+import useUserAuth from "@hooks/auth/useUserAuth";
 
 const DEFAULT_CONFIG = {
   public_key: "",
@@ -58,6 +65,8 @@ interface Props {
 
 const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
   const { toast } = useToast();
+  const [flutterLoading, setFlutterLoading] = useState(false);
+  const { isAuthenticated, user } = useUserAuth();
   const form = useForm<z.infer<typeof DonateToProjectValidation>>({
     resolver: zodResolver(DonateToProjectValidation),
     defaultValues: {
@@ -66,8 +75,17 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
       isAnonymous: false,
     },
   });
+  const formAuth = useForm<z.infer<typeof DonateToProjectAuthValidation>>({
+    resolver: zodResolver(DonateToProjectAuthValidation),
+    defaultValues: {
+      currency: "NGN",
+      isAnonymous: false,
+    },
+  });
   const [initiatePaymentToProjectUnauth, { isLoading }] =
     useInitiatePaymentToProjectUnauthMutation();
+  const [initiatePaymentToProjectAuth, { isLoading: loadingPaymentAuth }] =
+    useInitiatePaymentToProjectAuthMutation();
   const { getConfig } = useFlutterConfig();
   const [verifyProjectPayment, { isLoading: verifyingPayment }] =
     useVerifyProjectPaymentMutation();
@@ -77,6 +95,7 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
   /* eslint-disable */
   useEffect(() => {
     if (config.public_key === "" && config.tx_ref === "") return; // it's the default config
+    setFlutterLoading(true);
 
     handleFlutterwavePayment({
       callback: async (response) => {
@@ -94,10 +113,20 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
             description:
               "Unfortunately, we couldn't process your payment. Please try again later.",
           });
+          setConfig(DEFAULT_CONFIG);
+        } finally {
+          setFlutterLoading(false);
         }
         closePaymentModal();
       },
-      onClose: () => {},
+      onClose: () => {
+        setConfig(DEFAULT_CONFIG);
+        setFlutterLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Payment was unsuccessful.",
+        });
+      },
     });
   }, [config]);
   /* eslint-enable */
@@ -150,6 +179,140 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
       });
     }
   };
+
+  const onSubmitAuth = async (
+    values: z.infer<typeof DonateToProjectAuthValidation>
+  ) => {
+    const { amount, currency, isAnonymous } = values;
+    try {
+      const res = await initiatePaymentToProjectAuth({
+        id,
+        anonymous: isAnonymous,
+        amount: Number(amount.replace(/,/g, "")),
+        currency,
+      }).unwrap();
+
+      const { txn_reference: txnRef, amount: amn } = res.data;
+      const config = getConfig({
+        amount: amn,
+        currency,
+        desc: title || "Project Donation",
+        txnRef,
+        customer: {
+          email: user?.email || "",
+          name: `${user?.firstName} ${user?.lastName}`,
+          phone_number: user?.phone || "",
+        },
+      });
+      console.log({ config });
+      setConfig(config);
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Error occured initiating payment, please try again later",
+      });
+    }
+  };
+
+  // Authorized user form: TODO: Can possibly refactor this out of here.
+  if (isAuthenticated) {
+    return (
+      <Form {...formAuth}>
+        <form
+          className="flex w-full flex-col"
+          onSubmit={formAuth.handleSubmit(onSubmitAuth)}
+        >
+          <div className="mb-2 space-y-1">
+            <FormLabel required>Enter donation amount</FormLabel>
+            <div className="flex w-full items-start">
+              <FormField
+                control={formAuth.control}
+                name="currency"
+                render={({ field }) => (
+                  <FormItem className="w-[20%]">
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="rounded-r-none bg-[#F2F2F2]">
+                          <SelectValue placeholder="--Select--" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="max-h-[30vh]">
+                        <SelectItem value="NGN">NGN</SelectItem>
+                        <SelectItem value="USD">USD</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={formAuth.control}
+                name="amount"
+                render={() => (
+                  <FormItem className="w-[80%]">
+                    <FormControl>
+                      <Input
+                        placeholder="0.00"
+                        type="text"
+                        className="rounded-l-none"
+                        value={formAuth.watch("amount")}
+                        onChange={(event) => {
+                          const rawValue = event?.target?.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          ); // Remove non-numeric characters
+                          if (isNaN(+rawValue)) {
+                            return formAuth.setValue("amount", "");
+                          }
+                          const formattedValue = new Intl.NumberFormat(
+                            "en-US"
+                          ).format(parseInt(rawValue || "0", 10));
+
+                          formAuth.setValue(
+                            "amount",
+                            formattedValue !== "0" ? `${formattedValue}` : ""
+                          );
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="mt-2 flex items-center space-x-2">
+            <Checkbox
+              id="terms"
+              className=""
+              checked={formAuth.watch("isAnonymous")}
+              onClick={() =>
+                formAuth.setValue("isAnonymous", !formAuth.watch("isAnonymous"))
+              }
+            />
+            <label htmlFor="terms" className="text_small_body_r">
+              Don’t display my name publicly on the donor list.
+            </label>
+          </div>
+
+          <Button
+            loading={loadingPaymentAuth || verifyingPayment || flutterLoading}
+            type="submit"
+            className="ml-auto mt-8 w-fit space-x-2"
+          >
+            {!flutterLoading && !loadingPaymentAuth && !verifyingPayment && (
+              <Heart2 set="bold" size={19} />
+            )}
+            <span>Donate now</span>
+          </Button>
+        </form>
+      </Form>
+    );
+  }
 
   return (
     <Form {...form}>
@@ -354,11 +517,13 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
         </div>
 
         <Button
-          loading={isLoading || verifyingPayment}
+          loading={isLoading || verifyingPayment || flutterLoading}
           type="submit"
           className="ml-auto mt-8 w-fit space-x-2"
         >
-          {!isLoading && !verifyingPayment && <Heart2 set="bold" size={19} />}
+          {!flutterLoading && !isLoading && !verifyingPayment && (
+            <Heart2 set="bold" size={19} />
+          )}
           <span>Donate now</span>
         </Button>
       </form>
