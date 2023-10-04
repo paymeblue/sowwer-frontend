@@ -26,7 +26,13 @@ import {
 } from "@components/ui/dialog";
 import { InfoCircle } from "react-iconly";
 import { useToast } from "@components/ui/use-toast";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { MinistryConnectBankAccount } from "lib/validations/ministry";
 import { Input } from "@components/ui/input";
 import {
@@ -81,7 +87,7 @@ const ConnectBankAccountDialog = ({ setOpen }: Props) => {
     }
   };
 
-  const verifyEnteredAccount = async () => {
+  const verifyEnteredAccount = useCallback(async () => {
     const bankcode = form.watch("bank")?.split(",")[0];
     const accountNumber = form.watch("accountNumber");
 
@@ -101,7 +107,7 @@ const ConnectBankAccountDialog = ({ setOpen }: Props) => {
       setVerified(false);
       setVerifiedName(null);
     }
-  };
+  }, [form, toast, verifyAccount]);
 
   useEffect(() => {
     const valid = form.formState.isValid;
