@@ -8,28 +8,44 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { useForm } from "react-hook-form";
+import { useGetUserProfileQuery } from "services/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@components/ui/input";
 import { MinistryPersonalDetailsValidation } from "lib/validations/ministry";
+import Loader from "@components/shared/Loader";
+import { useEffect } from "react";
 
 const MinistryPersonalDetailsForm = () => {
+  const { data: userProfile, isLoading } = useGetUserProfileQuery(null, {
+    refetchOnFocus: true,
+  });
+
   const form = useForm<z.infer<typeof MinistryPersonalDetailsValidation>>({
     resolver: zodResolver(MinistryPersonalDetailsValidation),
-    defaultValues: {
-      firstName: "Victor",
-      lastName: "Whyte",
-      email: "victordavidwhyte@gmail.com",
-      phone: "08166406459",
-    },
   });
+
+  useEffect(() => {
+    if (userProfile?.data) {
+      const { firstName, lastName, email, phone } = userProfile?.data;
+      form.reset({
+        firstName,
+        lastName,
+        email,
+        phone,
+      });
+    }
+  }, [userProfile, form]);
 
   const onSubmit = async (
     values: z.infer<typeof MinistryPersonalDetailsValidation>
   ) => {
-    console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    return;
   };
+
+  if (isLoading) {
+    return <Loader className="h-[40vh]" />;
+  }
 
   return (
     <Form {...form}>

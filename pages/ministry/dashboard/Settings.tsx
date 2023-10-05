@@ -22,13 +22,19 @@ const SettingsPage = () => {
           </NoSSRWrapper>
         </TabsContent>
         <TabsContent value="personal-details">
-          <PersonalDetails />
+          <NoSSRWrapper>
+            <PersonalDetails />
+          </NoSSRWrapper>
         </TabsContent>
         <TabsContent value="password-settings">
-          <PasswordSettings />
+          <NoSSRWrapper>
+            <PasswordSettings />
+          </NoSSRWrapper>
         </TabsContent>
         <TabsContent value="notifications">
-          <Notifications />
+          <NoSSRWrapper>
+            <Notifications />
+          </NoSSRWrapper>
         </TabsContent>
       </Tabs>
     </MainContentWrapper>
