@@ -9,20 +9,48 @@ import {
 } from "@components/ui/form";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { useUpdateMinistryProfileMutation } from "services/ministry";
+
 import { MinistryGeneralLogoValidation } from "lib/validations/ministry";
 import FileUpload from "@components/ui/file-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
+import { useToast } from "@components/ui/use-toast";
+import { convertBase64toFile } from "@lib/functions";
+import { useState } from "react";
 
-export const MinistryUploadLogo = () => {
+interface Props {
+  ministryId: string | undefined;
+  logo: string | null;
+}
+
+export const MinistryUploadLogo = ({ ministryId, logo }: Props) => {
+  const [disabled, setDisabled] = useState(Boolean(logo));
   const form = useForm<z.infer<typeof MinistryGeneralLogoValidation>>({
     resolver: zodResolver(MinistryGeneralLogoValidation),
   });
+  const { toast } = useToast();
+  const [updateMinistry, { isLoading }] = useUpdateMinistryProfileMutation();
 
   const onSubmit = async (
     values: z.infer<typeof MinistryGeneralLogoValidation>
   ) => {
-    console.log("Submitted", { values });
+    const { logo: formLogoBase64 } = values;
+    try {
+      await updateMinistry({
+        logo: convertBase64toFile(formLogoBase64, "logo"),
+        id: ministryId,
+      }).unwrap();
+      toast({
+        title: "Ministry logo updated successfully",
+      });
+      setDisabled(true);
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Unable to update ministry logo",
+      });
+    }
   };
   return (
     <Form {...form}>
@@ -45,6 +73,12 @@ export const MinistryUploadLogo = () => {
                   desc="(.jpg, .jpeg or .png file format supported)"
                   containerClassname="w-[50%] aspect-square"
                   fileName="logo"
+                  editMode={logo ? true : false}
+                  fileUrl={logo || undefined}
+                  onDelete={() => {
+                    setDisabled(false);
+                    form.resetField("logo");
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -54,6 +88,8 @@ export const MinistryUploadLogo = () => {
 
         <Button
           type="submit"
+          loading={isLoading}
+          disabled={disabled}
           variant="secondary"
           className="ml-auto mt-10 w-fit"
         >

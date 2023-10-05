@@ -1,8 +1,24 @@
+import { useGetMinistryDetailsQuery } from "services/ministry";
+
 import MinistryGeneralDetailsForm from "@components/forms/ministry/MinistryGeneralDetailsForm";
 import TabSectionWrapper, { TabWrapper } from "./TabContentWrapper";
 import MinistryUploadLogo from "@components/forms/ministry/MinistryUploadLogo";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import Loader from "@components/shared/Loader";
 
-const ProfileInformation = () => {
+interface Props {
+  ministryId: string | undefined;
+}
+
+const ProfileInformation = ({ ministryId }: Props) => {
+  const { data: ministry, isLoading } = useGetMinistryDetailsQuery(
+    ministryId ?? skipToken
+  );
+
+  if (isLoading) {
+    return <Loader className="h-[50vh]" />;
+  }
+
   return (
     <TabWrapper>
       <TabSectionWrapper
@@ -14,7 +30,15 @@ const ProfileInformation = () => {
           </span>
         }
       >
-        <MinistryGeneralDetailsForm />
+        <MinistryGeneralDetailsForm
+          defaultValues={{
+            about: ministry?.data.about || "",
+            addressLine: ministry?.data?.address || "",
+            name: ministry?.data?.name || "",
+            state: ministry?.data?.state || "",
+          }}
+          ministryId={ministryId}
+        />
       </TabSectionWrapper>
 
       <TabSectionWrapper
@@ -23,7 +47,10 @@ const ProfileInformation = () => {
         contentClassname="w-[50%]"
         desc="Add your logo for easy identification."
       >
-        <MinistryUploadLogo />
+        <MinistryUploadLogo
+          ministryId={ministryId}
+          logo={ministry?.data.logo || null}
+        />
       </TabSectionWrapper>
     </TabWrapper>
   );

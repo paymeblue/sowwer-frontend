@@ -141,21 +141,24 @@ export type Ministry = {
 };
 
 type MinistryProfileRequest1 = {
+  [key: string]: any;
   id?: string;
-  name: string;
-  address: string;
-  postalCode: string;
-  state: string;
-  about: string;
+  name?: string;
+  address?: string;
+  postalCode?: string;
+  state?: string;
+  about?: string;
 };
 
 type MinistryProfileRequest2 = {
+  [key: string]: any;
   id?: string;
   email: string;
   phone: string;
 };
 
 type MinistryProfileRequest3 = {
+  [key: string]: any;
   id?: string;
   logo: string;
 };

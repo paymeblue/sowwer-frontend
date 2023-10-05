@@ -59,7 +59,18 @@ const ministry = api.injectEndpoints({
     >({
       query: (credentials) => {
         const { id, ...rest } = credentials;
-        return { url: `ministries/${id}/profile`, method: "PATCH", body: rest };
+        const formData = new FormData();
+
+        for (const key in rest) {
+          if (rest.hasOwnProperty(key)) {
+            formData.append(key, rest[key]);
+          }
+        }
+        return {
+          url: `ministries/${id}/profile`,
+          method: "PATCH",
+          body: formData,
+        };
       },
       // Invalidate 'Ministry' cache tags on successful creation
       invalidatesTags: cacher.providesProperty("Ministry"),

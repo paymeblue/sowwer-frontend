@@ -3,6 +3,7 @@ import Notifications from "@components/sections/ministry/Notifications";
 import PasswordSettings from "@components/sections/ministry/PasswordSettings";
 import PersonalDetails from "@components/sections/ministry/PersonalDetails";
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 
 const SettingsPage = () => {
@@ -16,7 +17,9 @@ const SettingsPage = () => {
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
         <TabsContent value="ministry-details">
-          <MinistryDetails />
+          <NoSSRWrapper>
+            <MinistryDetails />
+          </NoSSRWrapper>
         </TabsContent>
         <TabsContent value="personal-details">
           <PersonalDetails />

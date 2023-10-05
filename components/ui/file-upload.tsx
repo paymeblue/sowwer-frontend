@@ -15,6 +15,7 @@ interface Props {
   fileName: string;
   fileUrl?: string;
   editMode?: boolean;
+  onDelete?: () => void;
 }
 
 const FileUpload = ({
@@ -26,6 +27,7 @@ const FileUpload = ({
   fileName,
   fileUrl,
   editMode = false,
+  onDelete,
 }: Props) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
@@ -81,7 +83,6 @@ const FileUpload = ({
 
         reader.onloadend = (e) => {
           const base64String = e.target?.result as string;
-          console.log({ base64String });
           setImageBase64(base64String);
         };
         reader.readAsDataURL(newFile);
@@ -113,7 +114,6 @@ const FileUpload = ({
         const reader = new FileReader();
         reader.onloadend = () => {
           const base64String = reader.result as string;
-          console.log({ base64String });
 
           setImageBase64(base64String);
         };
@@ -171,7 +171,13 @@ const FileUpload = ({
           </div>
 
           <div
-            onClick={() => setSelectedFile(null)}
+            onClick={() => {
+              setSelectedFile(null);
+              setImageBase64(null);
+              if (onDelete) {
+                onDelete();
+              }
+            }}
             className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:bg-grey"
           >
             <Trash size={14} />
@@ -193,7 +199,14 @@ const FileUpload = ({
           </div>
 
           <div
-            onClick={() => setEditModeState(false)}
+            onClick={() => {
+              setImageBase64(null);
+              setSelectedFile(null);
+              setEditModeState(false);
+              if (onDelete) {
+                onDelete();
+              }
+            }}
             className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:bg-grey"
           >
             <Trash size={14} />

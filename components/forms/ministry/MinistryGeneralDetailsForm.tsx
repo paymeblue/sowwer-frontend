@@ -9,7 +9,10 @@ import {
 } from "@components/ui/form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useForm } from "react-hook-form";
+import { useUpdateMinistryProfileMutation } from "services/ministry";
+
 import { MinistryGeneralDetailsValidation } from "lib/validations/ministry";
 import { Input } from "@components/ui/input";
 import {
@@ -22,21 +25,58 @@ import {
 import { Textarea } from "@components/ui/textarea";
 import statesInNigeria from "@lib/NigeriaStates";
 import { Button } from "@components/ui/button";
+import { useEffect } from "react";
+import { useToast } from "@components/ui/use-toast";
 
-const MinistryGeneralDetailsForm = () => {
+interface Props {
+  defaultValues:
+    | {
+        name: string;
+        addressLine: string;
+        state: string;
+        about: string;
+      }
+    | undefined;
+  ministryId: string | undefined;
+}
+
+const MinistryGeneralDetailsForm = ({ defaultValues, ministryId }: Props) => {
   const form = useForm<z.infer<typeof MinistryGeneralDetailsValidation>>({
     resolver: zodResolver(MinistryGeneralDetailsValidation),
-    defaultValues: {
-      name: "Family Worship Center",
-      addressLine: "648 Idris Gidado St, Wuye",
-      state: "Federal Capital Territory",
-    },
   });
+  const { toast } = useToast();
+  const [updateMinistry, { isLoading }] = useUpdateMinistryProfileMutation();
+
+  useEffect(() => {
+    if (defaultValues) {
+      const { about, addressLine, name, state } = defaultValues;
+      form.reset({
+        name,
+        state,
+        addressLine,
+        about,
+      });
+    }
+  }, [defaultValues, form]);
 
   const onSubmit = async (
     values: z.infer<typeof MinistryGeneralDetailsValidation>
   ) => {
-    console.log("Submitted", { values });
+    const { about } = values;
+    try {
+      await updateMinistry({
+        about,
+        id: ministryId,
+      }).unwrap();
+      toast({
+        title: "Ministry updated successfully",
+      });
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Unable to update ministry",
+      });
+    }
   };
   return (
     <Form {...form}>
@@ -53,10 +93,10 @@ const MinistryGeneralDetailsForm = () => {
                 <FormLabel required>Name</FormLabel>
                 <FormControl>
                   <Input
-                    disabled
                     placeholder="Name of ministry"
                     type="text"
-                    //   {...field}
+                    {...field}
+                    disabled
                   />
                 </FormControl>
                 <FormMessage />
@@ -71,10 +111,10 @@ const MinistryGeneralDetailsForm = () => {
                 <FormLabel required>Address line</FormLabel>
                 <FormControl>
                   <Input
-                    disabled
                     placeholder="Address"
                     type="text"
-                    //   {...field}
+                    {...field}
+                    disabled
                   />
                 </FormControl>
                 <FormMessage />
@@ -91,7 +131,7 @@ const MinistryGeneralDetailsForm = () => {
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   disabled
                 >
                   <FormControl>
@@ -131,7 +171,13 @@ const MinistryGeneralDetailsForm = () => {
             )}
           />
         </div>
-        <Button type="submit" variant="secondary" className="ml-auto mt-10">
+        <Button
+          loading={isLoading}
+          disabled={!form.watch("about")}
+          type="submit"
+          variant="secondary"
+          className="ml-auto mt-10"
+        >
           Save
         </Button>
       </form>
