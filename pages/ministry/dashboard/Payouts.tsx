@@ -61,7 +61,7 @@ const PayoutsPageComp = () => {
                       <ArrowRight size={18} />
                     </Button>
                   </DialogTrigger>
-                  <ConnectBankAccountDialog setOpen={setOpen} defaultStep={1} />
+                  <ConnectBankAccountDialog setOpen={setOpen} defaultStep={2} />
                 </Dialog>
               </div>
             </div>

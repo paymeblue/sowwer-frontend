@@ -72,14 +72,14 @@ const CloseProjectDialog = ({ id, setOpen, title }: Props) => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleCloseProject)}
-            className="w-full"
+            className="flex w-full flex-col"
           >
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel className="flex w-full items-center justify-center text-center">
+                  <FormLabel className="mt-3 flex w-full items-center justify-center text-center">
                     <span className="text-center">
                       To close the project, enter your password below:
                     </span>
@@ -98,7 +98,7 @@ const CloseProjectDialog = ({ id, setOpen, title }: Props) => {
             <Button
               type="submit"
               loading={closingProject}
-              className="mt-6 w-full bg-[#DD3636] text-white hover:bg-[#DD3636]"
+              className="mt-8 w-full bg-[#DD3636] text-white hover:bg-[#DD3636]"
             >
               Close project
             </Button>

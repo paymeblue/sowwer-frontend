@@ -91,7 +91,7 @@ const ActionComp = ({
   project: MinistryProject;
   accountInfo: AccountResponse | undefined;
 }) => {
-  const disabled = !!project.request_payout || project.amountRaised === "0.00";
+  const disabled = !!project.request_payout;
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const [requestPayout, { isLoading }] = useRequestPayoutMutation();
@@ -113,7 +113,7 @@ const ActionComp = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <Button
           size="sm"
-          disabled={disabled}
+          disabled={disabled || project.amountRaised === "0.00"}
           variant="outline"
           loading={isLoading}
           onClick={() => {
@@ -123,9 +123,9 @@ const ActionComp = ({
               handleRequest();
             }
           }}
-          className="ml-auto w-fit border-accent text-[.75rem] text-accent"
+          className="ml-auto w-fit border-accent text-[.75rem] text-accent disabled:border-none disabled:bg-[#E8E9ED] disabled:text-white disabled:opacity-100"
         >
-          Request payout
+          {disabled ? "Payout requested" : "Request payout"}
         </Button>
         <ConnectBankAccountDialog setOpen={setOpen} defaultStep={1} />
       </Dialog>

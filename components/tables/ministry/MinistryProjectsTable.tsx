@@ -189,13 +189,7 @@ const ActionDialog = ({ project }: { project: MinistryProject }) => {
                 className="text_tiny_body_r space-x-2"
                 onClick={handleDownloadClick}
               >
-                <QrCode size={14} />{" "}
-                {/* <div id="TableQrCode">
-                  <QRCodeCanvas
-                    value={`${window.location.origin}/projects/${project.id}`}
-                    size={14}
-                  />
-                </div> */}
+                <QrCode size={14} />
                 <span className="text_tiny_body_r">Download QR</span>{" "}
               </DropdownMenuItem>
 
