@@ -139,7 +139,7 @@ const ProjectEditorComp = ({ id }: Props) => {
               desc="Once you publish you project, you'll see your sharing details and can download the QR code."
             />
           ) : (
-            <SharingDetails />
+            <SharingDetails projectId={id} />
           )}
         </TabsContent>
       </Tabs>

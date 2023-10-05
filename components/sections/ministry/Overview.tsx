@@ -94,7 +94,12 @@ const OverviewComp = ({ id }: Props) => {
 
   const toggleProjectStatus = async (
     id: string,
-    status: "active" | "drafted"
+    status: "active" | "drafted",
+    options?:
+      | {
+          redirect?: boolean;
+        }
+      | undefined
   ) => {
     try {
       await publishOrDraftProject({
@@ -105,6 +110,9 @@ const OverviewComp = ({ id }: Props) => {
         variant: "default",
         title: `Project successfully set to ${status}`,
       });
+      if (options && options.redirect) {
+        router.push("/ministry/projects");
+      }
     } catch (err: any) {
       toast({
         variant: "destructive",
@@ -251,7 +259,11 @@ const OverviewComp = ({ id }: Props) => {
           <div className="ml-auto flex w-fit space-x-4">
             {project?.data.status === "drafted" && (
               <Button
-                onClick={() => toggleProjectStatus(id, "active")}
+                onClick={() =>
+                  toggleProjectStatus(id, "active", {
+                    redirect: true,
+                  })
+                }
                 variant="outline"
                 className="w-fit border-accent text-accent"
                 loading={togglingProject || isLoading}

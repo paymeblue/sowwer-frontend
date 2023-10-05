@@ -20,6 +20,8 @@ import { Dialog } from "@components/ui/dialog";
 import DeleteProjectDialog from "@components/dialogs/ministry/DeleteProjectDialog";
 import { useState } from "react";
 import CloseProjectDialog from "@components/dialogs/ministry/CloseProjectDialog";
+// @ts-ignore
+import QRious from "qrious";
 
 interface Props {
   ministryId: string;
@@ -118,6 +120,29 @@ const ActionDialog = ({ project }: { project: MinistryProject }) => {
     setOpenViewModal(false);
   };
 
+  const handleDownloadClick = () => {
+    const qrValue = `${window.location.origin}/projects/${project.id}`;
+    const qr = new QRious({
+      value: qrValue,
+      size: 300, // Set the desired size for the larger QR code
+    });
+
+    // Convert the QR code to a data URL
+    const url = qr.toDataURL();
+
+    // Create an <a> element to trigger the download
+    const a = document.createElement("a");
+    a.download = "Soower-Project-QRCode.png";
+    a.href = url;
+    document.body.appendChild(a);
+
+    // Trigger the download
+    a.click();
+
+    // Remove the <a> element from the body
+    document.body.removeChild(a);
+  };
+
   return (
     <>
       <Dialog
@@ -160,8 +185,17 @@ const ActionDialog = ({ project }: { project: MinistryProject }) => {
                   <span className="text_tiny_body_r">Edit</span>{" "}
                 </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem className="text_tiny_body_r space-x-2">
+              <DropdownMenuItem
+                className="text_tiny_body_r space-x-2"
+                onClick={handleDownloadClick}
+              >
                 <QrCode size={14} />{" "}
+                {/* <div id="TableQrCode">
+                  <QRCodeCanvas
+                    value={`${window.location.origin}/projects/${project.id}`}
+                    size={14}
+                  />
+                </div> */}
                 <span className="text_tiny_body_r">Download QR</span>{" "}
               </DropdownMenuItem>
 
