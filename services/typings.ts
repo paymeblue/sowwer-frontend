@@ -391,12 +391,12 @@ export type UpdateUserResponse = Response<{
 };
 
 export type UpdateSocialLinksRequest = {
-  website: string;
-  facebook: string;
-  instagram: string;
-  twitter: string;
-  linkedin: string;
-  youtube: string;
+  website?: string;
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  linkedin?: string;
+  youtube?: string;
 };
 
 export type GetDonorsForProjectResponse = TResponse<{

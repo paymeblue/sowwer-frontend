@@ -9,7 +9,13 @@ import {
 } from "@components/ui/form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useForm } from "react-hook-form";
+import {
+  useGetSocialLinksQuery,
+  useUpdateSocialLinksMutation,
+} from "services/ministry";
+
 import { MinistrySocialAccountsValidation } from "lib/validations/ministry";
 import { Input } from "@components/ui/input-with-icon";
 import { Button } from "@components/ui/button";
@@ -19,20 +25,67 @@ import InstaColor from "@components/assets/svg/instaColor";
 import Twitter from "@components/assets/svg/twitter";
 import LinkedInColor from "@components/assets/svg/linkedInColor";
 import YoutubeColor from "@components/assets/svg/youtubeColor";
+import useUserAuth from "@hooks/auth/useUserAuth";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import Loader from "@components/shared/Loader";
+import { useEffect } from "react";
+import { useToast } from "@components/ui/use-toast";
 
 const SocialAccountsForm = () => {
+  const { user } = useUserAuth();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof MinistrySocialAccountsValidation>>({
     resolver: zodResolver(MinistrySocialAccountsValidation),
-    defaultValues: {
-      website: "fwcabuja.org",
-    },
   });
+  const { data: socialLinks, isLoading } = useGetSocialLinksQuery(
+    user?.ministry?.id ?? skipToken
+  );
+  const [updateSocialLinks, { isLoading: saving }] =
+    useUpdateSocialLinksMutation();
+
+  useEffect(() => {
+    if (socialLinks?.data) {
+      const { facebook, instagram, linkedin, twitter, website, youtube } =
+        socialLinks.data;
+      form.reset({
+        facebook: facebook || undefined,
+        instagram: instagram || undefined,
+        linkedIn: linkedin || undefined,
+        twitter: twitter || undefined,
+        website: website || undefined,
+        youtube: youtube || undefined,
+      });
+    }
+  }, [socialLinks, form]);
 
   const onSubmit = async (
     values: z.infer<typeof MinistrySocialAccountsValidation>
   ) => {
-    console.log("Submitted", { values });
+    const { facebook, instagram, linkedIn, twitter, website, youtube } = values;
+    try {
+      await updateSocialLinks({
+        facebook,
+        instagram,
+        linkedin: linkedIn,
+        twitter,
+        website,
+        youtube,
+      }).unwrap();
+      toast({
+        title: "Social links updated successfully",
+      });
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Unable to save social links",
+      });
+    }
   };
+
+  if (isLoading) {
+    return <Loader className="h-[30vh]" />;
+  }
+
   return (
     <Form {...form}>
       <form
@@ -175,6 +228,7 @@ const SocialAccountsForm = () => {
           type="submit"
           variant="secondary"
           className="ml-auto mt-10 w-fit"
+          loading={saving}
         >
           Save
         </Button>

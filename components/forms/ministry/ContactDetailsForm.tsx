@@ -12,20 +12,33 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { MinistryContactDetailsValidation } from "lib/validations/ministry";
 import { Input } from "@components/ui/input";
+import { useGetMinistryDetailsQuery } from "services/ministry";
+import useUserAuth from "@hooks/auth/useUserAuth";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { useEffect } from "react";
 
 const ContactDetailsForm = () => {
+  const { user } = useUserAuth();
   const form = useForm<z.infer<typeof MinistryContactDetailsValidation>>({
     resolver: zodResolver(MinistryContactDetailsValidation),
-    defaultValues: {
-      email: "info@fwcabuja.org",
-      phone: "+234 123 456 7890",
-    },
   });
+  const { data: ministry } = useGetMinistryDetailsQuery(
+    user?.ministry?.id ?? skipToken
+  );
+
+  useEffect(() => {
+    if (ministry?.data) {
+      form.reset({
+        email: ministry.data.email,
+        phone: ministry.data.phone,
+      });
+    }
+  }, [ministry, form]);
 
   const onSubmit = async (
     values: z.infer<typeof MinistryContactDetailsValidation>
   ) => {
-    console.log("Submitted", { values });
+    return;
   };
   return (
     <Form {...form}>
