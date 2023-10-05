@@ -8,22 +8,47 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { useForm } from "react-hook-form";
+import { useUpdateUserPasswordMutation } from "services/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@components/ui/input-with-icon";
 import { Button } from "@components/ui/button";
 import { MinistryPasswordSettingsValidation } from "lib/validations/ministry";
+import { useToast } from "@components/ui/use-toast";
+import useUserAuth from "@hooks/auth/useUserAuth";
 
 const MinistryPasswordSettingsForm = () => {
+  const { logout } = useUserAuth();
+  const [updatePassword, { isLoading }] = useUpdateUserPasswordMutation();
   const form = useForm<z.infer<typeof MinistryPasswordSettingsValidation>>({
     resolver: zodResolver(MinistryPasswordSettingsValidation),
   });
+  const { toast } = useToast();
 
   const onSubmit = async (
     values: z.infer<typeof MinistryPasswordSettingsValidation>
   ) => {
-    console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    const { confirmNewPassword, currentPassword, newPassword } = values;
+
+    try {
+      await updatePassword({
+        confirm_password: confirmNewPassword,
+        old_password: currentPassword,
+        new_password: newPassword,
+      }).unwrap();
+      toast({
+        title:
+          "Password change successfully, you will be logged out in 3 seconds",
+      });
+      setTimeout(async () => {
+        await logout();
+      }, 3000);
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Failed to update passwords, please try again later.",
+      });
+    }
   };
 
   return (
@@ -88,7 +113,11 @@ const MinistryPasswordSettingsForm = () => {
             )}
           />
         </div>
-        <Button variant="secondary" className="ml-auto w-fit">
+        <Button
+          loading={isLoading}
+          variant="secondary"
+          className="ml-auto w-fit"
+        >
           Save
         </Button>
       </form>

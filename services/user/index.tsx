@@ -28,7 +28,7 @@ const user = api.injectEndpoints({
       UpdateUserPasswordRequest
     >({
       query: (credentials) => ({
-        url: "users/profile",
+        url: "users/update-password",
         method: "PATCH",
         body: credentials,
       }),
