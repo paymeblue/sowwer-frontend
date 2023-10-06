@@ -1,6 +1,11 @@
+import NotAuthenticatedRoute from "@components/route-helpers/NotAuthenticatedRoute";
 import CenterLayout from "@components/shared/Layouts/Center";
 import { ReactNode } from "react";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
-  return <CenterLayout>{children}</CenterLayout>;
+  return (
+    <NotAuthenticatedRoute>
+      <CenterLayout>{children}</CenterLayout>
+    </NotAuthenticatedRoute>
+  );
 }

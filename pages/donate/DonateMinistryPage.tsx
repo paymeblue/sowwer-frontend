@@ -52,7 +52,17 @@ const DonateMinistryComp = ({ ministryId }: Props) => {
       <DonateLayoutWrapper showHeaderText={false} className="py-16">
         <SuccessState
           title="Donation successful"
-          desc="Your payment has been processed and your donation was successful."
+          className="mx-auto w-[80%]"
+          desc={
+            <>
+              Your donation to{" "}
+              <span className="font-[600] capitalize">
+                "{ministryData?.data.name}"
+              </span>{" "}
+              was successful. Thanks for being a part of the ripple effect of
+              giving.
+            </>
+          }
           action={
             <Link href="/ministries">
               <Button className="w-fit">Back to ministries page</Button>

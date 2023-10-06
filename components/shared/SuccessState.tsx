@@ -4,7 +4,7 @@ import Donate from "@components/assets/svg/Donate";
 
 interface Props {
   title: string;
-  desc: string;
+  desc: string | ReactNode;
   className?: HTMLAttributes<HTMLDivElement>["className"];
   action?: ReactNode;
 }
@@ -20,9 +20,9 @@ const SuccessState = ({ title, desc, className, action }: Props) => {
       <Donate />
 
       <h4 className="text_variant_h3 mt-8 text-center text-body-1">{title}</h4>
-      <desc className="text_small_body_r mt-2 max-w-[35vw] text-center !text-[.85rem] text-body-1">
+      <p className="text_small_body_r mt-2 max-w-[35vw] text-center !text-[.85rem] text-body-1">
         {desc}
-      </desc>
+      </p>
       <div className="pt-2">{action}</div>
     </div>
   );
