@@ -20,7 +20,7 @@ module.exports = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        grad: "linear-gradient(to right, #FDFBF2 -2.86%, #EAF4FF 36.28%, #F4F7F6 59.68%, #FFF4FE 83.52%)",
+        grad: "linear-gradient(to right, #FDFBF2 -2.86%, #EAF4FF 36.28%, #F4F7F6 59.68%, #FFF9FE 80.52%)",
       },
       fontFamily: {
         title: ["var(--font-baskerville)"],

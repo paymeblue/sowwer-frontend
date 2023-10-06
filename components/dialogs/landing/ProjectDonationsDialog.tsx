@@ -78,7 +78,9 @@ const ProjectDonationsDialog = ({ projectId, title }: Props) => {
           </p>
         )}
       </div>
-      {sortedProjectDonors && sortedProjectDonors.length ? (
+      {sortedProjectDonors &&
+      sortedProjectDonors.length &&
+      sortedProjectDonors.length > 3 ? (
         <Dialog>
           <DialogTrigger asChild>
             <Button

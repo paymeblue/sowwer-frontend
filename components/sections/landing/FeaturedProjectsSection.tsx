@@ -11,6 +11,7 @@ import {
   cardContainerVariant,
   defaultVariant,
 } from "lib/variants";
+import Link from "next/link";
 
 export const featuredProjects: IProject[] = [
   {
@@ -80,13 +81,15 @@ const FeaturedProjectSection = () => {
               dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
               dolor sit amet consectetur.
             </p>
-            <Button
-              variant="link"
-              className=" space-x-2 font-semibold text-accent"
-            >
-              <span>Explore ongoing projects</span>
-              <ArrowRight set="light" size={18} />
-            </Button>
+            <Link href="/projects" className="self-center">
+              <Button
+                variant="link"
+                className=" space-x-2 font-semibold text-accent"
+              >
+                <span>Explore ongoing projects</span>
+                <ArrowRight set="light" size={18} />
+              </Button>
+            </Link>
           </div>
 
           <motion.div

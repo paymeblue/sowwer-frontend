@@ -21,7 +21,7 @@ const ExploreMinistriesTab = () => {
     query: category,
   });
   return (
-    <div className="mt-8 flex w-full flex-col items-center  justify-center">
+    <div className="mt-8 flex w-full flex-col items-center justify-center">
       <h3 className="text_regular_body_sb text-center">Browse by category</h3>
       <Tabs defaultValue="all-ministries" className="mt-4">
         <TabsList className="flex items-center space-x-2">
@@ -50,7 +50,7 @@ const ExploreMinistriesTab = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="mt-10 grid w-full grid-cols-1 gap-6 lg:grid-cols-3"
+          className="mx-auto mt-10 grid w-[90%] grid-cols-1 gap-6 lg:grid-cols-3"
         >
           {data?.data.length ? (
             data?.data.map((ministry) => {

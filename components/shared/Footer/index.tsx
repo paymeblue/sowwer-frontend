@@ -80,17 +80,22 @@ const Footer = ({ variant = "default" }: Props) => {
               <h5 className="footerlink_header">Quick Links</h5>
               <ul className="flex flex-col items-center space-y-4 lg:items-start">
                 <li>
-                  <Link href={`/`} className="footerlink_sub">
+                  <Link href={`/about`} className="footerlink_sub">
                     About us
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/`} className="footerlink_sub">
+                  <Link href={`/projects`} className="footerlink_sub">
                     Explore projects
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/`} className="footerlink_sub">
+                  <Link href={`/ministries`} className="footerlink_sub">
+                    Explore ministries
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/for-ministries`} className="footerlink_sub">
                     For ministries
                   </Link>
                 </li>
@@ -103,19 +108,19 @@ const Footer = ({ variant = "default" }: Props) => {
               <ul className="flex flex-col items-center space-y-4 lg:items-start">
                 <li>
                   <Link
-                    href={`/`}
+                    href="tel:+2341234567890"
                     className="footerlink_sub flex items-center space-x-2"
                   >
                     <Calling /> <span>(+234) 123 456 7890</span>
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href={`/`}
+                  <a
+                    href="mailto:info@soower.com"
                     className="footerlink_sub flex items-center space-x-2"
                   >
                     <Message /> <span>info@soower.com</span>
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>

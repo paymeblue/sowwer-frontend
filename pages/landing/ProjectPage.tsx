@@ -91,7 +91,7 @@ const PageComp = ({ projectId }: Props) => {
         {/* Top Section */}
         <section className="grid grid-cols-2 gap-10">
           {/* Image goes here */}
-          <div className="relative aspect-[1/0.7] w-full rounded-md">
+          <div className="relative aspect-[1/0.7] w-full overflow-hidden rounded-[0.625rem]">
             {image && (
               <Image
                 src={image}
@@ -104,7 +104,11 @@ const PageComp = ({ projectId }: Props) => {
 
           <div className="flex h-full w-full flex-col justify-between">
             <div className="flex flex-col space-y-2">
-              <Tag color={"#9B51E0"} backgroundColor={"#9747FF24"}>
+              <Tag
+                color={"#9B51E0"}
+                backgroundColor={"#9747FF24"}
+                className="text-[.75rem]"
+              >
                 {category.toUpperCase()}
               </Tag>
               <h2 className="text_variant_h2">{title}</h2>
@@ -124,13 +128,13 @@ const PageComp = ({ projectId }: Props) => {
             <div className="flex w-full flex-col">
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center justify-between">
-                  <h5 className="font-sub-title text-[.8rem] font-bold">
+                  <h5 className="font-sub-title text-[1rem] font-bold">
                     ₦{formatCurrency(amountRaised)}{" "}
-                    <span className="font-body text-[.7rem] font-[400]">
+                    <span className="font-body text-[.75rem] font-[400] text-body-2">
                       raised
                     </span>
                   </h5>
-                  <h5 className="font-title text-[1rem] font-bold">
+                  <h5 className="font-title text-[1.2rem] font-bold">
                     ₦{formatCurrency(targetAmount)}
                   </h5>
                 </div>

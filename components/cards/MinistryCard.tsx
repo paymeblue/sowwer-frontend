@@ -12,12 +12,12 @@ export interface IMinistryCard {
 
 const MinistryCard = ({ name, location, logoUrl, id }: IMinistryCard) => {
   return (
-    <div className="overflow-hidden rounded-[15px] bg-white p-6 shadow-featured-project-card">
-      <div className="mb-10 flex flex-col items-center justify-between space-y-8">
+    <div className="overflow-hidden rounded-[15px] bg-white px-6 py-8 shadow-featured-project-card">
+      <div className="mb-10 flex flex-col items-center justify-between space-y-10">
         {!logoUrl ? (
-          <div className="h-20 w-20 rounded-full bg-gray-300" />
+          <div className="h-24 w-24 rounded-full bg-gray-300" />
         ) : (
-          <div className="relative h-20 w-20 overflow-hidden rounded-full">
+          <div className="relative h-24 w-24 overflow-hidden rounded-full">
             <Image
               src={logoUrl}
               alt="ministry logo"

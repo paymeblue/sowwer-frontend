@@ -10,6 +10,7 @@ import {
   cardItemVariant,
   defaultVariant,
 } from "lib/variants";
+import Link from "next/link";
 
 const effectOfGiving = [
   {
@@ -55,10 +56,12 @@ const AboutsUsSection = () => {
               Convallis iaculis blandit ultrices posuere.
             </p>
 
-            <Button className="w-fit space-x-2">
-              <span>Learn More</span>
-              <ArrowRight set="light" size={18} />
-            </Button>
+            <Link href="/about">
+              <Button className="w-fit space-x-2">
+                <span>Learn More</span>
+                <ArrowRight set="light" size={18} />
+              </Button>
+            </Link>
           </div>
         </motion.div>
 

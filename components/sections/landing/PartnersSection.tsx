@@ -56,7 +56,7 @@ const PartnersSection = () => {
               slidesPerView={1}
               spaceBetween={0}
               autoplay={{
-                delay: 2000,
+                delay: 1500,
                 disableOnInteraction: true,
               }}
               ref={sliderRef}
@@ -73,6 +73,8 @@ const PartnersSection = () => {
                   spaceBetween: 20,
                 },
               }}
+              speed={1000}
+              effect="fade"
             >
               <div>
                 <SwiperSlide>
