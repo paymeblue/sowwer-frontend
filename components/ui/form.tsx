@@ -95,7 +95,7 @@ const FormLabel = React.forwardRef<
   const { error, formItemId } = useFormField();
 
   return (
-    <>
+    <div className="flex items-center space-x-1">
       <Label
         ref={ref}
         className={cn(
@@ -111,7 +111,7 @@ const FormLabel = React.forwardRef<
           *
         </span>
       )}
-    </>
+    </div>
   );
 });
 FormLabel.displayName = "FormLabel";

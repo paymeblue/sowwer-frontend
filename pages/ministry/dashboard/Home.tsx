@@ -1,14 +1,20 @@
+"use client";
 import User from "@components/assets/svg/User";
 import Bank from "@components/assets/svg/Bank";
 import Speaker from "@components/assets/svg/Speaker";
 import ActionItemCard from "@components/cards/ActionItemCard";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import useUserAuth from "@hooks/auth/useUserAuth";
 
-const MinistryHomepage = () => {
+const MinistryHomepageComp = () => {
+  const { user } = useUserAuth();
   return (
     <div className="flex h-full items-center justify-center">
       <div className="w-[50%] rounded-[10px] bg-white">
         <div className="flex w-full flex-col border-b-[2px] border-accent p-4">
-          <h2 className="text_large_header_b">Welcome, Victor!</h2>
+          <h2 className="text_large_header_b capitalize">
+            Welcome, {user?.firstName}!
+          </h2>
           <p className="text_regular_body_p ">
             Let’s get you set up to start using Soower!
           </p>
@@ -33,6 +39,14 @@ const MinistryHomepage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const MinistryHomepage = () => {
+  return (
+    <NoSSRWrapper>
+      <MinistryHomepageComp />
+    </NoSSRWrapper>
   );
 };
 

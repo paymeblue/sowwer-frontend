@@ -13,6 +13,8 @@ const plusJakarta = PlusJarkataSans({
   subsets: ["latin"],
   weight: ["200", "300", "400", "500", "600", "700"],
   variable: "--font-plus-jakarta",
+  display: "swap",
+  adjustFontFallback: false,
 });
 
 const libreBaskerville = LibreBaskerville({

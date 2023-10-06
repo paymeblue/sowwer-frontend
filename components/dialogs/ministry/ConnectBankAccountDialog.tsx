@@ -15,7 +15,6 @@ import {
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FixedSizeList as List } from "react-window";
 
 import EmptyState from "@components/shared/EmptyState";
 import { Button } from "@components/ui/button";
@@ -35,16 +34,21 @@ import {
 } from "react";
 import { MinistryConnectBankAccount } from "lib/validations/ministry";
 import { Input } from "@components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@components/ui/select";
 import Loader from "@components/shared/Loader";
-
-const FList = List as any;
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@components/ui/popover";
+import { cn } from "@lib/cn";
+import { Check, ChevronDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@components/ui/command";
 
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -54,6 +58,7 @@ interface Props {
 const ConnectBankAccountDialog = ({ setOpen, defaultStep }: Props) => {
   const { toast } = useToast();
   const [verified, setVerified] = useState(false);
+  const [bankPopoverOpen, setBankPopoveropen] = useState(false);
   const [verifiedName, setVerifiedName] = useState<null | string>(null);
   const [reference, setReference] = useState<null | string>(null);
   const { data: banks, isLoading } = useGetBanksQuery();
@@ -121,138 +126,157 @@ const ConnectBankAccountDialog = ({ setOpen, defaultStep }: Props) => {
   }, [form.formState.isValid, verifyEnteredAccount]);
 
   return (
-    <DialogContent className="h-[40vh]">
-      {step === 1 && (
-        <div className="flex h-full w-full items-center justify-center px-10">
-          <EmptyState
-            image={
-              <InfoCircle primaryColor="#EB5757" size={60} stroke="light" />
-            }
-            title="Connect Your Bank Account"
-            desc="In order to request a payout, please connect your bank account."
-            action={
-              <Button
-                //   loading={deleteLoading}
-                //   onClick={handleDelete}
-                onClick={() => setStep(2)}
-                className="w-fit bg-accent text-white hover:bg-accent"
-              >
-                Connect Bank Account
-              </Button>
-            }
-          />
-        </div>
-      )}
-
-      {step === 2 && (
-        <>
-          {isLoading ? (
-            <Loader className="h-full" />
-          ) : (
-            <DialogHeader>
-              <DialogTitle className="font-body capitalize">
-                Connect Your Bank Account
-              </DialogTitle>
-              <p className="font-body text-[0.8rem] text-body-1">
-                Please enter your bank account details below to receive payouts.
-              </p>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="flex flex-col"
+    <DialogContent>
+      <div>
+        {step === 1 && (
+          <div className="flex h-full w-full items-center justify-center px-10">
+            <EmptyState
+              image={
+                <InfoCircle primaryColor="#EB5757" size={60} stroke="light" />
+              }
+              title="Connect Your Bank Account"
+              desc="In order to request a payout, please connect your bank account."
+              action={
+                <Button
+                  onClick={() => setStep(2)}
+                  className="w-fit bg-accent text-white hover:bg-accent"
                 >
-                  <div className="mt-4 grid w-full grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="bank"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel required>Select bank</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger
-                                className="bg-[#F2F2F2]"
-                                disabled={verifying}
-                              >
-                                <SelectValue placeholder="--Select--">
-                                  <span className="!text-start text-[.75rem] text-body-2">
-                                    {form.watch("bank")?.split(",")[1]}
-                                  </span>
-                                </SelectValue>
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="max-h-[30vh]">
-                              <FList
-                                height={200}
-                                itemCount={banks?.data.length}
-                                itemSize={40}
-                                width="100%"
-                              >
-                                {({ index, style }: any) => {
-                                  const option = banks?.data[index];
-                                  const key = `${index}-${option?.code}`;
-                                  return (
-                                    <div key={key} style={style}>
-                                      <SelectItem
-                                        key={key}
-                                        value={`${option?.code},${option?.name}`}
-                                        className="text-[.75rem] text-body-2"
-                                      >
-                                        {option?.name}
-                                      </SelectItem>
-                                    </div>
-                                  );
-                                }}
-                              </FList>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="accountNumber"
-                      render={({ field }) => (
-                        <FormItem className="">
-                          <FormLabel required>Account number</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="1234567890"
-                              disabled={verifying}
-                              type="number"
-                              inputMode="numeric"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                          {verifiedName && (
-                            <span className="font-body text-[.75rem] uppercase text-accent">
-                              {verifiedName}
-                            </span>
-                          )}
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    variant="secondary"
-                    className="ml-auto mt-10 w-fit"
-                    disabled={!verified}
-                    loading={saving}
+                  Connect Bank Account
+                </Button>
+              }
+            />
+          </div>
+        )}
+
+        {step === 2 && (
+          <>
+            {isLoading ? (
+              <Loader className="h-full" />
+            ) : (
+              <DialogHeader>
+                <DialogTitle className="font-body capitalize">
+                  Connect Your Bank Account
+                </DialogTitle>
+                <p className="font-body text-[0.8rem] text-body-1">
+                  Please enter your bank account details below to receive
+                  payouts.
+                </p>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex flex-col"
                   >
-                    Connect Bank Account
-                  </Button>
-                </form>
-              </Form>
-            </DialogHeader>
-          )}
-        </>
-      )}
+                    <div className="mt-4 grid w-full grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="bank"
+                        render={({ field }) => (
+                          <FormItem className="flex w-full flex-col">
+                            <FormLabel required>Select bank</FormLabel>
+                            <Popover
+                              modal={true}
+                              open={bankPopoverOpen}
+                              onOpenChange={setBankPopoveropen}
+                            >
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <Button
+                                    variant="input"
+                                    role="combobox"
+                                    className={cn(
+                                      "w-full justify-between",
+                                      !field.value && "text-muted-foreground"
+                                    )}
+                                  >
+                                    {field.value
+                                      ? banks?.data.find(
+                                          (bank) =>
+                                            `${bank?.code},${bank?.name}` ===
+                                            field.value
+                                        )?.name
+                                      : "--Select--"}
+                                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-[200px] p-0">
+                                <Command>
+                                  <CommandInput placeholder="Search bank..." />
+                                  <CommandEmpty>No bank found.</CommandEmpty>
+                                  <CommandGroup className="max-h-[30vh] overflow-y-scroll">
+                                    {banks?.data?.map((bank) => (
+                                      <CommandItem
+                                        value={`${bank?.code},${bank?.name}`}
+                                        key={bank.code}
+                                        onSelect={() => {
+                                          form.setValue(
+                                            "bank",
+                                            `${bank?.code},${bank?.name}`
+                                          );
+                                          setBankPopoveropen(false);
+                                        }}
+                                      >
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            `${bank?.code},${bank?.name}` ===
+                                              field.value
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                        {bank.name}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="accountNumber"
+                        render={({ field }) => (
+                          <FormItem className="">
+                            <FormLabel required>Account number</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="1234567890"
+                                disabled={verifying}
+                                type="number"
+                                inputMode="numeric"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                            {verifiedName && (
+                              <span className="font-body text-[.75rem] uppercase text-accent">
+                                {verifiedName}
+                              </span>
+                            )}
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      variant="secondary"
+                      className="ml-auto mt-10 w-fit"
+                      disabled={!verified}
+                      loading={saving}
+                    >
+                      Connect Bank Account
+                    </Button>
+                  </form>
+                </Form>
+              </DialogHeader>
+            )}
+          </>
+        )}
+      </div>
     </DialogContent>
   );
 };
