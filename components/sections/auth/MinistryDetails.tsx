@@ -210,7 +210,7 @@ const MinistryDetails = ({
                   name="cacDocument"
                   render={({ field }) => (
                     <FormItem className="col-span-2">
-                      <FormLabel required>Upload Cover Photo</FormLabel>
+                      <FormLabel required>Upload CAC Document</FormLabel>
                       <FormControl>
                         <FileUpload
                           onFileChange={(file: string) => {

@@ -27,7 +27,7 @@ const ContactPage = () => {
           <h2 className="text_variant_h2 max-lg:text-[2.6rem] max-lg:leading-[3.3rem]">
             Contact us
           </h2>
-          <p className="font-body text-[.9rem] leading-[1.5rem] text-body-2">
+          <p className="font-body text-[.9rem] leading-[1.5rem] text-body-1">
             Want to make an inquiry or give us some feedback? Fill out the form
             and <br className="hidden lg:inline" /> we’ll be in touch within
             24hours.

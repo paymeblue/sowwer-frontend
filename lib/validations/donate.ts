@@ -77,3 +77,16 @@ export const DonateToMinistryValidation = z
     message: "Frequency is required for recurring donations",
     path: ["frequency"],
   });
+
+export const DonateToMinistryAuthValidation = z
+  .object({
+    amount: z.string(),
+    currency: z.enum(["USD", "NGN"]),
+    isAnonymous: z.boolean(),
+    donationType: z.enum(["one-time", "recurring"]),
+    frequency: z.enum(["monthly", "quarterly", "yearly"]).optional(),
+  })
+  .refine((data) => data.donationType !== "recurring" || data.frequency, {
+    message: "Frequency is required for recurring donations",
+    path: ["frequency"],
+  });

@@ -3,6 +3,7 @@ import { ReactNode, useEffect } from "react";
 import SideLeft from "./SideLeft";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+import Link from "next/link";
 
 interface Props {
   children: ReactNode;
@@ -27,8 +28,18 @@ const SideLayoutWrapper = ({ children, title, desc }: Props) => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="w-1/2 overflow-y-scroll bg-white p-10"
+        className="w-1/2 overflow-y-scroll bg-white px-10 py-4"
       >
+        <div className="mb-10 flex w-full">
+          <p className="text_small_body_r ml-auto w-fit text-right">
+            Already have an account?{" "}
+            <Link href="/auth/ministry/sign-in">
+              <span className="cursor-pointer font-[500] text-accent transition-all duration-200 hover:underline">
+                Sign in
+              </span>
+            </Link>
+          </p>
+        </div>
         {children}
       </motion.div>
     </div>

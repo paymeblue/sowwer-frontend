@@ -19,11 +19,11 @@ const SuccessState = ({ title, desc, className, action }: Props) => {
     >
       <Donate />
 
-      <h4 className="text_variant_h3 mt-8 text-center ">{title}</h4>
-      <desc className="text_small_body_r mt-2 max-w-[30vw] text-center">
+      <h4 className="text_variant_h3 mt-8 text-center text-body-1">{title}</h4>
+      <desc className="text_small_body_r mt-2 max-w-[35vw] text-center !text-[.85rem] text-body-1">
         {desc}
       </desc>
-      {action}
+      <div className="pt-2">{action}</div>
     </div>
   );
 };

@@ -159,7 +159,7 @@ input[type="number"] {
   }
 
   .text-form-label {
-    @apply font-body !text-[.8rem] font-[300] leading-[2rem] text-body-1;
+    @apply font-body !text-[.8rem] font-[300] leading-[2rem] text-black;
   }
 
   .footerlink_header {
@@ -170,7 +170,7 @@ input[type="number"] {
     @apply text-center font-body text-[0.9rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white lg:text-start;
   }
   .contactlink_sub {
-    @apply text-[0.9rem] text-body-1 hover:text-black;
+    @apply font-body text-[0.9rem] text-body-1 hover:text-black;
   }
 
   .safearea-top {
