@@ -91,7 +91,7 @@ const PageComp = ({ projectId }: Props) => {
         {/* Top Section */}
         <section className="grid grid-cols-2 gap-10">
           {/* Image goes here */}
-          <div className="relative aspect-[1/0.7] w-full overflow-hidden rounded-[0.625rem]">
+          <div className="relative aspect-[1/0.65] w-full overflow-hidden rounded-[0.625rem]">
             {image && (
               <Image
                 src={image}
