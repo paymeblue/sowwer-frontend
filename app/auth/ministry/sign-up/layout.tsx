@@ -1,3 +1,4 @@
+import NotAuthenticatedRoute from "@components/route-helpers/NotAuthenticatedRoute";
 import SideLayout from "@components/shared/Layouts/Side";
 import { ReactNode } from "react";
 
@@ -6,5 +7,9 @@ export default function MinstrySignupLayout({
 }: {
   children: ReactNode;
 }) {
-  return <SideLayout>{children}</SideLayout>;
+  return (
+    <NotAuthenticatedRoute>
+      <SideLayout>{children}</SideLayout>
+    </NotAuthenticatedRoute>
+  );
 }

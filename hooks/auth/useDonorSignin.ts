@@ -5,13 +5,11 @@ import { useLoginMutation } from "services/auth";
 import { useDispatch } from "react-redux";
 import * as z from "zod";
 import { setCredentials } from "redux/auth/reducer";
-import { useRouter } from "next/navigation";
 import { useToast } from "@components/ui/use-toast";
 
 const useDonorSignin = () => {
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
-  const router = useRouter();
   const { toast } = useToast();
 
   const loginDonor = async (values: z.infer<typeof DonorSigninValidation>) => {
@@ -30,7 +28,7 @@ const useDonorSignin = () => {
           context: "donor",
         })
       );
-      router.push("/donor");
+      // router.push("/donor");
     } catch (error: any) {
       toast({
         variant: "destructive",

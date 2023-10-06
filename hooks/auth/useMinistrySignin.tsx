@@ -4,14 +4,12 @@ import { useLoginMutation } from "services/auth";
 import { useDispatch } from "react-redux";
 import * as z from "zod";
 import { setCredentials } from "redux/auth/reducer";
-import { useRouter } from "next/navigation";
 import { useToast } from "@components/ui/use-toast";
 import { MinistrySigninValidation } from "lib/validations/ministry";
 
 const useMinistrySignin = () => {
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
-  const router = useRouter();
   const { toast } = useToast();
 
   const loginMinistry = async (
@@ -32,7 +30,7 @@ const useMinistrySignin = () => {
           context: "ministry",
         })
       );
-      router.push("/ministry");
+      // router.push("/ministry");
     } catch (error: any) {
       toast({
         variant: "destructive",
