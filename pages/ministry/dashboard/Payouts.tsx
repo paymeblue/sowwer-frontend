@@ -19,6 +19,7 @@ import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { Dialog, DialogTrigger } from "@components/ui/dialog";
 import ConnectBankAccountDialog from "@components/dialogs/ministry/ConnectBankAccountDialog";
 import { useState } from "react";
+import PayoutGeneralDonations from "@components/sections/ministry/PayoutGeneralDonations";
 
 const PayoutsPageComp = () => {
   const { data: accountInfo, isLoading } = useGetAccountInfoQuery();
@@ -126,6 +127,9 @@ const PayoutsPageComp = () => {
                     <TabsTrigger value="completed-projects">
                       Completed Projects
                     </TabsTrigger>
+                    <TabsTrigger value="general-donations">
+                      General Donations
+                    </TabsTrigger>
                     <TabsTrigger value="payout-history">
                       Payout History
                     </TabsTrigger>
@@ -133,6 +137,9 @@ const PayoutsPageComp = () => {
 
                   <TabsContent value="completed-projects">
                     <MinistryCompletedProjectsTable accountInfo={accountInfo} />
+                  </TabsContent>
+                  <TabsContent value="general-donations">
+                    <PayoutGeneralDonations />
                   </TabsContent>
                   <TabsContent value="payout-history">
                     <MinistryPayoutHistryTable />

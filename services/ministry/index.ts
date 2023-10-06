@@ -2,6 +2,7 @@ import {
   ErrorResponse,
   ExploreMinistriesResponse,
   ExploreRequest,
+  GetMinistryBalanceResponse,
   GetMinistryDetailsResponse,
   GetSocialLinksResponse,
   MinistryProfileRequest,
@@ -123,6 +124,17 @@ const ministry = api.injectEndpoints({
       queryFn: () => ({ data: null }),
       invalidatesTags: cacher.invalidatesUnknownErrors(),
     }),
+    getBalance: build.query<GetMinistryBalanceResponse, { ministryId: string }>(
+      {
+        query: (data) => `ministries/${data.ministryId}/balance`,
+        transformResponse: (reponse: GetMinistryBalanceResponse, meta, arg) => {
+          return reponse;
+        },
+        transformErrorResponse: (reponse: ErrorResponse, meta, arg) => {
+          return reponse.data.message;
+        },
+      }
+    ),
   }),
   overrideExisting: true,
 });
@@ -134,4 +146,5 @@ export const {
   useUpdateMinistryProfileMutation,
   useUpdateSocialLinksMutation,
   useGetSocialLinksQuery,
+  useGetBalanceQuery,
 } = ministry;

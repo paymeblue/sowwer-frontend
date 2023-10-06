@@ -552,6 +552,10 @@ export type GetSocialLinksResponse = Response<{
   createdAt: string;
 }>;
 
+export type GetMinistryBalanceResponse = Response<{
+  balance: string;
+}>;
+
 export type WidowJoinSoowerResponse = {
   name: string;
   email: string;
