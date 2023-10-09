@@ -12,17 +12,35 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@components/ui/input";
 import { DonorPersonalDetailsValidation } from "lib/validations/donor";
+import { useEffect } from "react";
 
-const PersonalDetailsForm = () => {
+interface Props {
+  defaultValues:
+    | {
+        firstName: string;
+        lastName: string;
+        email: string;
+        phoneNumber: string;
+      }
+    | undefined;
+}
+
+const PersonalDetailsForm = ({ defaultValues }: Props) => {
   const form = useForm<z.infer<typeof DonorPersonalDetailsValidation>>({
     resolver: zodResolver(DonorPersonalDetailsValidation),
-    defaultValues: {
-      firstName: "Victor",
-      lastName: "Whyte",
-      email: "victordavidwhyte@gmail.com",
-      phoneNumber: "08166406459",
-    },
   });
+
+  useEffect(() => {
+    if (defaultValues) {
+      const { email, firstName, lastName, phoneNumber } = defaultValues;
+      form.reset({
+        email,
+        firstName,
+        lastName,
+        phoneNumber,
+      });
+    }
+  }, [defaultValues, form]);
 
   const onSubmit = async (
     values: z.infer<typeof DonorPersonalDetailsValidation>

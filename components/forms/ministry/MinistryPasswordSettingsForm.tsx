@@ -43,10 +43,12 @@ const MinistryPasswordSettingsForm = () => {
       setTimeout(async () => {
         await logout();
       }, 3000);
-    } catch (err) {
+    } catch (err: any) {
       toast({
         variant: "destructive",
-        title: "Failed to update passwords, please try again later.",
+        title:
+          err?.data?.message ||
+          "Failed to update passwords, please try again later.",
       });
     }
   };

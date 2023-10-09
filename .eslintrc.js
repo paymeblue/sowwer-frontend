@@ -24,5 +24,6 @@ module.exports = {
     "@next/next/no-page-custom-font": "off",
     "require-jsdoc": "off",
     "new-cap": ["error", { capIsNew: false }],
+    camelcase: "off",
   },
 };

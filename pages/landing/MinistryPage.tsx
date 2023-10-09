@@ -19,6 +19,7 @@ import EmptyState from "@components/shared/EmptyState";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import MinistryProjectsSection from "@components/sections/landing/MinistryProjectsSection";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Props {
   ministryId: string;
@@ -44,7 +45,7 @@ const MinistryPageComp = ({ ministryId }: Props) => {
     );
   }
 
-  const { about, state, website, name, id } = ministryDetails?.data!;
+  const { about, state, website, name, id, logo } = ministryDetails?.data!;
 
   return (
     <SectionContainer>
@@ -56,7 +57,18 @@ const MinistryPageComp = ({ ministryId }: Props) => {
         className="safearea-top mb-20 w-full"
       >
         <div className="flex items-center space-x-4">
-          <div className="h-14 w-14 rounded-full bg-gray-200"></div>
+          {logo ? (
+            <div className="relative h-14 w-14 rounded-full">
+              <Image
+                src={logo}
+                alt="ministry logo"
+                fill
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="h-14 w-14 rounded-full bg-gray-200" />
+          )}
           <h1 className="text_variant_h2 text-[2.1rem] capitalize">{name}</h1>
         </div>
         <Tabs defaultValue="ministry-profile" className="mt-8">

@@ -22,6 +22,7 @@ export interface IProject {
   donationPercent?: string;
   donors?: number;
   variant?: "default" | "featured" | "general";
+  cover_photo?: string | null | undefined;
 }
 
 const ProjectCard = ({
@@ -35,6 +36,7 @@ const ProjectCard = ({
   organisedBy,
   id,
   variant = "default",
+  cover_photo,
 }: IProject) => {
   const getColorForTag = (category: string | null | undefined) => {
     if (!category) return;
@@ -59,9 +61,9 @@ const ProjectCard = ({
           !image && "flex items-center justify-center bg-gray-200"
         }`}
       >
-        {image ? (
+        {image || cover_photo ? (
           <Image
-            src={image}
+            src={(image || cover_photo) as string}
             alt="happy woman"
             fill
             className="object-cover transition-all duration-300 group-hover:scale-105"
