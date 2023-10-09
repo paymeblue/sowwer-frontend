@@ -6,7 +6,10 @@ import { Fragment, ReactNode } from "react";
 
 const DonorRouteComp = ({ children }: { children: ReactNode }) => {
   const { user, context } = useUserAuth();
-  const auth = !!(user?.type === "ministry-donor" && context === "donor");
+  const auth = !!(
+    (user?.type === "ministry-donor" || user?.type === "ministry") &&
+    context === "donor"
+  );
   if (!auth) {
     redirect("/");
   }

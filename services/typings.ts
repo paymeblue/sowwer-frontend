@@ -442,7 +442,7 @@ export type DonorGeneralDonationsResponse = TResponse<{
   plan_id: string;
   state: string;
   type: "one-time" | "recurring";
-  interval: "montly" | "quarterly" | "yearly";
+  interval: "monthly" | "quarterly" | "yearly";
   logo: string | null;
   plan_status: string;
   organisedBy: string;
