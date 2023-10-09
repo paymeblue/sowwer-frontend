@@ -1,7 +1,9 @@
 "use client";
-
 import { Button } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
+
+import { useMissionaryMutation } from "services/join-soower-registry";
+
 import {
   Form,
   FormControl,
@@ -18,17 +20,69 @@ import { ArrowRight } from "react-iconly";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Textarea } from "@components/ui/textarea";
+import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
+import { useEffect } from "react";
+import { useToast } from "@components/ui/use-toast";
+import { MissionaryJoinSoowerRequest1 } from "services/typings";
 
-const NewMissionaryForm = () => {
+const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
   const form = useForm<z.infer<typeof NewMissionaryRegistration>>({
     resolver: zodResolver(NewMissionaryRegistration),
   });
+  const { toast } = useToast();
+
+  const [joinMissionaryRegistry, { isLoading, isSuccess }] =
+    useMissionaryMutation();
+
+  useEffect(() => {
+    if (isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [isSuccess, onSuccess]);
 
   const onSubmit = async (
     values: z.infer<typeof NewMissionaryRegistration>
   ) => {
-    console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    const {
+      acceptTerms,
+      address,
+      email,
+      isBornAgain,
+      isChristian,
+      name,
+      nameOfChurch,
+      occupation,
+      phoneNumber,
+      reason,
+    } = values;
+
+    try {
+      const data = {
+        address,
+        born_again: isBornAgain === "Yes" ? true : false,
+        christianity: isChristian === "Yes" ? true : false,
+        church: nameOfChurch,
+        declaration: acceptTerms,
+        email,
+        name,
+        occupation,
+        phone: phoneNumber,
+        reason_about: reason,
+        status: "new",
+      } as MissionaryJoinSoowerRequest1;
+      await joinMissionaryRegistry(data).unwrap();
+      toast({
+        title: "Missionary registration successful, we will be in touch.",
+      });
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to complete registration.",
+        description:
+          err ||
+          "There seems to be a problem with your registration, please try again later.",
+      });
+    }
   };
 
   return (
@@ -217,6 +271,7 @@ const NewMissionaryForm = () => {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
+                  <FormMessage />
                   <FormLabel>
                     I declare that all information by me is true, and I can be
                     held liable legally if it is found that I declared false
@@ -232,6 +287,7 @@ const NewMissionaryForm = () => {
           type="submit"
           variant="secondary"
           className="ml-auto mt-10 w-fit space-x-2"
+          loading={isLoading}
         >
           <span>Submit</span>
           <ArrowRight set="light" size={18} />

@@ -58,8 +58,8 @@ export const NewMissionaryRegistration = z.object({
     .string()
     .min(3, { message: "Name must be more than three characters" }),
   address: z.string().min(3),
-  isChristian: z.boolean(),
-  isBornAgain: z.boolean(),
+  isChristian: z.enum(["Yes", "No"]),
+  isBornAgain: z.enum(["Yes", "No"]),
   nameOfChurch: z.string(),
   occupation: z.string(),
   reason: z.string(),
@@ -77,10 +77,11 @@ export const ExisitingMissionRegistration = z.object({
     .string()
     .min(3, { message: "Name must be more than three characters" }),
   address: z.string().min(3),
-  duration: z.number(),
+  duration: z.string(),
+  range: z.enum(["month", "year"]),
   serviceArea: z.string(),
   previousWork: z.string(),
-  isAffiliatedWithChurch: z.boolean(),
+  isAffiliatedWithChurch: z.enum(["Yes", "No"]),
   acceptTerms: z.boolean({
     required_error: "You must read and accept the declaration",
   }),

@@ -9,9 +9,15 @@ interface Props {
   children: ReactNode;
   title: string;
   desc: string;
+  showSignPrompt?: boolean;
 }
 
-const SideLayoutWrapper = ({ children, title, desc }: Props) => {
+const SideLayoutWrapper = ({
+  children,
+  title,
+  desc,
+  showSignPrompt = false,
+}: Props) => {
   useEffect(() => {
     document.body.classList.add("body_on_center_layout");
 
@@ -30,16 +36,20 @@ const SideLayoutWrapper = ({ children, title, desc }: Props) => {
         viewport={DEFAULT_VIEWPORT}
         className="w-1/2 overflow-y-scroll bg-white px-10 py-4"
       >
-        <div className="mb-10 flex w-full">
-          <p className="text_small_body_r ml-auto w-fit text-right">
-            Already have an account?{" "}
-            <Link href="/auth/ministry/sign-in">
-              <span className="cursor-pointer font-[500] text-accent transition-all duration-200 hover:underline">
-                Sign in
-              </span>
-            </Link>
-          </p>
-        </div>
+        {showSignPrompt ? (
+          <div className="mb-10 flex w-full">
+            <p className="text_small_body_r ml-auto w-fit text-right">
+              Already have an account?{" "}
+              <Link href="/auth/ministry/sign-in">
+                <span className="cursor-pointer font-[500] text-accent transition-all duration-200 hover:underline">
+                  Sign in
+                </span>
+              </Link>
+            </p>
+          </div>
+        ) : (
+          <div className="mb-10" />
+        )}
         {children}
       </motion.div>
     </div>

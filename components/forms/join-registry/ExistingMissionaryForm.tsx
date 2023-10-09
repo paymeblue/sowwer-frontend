@@ -18,17 +18,81 @@ import { ArrowRight } from "react-iconly";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Textarea } from "@components/ui/textarea";
+import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
+import { useToast } from "@components/ui/use-toast";
+import { useMissionaryMutation } from "services/join-soower-registry";
+import { useEffect } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
+import { MissionaryJoinSoowerRequest2 } from "services/typings";
 
-const ExistingMissionaryForm = () => {
+const ExistingMissionaryForm = ({
+  onSuccess,
+}: RegistryRegistrationFormProps) => {
   const form = useForm<z.infer<typeof ExisitingMissionRegistration>>({
     resolver: zodResolver(ExisitingMissionRegistration),
+    defaultValues: {
+      range: "year",
+    },
   });
+  const { toast } = useToast();
+  const [joinMissionaryRegistry, { isLoading, isSuccess }] =
+    useMissionaryMutation();
+
+  useEffect(() => {
+    if (isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [isSuccess, onSuccess]);
 
   const onSubmit = async (
     values: z.infer<typeof ExisitingMissionRegistration>
   ) => {
-    console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    const {
+      acceptTerms,
+      address,
+      duration,
+      email,
+      isAffiliatedWithChurch,
+      name,
+      phoneNumber,
+      previousWork,
+      serviceArea,
+      range,
+    } = values;
+
+    try {
+      const data = {
+        address,
+        affiliated_to_church: isAffiliatedWithChurch === "Yes" ? true : false,
+        email,
+        phone: phoneNumber,
+        service_area: serviceArea,
+        declaration: acceptTerms,
+        status: "existing",
+        name,
+        duration: Number(duration),
+        timestamp: range,
+        reason_about: previousWork,
+      } as MissionaryJoinSoowerRequest2;
+      await joinMissionaryRegistry(data).unwrap();
+      toast({
+        title: "Missionary registration successful, we will be in touch.",
+      });
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to complete registration.",
+        description:
+          err ||
+          "There seems to be a problem with your registration, please try again later.",
+      });
+    }
   };
 
   return (
@@ -96,25 +160,50 @@ const ExistingMissionaryForm = () => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="duration"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel required>
-                  How long have you been a missionary?
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="No of months/years"
-                    type="number"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="col-span-2 flex w-full items-end">
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem className="w-[75%]">
+                  <FormLabel required className="whitespace-nowrap">
+                    How long have you been a missionary?
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="No of months/years"
+                      type="number"
+                      className="rounded-br-none rounded-tr-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="range"
+              render={({ field }) => (
+                <FormItem className="w-[25%]">
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="rounded-bl-none rounded-tl-none bg-gray-200 text-[.8rem]">
+                        <SelectValue placeholder="--Select--" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="max-h-[30vh]">
+                      <SelectItem value="year">Years</SelectItem>
+                      <SelectItem value="month">Months</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
@@ -196,6 +285,7 @@ const ExistingMissionaryForm = () => {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
+                  <FormMessage />
                   <FormLabel>
                     I declare that all information by me is true, and I can be
                     held liable legally if it is found that I declared false
@@ -210,6 +300,7 @@ const ExistingMissionaryForm = () => {
         <Button
           type="submit"
           variant="secondary"
+          loading={isLoading}
           className="ml-auto mt-10 w-fit space-x-2"
         >
           <span>Submit</span>

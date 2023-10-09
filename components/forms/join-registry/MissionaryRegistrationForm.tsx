@@ -21,8 +21,11 @@ import {
 } from "@components/ui/select";
 import NewMissionaryForm from "./NewMissionaryForm";
 import ExistingMissionaryForm from "./ExistingMissionaryForm";
+import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
 
-const MissionaryRegistrationForm = () => {
+const MissionaryRegistrationForm = ({
+  onSuccess,
+}: RegistryRegistrationFormProps) => {
   const form = useForm<z.infer<typeof MissionaryRegistrationStart>>({
     resolver: zodResolver(MissionaryRegistrationStart),
   });
@@ -66,8 +69,12 @@ const MissionaryRegistrationForm = () => {
       </Form>
 
       <div className="mt-8">
-        {form.watch("isNewMissionary") === "Yes" && <NewMissionaryForm />}
-        {form.watch("isNewMissionary") === "No" && <ExistingMissionaryForm />}
+        {form.watch("isNewMissionary") === "Yes" && (
+          <NewMissionaryForm onSuccess={onSuccess} />
+        )}
+        {form.watch("isNewMissionary") === "No" && (
+          <ExistingMissionaryForm onSuccess={onSuccess} />
+        )}
       </div>
     </div>
   );

@@ -51,7 +51,13 @@ const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
             }}
           />
         )}
-        {selectedCategory === "Missionary" && <MissionaryRegistrationForm />}
+        {selectedCategory === "Missionary" && (
+          <MissionaryRegistrationForm
+            onSuccess={() => {
+              setSuccess(true);
+            }}
+          />
+        )}
       </div>
     </section>
   );
