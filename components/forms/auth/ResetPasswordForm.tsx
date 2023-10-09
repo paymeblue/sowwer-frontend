@@ -1,4 +1,5 @@
 "use client";
+import { useResetPasswordMutation } from "services/auth";
 import {
   Form,
   FormControl,
@@ -13,18 +14,43 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ResetPassword } from "lib/validations/auth";
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input-with-icon";
+import { useToast } from "@components/ui/use-toast";
 
-const ResetPasswordForm = () => {
+interface Props {
+  onSuccess: () => void;
+  token: string;
+}
+
+const ResetPasswordForm = ({ onSuccess, token }: Props) => {
   const form = useForm<z.infer<typeof ResetPassword>>({
     resolver: zodResolver(ResetPassword),
     defaultValues: {
       password: "",
     },
   });
+  const { toast } = useToast();
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+
   const onSubmit = async (values: z.infer<typeof ResetPassword>) => {
-    console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    const { confirmPassword, password } = values;
+    try {
+      await resetPassword({
+        password,
+        confirm_password: confirmPassword,
+        token,
+      }).unwrap();
+      onSuccess();
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to reset your password",
+        description:
+          err ||
+          "There was a problem reseting your password, please try again later.",
+      });
+    }
   };
+
   return (
     <div className="w-full">
       <Form {...form}>
@@ -61,7 +87,7 @@ const ResetPasswordForm = () => {
               )}
             />
           </div>
-          <Button type="submit" className="mt-16 w-full">
+          <Button loading={isLoading} type="submit" className="mt-16 w-full">
             Reset Password
           </Button>
         </form>
