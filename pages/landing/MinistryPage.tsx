@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-head-element */
 "use client";
 import SectionContainer from "@components/sections/SectionContainer";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
@@ -20,6 +21,7 @@ import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import MinistryProjectsSection from "@components/sections/landing/MinistryProjectsSection";
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 
 interface Props {
   ministryId: string;
@@ -49,6 +51,9 @@ const MinistryPageComp = ({ ministryId }: Props) => {
 
   return (
     <SectionContainer>
+      <Head>
+        <title>{`${name} | Soower`}</title>
+      </Head>
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"

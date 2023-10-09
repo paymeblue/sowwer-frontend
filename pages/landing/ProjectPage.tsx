@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-head-element */
 "use client";
 import Link from "next/link";
 
@@ -81,6 +82,9 @@ const PageComp = ({ projectId }: Props) => {
 
   return (
     <SectionContainer>
+      <head>
+        <title>{`${title} | Soower`}</title>
+      </head>
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"

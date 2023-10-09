@@ -1,5 +1,10 @@
 import Loader from "@components/shared/Loader";
 import dynamic from "next/dynamic";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Ministries | Soower",
+};
 
 const DynamicExploreMinistriesPage = dynamic(
   () => import("pages/landing/ExploreMinistries"),
