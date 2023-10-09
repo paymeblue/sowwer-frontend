@@ -17,15 +17,80 @@ import { WidowRegistration } from "lib/validations/join-registry";
 import { ArrowRight } from "react-iconly";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
+import { useToast } from "@components/ui/use-toast";
+import { useWidowMutation } from "services/join-soower-registry";
+import { WidowJoinSoowerRequest1 } from "services/typings";
+import { useEffect } from "react";
+import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
 
-const Registration = () => {
+const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
+  const { toast } = useToast();
+  const [joinWidowRegistry, { isLoading, isSuccess }] = useWidowMutation();
   const form = useForm<z.infer<typeof WidowRegistration>>({
     resolver: zodResolver(WidowRegistration),
+    defaultValues: {
+      range: "year",
+    },
   });
 
+  useEffect(() => {
+    if (isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [isSuccess, onSuccess]);
+
   const onSubmit = async (values: z.infer<typeof WidowRegistration>) => {
-    console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    const {
+      acceptTerms,
+      address,
+      age,
+      doesWidowHaveKids,
+      duration,
+      email,
+      isWidowChristian,
+      name,
+      phoneNumber,
+      range,
+    } = values;
+
+    if (!acceptTerms) {
+      toast({
+        variant: "destructive",
+        title: "You must accept the declaration.",
+      });
+      return;
+    }
+
+    try {
+      const data = {
+        address,
+        age: Number(age),
+        christianity: isWidowChristian === "Yes" ? true : false,
+        declaration: acceptTerms,
+        duration: Number(duration),
+        timestamp: range,
+        email,
+        kids: doesWidowHaveKids === "Yes" ? true : false,
+        name,
+        phone: String(phoneNumber),
+      } as WidowJoinSoowerRequest1;
+      await joinWidowRegistry(data).unwrap();
+      toast({
+        title: "Widow registration successful",
+      });
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Unable to complete registration. Please try again later.",
+      });
+    }
   };
 
   return (
@@ -61,23 +126,53 @@ const Registration = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="duration"
-            render={({ field }) => (
-              <FormItem className="">
-                <FormLabel required>How long have you been a widow?</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="No of months/years"
-                    type="number"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex w-full items-end">
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem className="w-[65%]">
+                  <FormLabel required className="whitespace-nowrap">
+                    How long have you been a widow?
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="No of months/years"
+                      type="number"
+                      className="rounded-br-none rounded-tr-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="range"
+              render={({ field }) => (
+                <FormItem className="w-[35%]">
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="rounded-bl-none rounded-tl-none bg-gray-200 text-[.8rem]">
+                        <SelectValue placeholder="--Select--" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="max-h-[30vh]">
+                      <SelectItem value="year">Years</SelectItem>
+                      <SelectItem value="month">Months</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {form.getFieldState("duration").error && (
+                    <FormMessage>Enter duration</FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
@@ -196,6 +291,7 @@ const Registration = () => {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
+                  <FormMessage />
                   <FormLabel>
                     I declare that all information by me is true, and I can be
                     held liable legally if it is found that I declared false
@@ -209,6 +305,7 @@ const Registration = () => {
         </div>
         <Button
           variant="secondary"
+          loading={isLoading}
           type="submit"
           className="ml-auto mt-10 w-fit space-x-2"
         >

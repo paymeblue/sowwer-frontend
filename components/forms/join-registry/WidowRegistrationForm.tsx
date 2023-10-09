@@ -15,7 +15,13 @@ import * as z from "zod";
 import RegistrationForSomeone from "./RegistrationForSomeone";
 import Registration from "./Registration";
 
-const WidowRegistrationForm = () => {
+export interface RegistryRegistrationFormProps {
+  onSuccess: () => void;
+}
+
+const WidowRegistrationForm = ({
+  onSuccess,
+}: RegistryRegistrationFormProps) => {
   const form = useForm<z.infer<typeof WidowRegisterationStart>>({
     resolver: zodResolver(WidowRegisterationStart),
   });
@@ -59,9 +65,11 @@ const WidowRegistrationForm = () => {
 
       <div className="mt-8">
         {form.watch("isRegisteringForSomeone") === "Yes" && (
-          <RegistrationForSomeone />
+          <RegistrationForSomeone onSuccess={onSuccess} />
         )}
-        {form.watch("isRegisteringForSomeone") === "No" && <Registration />}
+        {form.watch("isRegisteringForSomeone") === "No" && (
+          <Registration onSuccess={onSuccess} />
+        )}
       </div>
     </div>
   );

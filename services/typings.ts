@@ -571,7 +571,7 @@ export type WidowJoinSoowerResponse = {
   age: number;
   kids: boolean;
 };
-type WidowJoinSoowerRequest1 = {
+export type WidowJoinSoowerRequest1 = {
   name: string;
   email: string;
   phone: string;
@@ -583,7 +583,7 @@ type WidowJoinSoowerRequest1 = {
   age: number;
   kids: boolean;
 };
-type WidowJoinSoowerRequest2 = {
+export type WidowJoinSoowerRequest2 = {
   name: string;
   email: string;
   phone: string;

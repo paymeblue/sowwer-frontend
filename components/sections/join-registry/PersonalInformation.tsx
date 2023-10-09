@@ -1,7 +1,10 @@
 import MissionaryRegistrationForm from "@components/forms/join-registry/MissionaryRegistrationForm";
 import WidowRegistrationForm from "@components/forms/join-registry/WidowRegistrationForm";
+import SuccessState from "@components/shared/SuccessState";
+import { Button } from "@components/ui/button";
 import { CardSelector } from "@components/ui/card-selector";
-import { Dispatch, SetStateAction } from "react";
+import Link from "next/link";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface Props {
   selectedCategory: "Widow" | "Missionary" | null;
@@ -9,6 +12,22 @@ interface Props {
 }
 
 const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
+  const [success, setSuccess] = useState(false);
+
+  if (success) {
+    return (
+      <SuccessState
+        title="Thanks for joining our registry!"
+        className="mt-10"
+        desc="Lorem ipsum dolor sit amet consectetur. Iaculis a ut faucibus nibh tempor felis. Vitae eget semper vel porttitor diam."
+        action={
+          <Link href="/">
+            <Button variant="secondary">Back to homepage</Button>
+          </Link>
+        }
+      />
+    );
+  }
   return (
     <section className="w-full p-8 ">
       <CardSelector
@@ -25,7 +44,13 @@ const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
       />
 
       <div className="mt-8 w-full">
-        {selectedCategory === "Widow" && <WidowRegistrationForm />}
+        {selectedCategory === "Widow" && (
+          <WidowRegistrationForm
+            onSuccess={() => {
+              setSuccess(true);
+            }}
+          />
+        )}
         {selectedCategory === "Missionary" && <MissionaryRegistrationForm />}
       </div>
     </section>

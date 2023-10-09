@@ -15,28 +15,34 @@ export const WidowRegistrationForSomeone = z.object({
   widowName: z
     .string()
     .min(3, { message: "Name must be more than three characters" }),
-  widowAge: z.number(),
-  widowDuration: z.number(),
+  widowAge: z.string(),
+  widowDuration: z.string(),
+  range: z.enum(["month", "year"]),
   widowEmail: z.string().email(),
-  widowPhone: z.number(),
+  widowPhone: z.string(),
   widowAddress: z.string(),
-  isWidowChristian: z.boolean(),
-  doesWidowHaveKids: z.boolean(),
-  acceptTerms: z.boolean(),
+  isWidowChristian: z.enum(["Yes", "No"]),
+  doesWidowHaveKids: z.enum(["Yes", "No"]),
+  acceptTerms: z.boolean({
+    required_error: "You must read and accept the declaration",
+  }),
 });
 
 export const WidowRegistration = z.object({
   name: z
     .string()
     .min(3, { message: "Name must be more than three characters" }),
-  age: z.number(),
-  duration: z.number(),
+  age: z.string(),
+  duration: z.string(),
+  range: z.enum(["month", "year"]),
   email: z.string().email(),
-  phoneNumber: z.number(),
+  phoneNumber: z.string(),
   address: z.string(),
-  isWidowChristian: z.boolean(),
-  doesWidowHaveKids: z.boolean(),
-  acceptTerms: z.boolean(),
+  isWidowChristian: z.enum(["Yes", "No"]),
+  doesWidowHaveKids: z.enum(["Yes", "No"]),
+  acceptTerms: z.boolean({
+    required_error: "You must read and accept the declaration",
+  }),
 });
 
 export const MissionaryRegistrationStart = z.object({
@@ -57,7 +63,9 @@ export const NewMissionaryRegistration = z.object({
   nameOfChurch: z.string(),
   occupation: z.string(),
   reason: z.string(),
-  acceptTerms: z.boolean(),
+  acceptTerms: z.boolean({
+    required_error: "You must read and accept the declaration",
+  }),
 });
 
 export const ExisitingMissionRegistration = z.object({
@@ -73,5 +81,7 @@ export const ExisitingMissionRegistration = z.object({
   serviceArea: z.string(),
   previousWork: z.string(),
   isAffiliatedWithChurch: z.boolean(),
-  acceptTerms: z.boolean(),
+  acceptTerms: z.boolean({
+    required_error: "You must read and accept the declaration",
+  }),
 });

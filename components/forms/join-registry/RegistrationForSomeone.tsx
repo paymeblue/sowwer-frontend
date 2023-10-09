@@ -2,6 +2,7 @@
 
 import { Button } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
+import { useWidowMutation } from "services/join-soower-registry";
 import {
   Form,
   FormControl,
@@ -17,17 +18,88 @@ import { WidowRegistrationForSomeone } from "lib/validations/join-registry";
 import { ArrowRight } from "react-iconly";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
+import { useEffect } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
+import { useToast } from "@components/ui/use-toast";
+import { WidowJoinSoowerRequest2 } from "services/typings";
 
-const RegistrationForSomeone = () => {
+const RegistrationForSomeone = ({
+  onSuccess,
+}: RegistryRegistrationFormProps) => {
   const form = useForm<z.infer<typeof WidowRegistrationForSomeone>>({
     resolver: zodResolver(WidowRegistrationForSomeone),
+    defaultValues: {
+      range: "year",
+    },
   });
+  const { toast } = useToast();
+  const [joinWidowRegistry, { isLoading, isSuccess }] = useWidowMutation();
+
+  useEffect(() => {
+    if (isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [isSuccess, onSuccess]);
 
   const onSubmit = async (
     values: z.infer<typeof WidowRegistrationForSomeone>
   ) => {
-    console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    const {
+      acceptTerms,
+      doesWidowHaveKids,
+      email,
+      isWidowChristian,
+      name,
+      phoneNumber,
+      range,
+      widowAddress,
+      widowAge,
+      widowDuration,
+      widowEmail,
+      widowName,
+      widowPhone,
+    } = values;
+
+    if (acceptTerms) {
+      toast({
+        variant: "destructive",
+        title: "You must accept the declaration.",
+      });
+    }
+
+    try {
+      const data = {
+        address: widowAddress,
+        age: Number(widowAge),
+        christianity: isWidowChristian === "Yes" ? true : false,
+        declaration: acceptTerms,
+        duration: Number(widowDuration),
+        timestamp: range,
+        email: widowEmail,
+        kids: doesWidowHaveKids === "Yes" ? true : false,
+        name: widowName,
+        phone: String(widowPhone),
+        registrar_name: name,
+        registrar_email: email,
+        registrar_phone: phoneNumber,
+      } as WidowJoinSoowerRequest2;
+      await joinWidowRegistry(data).unwrap();
+      toast({
+        title: "Widow registration successful",
+      });
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Unable to complete registration. Please try again later.",
+      });
+    }
   };
 
   return (
@@ -103,7 +175,7 @@ const RegistrationForSomeone = () => {
               control={form.control}
               name="widowAge"
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem>
                   <FormLabel required>How old are you?</FormLabel>
                   <FormControl>
                     <Input placeholder="Age" type="number" {...field} />
@@ -112,25 +184,53 @@ const RegistrationForSomeone = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="widowDuration"
-              render={({ field }) => (
-                <FormItem className="">
-                  <FormLabel required>
-                    How long have you been a widow?
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="No of months/years"
-                      type="number"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex w-full items-end">
+              <FormField
+                control={form.control}
+                name="widowDuration"
+                render={({ field }) => (
+                  <FormItem className="w-[65%]">
+                    <FormLabel required className="whitespace-nowrap">
+                      How long have you been a widow?
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="No of months/years"
+                        type="number"
+                        className="rounded-br-none rounded-tr-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="range"
+                render={({ field }) => (
+                  <FormItem className="w-[35%]">
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="rounded-bl-none rounded-tl-none bg-gray-200 text-[.8rem]">
+                          <SelectValue placeholder="--Select--" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="max-h-[30vh]">
+                        <SelectItem value="year">Years</SelectItem>
+                        <SelectItem value="month">Months</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {form.getFieldState("widowDuration").error && (
+                      <FormMessage>Enter duration</FormMessage>
+                    )}
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="widowEmail"
@@ -208,6 +308,7 @@ const RegistrationForSomeone = () => {
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -241,6 +342,7 @@ const RegistrationForSomeone = () => {
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -257,6 +359,7 @@ const RegistrationForSomeone = () => {
                       className="border-[#BDBDBD]"
                     />
                   </FormControl>
+
                   <div className="space-y-1 leading-none">
                     <FormLabel>
                       I declare that all information by me is true, and I can be
@@ -264,6 +367,7 @@ const RegistrationForSomeone = () => {
                       information, and also that registration doesn’t guarantee
                       that I would benefit from Soower.
                     </FormLabel>
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}
@@ -273,6 +377,7 @@ const RegistrationForSomeone = () => {
         <Button
           type="submit"
           variant="secondary"
+          loading={isLoading}
           className="ml-auto mt-10 w-fit space-x-2"
         >
           <span>Submit</span>

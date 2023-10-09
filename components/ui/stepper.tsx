@@ -33,7 +33,9 @@ const Stepper = ({ steps, activeStep }: Props) => {
                 {index < activeStep && <Check size={12} />}
               </div>
             </div>
-            <div className="label w-[8rem] text-center">{label}</div>
+            <div className="label w-[8rem] text-center !text-black">
+              {label}
+            </div>
           </div>
           {index !== 0 && <div className="line"></div>}
         </div>
