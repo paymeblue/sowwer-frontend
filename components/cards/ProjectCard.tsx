@@ -38,6 +38,7 @@ const ProjectCard = ({
   variant = "default",
   cover_photo,
 }: IProject) => {
+  const isCompleted = Number(amountRaised) >= Number(targetAmount);
   const getColorForTag = (category: string | null | undefined) => {
     if (!category) return;
     switch (category) {
@@ -103,7 +104,11 @@ const ProjectCard = ({
           <div className="mt-8 flex w-full flex-col space-y-6">
             <div className="flex w-full flex-col space-y-2">
               <div className="flex items-center justify-between">
-                <h5 className="font-sub-title text-[.8rem] font-bold">
+                <h5
+                  className={`font-sub-title text-[.8rem] font-bold ${
+                    isCompleted && "text-[#27AE60]"
+                  }`}
+                >
                   ₦{formatCurrency(amountRaised || "0")}{" "}
                   <span className="font-body text-[.7rem] font-[400]">
                     raised
@@ -115,12 +120,16 @@ const ProjectCard = ({
               </div>
               <Progress value={Number(donationPercent) ?? 0} className="h-2" />
             </div>
-            <Link href={`/projects/${id}`}>
-              <Button className="w-full space-x-2">
-                <Heart2 set="bold" size={19} />
-                <span>Make a donation</span>
-              </Button>
-            </Link>
+            {isCompleted ? (
+              <Button className="w-full space-x-2">Get audit reports</Button>
+            ) : (
+              <Link href={`/projects/${id}`}>
+                <Button className="w-full space-x-2">
+                  <Heart2 set="bold" size={19} />
+                  <span>Make a donation</span>
+                </Button>
+              </Link>
+            )}
           </div>
         )}
 
@@ -128,7 +137,7 @@ const ProjectCard = ({
           <div className="mt-8 flex w-full items-center justify-between">
             <div className="flex w-fit items-center space-x-2">
               <Heart2 set="light" primaryColor="#FFC629" />
-              <p className="font-body  text-xs text-body-2">
+              <p className={`font-body  text-xs text-body-2`}>
                 <strong className="font-sub-title text-[.85rem] font-bold leading-[15.36px] text-black">
                   ₦{amountRaised}
                 </strong>
