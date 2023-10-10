@@ -1,11 +1,14 @@
 import DonorSignupForm from "@components/forms/donor/DonorSignupForm";
 import CenterLayoutMidWrapper from "../../components/shared/Layouts/Center/CenterLayoutMidWrapper";
 import Link from "next/link";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 
 const DonorSignupPage = () => {
   return (
     <CenterLayoutMidWrapper title="Sign up as a Donor">
-      <DonorSignupForm />
+      <NoSSRWrapper>
+        <DonorSignupForm />
+      </NoSSRWrapper>
       <p className="text_small_body_r mt-4 text-center">
         Already have an account?{" "}
         <Link href="/auth/donor/sign-in">

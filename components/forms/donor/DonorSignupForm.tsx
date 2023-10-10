@@ -1,4 +1,5 @@
 "use client";
+import { useDonorRegisterMutation } from "services/auth";
 import {
   Form,
   FormControl,
@@ -14,8 +15,13 @@ import { DonorSignupValidation } from "lib/validations/donor";
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
+import { useToast } from "@components/ui/use-toast";
+import useDonorSignin from "@hooks/auth/useDonorSignin";
 
 const DonorSignupForm = () => {
+  const [signupDonor, { isLoading }] = useDonorRegisterMutation();
+  const { loginDonor } = useDonorSignin();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof DonorSignupValidation>>({
     resolver: zodResolver(DonorSignupValidation),
     defaultValues: {
@@ -28,8 +34,34 @@ const DonorSignupForm = () => {
     },
   });
   const onSubmit = async (values: z.infer<typeof DonorSignupValidation>) => {
-    console.log("Submitted", { values });
-    alert("Your message has been sent successfully");
+    const {
+      confirmPassword,
+      email,
+      firstName,
+      lastName,
+      password,
+      phoneNumber,
+    } = values;
+    try {
+      await signupDonor({
+        confirm_password: confirmPassword,
+        email,
+        firstName,
+        lastName,
+        password,
+        phone: phoneNumber,
+      }).unwrap();
+      await loginDonor({
+        email,
+        password,
+      });
+    } catch (err) {
+      console.log({ err });
+      toast({
+        variant: "destructive",
+        title: "Unable to signup. Please try again later",
+      });
+    }
   };
   return (
     <div className="w-full">
@@ -137,7 +169,7 @@ const DonorSignupForm = () => {
               Password must be at least 8 characters
             </span>
           </div>
-          <Button type="submit" className="mt-16 w-full">
+          <Button type="submit" className="mt-16 w-full" loading={isLoading}>
             Sign up
           </Button>
         </form>

@@ -7,7 +7,9 @@ import { Fragment, ReactNode } from "react";
 const DonorRouteComp = ({ children }: { children: ReactNode }) => {
   const { user, context } = useUserAuth();
   const auth = !!(
-    (user?.type === "ministry-donor" || user?.type === "ministry") &&
+    (user?.type === "ministry-donor" ||
+      user?.type === "donor" ||
+      user?.type === "ministry") &&
     context === "donor"
   );
   if (!auth) {
