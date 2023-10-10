@@ -180,12 +180,31 @@ interface Props {
 export const MinistryCompletedProjectsTable = ({ accountInfo }: Props) => {
   const { user } = useUserAuth();
   const { pagination, handleNext, handlePrevious } = usePagination();
-  const { data: completedProjects, isFetching } = useGetMinistryProjectsQuery({
+  const {
+    data: completedProjects,
+    isFetching,
+    isLoading,
+  } = useGetMinistryProjectsQuery({
     id: user?.ministry?.id || "",
     page: pagination.current,
     status: "completed",
   });
 
+  if (isLoading) {
+    return <Loader className="h-[40vh]" />;
+  }
+
+  if (!completedProjects?.data && !isLoading) {
+    return (
+      <div className="flex  flex-1 items-center justify-center">
+        <EmptyState
+          image={<EmptyWallet />}
+          title="No payouts yet"
+          desc="None of your projects have been completed. Once they’re completed, you will see a list of your completed projects and be able to request payouts after adding your payout details."
+        />
+      </div>
+    );
+  }
   return (
     <DataTable
       data={completedProjects?.data || []}

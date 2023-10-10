@@ -1,7 +1,6 @@
 "use client";
 import { useGetAccountInfoQuery } from "services/payouts";
 
-import { useGetMinistryProjectsQuery } from "services/projects";
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
 import {
   MinistryCompletedProjectsTable,
@@ -11,10 +10,6 @@ import { Button } from "@components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 import { InfoCircle, ArrowRight, EditSquare } from "react-iconly";
 import Loader from "@components/shared/Loader";
-import usePagination from "@hooks/general/usePagination";
-import useUserAuth from "@hooks/auth/useUserAuth";
-import EmptyState from "@components/shared/EmptyState";
-import EmptyWallet from "@components/assets/svg/emptyWallet";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { Dialog, DialogTrigger } from "@components/ui/dialog";
 import ConnectBankAccountDialog from "@components/dialogs/ministry/ConnectBankAccountDialog";
@@ -24,14 +19,6 @@ import PayoutGeneralDonations from "@components/sections/ministry/PayoutGeneralD
 const PayoutsPageComp = () => {
   const { data: accountInfo, isLoading } = useGetAccountInfoQuery();
   const [open, setOpen] = useState(false);
-  const { user } = useUserAuth();
-  const { pagination } = usePagination();
-  const { data: completedProjects, isLoading: loadingMinistryProjects } =
-    useGetMinistryProjectsQuery({
-      id: user?.ministry?.id || "",
-      page: pagination.current,
-      status: "completed",
-    });
 
   if (isLoading) {
     return <Loader />;
@@ -108,47 +95,29 @@ const PayoutsPageComp = () => {
           </div>
         )}
 
-        {loadingMinistryProjects ? (
-          <Loader className="h-[50vh]" />
-        ) : (
-          <>
-            {!completedProjects?.data?.length ? (
-              <div className="flex  flex-1 items-center justify-center">
-                <EmptyState
-                  image={<EmptyWallet />}
-                  title="No payouts yet"
-                  desc="None of your projects have been completed. Once they’re completed, you will see a list of your completed projects and be able to request payouts after adding your payout details."
-                />
-              </div>
-            ) : (
-              <div className="mt-4 w-full">
-                <Tabs defaultValue="completed-projects" className="mt-4 w-full">
-                  <TabsList>
-                    <TabsTrigger value="completed-projects">
-                      Completed Projects
-                    </TabsTrigger>
-                    <TabsTrigger value="general-donations">
-                      General Donations
-                    </TabsTrigger>
-                    <TabsTrigger value="payout-history">
-                      Payout History
-                    </TabsTrigger>
-                  </TabsList>
+        <div className="mt-4 w-full">
+          <Tabs defaultValue="completed-projects" className="mt-4 w-full">
+            <TabsList>
+              <TabsTrigger value="completed-projects">
+                Completed Projects
+              </TabsTrigger>
+              <TabsTrigger value="general-donations">
+                General Donations
+              </TabsTrigger>
+              <TabsTrigger value="payout-history">Payout History</TabsTrigger>
+            </TabsList>
 
-                  <TabsContent value="completed-projects">
-                    <MinistryCompletedProjectsTable accountInfo={accountInfo} />
-                  </TabsContent>
-                  <TabsContent value="general-donations">
-                    <PayoutGeneralDonations />
-                  </TabsContent>
-                  <TabsContent value="payout-history">
-                    <MinistryPayoutHistryTable />
-                  </TabsContent>
-                </Tabs>
-              </div>
-            )}
-          </>
-        )}
+            <TabsContent value="completed-projects">
+              <MinistryCompletedProjectsTable accountInfo={accountInfo} />
+            </TabsContent>
+            <TabsContent value="general-donations">
+              <PayoutGeneralDonations />
+            </TabsContent>
+            <TabsContent value="payout-history">
+              <MinistryPayoutHistryTable />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </MainContentWrapper>
   );
