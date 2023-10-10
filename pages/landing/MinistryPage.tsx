@@ -63,7 +63,7 @@ const MinistryPageComp = ({ ministryId }: Props) => {
       >
         <div className="flex items-center space-x-4">
           {logo ? (
-            <div className="relative h-14 w-14 rounded-full">
+            <div className="relative h-14 w-14 overflow-hidden rounded-full">
               <Image
                 src={logo}
                 alt="ministry logo"

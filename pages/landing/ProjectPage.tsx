@@ -78,6 +78,7 @@ const PageComp = ({ projectId }: Props) => {
     donationPercent,
     link,
     id,
+    logo,
   } = projectDetails?.data!;
 
   return (
@@ -117,7 +118,18 @@ const PageComp = ({ projectId }: Props) => {
               </Tag>
               <h2 className="text_variant_h2">{title}</h2>
               <div className="flex items-center space-x-2">
-                <div className="h-10 w-10 rounded-full bg-gray-200" />
+                {logo ? (
+                  <div className="relative h-10 w-10 overflow-hidden rounded-full">
+                    <Image
+                      src={logo}
+                      alt="ministry logo"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-10 w-10 rounded-full bg-gray-200" />
+                )}
                 <p className="text_medium_body_p">
                   Organized by{" "}
                   <Link href={`/ministries/${organisedById}`}>
