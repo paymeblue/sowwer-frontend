@@ -4,6 +4,7 @@ import { Heart2 } from "react-iconly";
 import SectionContainer from "../SectionContainer";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -34,12 +35,14 @@ const Hero = () => {
             <span className="text_large_body_r mt-2 text-center text-[.8rem]">
               — Acts 20:35 (ESV)
             </span>
-            <Button className="mt-6 px-8">
-              <div className="flex items-center space-x-2">
-                <Heart2 set="bold" size={19} />
-                <span>Make a Donation</span>
-              </div>
-            </Button>
+            <Link href="/projects">
+              <Button className="mt-6 px-8">
+                <div className="flex items-center space-x-2">
+                  <Heart2 set="bold" size={19} />
+                  <span>Make a Donation</span>
+                </div>
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
