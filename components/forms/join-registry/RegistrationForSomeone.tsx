@@ -178,7 +178,19 @@ const RegistrationForSomeone = ({
                 <FormItem>
                   <FormLabel required>How old are you?</FormLabel>
                   <FormControl>
-                    <Input placeholder="Age" type="number" {...field} />
+                    <Input
+                      placeholder="Age"
+                      type="text"
+                      inputMode="numeric"
+                      {...field}
+                      onChange={(e) => {
+                        const sanitizedValue = e.target.value.replace(
+                          /[^0-9]/g,
+                          ""
+                        );
+                        field.onChange(sanitizedValue);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -196,9 +208,18 @@ const RegistrationForSomeone = ({
                     <FormControl>
                       <Input
                         placeholder="No of months/years"
-                        type="number"
+                        type="text"
+                        // min="0"
+                        inputMode="numeric"
                         className="rounded-br-none rounded-tr-none"
                         {...field}
+                        onChange={(e) => {
+                          const sanitizedValue = e.target.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          );
+                          field.onChange(sanitizedValue);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />

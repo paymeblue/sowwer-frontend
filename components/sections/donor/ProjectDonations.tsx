@@ -42,34 +42,36 @@ const ProjectDonationsComp = () => {
     );
   }
   return (
-    <motion.div
-      variants={cardContainerVariant}
-      initial="hidden"
-      whileInView="visible"
-      viewport={DEFAULT_VIEWPORT}
-      className="mt-6 grid w-full grid-cols-3 gap-6"
-    >
-      {donations?.data
-        .filter((donation, index, self) => {
-          // Use the filter method to keep only the first occurrence of each unique id
-          return index === self.findIndex((d) => d.id === donation.id);
-        })
-        .map((project, i) => {
-          return (
-            <ProjectCard
-              {...project}
-              variant="default"
-              key={project.title + i}
-            />
-          );
-        })}
+    <div className="flex w-full flex-col items-center">
+      <motion.div
+        variants={cardContainerVariant}
+        initial="hidden"
+        whileInView="visible"
+        viewport={DEFAULT_VIEWPORT}
+        className="mt-6 grid w-full grid-cols-3 gap-6"
+      >
+        {donations?.data
+          .filter((donation, index, self) => {
+            // Use the filter method to keep only the first occurrence of each unique id
+            return index === self.findIndex((d) => d.id === donation.id);
+          })
+          .map((project, i) => {
+            return (
+              <ProjectCard
+                {...project}
+                variant="default"
+                key={project.title + i}
+              />
+            );
+          })}
+      </motion.div>
       <Pagination
         handleNext={handleNext}
         handlePrevious={handlePrevious}
         hasNext={donations?.paginationInfo.hasNext || false}
         hasPrevious={donations?.paginationInfo.hasPrevious || false}
       />
-    </motion.div>
+    </div>
   );
 };
 

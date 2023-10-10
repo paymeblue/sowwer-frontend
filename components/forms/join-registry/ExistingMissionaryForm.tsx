@@ -172,9 +172,17 @@ const ExistingMissionaryForm = ({
                   <FormControl>
                     <Input
                       placeholder="No of months/years"
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
                       className="rounded-br-none rounded-tr-none"
                       {...field}
+                      onChange={(e) => {
+                        const sanitizedValue = e.target.value.replace(
+                          /[^0-9]/g,
+                          ""
+                        );
+                        field.onChange(sanitizedValue);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />

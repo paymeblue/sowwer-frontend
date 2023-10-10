@@ -422,14 +422,14 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
 
           <div className="mt-2 flex items-center space-x-2">
             <Checkbox
-              id="terms"
+              id="anony"
               className=""
               checked={formAuth.watch("isAnonymous")}
               onClick={() =>
                 formAuth.setValue("isAnonymous", !formAuth.watch("isAnonymous"))
               }
             />
-            <label htmlFor="terms" className="text_small_body_r">
+            <label htmlFor="anony" className="text_small_body_r">
               Don’t display my name publicly on the donor list.
             </label>
           </div>
@@ -722,14 +722,14 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
 
         <div className="mt-6 flex items-center space-x-2">
           <Checkbox
-            id="terms"
+            id="anonymous"
             className=""
             checked={form.watch("isAnonymous")}
             onClick={() =>
               form.setValue("isAnonymous", !form.watch("isAnonymous"))
             }
           />
-          <label htmlFor="terms" className="text_small_body_r">
+          <label htmlFor="anonymous" className="text_small_body_r">
             Don’t display my name publicly on the donor list.
           </label>
         </div>

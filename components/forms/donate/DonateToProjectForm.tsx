@@ -387,14 +387,14 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
           <h4>Personal Information</h4>
           <div className="mt-2 flex items-center space-x-2">
             <Checkbox
-              id="terms"
+              id="shouldSignup"
               className=""
               checked={form.watch("shouldSignup")}
               onClick={() =>
                 form.setValue("shouldSignup", !form.watch("shouldSignup"))
               }
             />
-            <label htmlFor="terms" className="text_small_body_r">
+            <label htmlFor="shouldSignup" className="text_small_body_r">
               I would like to sign up on Soower.
             </label>
           </div>
