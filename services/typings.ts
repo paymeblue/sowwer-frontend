@@ -700,8 +700,8 @@ export type InitiateDonationToMinistryRequestUnauth = {
   amount: number;
   currency: string;
   interval: "monthly" | "quarterly" | "yearly";
-  password: string;
-  confirm_password: string;
+  password: string | undefined;
+  confirm_password: string | undefined;
 };
 export type InitiateDonationToMinistryRequestAuth = {
   id: string;
