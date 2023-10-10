@@ -47,7 +47,7 @@ const PayoutGeneralDonationsComp = () => {
       <Button
         onClick={handleRequest}
         loading={loadingPayout}
-        disabled={isSuccess}
+        disabled={isSuccess || !Number(balance?.data.balance || "0")}
         variant="outline"
         className=" border-accent text-accent"
       >

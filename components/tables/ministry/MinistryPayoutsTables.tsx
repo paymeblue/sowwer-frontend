@@ -194,7 +194,7 @@ export const MinistryCompletedProjectsTable = ({ accountInfo }: Props) => {
     return <Loader className="h-[40vh]" />;
   }
 
-  if (!completedProjects?.data && !isLoading) {
+  if (!completedProjects?.data.length && !isLoading) {
     return (
       <div className="flex  flex-1 items-center justify-center">
         <EmptyState
