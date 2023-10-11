@@ -10,7 +10,7 @@ const Hero = () => {
   return (
     <SectionContainer>
       <section className="flex min-h-screen w-full items-center justify-center">
-        <div className="flex w-[80%] flex-col items-center space-y-2 lg:space-y-6">
+        <div className="flex w-[90%] flex-col items-center space-y-2 lg:w-[80%] lg:space-y-6">
           <motion.h1
             variants={defaultVariant({})}
             initial="hidden"

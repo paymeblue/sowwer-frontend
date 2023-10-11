@@ -60,6 +60,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
   const router = useRouter();
   const { isAuthenticated } = useUserAuth();
   const [isScrolling, setIsScrolling] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleScroll = () => {
     setIsScrolling(window.scrollY > 50);
@@ -143,12 +144,13 @@ const Navbar = ({ variant = "landing" }: Props) => {
         )}
       </div>
 
+      {/* MOBILE */}
       <div className="flex lg:hidden">
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger className="text-black">
             <AlignJustify size={24} />
           </SheetTrigger>
-          <SheetContent className="w-3/5">
+          <SheetContent className="w-[65%]">
             <div className="flex w-full flex-col items-start gap-10">
               <NavigationMenu>
                 <NavigationMenuList className="flex-col items-start justify-start space-x-0 space-y-2">
@@ -165,6 +167,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
                         label={label}
                         route={route}
                         child={child}
+                        handleMenuClick={() => setOpen(false)}
                       />
                     );
                   })}
@@ -182,7 +185,10 @@ const Navbar = ({ variant = "landing" }: Props) => {
                   <Button
                     variant="outline"
                     className="w-full px-9"
-                    onClick={() => router.push("/auth/donor/sign-in")}
+                    onClick={() => {
+                      setOpen(false);
+                      router.push("/auth/donor/sign-in");
+                    }}
                   >
                     Login
                   </Button>
@@ -190,7 +196,10 @@ const Navbar = ({ variant = "landing" }: Props) => {
                 {variant === "landing" && (
                   <Button
                     className="w-full"
-                    onClick={() => router.push("/registry/join")}
+                    onClick={() => {
+                      setOpen(false);
+                      router.push("/registry/join");
+                    }}
                   >
                     <span className="whitespace-nowrap">
                       Join Soower's Registry

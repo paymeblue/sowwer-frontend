@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,6 +9,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@components/ui/navigation-menu";
+import { useRouter } from "next/navigation";
 
 interface BaseNaveItemProps {
   label: string;
@@ -19,19 +19,36 @@ interface BaseNaveItemProps {
 export interface INavitem extends BaseNaveItemProps {
   child?: INavitem[];
   isActive?: boolean;
+  handleMenuClick?: () => void;
 }
 
-const Navitem = ({ label, route, child, isActive }: INavitem) => {
+const Navitem = ({
+  label,
+  route,
+  child,
+  isActive,
+  handleMenuClick,
+}: INavitem) => {
+  const router = useRouter();
+
   return (
     <NavigationMenu className={`${child && "z-30"}`}>
       <NavigationMenuList>
         <NavigationMenuItem className="relative">
           {!child && (
-            <Link href={route} legacyBehavior passHref>
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                if (handleMenuClick) {
+                  handleMenuClick();
+                }
+                router.push(route);
+              }}
+            >
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 <span className={`${isActive && "text-primary"}`}>{label}</span>
               </NavigationMenuLink>
-            </Link>
+            </div>
           )}
           {child && <NavigationMenuTrigger>{label}</NavigationMenuTrigger>}
           {child && (
@@ -39,15 +56,20 @@ const Navitem = ({ label, route, child, isActive }: INavitem) => {
               <ul className="z-[90] flex w-[10rem] flex-col space-y-4 p-4">
                 {child.map((item) => {
                   return (
-                    <Link
+                    <div
                       key={item.label}
-                      href={item.route}
-                      className={`text-sm hover:text-primary ${
+                      onClick={() => {
+                        if (handleMenuClick) {
+                          handleMenuClick();
+                        }
+                        router.push(item.route);
+                      }}
+                      className={`cursor-pointer text-sm hover:text-primary ${
                         isActive && "text-primary"
                       }`}
                     >
                       {item.label}
-                    </Link>
+                    </div>
                   );
                 })}
               </ul>

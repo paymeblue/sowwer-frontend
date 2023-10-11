@@ -9,7 +9,7 @@ interface Props {
 const SectionContainer = ({ children, className }: Props) => {
   return (
     <div
-      className={cn("mx-auto w-full max-w-[2000px] px-10 lg:px-20", className)}
+      className={cn("mx-auto w-full max-w-[2000px] px-6 lg:px-20", className)}
     >
       {children}
     </div>
