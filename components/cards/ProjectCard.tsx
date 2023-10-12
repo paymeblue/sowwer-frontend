@@ -134,7 +134,7 @@ const ProjectCard = ({
         )}
 
         {variant === "featured" && (
-          <div className="mt-8 flex w-full items-center justify-between">
+          <div className="mt-12 flex w-full items-center justify-between lg:mt-8">
             <div className="flex w-fit items-center space-x-2">
               <Heart2 set="light" primaryColor="#FFC629" />
               <p className={`font-body  text-xs text-body-2`}>

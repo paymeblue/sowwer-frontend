@@ -57,7 +57,7 @@ const ProjectDonationsDialog = ({ projectId, title }: Props) => {
   }
 
   return (
-    <div className="h-fit w-[70%] rounded-[15px] bg-white p-[2rem]">
+    <div className="h-fit w-full rounded-[15px] bg-white p-[2rem] lg:w-[70%]">
       <h3 className="text_variant_h2 text-[2rem]">Donations</h3>
       <div className="mt-6 min-h-[10rem] w-full space-y-10">
         {firstSetDonations.length ? (

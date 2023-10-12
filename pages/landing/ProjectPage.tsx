@@ -94,7 +94,7 @@ const PageComp = ({ projectId }: Props) => {
         className="safearea-top mb-20 w-full"
       >
         {/* Top Section */}
-        <section className="grid grid-cols-2 gap-10">
+        <section className="grid grid-cols-1 gap-10 lg:grid-cols-2">
           {/* Image goes here */}
           <div className="relative aspect-[1/0.65] w-full overflow-hidden rounded-[0.625rem]">
             {image && (
@@ -108,7 +108,7 @@ const PageComp = ({ projectId }: Props) => {
           </div>
 
           <div className="flex h-full w-full flex-col justify-between">
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-4 lg:space-y-2">
               <Tag
                 color={"#9B51E0"}
                 backgroundColor={"#9747FF24"}
@@ -130,8 +130,8 @@ const PageComp = ({ projectId }: Props) => {
                 ) : (
                   <div className="h-10 w-10 rounded-full bg-gray-200" />
                 )}
-                <p className="text_medium_body_p">
-                  Organized by{" "}
+                <p className="text_medium_body_p flex flex-col lg:flex-row lg:items-end lg:space-x-2">
+                  <span>Organized by</span>
                   <Link href={`/ministries/${organisedById}`}>
                     <span className="cursor-pointer font-[400] uppercase text-accent transition-all duration-300 hover:underline">
                       {organisedBy}
@@ -141,7 +141,7 @@ const PageComp = ({ projectId }: Props) => {
               </div>
             </div>
 
-            <div className="flex w-full flex-col">
+            <div className="mt-8 flex w-full flex-col lg:mt-0">
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center justify-between">
                   <h5 className="font-sub-title text-[1rem] font-bold">
@@ -159,7 +159,7 @@ const PageComp = ({ projectId }: Props) => {
                   {donors} <span className="font-[400] uppercase">donors</span>
                 </p>
               </div>
-              <div className="mb-10 mt-6 flex space-x-2">
+              <div className="mb-10 mt-8 flex justify-center space-x-6 lg:mt-6 lg:justify-start lg:space-x-0">
                 <Link href={`/donate/projects/${id}`}>
                   <Button className="space-x-2">
                     <Heart2 set="bold" size={19} />
@@ -168,11 +168,11 @@ const PageComp = ({ projectId }: Props) => {
                 </Link>
                 <Button
                   variant="link"
-                  className="space-x-2 text-accent"
+                  className="space-x-2 text-accent max-lg:px-0"
                   onClick={() => copyToClipboard(link)}
                 >
                   <LinkIcon size={19} />
-                  <span>Share this project</span>
+                  <span className="whitespace-nowrap">Share this project</span>
                 </Button>
               </div>
             </div>
@@ -180,7 +180,7 @@ const PageComp = ({ projectId }: Props) => {
         </section>
 
         {/* Bottom Section */}
-        <section className="mt-10 grid grid-cols-2 gap-10">
+        <section className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-2">
           <div className="flex flex-col space-y-3">
             <h3 className="text_variant_h2 text-[2rem]">Story</h3>
             <div className="felx flex-col space-y-10">

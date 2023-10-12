@@ -69,7 +69,7 @@ const AboutMidSection = () => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="relative h-[60vh] w-full lg:h-[100vh] lg:w-[55%]"
+        className="relative h-[50vh] w-full lg:h-[100vh] lg:w-[55%]"
       >
         <Image
           src="/assets/images/coin_tree_jar.png"

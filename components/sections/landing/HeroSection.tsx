@@ -10,7 +10,7 @@ const Hero = () => {
   return (
     <SectionContainer>
       <section className="flex min-h-screen w-full items-center justify-center">
-        <div className="flex w-[90%] flex-col items-center space-y-2 lg:w-[80%] lg:space-y-6">
+        <div className="flex w-full flex-col items-center space-y-2 lg:w-[80%] lg:space-y-6">
           <motion.h1
             variants={defaultVariant({})}
             initial="hidden"
@@ -18,7 +18,13 @@ const Hero = () => {
             viewport={DEFAULT_VIEWPORT}
             className="text-center font-title text-[2.6rem] leading-[3.3rem] text-black lg:text-[4.6rem] lg:leading-[4.6rem]"
           >
-            Alone we can do so little; <br /> together we can do so much.
+            <span className="hidden lg:inline-block">
+              Alone we can do so little; <br /> together we can do so much.
+            </span>
+            <span className="inline-block lg:hidden">
+              Alone we can do so little; <br /> together we can <br /> do so
+              much.
+            </span>
           </motion.h1>
           <motion.div
             variants={defaultVariant({ delay: 0.5 })}
