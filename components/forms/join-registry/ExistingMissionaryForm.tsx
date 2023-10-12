@@ -101,7 +101,7 @@ const ExistingMissionaryForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex h-full w-full flex-col"
       >
-        <div className="grid grid-cols-2 gap-x-4 gap-y-5">
+        <div className="flex flex-col gap-x-4 gap-y-5 lg:grid lg:grid-cols-2">
           <FormField
             control={form.control}
             name="name"

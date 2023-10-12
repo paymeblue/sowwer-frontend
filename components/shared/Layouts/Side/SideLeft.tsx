@@ -11,7 +11,7 @@ interface Props {
 
 const SideLeft = ({ title, desc }: Props) => {
   return (
-    <div className="h-screen max-h-screen w-1/2 overflow-hidden bg-primary p-10">
+    <div className="w-full bg-primary p-10 lg:h-screen lg:max-h-screen lg:w-1/2 lg:overflow-hidden">
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"

@@ -6,7 +6,7 @@ interface Props {
 
 const SideLayout = ({ children }: Props) => {
   return (
-    <div className="max-w-screen h-screen max-h-screen w-screen overflow-hidden">
+    <div className="max-w-screen h-screen w-screen lg:max-h-screen lg:overflow-hidden">
       {children}
     </div>
   );

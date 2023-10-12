@@ -12,7 +12,7 @@ const SelectCategory = ({ setActiveStep, setSelectedCategory }: Props) => {
     setActiveStep(1);
   };
   return (
-    <section className="p-8">
+    <section className="mt-6 p-2 lg:mt-0 lg:p-8">
       <h3 className="text_variant_h3 text-center">
         What category do you fall under?
       </h3>

@@ -27,14 +27,14 @@ const SideLayoutWrapper = ({
     };
   }, []);
   return (
-    <div className="flex h-screen w-screen overflow-hidden">
+    <div className="flex h-screen w-screen flex-col lg:flex-row lg:overflow-hidden">
       <SideLeft title={title} desc={desc} />
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="w-1/2 overflow-y-scroll bg-white px-10 py-4"
+        className="w-full bg-white px-2  py-4 max-lg:min-h-full lg:w-1/2 lg:overflow-y-scroll lg:px-10"
       >
         {showSignPrompt ? (
           <div className="mb-10 flex w-full">

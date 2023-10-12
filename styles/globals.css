@@ -75,9 +75,7 @@ input[type="number"] {
 }
 
 .body_on_center_layout {
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
+  @apply w-screen lg:h-screen lg:overflow-hidden;
 }
 
 .activate-cursor {
@@ -101,7 +99,7 @@ input[type="number"] {
     @apply font-title text-[1.8rem] leading-[2.2rem] text-black lg:text-[2.8rem] lg:leading-[3rem];
   }
   .text_variant_h3 {
-    @apply font-title text-[2.2rem] leading-[3rem] text-black;
+    @apply font-title text-[1.6rem] leading-[2.5rem] text-black lg:text-[2.2rem] lg:leading-[3rem];
   }
 
   .text_large_header_b {

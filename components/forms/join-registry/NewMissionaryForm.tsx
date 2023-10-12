@@ -91,12 +91,12 @@ const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex h-full w-full flex-col"
       >
-        <div className="grid grid-cols-2 gap-x-4 gap-y-5">
+        <div className="flex flex-col gap-x-4 gap-y-5 lg:grid lg:grid-cols-2">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem className="col-span-2">
+              <FormItem className="lg:col-span-2">
                 <FormLabel required>Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Name" type="text" {...field} />

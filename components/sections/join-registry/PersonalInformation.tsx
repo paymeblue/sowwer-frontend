@@ -29,7 +29,7 @@ const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
     );
   }
   return (
-    <section className="w-full p-8 ">
+    <section className="w-full p-4 lg:p-8">
       <CardSelector
         title={selectedCategory || ""}
         containerClassname="cursor-default"
