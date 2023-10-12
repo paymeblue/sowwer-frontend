@@ -19,16 +19,20 @@ interface Props {
 const Footer = ({ variant = "default" }: Props) => {
   if (variant === "minimal") {
     return (
-      <footer className="flex w-full flex-col justify-between border-t-[.3px] border-body-2 px-4 py-4 lg:flex-row">
+      <footer className="flex w-full flex-col items-center justify-center border-t-[.3px] border-body-2 px-4 py-4 lg:flex-row lg:justify-between">
         <span className="text_small_body_sb">
           © 2023 Soower. All rights reserved.
         </span>
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-col items-center space-x-0 max-lg:justify-center lg:flex-row lg:space-x-2">
           <Link href="#">
-            <span className="text_small_body_r">Terms of Use</span>
+            <span className="text_small_body_r max-lg:text-center">
+              Terms of Use
+            </span>
           </Link>
           <Link href="#">
-            <span className="text_small_body_r">Privacy Policy</span>
+            <span className="text_small_body_r max-lg:text-center">
+              Privacy Policy
+            </span>
           </Link>
         </div>
       </footer>

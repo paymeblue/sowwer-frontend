@@ -617,7 +617,7 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
             </div>
           )}
         </div>
-        <div className="mt-6 grid grid-cols-2 gap-x-2 gap-y-4">
+        <div className="mt-6 grid grid-cols-1 gap-x-2 gap-y-4 lg:grid-cols-2">
           <FormField
             control={form.control}
             name="firstName"

@@ -20,7 +20,10 @@ const DonateLayoutWrapper = ({
       initial="hidden"
       whileInView="visible"
       viewport={DEFAULT_VIEWPORT}
-      className={cn("w-[40%] rounded-[15px] bg-white px-8 py-8", className)}
+      className={cn(
+        "w-[90%] rounded-[15px] bg-white px-4 py-8 lg:w-[40%] lg:px-8 lg:py-8",
+        className
+      )}
     >
       {/* Top section */}
       {showHeaderText && (

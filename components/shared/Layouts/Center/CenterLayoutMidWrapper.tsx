@@ -8,7 +8,7 @@ interface Props {
 
 const CenterLayoutMidWrapper = ({ children, title, subTitle }: Props) => {
   return (
-    <div className="w-[35%] rounded-[15px] bg-white px-8 py-16">
+    <div className="w-[90%] rounded-[15px] bg-white px-8 py-16 lg:w-[35%]">
       <div className="mb-8 space-y-2">
         <h2 className="text_medium_header  text-center">{title}</h2>
         {subTitle && (

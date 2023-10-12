@@ -52,7 +52,7 @@ const DonateMinistryComp = ({ ministryId }: Props) => {
       <DonateLayoutWrapper showHeaderText={false} className="py-16">
         <SuccessState
           title="Donation successful"
-          className="mx-auto w-[80%]"
+          className="mx-auto w-full lg:w-[80%]"
           desc={
             <>
               Your donation to{" "}

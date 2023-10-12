@@ -76,19 +76,22 @@ const MinistryPageComp = ({ ministryId }: Props) => {
           )}
           <h1 className="text_variant_h2 text-[2.1rem] capitalize">{name}</h1>
         </div>
-        <Tabs defaultValue="ministry-profile" className="mt-8">
-          <TabsList>
+        <Tabs
+          defaultValue="ministry-profile"
+          className="mt-8 flex flex-col max-lg:items-center"
+        >
+          <TabsList className="">
             <TabsTrigger value="ministry-profile">Ministry Profile</TabsTrigger>
             <TabsTrigger value="ministry-projects">Projects</TabsTrigger>
           </TabsList>
           <TabsContent value="ministry-profile">
-            <div className="flex w-full justify-between">
-              <div className="flex w-[55%] flex-col space-y-2">
+            <div className="flex w-full flex-col lg:flex-row lg:justify-between">
+              <div className="flex w-full flex-col space-y-2 lg:w-[55%]">
                 <h3 className="text_variant_h2 text-[1.8rem]">Story</h3>
                 <p className="text_regular_body_p">{about || "N/A"}</p>
               </div>
 
-              <div className="w-[25%] rounded-[15px] bg-white p-6">
+              <div className="mt-10 w-full rounded-[15px] bg-white p-6 lg:mt-0 lg:w-[25%]">
                 <div className="flex flex-col space-y-8">
                   <div className="flex items-center space-x-3">
                     <Location size={24} />

@@ -38,10 +38,14 @@ const MinistryProjectsSection = ({ ministryId }: Props) => {
   }
 
   return (
-    <div className="grid w-full grid-cols-3 gap-8">
-      {ministryProjects?.data.map((project) => {
-        return <ProjectCard variant="default" {...project} key={project.id} />;
-      })}
+    <div className="flex w-full flex-col items-center justify-center">
+      <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-3">
+        {ministryProjects?.data.map((project) => {
+          return (
+            <ProjectCard variant="default" {...project} key={project.id} />
+          );
+        })}
+      </div>
       <Pagination
         handleNext={handleNext}
         handlePrevious={handlePrevious}

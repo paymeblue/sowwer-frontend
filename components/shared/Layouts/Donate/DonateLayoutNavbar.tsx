@@ -15,10 +15,10 @@ const DonateLayoutNavbar = () => {
       initial="hidden"
       whileInView="visible"
       viewport={DEFAULT_VIEWPORT}
-      className="fixed left-0 top-0 z-30 flex h-[10vh] w-full items-center bg-white shadow-navbar transition-all duration-200"
+      className="z-30 flex h-fit w-full items-center bg-transparent transition-all duration-200 lg:fixed lg:left-0 lg:top-0 lg:h-[10vh] lg:bg-white lg:shadow-navbar"
     >
       <SectionContainer>
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full flex-col items-center lg:flex-row lg:justify-between">
           <Logo />
 
           {isAuthenticated ? (
