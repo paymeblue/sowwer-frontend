@@ -23,7 +23,7 @@ const DonorDashboardPage = () => {
         </Link>
         <h3 className="text_variant_h3">Account Settings</h3>
         <Tabs defaultValue="personal-details" className="mt-4">
-          <TabsList className="flex items-center space-x-2">
+          <TabsList className="space-x-2">
             <TabsTrigger value="personal-details">Personal Details</TabsTrigger>
             <TabsTrigger value="password-settings">
               Password Settings

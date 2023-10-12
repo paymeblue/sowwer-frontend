@@ -6,7 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 
 const DonationHistory = () => {
   return (
-    <Tabs defaultValue="project-donations" className="mt-4 flex w-full">
+    <Tabs
+      defaultValue="project-donations"
+      className="mt-4 flex w-full flex-col lg:flex-row"
+    >
       <TabsList orientation="vertical">
         <TabsTrigger orientation="vertical" value="project-donations">
           Project Donations

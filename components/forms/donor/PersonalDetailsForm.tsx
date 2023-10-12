@@ -52,7 +52,7 @@ const PersonalDetailsForm = ({ defaultValues }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-        <div className="grid grid-cols-2 gap-x-2 gap-y-4">
+        <div className="grid grid-cols-1 gap-x-2 gap-y-4 lg:grid-cols-2">
           <FormField
             control={form.control}
             name="firstName"

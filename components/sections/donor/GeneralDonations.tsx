@@ -80,7 +80,7 @@ const GeneralDonationsComp = () => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="mt-6 grid w-full grid-cols-3 gap-6"
+        className="mt-6 grid w-full grid-cols-1 gap-6 lg:grid-cols-3"
       >
         {donations?.data
           .filter((donation, index, self) => {

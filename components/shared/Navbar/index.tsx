@@ -152,35 +152,42 @@ const Navbar = ({ variant = "landing" }: Props) => {
           </SheetTrigger>
           <SheetContent className="w-[65%]">
             <div className="flex w-full flex-col items-start gap-10">
-              <NavigationMenu>
-                <NavigationMenuList className="flex-col items-start justify-start space-x-0 space-y-2">
-                  {navItems.map((item) => {
-                    const { label, route, child } = item;
-                    const isActive =
-                      (pathname?.includes(item.route) &&
-                        item.route.length > 1) ||
-                      pathname === item.route;
-                    return (
-                      <Navitem
-                        key={item.label}
-                        isActive={isActive}
-                        label={label}
-                        route={route}
-                        child={child}
-                        handleMenuClick={() => setOpen(false)}
-                      />
-                    );
-                  })}
-                </NavigationMenuList>
-              </NavigationMenu>
+              {variant === "landing" && (
+                <NavigationMenu>
+                  <NavigationMenuList className="flex-col items-start justify-start space-x-0 space-y-2">
+                    {navItems.map((item) => {
+                      const { label, route, child } = item;
+                      const isActive =
+                        (pathname?.includes(item.route) &&
+                          item.route.length > 1) ||
+                        pathname === item.route;
+                      return (
+                        <Navitem
+                          key={item.label}
+                          isActive={isActive}
+                          label={label}
+                          route={route}
+                          child={child}
+                          handleMenuClick={() => setOpen(false)}
+                        />
+                      );
+                    })}
+                  </NavigationMenuList>
+                </NavigationMenu>
+              )}
 
               <div
-                className={`flex flex-col items-center gap-4 ${
+                className={`mt-8 flex flex-col items-center gap-4 ${
                   isAuthenticated && "flex-row-reverse"
                 }`}
               >
                 {isAuthenticated ? (
-                  <ProfileMenuCard variant={variant} />
+                  <ProfileMenuCard
+                    variant={variant}
+                    onMenuClick={() => {
+                      setOpen(false);
+                    }}
+                  />
                 ) : (
                   <Button
                     variant="outline"
