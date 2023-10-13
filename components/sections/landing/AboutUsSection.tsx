@@ -101,7 +101,7 @@ const AboutsUsSection = () => {
           src="/assets/images/circular_dotted_lines.svg"
           alt="Background spiral"
           fill
-          className="object-contain pb-10"
+          className="-z-10 object-cover pb-10 max-lg:mt-20 max-lg:opacity-50 lg:object-contain"
         />
         <motion.div className="flex w-full flex-col space-y-4 lg:w-[60%]">
           <h2 className="font-title text-[1.8rem] leading-[2.2rem] text-black lg:text-[2.8rem] lg:leading-[3rem]">

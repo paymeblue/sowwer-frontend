@@ -24,7 +24,13 @@ const Pagination = ({
       <Button
         variant="link"
         disabled={!hasPrevious}
-        onClick={handlePrevious}
+        onClick={() => {
+          handlePrevious();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
         className="space-x-2 px-0 text-body-2"
       >
         <ArrowLeft size={20} /> <span>Previous</span>
@@ -32,7 +38,13 @@ const Pagination = ({
       <Button
         variant="link"
         disabled={!hasNext}
-        onClick={handleNext}
+        onClick={() => {
+          handleNext();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
         className="space-x-2 px-0 text-body-2"
       >
         <span>Next</span> <ArrowRight size={20} />

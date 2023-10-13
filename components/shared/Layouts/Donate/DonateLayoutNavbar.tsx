@@ -26,7 +26,12 @@ const DonateLayoutNavbar = () => {
           ) : (
             <p className="text_small_body_r">
               Already have an account?{" "}
-              <Link href="/auth/donor/sign-in">
+              <Link
+                href={{
+                  pathname: "/auth/donor/sign-in",
+                  query: { redirectUrl: window.location.href },
+                }}
+              >
                 <span className="cursor-pointer font-[500] text-accent transition-all duration-200 hover:underline">
                   Sign in
                 </span>

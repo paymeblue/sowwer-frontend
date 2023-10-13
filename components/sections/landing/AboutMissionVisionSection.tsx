@@ -26,7 +26,7 @@ const AboutMissionVisionSection = () => {
       >
         <Target />
         <h3 className="text_small_header mt-10">Our Mission</h3>
-        <p className="text_regular_body_p mt-2">
+        <p className="text_regular_body_p mt-2 max-lg:text-[.8rem]">
           Lorem ipsum dolor sit amet consectetur. Hendrerit diam tempus ac sit
           tellus. Pellentesque odio lorem ut metus viverra sem. Rhoncus
           vulputate sapien ut egestas porttitor egestas urna tempus libero. Est
@@ -41,7 +41,7 @@ const AboutMissionVisionSection = () => {
       >
         <Vision />
         <h3 className="text_small_header mt-10">Our Vision</h3>
-        <p className="text_regular_body_p mt-2">
+        <p className="text_regular_body_p mt-2 max-lg:text-[.8rem]">
           Lorem ipsum dolor sit amet consectetur. Hendrerit diam tempus ac sit
           tellus. Pellentesque odio lorem ut metus viverra sem. Rhoncus
           vulputate sapien ut egestas porttitor egestas urna tempus libero. Est

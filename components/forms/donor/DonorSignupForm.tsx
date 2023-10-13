@@ -68,7 +68,7 @@ const DonorSignupForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex w-full flex-col justify-start gap-4">
-            <div className="grid grid-cols-2 gap-5">
+            <div className="flex flex-col gap-5 lg:grid lg:grid-cols-2">
               <FormField
                 control={form.control}
                 name="firstName"

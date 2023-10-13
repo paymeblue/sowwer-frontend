@@ -1,15 +1,17 @@
 "use client";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import useUserAuth from "@hooks/auth/useUserAuth";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { Fragment, ReactNode } from "react";
 
 const NotAuthenticatedRouteComp = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, token, context } = useUserAuth();
+  const params = useSearchParams();
+  const redirectUrl = params?.get("redirectUrl") as string | undefined;
   const auth = isAuthenticated && token && context;
 
   if (auth) {
-    redirect(`/${context}`);
+    redirect(redirectUrl || `/${context}`);
   }
   return <Fragment>{children}</Fragment>;
 };
