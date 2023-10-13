@@ -43,7 +43,9 @@ const Pagination = ({
             top: 0,
             behavior: "smooth",
           });
-          handleNext();
+          setTimeout(() => {
+            handleNext();
+          }, 1000);
         }}
         className="space-x-2 px-0 text-body-2"
       >
