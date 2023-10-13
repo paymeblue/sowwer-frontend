@@ -25,11 +25,11 @@ const Pagination = ({
         variant="link"
         disabled={!hasPrevious}
         onClick={() => {
-          handlePrevious();
           window.scrollTo({
             top: 0,
             behavior: "smooth",
           });
+          handlePrevious();
         }}
         className="space-x-2 px-0 text-body-2"
       >
@@ -39,11 +39,11 @@ const Pagination = ({
         variant="link"
         disabled={!hasNext}
         onClick={() => {
-          handleNext();
           window.scrollTo({
             top: 0,
             behavior: "smooth",
           });
+          handleNext();
         }}
         className="space-x-2 px-0 text-body-2"
       >
