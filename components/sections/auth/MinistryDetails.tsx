@@ -47,7 +47,7 @@ const MinistryDetails = ({
     setActiveStep((step) => step + 1);
   };
   return (
-    <section className="p-8">
+    <section className="p-4 lg:p-8">
       {!selectedCategory ? (
         <div>
           <h3 className="text_variant_h3 text-center">
