@@ -33,7 +33,7 @@ const Stepper = ({ steps, activeStep }: Props) => {
                 {index < activeStep && <Check size={12} />}
               </div>
             </div>
-            <div className="label w-[8rem] text-center !text-black">
+            <div className="label w-[4rem] text-center !text-black lg:w-[8rem]">
               {label}
             </div>
           </div>

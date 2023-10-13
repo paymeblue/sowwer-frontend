@@ -21,7 +21,7 @@ const SideLeft = ({ title, desc }: Props) => {
       >
         <Logo logoVariant="black" />
 
-        <div className="mt-10 space-y-2">
+        <div className="mt-0 space-y-2 lg:mt-10">
           <h2 className="text_variant_h2">{title}</h2>
           <p className="text_medium_body_p">{desc}</p>
         </div>

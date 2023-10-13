@@ -186,14 +186,14 @@ input[type="number"] {
   }
 
   .step .line {
-    height: 0px;
+    /* height: 0px;
     border-width: 0.5px;
     border-style: solid;
     position: absolute;
     left: -4rem;
     width: calc(100%);
-    z-index: 10;
-    @apply top-2.5;
+    z-index: 10; */
+    @apply absolute -left-[2rem] top-2.5 z-10 h-0 w-full border-[0.5px] border-solid lg:-left-[4rem];
   }
 
   .step .circle {

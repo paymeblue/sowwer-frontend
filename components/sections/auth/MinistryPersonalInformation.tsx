@@ -38,7 +38,7 @@ const MinistryPersonalInformation = ({ setActiveStep, form }: Props) => {
           onSubmit={form.handleSubmit(handleContinue)}
           className="flex w-full flex-col"
         >
-          <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+          <div className="flex flex-col gap-x-4 gap-y-6 lg:grid lg:grid-cols-2">
             <FormField
               control={form.control}
               name="firstName"

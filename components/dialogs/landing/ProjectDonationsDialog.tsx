@@ -92,7 +92,7 @@ const ProjectDonationsDialog = ({ projectId, title }: Props) => {
           </DialogTrigger>
           <DialogContent className="">
             <DialogHeader>
-              <DialogTitle className="font-body capitalize">
+              <DialogTitle className="max-w-[80%] text-start font-body capitalize leading-[1.5rem]">
                 Donations for {title} project
               </DialogTitle>
             </DialogHeader>
