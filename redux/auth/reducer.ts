@@ -8,7 +8,7 @@ export type AuthState = {
   user: User | null;
   token: string | null;
   refreshToken?: string | null;
-  context?: "ministry" | "donor" | null;
+  context?: "ministry" | "donor" | "admin" | null;
 };
 
 const initialState: AuthState = {

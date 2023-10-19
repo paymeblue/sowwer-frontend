@@ -4,24 +4,21 @@ import useUserAuth from "@hooks/auth/useUserAuth";
 import { redirect } from "next/navigation";
 import { Fragment, ReactNode } from "react";
 
-const MinistryRouteComp = ({ children }: { children: ReactNode }) => {
+const AdminRouteComp = ({ children }: { children: ReactNode }) => {
   const { user, context } = useUserAuth();
-  const auth = !!(
-    (user?.ministry?.id || user?.type === "ministry") &&
-    context === "ministry"
-  );
+  const auth = !!(context === "admin" && user?.type === "admin");
   if (!auth) {
     redirect("/");
   }
   return <Fragment>{children}</Fragment>;
 };
 
-const MinistryRoute = ({ children }: { children: ReactNode }) => {
+const AdminRoute = ({ children }: { children: ReactNode }) => {
   return (
     <NoSSRWrapper>
-      <MinistryRouteComp>{children}</MinistryRouteComp>
+      <AdminRouteComp>{children}</AdminRouteComp>
     </NoSSRWrapper>
   );
 };
 
-export default MinistryRoute;
+export default AdminRoute;

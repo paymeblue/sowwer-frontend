@@ -33,6 +33,7 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
   const getAccountUrl = () => {
     if (context === "donor") return "/donor";
     if (context === "ministry") return "/ministry";
+    if (context === "admin") return "/admin/ministries";
     return "/";
   };
 

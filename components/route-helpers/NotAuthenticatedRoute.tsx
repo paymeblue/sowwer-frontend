@@ -11,6 +11,9 @@ const NotAuthenticatedRouteComp = ({ children }: { children: ReactNode }) => {
   const auth = isAuthenticated && token && context;
 
   if (auth) {
+    if (context === "admin") {
+      redirect("/admin/ministries");
+    }
     redirect(redirectUrl || `/${context}`);
   }
   return <Fragment>{children}</Fragment>;

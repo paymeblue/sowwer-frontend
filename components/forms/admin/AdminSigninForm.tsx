@@ -14,10 +14,10 @@ import { AdminSigninValidation } from "lib/validations/donor";
 import { Button } from "@components/ui/button";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import { Input } from "@components/ui/input";
-import { useRouter } from "next/navigation";
+import useAdminSignin from "@hooks/auth/useAdminSignin";
 
 const AdminSigninForm = () => {
-  const router = useRouter();
+  const { loading, loginAdmin } = useAdminSignin();
   const form = useForm<z.infer<typeof AdminSigninValidation>>({
     resolver: zodResolver(AdminSigninValidation),
     defaultValues: {
@@ -25,8 +25,7 @@ const AdminSigninForm = () => {
     },
   });
   const onSubmit = async (values: z.infer<typeof AdminSigninValidation>) => {
-    // await loginDonor(values);
-    router.push("/admin");
+    await loginAdmin(values);
   };
   return (
     <div className="w-full">
@@ -64,7 +63,7 @@ const AdminSigninForm = () => {
               )}
             />
           </div>
-          <Button type="submit" className="mt-8 w-full">
+          <Button type="submit" loading={loading} className="mt-8 w-full">
             Sign in
           </Button>
         </form>
