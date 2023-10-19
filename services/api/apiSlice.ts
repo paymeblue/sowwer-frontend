@@ -103,6 +103,7 @@ const api = createApi({
     "Social-links",
     "Account",
     "General",
+    "Ministries",
   ],
   endpoints: (builder) => ({}),
 });
