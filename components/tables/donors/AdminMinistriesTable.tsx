@@ -4,6 +4,13 @@ import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
 import { Button } from "@components/ui/button";
 import DataTable from "@components/ui/data-table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@components/ui/dialog";
 import usePagination from "@hooks/general/usePagination";
 import { ColumnDef } from "@tanstack/react-table";
 import { Check } from "lucide-react";
@@ -51,7 +58,11 @@ const adminMinistriesColumn: ColumnDef<AdminMinistryBase>[] = [
       const ministry = row.original;
 
       return (
-        <ActionComp id={ministry.id} isVerified={ministry.verificationStatus} />
+        <ActionComp
+          id={ministry.id}
+          isVerified={ministry.verificationStatus}
+          name={ministry.name}
+        />
       );
     },
   },
@@ -60,20 +71,40 @@ const adminMinistriesColumn: ColumnDef<AdminMinistryBase>[] = [
 const ActionComp = ({
   id,
   isVerified,
+  name,
 }: {
   id: string;
   isVerified: boolean;
+  name: string;
 }) => {
   return (
     <>
       {!isVerified ? (
-        <Button
-          variant="link"
-          className="w-fit space-x-2 text-[.8rem] text-[#27AE60]"
-        >
-          <Check size={14}></Check>
-          <span>Verify</span>
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="link"
+              className="w-fit space-x-2 text-[.8rem] text-[#27AE60]"
+            >
+              <Check size={14}></Check>
+              <span>Verify</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Verfiy User</DialogTitle>
+            </DialogHeader>
+            <div className="mb-4 mt-2 flex flex-col space-y-4 border-t-[.5px] border-[#DEDEDE] px-4 pt-4">
+              <p className="text-center font-body text-body-1">
+                Are you sure you want to verify this ministry “
+                <span className="font-[600] capitalize">{name}</span>”?
+              </p>
+              <Button variant="secondary" className="w-full">
+                Verify User
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       ) : null}
     </>
   );
@@ -114,6 +145,10 @@ const AdminMinistriesTable = ({ status }: Props) => {
       data={ministries.data || []}
       columns={adminMinistriesColumn}
       isLoading={isFetching}
+      rowClassName="cursor-pointer"
+      navigateOptions={{
+        base: "/admin/ministries",
+      }}
       paginationInfo={{
         handleNext,
         handlePrevious,

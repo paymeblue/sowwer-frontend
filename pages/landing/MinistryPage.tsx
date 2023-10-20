@@ -21,7 +21,6 @@ import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import MinistryProjectsSection from "@components/sections/landing/MinistryProjectsSection";
 import Link from "next/link";
 import Image from "next/image";
-import Head from "next/head";
 
 interface Props {
   ministryId: string;
@@ -51,9 +50,9 @@ const MinistryPageComp = ({ ministryId }: Props) => {
 
   return (
     <SectionContainer>
-      <Head>
+      <head>
         <title>{`${name} | Soower`}</title>
-      </Head>
+      </head>
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"

@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { HTMLAttributes, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   ColumnDef,
@@ -31,6 +32,10 @@ interface DataTableProps<TData, TValue> {
     handleNext: () => void;
     handlePrevious: () => void;
   } | null;
+  rowClassName?: HTMLAttributes<HTMLDivElement>["className"];
+  navigateOptions?: {
+    base: string;
+  };
 }
 
 export default function DataTable<TData, TValue>({
@@ -38,7 +43,10 @@ export default function DataTable<TData, TValue>({
   data,
   paginationInfo = null,
   isLoading,
+  rowClassName,
+  navigateOptions,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     data,
@@ -79,20 +87,38 @@ export default function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  className={rowClassName}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="whitespace-nowrap">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    const header = cell.id.split("_")[1];
+
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className="whitespace-nowrap"
+                        onClick={
+                          navigateOptions && header !== "actions"
+                            ? () => {
+                                console.log({ header });
+                                const { base } = navigateOptions;
+                                const rowData = row.original as any;
+                                router.push(`${base}/${rowData?.id}`);
+                              }
+                            : undefined
+                        }
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              <TableRow className={rowClassName}>
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"
