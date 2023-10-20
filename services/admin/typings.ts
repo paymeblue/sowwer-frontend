@@ -25,6 +25,10 @@ export interface GetAdminMinistriesRequest {
   limit: number;
 }
 
+export interface VerifyMinistryRequest {
+  id: string;
+}
+
 export interface GetAdminMinistry {
   id: string;
 }

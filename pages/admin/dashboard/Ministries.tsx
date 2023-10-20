@@ -1,6 +1,6 @@
 import ContentWrapper from "@components/shared/Layouts/Admin/ContentWrapper";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
-import AdminMinistriesTable from "@components/tables/donors/AdminMinistriesTable";
+import AdminMinistriesTable from "@components/tables/admin/AdminMinistriesTable";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@components/ui/tabs";
 
 const AdminMinistriesComp = () => {

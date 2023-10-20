@@ -11,11 +11,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@components/ui/dialog";
+import { useToast } from "@components/ui/use-toast";
 import usePagination from "@hooks/general/usePagination";
 import { ColumnDef } from "@tanstack/react-table";
 import { Check } from "lucide-react";
 import moment from "moment";
-import { useGetMinistriesQuery } from "services/admin";
+import { useState } from "react";
+import {
+  useGetMinistriesQuery,
+  useVerifyMinistryMutation,
+} from "services/admin";
 import { AdminMinistryBase } from "services/admin/typings";
 
 const adminMinistriesColumn: ColumnDef<AdminMinistryBase>[] = [
@@ -77,10 +82,29 @@ const ActionComp = ({
   isVerified: boolean;
   name: string;
 }) => {
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [verifyMinistry, { isLoading }] = useVerifyMinistryMutation();
+
+  const handleClick = async () => {
+    try {
+      await verifyMinistry({ id }).unwrap();
+      toast({
+        title: "Ministry successully verified",
+      });
+      setOpen(false);
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to verify ministry. Please try again later.",
+      });
+    }
+  };
+
   return (
     <>
       {!isVerified ? (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button
               variant="link"
@@ -99,7 +123,12 @@ const ActionComp = ({
                 Are you sure you want to verify this ministry “
                 <span className="font-[600] capitalize">{name}</span>”?
               </p>
-              <Button variant="secondary" className="w-full">
+              <Button
+                variant="secondary"
+                onClick={handleClick}
+                className="w-full"
+                loading={isLoading}
+              >
                 Verify User
               </Button>
             </div>
