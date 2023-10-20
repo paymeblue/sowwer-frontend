@@ -3,6 +3,9 @@ import {
   GetAdminMinistriesRequest,
   GetAdminMinistriesResponse,
   VerifyMinistryRequest,
+  GetAdminMinistryResponse,
+  GetAdminMinistryRequest,
+  GetAdminMinistryAdministratorResponse,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -44,8 +47,49 @@ const admin = api.injectEndpoints({
         return reponse.data.message;
       },
     }),
+    getAdminMinistry: build.query<
+      GetAdminMinistryResponse,
+      GetAdminMinistryRequest
+    >({
+      query: (payload) => {
+        const { id } = payload;
+        return {
+          url: `admins/ministries/${id}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (reponse: GetAdminMinistryResponse) => {
+        return reponse;
+      },
+      transformErrorResponse: (reponse: ErrorResponse) => {
+        return reponse.data.message;
+      },
+    }),
+    getAdminMinistryAdministrator: build.query<
+      GetAdminMinistryAdministratorResponse,
+      GetAdminMinistryRequest
+    >({
+      query: (payload) => {
+        const { id } = payload;
+        return {
+          url: `admins/ministries/${id}/administrator`,
+          method: "GET",
+        };
+      },
+      transformResponse: (reponse: GetAdminMinistryAdministratorResponse) => {
+        return reponse;
+      },
+      transformErrorResponse: (reponse: ErrorResponse) => {
+        return reponse.data.message;
+      },
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useGetMinistriesQuery, useVerifyMinistryMutation } = admin;
+export const {
+  useGetMinistriesQuery,
+  useVerifyMinistryMutation,
+  useGetAdminMinistryQuery,
+  useGetAdminMinistryAdministratorQuery,
+} = admin;

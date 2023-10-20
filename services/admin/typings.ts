@@ -18,6 +18,17 @@ export interface AdminMinistry extends AdminMinistryBase {
   website: string;
   logo: string | null;
 }
+export interface AdminMinistryAdmin {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  verificationStatus: boolean;
+  role: string;
+  type: string;
+  createdAt: string;
+}
 
 export interface GetAdminMinistriesRequest {
   status: "verified" | "unverified";
@@ -29,9 +40,16 @@ export interface VerifyMinistryRequest {
   id: string;
 }
 
-export interface GetAdminMinistry {
+export interface GetAdminMinistryRequest {
   id: string;
 }
 
+export interface GetAdminMinistryRequest {
+  id: string;
+}
+
+// Responses
 export type GetAdminMinistriesResponse = TResponse<AdminMinistryBase>;
 export type GetAdminMinistryResponse = Response<AdminMinistry>;
+export type GetAdminMinistryAdministratorResponse =
+  Response<AdminMinistryAdmin>;

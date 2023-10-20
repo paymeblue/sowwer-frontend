@@ -34,10 +34,10 @@ const MinistryComp = ({ id }: Props) => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="ministry-details" className="w-[70%]">
-          <MinistryDetailsForm />
+          <MinistryDetailsForm id={id} />
         </TabsContent>
         <TabsContent value="administrator-details" className="w-[70%]">
-          <AdministratorDetailsForm />
+          <AdministratorDetailsForm id={id} />
         </TabsContent>
       </Tabs>
     </div>
