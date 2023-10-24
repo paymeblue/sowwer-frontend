@@ -2,6 +2,7 @@
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
+import { Dialog, DialogContent, DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
 import { Label } from "@components/ui/label";
 import { Textarea } from "@components/ui/textarea";
@@ -50,6 +51,7 @@ export const MinistryDetailsForm = ({ id }: Props) => {
     phone,
     state,
     website,
+    cac_document,
   } = ministry.data;
 
   return (
@@ -102,7 +104,28 @@ export const MinistryDetailsForm = ({ id }: Props) => {
             />
             <div className="flex flex-col">
               <Label className="font-[500]">FWC CAC Document</Label>
-              <Label className="text-[.8rem] text-[#8F8F8F]">.JPG • 2MB</Label>
+              <div className="flex items-center space-x-2">
+                <Label className="text-[.8rem] text-[#8F8F8F]">
+                  .JPG • 2MB
+                </Label>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Label className=" cursor-pointer text-accent hover:underline">
+                      View
+                    </Label>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <div className="relative h-[60vh] w-full">
+                      <Image
+                        src={cac_document}
+                        alt="CAC Document"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
           </div>
         </div>
