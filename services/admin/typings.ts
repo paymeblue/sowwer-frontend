@@ -32,12 +32,23 @@ export interface AdminMinistryAdmin {
 
 export interface AdminPayoutHistory {
   id: string;
-  user_id: string;
-  reference: string;
-  project_title: string;
+  payout_date: string;
   amount: string;
+  status: "successful" | "failed";
   createdAt: string;
-  updatedAt: string;
+  donor_count: number;
+  ministry_name: string;
+  project_title: string;
+  project_goal: number;
+}
+
+export interface AdminPayoutHistoryGeneral {
+  id: string;
+  payout_date: string;
+  amount: string;
+  status: "successful" | "failed";
+  createdAt: string;
+  ministry_name: string;
 }
 
 export interface GetAdminMinistriesRequest {
@@ -56,6 +67,8 @@ export interface GetAdminMinistryRequest {
 
 export interface GetAdminPayoutHistoryRequest {
   type: "ministry" | "project";
+  page: number;
+  limit: number;
 }
 
 // Responses
