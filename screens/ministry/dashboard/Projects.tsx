@@ -26,6 +26,21 @@ const ProjectsPageComp = () => {
 
   if (!projects?.data && isLoading) return <Loader className="h-[80vh]" />;
 
+  if (!user?.verificationStatus) {
+    return (
+      <EmptyState
+        image={<EmptySpeaker />}
+        title="Pending Verification"
+        desc="Your ministry is still awaiting verification. Please hang tight while we verify, afterwards you can create projects"
+        action={
+          <Link href="mailto:info@soower.com">
+            <Button variant="secondary">Contact Support</Button>
+          </Link>
+        }
+      />
+    );
+  }
+
   return (
     <MainContentWrapper
       title="Projects"

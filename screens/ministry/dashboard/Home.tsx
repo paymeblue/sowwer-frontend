@@ -31,9 +31,17 @@ const MinistryHomepageComp = () => {
             title="Create your first project"
             last
             right={
-              <span className="text_tiny_body_r font-[500] text-[#EB5757]">
-                Awaiting Verification
-              </span>
+              <>
+                {user?.verificationStatus ? (
+                  <span className="text_tiny_body_r font-[500] text-[#219653]">
+                    Verified
+                  </span>
+                ) : (
+                  <span className="text_tiny_body_r font-[500] text-[#EB5757]">
+                    Awaiting Verification
+                  </span>
+                )}
+              </>
             }
           />
         </div>
