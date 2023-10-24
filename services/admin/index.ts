@@ -6,6 +6,8 @@ import {
   GetAdminMinistryResponse,
   GetAdminMinistryRequest,
   GetAdminMinistryAdministratorResponse,
+  GetAdminPayoutHistoryResponse,
+  GetAdminPayoutHistoryRequest,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -83,6 +85,18 @@ const admin = api.injectEndpoints({
         return reponse.data.message;
       },
     }),
+    getAdminPayoutHistory: build.query<
+      GetAdminPayoutHistoryResponse,
+      GetAdminPayoutHistoryRequest
+    >({
+      query: (payload) => {
+        const { type } = payload;
+        return {
+          url: `payouts?type=${type}`,
+          method: "GET",
+        };
+      },
+    }),
   }),
   overrideExisting: true,
 });
@@ -92,4 +106,5 @@ export const {
   useVerifyMinistryMutation,
   useGetAdminMinistryQuery,
   useGetAdminMinistryAdministratorQuery,
+  useGetAdminPayoutHistoryQuery,
 } = admin;

@@ -6,9 +6,12 @@ export const metadata: Metadata = {
   title: "Contact Us | Soower",
 };
 
-const DynamicContactPage = dynamic(() => import("pages/landing/ContactPage"), {
-  loading: () => <Loader />,
-}) as any;
+const DynamicContactPage = dynamic(
+  () => import("screens/landing/ContactPage"),
+  {
+    loading: () => <Loader />,
+  }
+) as any;
 
 export default function Contact() {
   return <DynamicContactPage />;

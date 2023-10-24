@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Loader from "@components/shared/Loader";
 
 const DynamicDonorSettingsPage = dynamic(
-  () => import("pages/donor/DonorSettingsPage"),
+  () => import("screens/donor/DonorSettingsPage"),
   {
     loading: () => <Loader />,
   }

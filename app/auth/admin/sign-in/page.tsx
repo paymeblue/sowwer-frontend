@@ -3,7 +3,7 @@ import Loader from "@components/shared/Loader";
 import { Metadata } from "next";
 
 const DynamicAdminSigninPage = dynamic(
-  () => import("pages/auth/AdminSigninPage"),
+  () => import("screens/auth/AdminSigninPage"),
   {
     loading: () => <Loader showLogo />,
   }

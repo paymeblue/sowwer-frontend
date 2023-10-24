@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Loader from "@components/shared/Loader";
 
 const DynamicMinistryDonors = dynamic(
-  () => import("pages/ministry/dashboard/Donors"),
+  () => import("screens/ministry/dashboard/Donors"),
   {
     loading: () => <Loader className="h-[80vh]" />,
   }

@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Loader from "@components/shared/Loader";
 
 const DynamicDonateMinistryPage = dynamic(
-  () => import("pages/donate/DonateMinistryPage"),
+  () => import("screens/donate/DonateMinistryPage"),
   {
     loading: () => <Loader showLogo />,
   }

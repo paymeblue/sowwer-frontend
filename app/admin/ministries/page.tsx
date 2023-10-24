@@ -3,7 +3,7 @@ import Loader from "@components/shared/Loader";
 import { Metadata } from "next";
 
 const DynamicMinistries = dynamic(
-  () => import("pages/admin/dashboard/Ministries"),
+  () => import("screens/admin/dashboard/Ministries"),
   {
     loading: () => <Loader className="h-[80vh]" />,
   }

@@ -3,7 +3,7 @@ import Loader from "@components/shared/Loader";
 import { Metadata } from "next";
 
 const DynamicMinistrySigninPage = dynamic(
-  () => import("pages/auth/MinistrySigninPage"),
+  () => import("screens/auth/MinistrySigninPage"),
   {
     loading: () => <Loader showLogo />,
   }

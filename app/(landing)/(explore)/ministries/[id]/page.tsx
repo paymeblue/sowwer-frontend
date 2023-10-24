@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
 const DynamicMinistryPage = dynamic(
-  () => import("pages/landing/MinistryPage"),
+  () => import("screens/landing/MinistryPage"),
   {
     loading: () => <Loader />,
   }

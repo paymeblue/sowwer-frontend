@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const DynamicMinistrySignupPage = dynamic(
-  () => import("pages/auth/MinistrySignupPage"),
+  () => import("screens/auth/MinistrySignupPage"),
   {
     loading: () => <Loader showLogo />,
   }

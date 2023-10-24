@@ -30,6 +30,16 @@ export interface AdminMinistryAdmin {
   createdAt: string;
 }
 
+export interface AdminPayoutHistory {
+  id: string;
+  user_id: string;
+  reference: string;
+  project_title: string;
+  amount: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface GetAdminMinistriesRequest {
   status: "verified" | "unverified";
   page: number;
@@ -44,8 +54,8 @@ export interface GetAdminMinistryRequest {
   id: string;
 }
 
-export interface GetAdminMinistryRequest {
-  id: string;
+export interface GetAdminPayoutHistoryRequest {
+  type: "ministry" | "project";
 }
 
 // Responses
@@ -53,3 +63,4 @@ export type GetAdminMinistriesResponse = TResponse<AdminMinistryBase>;
 export type GetAdminMinistryResponse = Response<AdminMinistry>;
 export type GetAdminMinistryAdministratorResponse =
   Response<AdminMinistryAdmin>;
+export type GetAdminPayoutHistoryResponse = TResponse<AdminPayoutHistory>;

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const DynamicForMinistriesPage = dynamic(
-  () => import("pages/landing/ForMinistries"),
+  () => import("screens/landing/ForMinistries"),
   {
     loading: () => <Loader />,
   }

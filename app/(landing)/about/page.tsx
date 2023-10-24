@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "About | Soower",
 };
 
-const DynamicAboutpage = dynamic(() => import("pages/landing/Aboutpage"), {
+const DynamicAboutpage = dynamic(() => import("screens/landing/Aboutpage"), {
   loading: () => <Loader />,
 }) as any;
 

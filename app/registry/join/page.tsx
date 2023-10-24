@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Loader from "@components/shared/Loader";
 
 const DynamicJoinRegistryPage = dynamic(
-  () => import("pages/registry/JoinRegistryPage"),
+  () => import("screens/registry/JoinRegistryPage"),
   {
     loading: () => <Loader showLogo />,
   }

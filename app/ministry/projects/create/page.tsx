@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Loader from "@components/shared/Loader";
 
 const DynamicMinistryProjectEditor = dynamic(
-  () => import("pages/ministry/dashboard/ProjectEditor"),
+  () => import("screens/ministry/dashboard/ProjectEditor"),
   {
     loading: () => <Loader />,
   }

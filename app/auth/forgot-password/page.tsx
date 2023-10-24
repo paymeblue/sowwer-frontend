@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Loader from "@components/shared/Loader";
 
 const DynamicForgotPassword = dynamic(
-  () => import("pages/auth/ForgotPasswordPage"),
+  () => import("screens/auth/ForgotPasswordPage"),
   {
     loading: () => <Loader />,
   }
