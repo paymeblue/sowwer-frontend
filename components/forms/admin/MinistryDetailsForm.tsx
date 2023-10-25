@@ -2,7 +2,6 @@
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
-import { Dialog, DialogContent, DialogTrigger } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
 import { Label } from "@components/ui/label";
 import { Textarea } from "@components/ui/textarea";
@@ -12,6 +11,7 @@ import {
   useGetAdminMinistryQuery,
   useGetAdminMinistryAdministratorQuery,
 } from "services/admin";
+import { saveAs } from "file-saver";
 
 interface Props {
   id: string;
@@ -53,6 +53,10 @@ export const MinistryDetailsForm = ({ id }: Props) => {
     website,
     cac_document,
   } = ministry.data;
+
+  const handleClick = () => {
+    saveAs(cac_document, `${name}_cac_document`);
+  };
 
   return (
     <Wrapper>
@@ -108,23 +112,12 @@ export const MinistryDetailsForm = ({ id }: Props) => {
                 <Label className="text-[.8rem] text-[#8F8F8F]">
                   .JPG • 2MB
                 </Label>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Label className=" cursor-pointer text-accent hover:underline">
-                      View
-                    </Label>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <div className="relative h-[60vh] w-full">
-                      <Image
-                        src={cac_document}
-                        alt="CAC Document"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <Label
+                  className="cursor-pointer text-accent hover:underline"
+                  onClick={handleClick}
+                >
+                  Download
+                </Label>
               </div>
             </div>
           </div>
