@@ -1,3 +1,5 @@
+import { TResponse } from "services/typings";
+
 export interface IMinistryProjectPayout {
   id: string;
   payout_date: string;
@@ -16,3 +18,5 @@ export interface IMinistryGeneralPayout {
   status: "successful" | "failed";
   createdAt: string;
 }
+
+export type GetMinistryPayoutsResponse = TResponse<IMinistryProjectPayout>;

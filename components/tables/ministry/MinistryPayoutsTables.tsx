@@ -1,6 +1,10 @@
 "use client";
+import EmptySpeaker from "@components/assets/svg/emptySpeaker";
+import EmptyState from "@components/shared/EmptyState";
+import Loader from "@components/shared/Loader";
 import DataTable from "@components/ui/data-table";
 import Tag from "@components/ui/tag";
+import usePagination from "@hooks/general/usePagination";
 import { formatCurrency } from "@lib/functions";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
@@ -8,79 +12,80 @@ import {
   IMinistryGeneralPayout,
   IMinistryProjectPayout,
 } from "services/ministry/typings";
+import { usePayoutHistoryQuery } from "services/payouts";
 
-const DUMMY_GENERAL_PAYOUT: IMinistryGeneralPayout[] = [
-  {
-    amount: "135000",
-    createdAt: "2023-08-22T12:29:39.000Z",
-    id: "fb690a00-d255-4642-87af-88dffd2319b4",
-    payout_date: "2023-08-22T12:29:39.000Z",
-    status: "successful",
-  },
-  {
-    amount: "135000",
-    createdAt: "2023-08-22T12:29:39.000Z",
-    id: "fb690a00-d255-4642-87af-88dffd2319b4",
-    payout_date: "2023-08-22T12:29:39.000Z",
-    status: "successful",
-  },
-  {
-    amount: "135000",
-    createdAt: "2023-08-22T12:29:39.000Z",
-    id: "fb690a00-d255-4642-87af-88dffd2319b4",
-    payout_date: "2023-08-22T12:29:39.000Z",
-    status: "failed",
-  },
-  {
-    amount: "135000",
-    createdAt: "2023-08-22T12:29:39.000Z",
-    id: "fb690a00-d255-4642-87af-88dffd2319b4",
-    payout_date: "2023-08-22T12:29:39.000Z",
-    status: "successful",
-  },
-];
-const DUMMY_PROJECT_PAYOUT: IMinistryProjectPayout[] = [
-  {
-    amount: "135000",
-    createdAt: "2023-08-22T12:29:39.000Z",
-    id: "fb690a00-d255-4642-87af-88dffd2319b4",
-    payout_date: "2023-08-22T12:29:39.000Z",
-    status: "successful",
-    donor_count: 13,
-    project_goal: 1355000,
-    project_title: "The Widows Project",
-  },
-  {
-    amount: "135000",
-    createdAt: "2023-08-22T12:29:39.000Z",
-    id: "fb690a00-d255-4642-87af-88dffd2319b4",
-    payout_date: "2023-08-22T12:29:39.000Z",
-    status: "successful",
-    donor_count: 13,
-    project_goal: 1355000,
-    project_title: "The Widows Project",
-  },
-  {
-    amount: "135000",
-    createdAt: "2023-08-22T12:29:39.000Z",
-    id: "fb690a00-d255-4642-87af-88dffd2319b4",
-    payout_date: "2023-08-22T12:29:39.000Z",
-    status: "successful",
-    donor_count: 13,
-    project_goal: 1355000,
-    project_title: "The Widows Project",
-  },
-  {
-    amount: "135000",
-    createdAt: "2023-08-22T12:29:39.000Z",
-    id: "fb690a00-d255-4642-87af-88dffd2319b4",
-    payout_date: "2023-08-22T12:29:39.000Z",
-    status: "successful",
-    donor_count: 13,
-    project_goal: 1355000,
-    project_title: "The Widows Project",
-  },
-];
+// const DUMMY_GENERAL_PAYOUT: IMinistryGeneralPayout[] = [
+//   {
+//     amount: "135000",
+//     createdAt: "2023-08-22T12:29:39.000Z",
+//     id: "fb690a00-d255-4642-87af-88dffd2319b4",
+//     payout_date: "2023-08-22T12:29:39.000Z",
+//     status: "successful",
+//   },
+//   {
+//     amount: "135000",
+//     createdAt: "2023-08-22T12:29:39.000Z",
+//     id: "fb690a00-d255-4642-87af-88dffd2319b4",
+//     payout_date: "2023-08-22T12:29:39.000Z",
+//     status: "successful",
+//   },
+//   {
+//     amount: "135000",
+//     createdAt: "2023-08-22T12:29:39.000Z",
+//     id: "fb690a00-d255-4642-87af-88dffd2319b4",
+//     payout_date: "2023-08-22T12:29:39.000Z",
+//     status: "failed",
+//   },
+//   {
+//     amount: "135000",
+//     createdAt: "2023-08-22T12:29:39.000Z",
+//     id: "fb690a00-d255-4642-87af-88dffd2319b4",
+//     payout_date: "2023-08-22T12:29:39.000Z",
+//     status: "successful",
+//   },
+// ];
+// const DUMMY_PROJECT_PAYOUT: IMinistryProjectPayout[] = [
+//   {
+//     amount: "135000",
+//     createdAt: "2023-08-22T12:29:39.000Z",
+//     id: "fb690a00-d255-4642-87af-88dffd2319b4",
+//     payout_date: "2023-08-22T12:29:39.000Z",
+//     status: "successful",
+//     donor_count: 13,
+//     project_goal: 1355000,
+//     project_title: "The Widows Project",
+//   },
+//   {
+//     amount: "135000",
+//     createdAt: "2023-08-22T12:29:39.000Z",
+//     id: "fb690a00-d255-4642-87af-88dffd2319b4",
+//     payout_date: "2023-08-22T12:29:39.000Z",
+//     status: "successful",
+//     donor_count: 13,
+//     project_goal: 1355000,
+//     project_title: "The Widows Project",
+//   },
+//   {
+//     amount: "135000",
+//     createdAt: "2023-08-22T12:29:39.000Z",
+//     id: "fb690a00-d255-4642-87af-88dffd2319b4",
+//     payout_date: "2023-08-22T12:29:39.000Z",
+//     status: "successful",
+//     donor_count: 13,
+//     project_goal: 1355000,
+//     project_title: "The Widows Project",
+//   },
+//   {
+//     amount: "135000",
+//     createdAt: "2023-08-22T12:29:39.000Z",
+//     id: "fb690a00-d255-4642-87af-88dffd2319b4",
+//     payout_date: "2023-08-22T12:29:39.000Z",
+//     status: "successful",
+//     donor_count: 13,
+//     project_goal: 1355000,
+//     project_title: "The Widows Project",
+//   },
+// ];
 
 const ministryProjectPayoutsColumns: ColumnDef<IMinistryProjectPayout>[] = [
   {
@@ -217,23 +222,62 @@ const ministryGeneralPayoutColumns: ColumnDef<IMinistryGeneralPayout>[] = [
 ];
 
 interface Props {
-  type: "project" | "general";
+  type: "project" | "ministry";
 }
 
 const MinstryPayoutsTable = ({ type }: Props) => {
+  const { pagination, handleNext, handlePrevious } = usePagination();
+  const {
+    data: payouts,
+    isLoading,
+    isFetching,
+  } = usePayoutHistoryQuery({
+    type,
+    limit: pagination.pageSize,
+    page: pagination.current,
+  });
+
+  if (isLoading) {
+    return <Loader className="h-[50vh]" />;
+  }
+
+  if (!payouts?.data?.length) {
+    return (
+      <EmptyState
+        image={<EmptySpeaker />}
+        title="No payouts"
+        desc="This page will be populated once you have payouts"
+      />
+    );
+  }
+
   if (type === "project") {
     return (
       <DataTable
-        data={DUMMY_PROJECT_PAYOUT}
+        data={payouts.data || []}
         columns={ministryProjectPayoutsColumns}
+        isLoading={isFetching}
+        paginationInfo={{
+          handleNext,
+          handlePrevious,
+          hasNext: payouts?.paginationInfo?.hasNext || false,
+          hasPrevious: payouts?.paginationInfo?.hasPrevious || false,
+        }}
       />
     );
   }
 
   return (
     <DataTable
-      data={DUMMY_GENERAL_PAYOUT}
+      data={payouts.data || []}
       columns={ministryGeneralPayoutColumns}
+      isLoading={isFetching}
+      paginationInfo={{
+        handleNext,
+        handlePrevious,
+        hasNext: payouts?.paginationInfo?.hasNext || false,
+        hasPrevious: payouts?.paginationInfo?.hasPrevious || false,
+      }}
     />
   );
 };

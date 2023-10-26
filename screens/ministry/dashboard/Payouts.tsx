@@ -102,7 +102,7 @@ const PayoutsPageComp = () => {
               <MinstryPayoutsTable type="project" />
             </TabsContent>
             <TabsContent value="general-payouts">
-              <MinstryPayoutsTable type="general" />
+              <MinstryPayoutsTable type="ministry" />
             </TabsContent>
           </Tabs>
         </div>

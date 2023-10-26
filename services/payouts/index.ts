@@ -2,7 +2,6 @@ import {
   AccountResponse,
   ErrorResponse,
   GetBanksResponse,
-  PayoutHistoryResponse,
   PlainResponse,
   SaveAccountRequest,
   VerifyAccountRequest,
@@ -10,6 +9,7 @@ import {
 } from "../typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
+import { GetMinistryPayoutsResponse } from "services/ministry/typings";
 
 const payouts = api.injectEndpoints({
   endpoints: (build) => ({
@@ -110,8 +110,12 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    payoutHistory: build.query<PayoutHistoryResponse, { page?: number }>({
-      query: (body) => `payouts?page=${body.page}&limit=10`,
+    payoutHistory: build.query<
+      GetMinistryPayoutsResponse,
+      { page?: number; type: "project" | "ministry"; limit?: number }
+    >({
+      query: (body) =>
+        `payouts?page=${body.page}&limit=${body.limit}&type=${body.type}`,
       providesTags: cacher.providesNestedList("Projects"),
       transformResponse: (response, meta, arg): any => {
         return response;
