@@ -2,10 +2,6 @@
 import { useGetAccountInfoQuery } from "services/payouts";
 
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
-import {
-  MinistryCompletedProjectsTable,
-  MinistryPayoutHistryTable,
-} from "@components/tables/ministry/MinistryPayoutsTables";
 import { Button } from "@components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 import { InfoCircle, ArrowRight, EditSquare } from "react-iconly";
@@ -14,7 +10,7 @@ import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { Dialog, DialogTrigger } from "@components/ui/dialog";
 import ConnectBankAccountDialog from "@components/dialogs/ministry/ConnectBankAccountDialog";
 import { useState } from "react";
-import PayoutGeneralDonations from "@components/sections/ministry/PayoutGeneralDonations";
+import MinstryPayoutsTable from "@components/tables/ministry/MinistryPayoutsTables";
 
 const PayoutsPageComp = () => {
   const { data: accountInfo, isLoading } = useGetAccountInfoQuery();
@@ -96,25 +92,17 @@ const PayoutsPageComp = () => {
         )}
 
         <div className="mt-4 w-full">
-          <Tabs defaultValue="completed-projects" className="mt-4 w-full">
+          <Tabs defaultValue="project-payouts" className="mt-4 w-full">
             <TabsList>
-              <TabsTrigger value="completed-projects">
-                Completed Projects
-              </TabsTrigger>
-              <TabsTrigger value="general-donations">
-                General Donations
-              </TabsTrigger>
-              <TabsTrigger value="payout-history">Payout History</TabsTrigger>
+              <TabsTrigger value="project-payouts">Project Payouts</TabsTrigger>
+              <TabsTrigger value="general-payouts">General Payouts</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="completed-projects">
-              <MinistryCompletedProjectsTable accountInfo={accountInfo} />
+            <TabsContent value="project-payouts">
+              <MinstryPayoutsTable type="project" />
             </TabsContent>
-            <TabsContent value="general-donations">
-              <PayoutGeneralDonations />
-            </TabsContent>
-            <TabsContent value="payout-history">
-              <MinistryPayoutHistryTable />
+            <TabsContent value="general-payouts">
+              <MinstryPayoutsTable type="general" />
             </TabsContent>
           </Tabs>
         </div>
