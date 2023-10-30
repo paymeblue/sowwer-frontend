@@ -168,7 +168,10 @@ const MinistryDetails = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel required>State</FormLabel>
-                      <Select onValueChange={field.onChange}>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="--Select--" />
