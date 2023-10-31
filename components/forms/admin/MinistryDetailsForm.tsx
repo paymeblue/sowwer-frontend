@@ -100,13 +100,15 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
               height={32}
             />
             <div className="flex flex-col">
-              <Label className="font-[500]">FWC CAC Document</Label>
+              <Label className="font-[500] lowercase">
+                {name?.split(" ").join("_")}_cac
+              </Label>
               <div className="flex items-center space-x-2">
-                <Label className="text-[.8rem] text-[#8F8F8F]">
+                {/* <Label className="text-[.8rem] text-[#8F8F8F]">
                   .JPG • 2MB
-                </Label>
+                </Label> */}
                 <Label
-                  className="cursor-pointer text-accent hover:underline"
+                  className="cursor-pointer leading-[1rem] text-accent hover:underline"
                   onClick={handleClick}
                 >
                   Download
