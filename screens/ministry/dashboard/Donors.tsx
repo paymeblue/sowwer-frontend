@@ -11,7 +11,7 @@ import Link from "next/link";
 
 const DonorsPage = () => {
   const { user } = useUserAuth();
-  if (!user?.verificationStatus) {
+  if (!user?.ministry?.verificationStatus) {
     return (
       <EmptyState
         image={<EmptySpeaker />}

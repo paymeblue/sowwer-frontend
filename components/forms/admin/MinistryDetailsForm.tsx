@@ -7,14 +7,13 @@ import { Label } from "@components/ui/label";
 import { Textarea } from "@components/ui/textarea";
 import Image from "next/image";
 import { ReactNode } from "react";
-import {
-  useGetAdminMinistryQuery,
-  useGetAdminMinistryAdministratorQuery,
-} from "services/admin";
+import { useGetAdminMinistryAdministratorQuery } from "services/admin";
 import { saveAs } from "file-saver";
+import { GetAdminMinistryResponse } from "services/admin/typings";
 
 interface Props {
   id: string;
+  ministry?: GetAdminMinistryResponse;
 }
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
@@ -25,13 +24,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const MinistryDetailsForm = ({ id }: Props) => {
-  const { data: ministry, isLoading } = useGetAdminMinistryQuery({ id });
-
-  if (isLoading) {
-    return <Loader className="h-[50vh]" />;
-  }
-
+export const MinistryDetailsForm = ({ ministry }: Props) => {
   if (!ministry?.data) {
     return (
       <EmptyState

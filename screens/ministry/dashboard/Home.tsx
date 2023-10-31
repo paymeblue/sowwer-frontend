@@ -24,15 +24,21 @@ const MinistryHomepageComp = () => {
           <ActionItemCard
             icon={<User />}
             title="Set up your ministry's profile"
+            route="/ministry/settings"
           />
-          <ActionItemCard icon={<Bank />} title="Connect your payout method" />
+          <ActionItemCard
+            icon={<Bank />}
+            title="Connect your payout method"
+            route="/ministry/payouts"
+          />
           <ActionItemCard
             icon={<Speaker />}
             title="Create your first project"
             last
+            route="/ministry/projects"
             right={
               <>
-                {user?.verificationStatus ? (
+                {user?.ministry?.verificationStatus ? (
                   <span className="text_tiny_body_r font-[500] text-[#219653]">
                     Verified
                   </span>

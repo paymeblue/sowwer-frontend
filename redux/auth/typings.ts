@@ -4,11 +4,11 @@ type BasicUserInfo = {
   lastName: string;
   email: string;
   phone: string;
-  verificationStatus: boolean;
   role: string;
   type: string;
   createdAt: string;
   ministry?: Ministry;
+  verificationStatus: boolean;
 };
 
 export type Ministry = {
@@ -28,6 +28,7 @@ export type Ministry = {
   postal_code: string;
   about: string;
   logo: string;
+  verificationStatus: boolean;
 };
 
 type MinistryUserInfo = {

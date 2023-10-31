@@ -24,9 +24,12 @@ const ProjectsPageComp = () => {
     page: pagination.current,
   });
 
+  console.log({ user });
+
   if (!projects?.data && isLoading) return <Loader className="h-[80vh]" />;
 
-  if (!user?.verificationStatus) {
+  if (!user?.ministry?.verificationStatus) {
+    console.log("I am being called");
     return (
       <EmptyState
         image={<EmptySpeaker />}

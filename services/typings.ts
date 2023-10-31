@@ -138,6 +138,7 @@ export type Ministry = {
   postal_code: string;
   about: string;
   logo: string;
+  verificationStatus: boolean;
 };
 
 type MinistryProfileRequest1 = {
