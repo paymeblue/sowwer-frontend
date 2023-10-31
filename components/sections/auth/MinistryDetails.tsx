@@ -223,6 +223,10 @@ const MinistryDetails = ({
                           desc="(.jpg, .png or .pdf file format supported)"
                           file={field.value}
                           fileName="CAC_Document"
+                          acceptedFiles=".jpg, .jpeg, .png, .pdf"
+                          onDelete={() => {
+                            field.onChange(null);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />

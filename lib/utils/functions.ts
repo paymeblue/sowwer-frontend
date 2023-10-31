@@ -11,7 +11,7 @@ export const convertBase64toFile = (
   type: string = "image/png"
 ) => {
   const base64StringWithoutPrefix = base64.replace(
-    /^data:image\/[a-z]+;base64,/,
+    /^data:(image|application)\/[a-z]+;base64,/,
     ""
   );
   const byteCharacters = atob(base64StringWithoutPrefix);

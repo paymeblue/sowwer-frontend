@@ -20,7 +20,6 @@ const MinistryTermsAndConditions = ({
 
   const handleSubmit = () => {
     if (!checked) {
-      console.log("here");
       toast({
         variant: "destructive",
         title: "Accept terms and conditions",

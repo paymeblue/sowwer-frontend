@@ -16,6 +16,7 @@ interface Props {
   fileUrl?: string;
   editMode?: boolean;
   onDelete?: () => void;
+  acceptedFiles?: string;
 }
 
 const FileUpload = ({
@@ -28,11 +29,14 @@ const FileUpload = ({
   fileUrl,
   editMode = false,
   onDelete,
+  acceptedFiles = ".jpg, .jpeg, .png",
 }: Props) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [editModeState, setEditModeState] = useState(editMode);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  console.log({ file });
 
   useEffect(() => {
     if (!onFileChange) return;
@@ -45,7 +49,7 @@ const FileUpload = ({
     if (file && !imageBase64) {
       // Remove the data URL prefix (e.g., "data:image/png;base64,")
       const base64StringWithoutPrefix = file.replace(
-        /^data:image\/[a-z]+;base64,/,
+        /^data:(image|application)\/[a-z]+;base64,/,
         ""
       );
 
@@ -64,6 +68,7 @@ const FileUpload = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
+    console.log("I am here");
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
         // File size exceeds the limit, you can display an error message or take appropriate action
@@ -87,6 +92,8 @@ const FileUpload = ({
         };
         reader.readAsDataURL(newFile);
       }
+    } else {
+      console.log("No file");
     }
   };
 
@@ -119,6 +126,8 @@ const FileUpload = ({
         };
         reader.readAsDataURL(newFile);
       }
+    } else {
+      console.log("No file");
     }
   };
 
@@ -142,7 +151,7 @@ const FileUpload = ({
         >
           <input
             type="file"
-            accept=".jpg, .jpeg, .png"
+            accept={acceptedFiles}
             ref={fileInputRef}
             style={{ display: "none" }}
             onChange={handleFileChange}
@@ -157,14 +166,16 @@ const FileUpload = ({
       {selectedFile && !editModeState && (
         <div className="flex w-full items-center justify-between rounded-lg border-[.5px] border-gray-300 p-4">
           <div className="flex items-center space-x-2">
-            <div className="relative h-6 w-6 rounded-md border border-gray-300">
-              <Image
-                src={URL.createObjectURL(selectedFile)}
-                alt="Selected File"
-                fill
-                className="object-contain"
-              />
-            </div>
+            {selectedFile?.type !== "application/pdf" && (
+              <div className="relative h-6 w-6 rounded-md border border-gray-300">
+                <Image
+                  src={URL.createObjectURL(selectedFile)}
+                  alt="Selected File"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            )}
             <p className="text_regular_body_p text-[.75rem]">
               {selectedFile.name}
             </p>

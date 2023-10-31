@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 import { useDispatch } from "react-redux";
-import { setCredentials } from "redux/auth/reducer";
+import { AuthState, setCredentials } from "redux/auth/reducer";
 import { useMinistrySignupMutation } from "services/auth";
 
 import MinistryDetails from "@components/sections/auth/MinistryDetails";
@@ -23,13 +23,15 @@ import { Button } from "@components/ui/button";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { MinistrySignupRequest } from "services/typings";
 import { convertBase64toFile } from "@lib/functions";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const MinistrySignupPageComp = () => {
   const { toast } = useToast();
+  const router = useRouter();
   const dispatch = useDispatch();
   const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+  const [registrationData, setRegistrationData] = useState<AuthState | null>();
   const [selectedCategory, setSelectedCategory] = useState<
     null | "church" | "christian organization"
   >(null);
@@ -104,14 +106,12 @@ const MinistrySignupPageComp = () => {
         role,
       };
       const res = await ministrySignup(credentials).unwrap();
-      dispatch(
-        setCredentials({
-          user: res.data.user,
-          token: res.data.token.accessToken,
-          refreshToken: res.data.token.refreshToken,
-          context: "ministry",
-        })
-      );
+      setRegistrationData({
+        user: res.data.user,
+        token: res.data.token.accessToken,
+        refreshToken: res.data.token.refreshToken,
+        context: "ministry",
+      });
       setRegistrationSuccessful(true);
     } catch (err: any) {
       toast({
@@ -169,9 +169,18 @@ const MinistrySignupPageComp = () => {
               title="We’ve received your application!"
               desc="Thank you for registering your ministry on Soower. Your application has been received and you’ll be able to start creating projects and receiving donations once your details are verified. This should typically take 24-48 hours. In the meantime you can proceed to your dashboard to set up your remaining account details."
               action={
-                <Link href="/ministry">
-                  <Button variant="secondary">Go to Dashboard</Button>
-                </Link>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    if (registrationData) {
+                      dispatch(setCredentials(registrationData));
+                    } else {
+                      router.push("/ministry");
+                    }
+                  }}
+                >
+                  Go to Dashboard
+                </Button>
               }
             />
           </div>
