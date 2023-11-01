@@ -70,7 +70,6 @@ const ContactForm = () => {
         throw new Error(result);
       }
     } catch (err: any) {
-      console.log({ err });
       toast({
         variant: "destructive",
         title:

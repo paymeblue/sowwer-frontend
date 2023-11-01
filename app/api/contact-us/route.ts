@@ -48,7 +48,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   });
 
   const outcome = await result.json();
-  console.log(outcome, "outcome");
 
   if (outcome.success) {
     // Now call the send the original body to the external API
@@ -62,7 +61,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
 
     const response = await externalApiResponse.json();
-    console.log(response, "response");
 
     if (externalApiResponse.ok) {
       const result = response;
@@ -70,7 +68,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     } else {
       const status = externalApiResponse.status;
       const errorResponse = response;
-      console.log("oh no", errorResponse.message);
       return NextResponse.json(errorResponse.message, { status });
     }
   } else {

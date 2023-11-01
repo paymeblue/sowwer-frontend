@@ -56,7 +56,6 @@ const DonorSignupForm = () => {
         password,
       });
     } catch (err) {
-      console.log({ err });
       toast({
         variant: "destructive",
         title: "Unable to signup. Please try again later",

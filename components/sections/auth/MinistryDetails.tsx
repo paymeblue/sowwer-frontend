@@ -99,7 +99,7 @@ const MinistryDetails = ({
                       <FormLabel required>Name</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter the name of your organization"
+                          placeholder={`Enter the name of your ${selectedCategory}`}
                           type="text"
                           {...field}
                         />

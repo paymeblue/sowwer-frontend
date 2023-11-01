@@ -10,6 +10,12 @@ export const convertBase64toFile = (
   name: string,
   type: string = "image/png"
 ) => {
+  const str = base64.split(";");
+  let newType = type;
+  if (str[0].includes("application/pdf")) {
+    newType = "application/pdf";
+  }
+
   const base64StringWithoutPrefix = base64.replace(
     /^data:(image|application)\/[a-z]+;base64,/,
     ""
@@ -20,10 +26,10 @@ export const convertBase64toFile = (
     byteNumbers[i] = byteCharacters.charCodeAt(i);
   }
   const byteArray = new Uint8Array(byteNumbers);
-  const blob = new Blob([byteArray], { type }); // You can set the appropriate image type here
+  const blob = new Blob([byteArray], { type: newType }); // You can set the appropriate image type here
 
   // Create a new File object from the Blob
-  const file = new File([blob], name, { type });
+  const file = new File([blob], name, { type: newType });
 
   return file;
 };

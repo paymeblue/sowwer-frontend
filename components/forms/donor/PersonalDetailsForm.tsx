@@ -45,7 +45,6 @@ const PersonalDetailsForm = ({ defaultValues }: Props) => {
   const onSubmit = async (
     values: z.infer<typeof DonorPersonalDetailsValidation>
   ) => {
-    console.log("Submitted", { values });
     alert("Your message has been sent successfully");
   };
 

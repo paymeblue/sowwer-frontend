@@ -43,7 +43,6 @@ const CloseProjectDialog = ({ id, setOpen, title }: Props) => {
       });
       setOpen(false);
     } catch (err: any) {
-      console.log({ err });
       toast({
         variant: "destructive",
         title: "Unable to close project",

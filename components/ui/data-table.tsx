@@ -100,7 +100,6 @@ export default function DataTable<TData, TValue>({
                         onClick={
                           navigateOptions && header !== "actions"
                             ? () => {
-                                console.log({ header });
                                 const { base } = navigateOptions;
                                 const rowData = row.original as any;
                                 router.push(`${base}/${rowData?.id}`);

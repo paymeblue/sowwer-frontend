@@ -204,7 +204,6 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
           phone_number: user?.phone || "",
         },
       });
-      console.log({ config });
       setConfig(config);
     } catch (err) {
       toast({

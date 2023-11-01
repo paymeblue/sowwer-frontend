@@ -44,7 +44,6 @@ const PasswordSettingsForm = () => {
         await logout();
       }, 3000);
     } catch (err: any) {
-      console.log({ err });
       toast({
         variant: "destructive",
         title:

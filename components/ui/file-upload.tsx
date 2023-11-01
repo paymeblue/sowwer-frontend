@@ -36,8 +36,6 @@ const FileUpload = ({
   const [editModeState, setEditModeState] = useState(editMode);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  console.log({ file });
-
   useEffect(() => {
     if (!onFileChange) return;
     if (imageBase64) {
@@ -68,7 +66,6 @@ const FileUpload = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
-    console.log("I am here");
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
         // File size exceeds the limit, you can display an error message or take appropriate action
@@ -93,7 +90,6 @@ const FileUpload = ({
         reader.readAsDataURL(newFile);
       }
     } else {
-      console.log("No file");
     }
   };
 
@@ -127,7 +123,6 @@ const FileUpload = ({
         reader.readAsDataURL(newFile);
       }
     } else {
-      console.log("No file");
     }
   };
 
