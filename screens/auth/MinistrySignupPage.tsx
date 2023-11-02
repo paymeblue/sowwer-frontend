@@ -94,7 +94,7 @@ const MinistrySignupPageComp = () => {
         ministryAddress: address,
         ministryName: name,
         ministryPhone: phoneNumber,
-        ministrySocialLink: websiteLink || "",
+        ministrySocialLink: websiteLink || undefined,
         ministryState: state,
         ministryType:
           selectedCategory === "christian organization"

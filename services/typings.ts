@@ -181,14 +181,14 @@ export type MinistryProfileResponse = Response<{
 }>;
 
 export type MinistrySignupRequest = {
-  [key: string]: string | File;
+  [key: string]: string | File | undefined;
   ministryType: string;
   ministryPhone: string;
   ministryEmail: string;
   ministryName: string;
   projectDescription: string;
   ministryState: string;
-  ministrySocialLink: string;
+  ministrySocialLink: string | undefined;
   ministryAddress: string;
   cacDocument: File;
   phone: string;

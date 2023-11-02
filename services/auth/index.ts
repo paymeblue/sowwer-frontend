@@ -25,7 +25,7 @@ const auth = api.injectEndpoints({
 
         for (const key in credentials) {
           if (credentials.hasOwnProperty(key)) {
-            formData.append(key, credentials[key]);
+            formData.append(key, credentials[key]!);
           }
         }
 
