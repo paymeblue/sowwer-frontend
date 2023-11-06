@@ -13,6 +13,10 @@ import useFlutterConfig, {
   IConfig,
   IConfigReccuring,
 } from "@hooks/payments/useFlutterConfig";
+import usePaystackConfig, {
+  IPaystackConfig,
+} from "@hooks/payments/usePaystackConfig";
+import { usePaystackPayment } from "react-paystack";
 
 import { useVerifyMinistryPaymentMutation } from "services/payouts";
 import {
@@ -44,6 +48,7 @@ import { Heart2, InfoCircle } from "react-iconly";
 import { Toggle } from "@components/ui/toggle";
 import { useToast } from "@components/ui/use-toast";
 import useUserAuth from "@hooks/auth/useUserAuth";
+import { PAYMENT_GATEWAY } from "@lib/constants";
 
 interface Props {
   id: string;
@@ -69,9 +74,17 @@ const DEFAULT_CONFIG = {
   },
 };
 
+const DEFAULT_PAYSTACK_CONFIG: IPaystackConfig = {
+  email: "",
+  reference: "",
+  publicKey: "",
+  amount: 0,
+};
+
 const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
   const { toast } = useToast();
   const [flutterLoading, setFlutterLoading] = useState(false);
+  const [paystackLoading, setPaystackLoading] = useState(false);
   const form = useForm<z.infer<typeof DonateToMinistryValidation>>({
     resolver: zodResolver(DonateToMinistryValidation),
     defaultValues: {
@@ -89,6 +102,7 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
   });
   const { getConfig } = useFlutterConfig();
   const { getConfig: getRecuringConfig } = useFlutterConfigReccuring();
+  const { getConfig: getPaystackConfig } = usePaystackConfig();
   const [initiatePaymentToMinistryUnauth, { isLoading: paymentAuthLoading }] =
     useInitiatePaymentToMinistryUnauthMutation();
   const { isAuthenticated, user } = useUserAuth();
@@ -101,7 +115,11 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
   const [config, setConfig] = useState<IConfig | IConfigReccuring>(
     DEFAULT_CONFIG
   );
+  const [paystackConfig, setPaystackConfig] = useState<IPaystackConfig>(
+    DEFAULT_PAYSTACK_CONFIG
+  );
   const handleFlutterwavePayment = useFlutterwave(config);
+  const initializePayment = usePaystackPayment(paystackConfig);
 
   /* eslint-disable */
   useEffect(() => {
@@ -139,6 +157,37 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
       },
     });
   }, [config]);
+  /* eslint-enable */
+
+  /* eslint-disable */
+  useEffect(() => {
+    if (paystackConfig.publicKey === "" || paystackConfig.reference === "")
+      return;
+    setPaystackLoading(true);
+    initializePayment(() => {
+      const verify = async () => {
+        try {
+          await verifyProjectPayment({
+            // txn_id: "",
+            txn_reference: paystackConfig.reference,
+          });
+
+          setPaymentSuccessful(true);
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Payment failed",
+            description:
+              "Unfortunately, we couldn't process your payment. Please try again later.",
+          });
+        } finally {
+          setFlutterLoading(false);
+        }
+        closePaymentModal();
+      };
+      verify();
+    });
+  }, [paystackConfig]);
   /* eslint-enable */
 
   const donationType = form.watch("donationType");
@@ -185,18 +234,29 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
 
       const { txn_reference: txnRef, amount: amn } = res.data.donation;
       if (donationType === "one-time") {
-        const config = getConfig({
-          amount: amn,
-          currency,
-          desc: title || "Ministry Donation",
-          txnRef,
-          customer: {
+        if (PAYMENT_GATEWAY === "flutterwave") {
+          const config = getConfig({
+            amount: amn,
+            currency,
+            desc: title || "Ministry Donation",
+            txnRef,
+            customer: {
+              email,
+              name: `${firstName} ${lastName}`,
+              phone_number: phoneNumber,
+            },
+          });
+          setConfig(config);
+        }
+
+        if (PAYMENT_GATEWAY === "paystack") {
+          const config = getPaystackConfig({
+            amount: amn * 100,
             email,
-            name: `${firstName} ${lastName}`,
-            phone_number: phoneNumber,
-          },
-        });
-        setConfig(config);
+            reference: txnRef,
+          });
+          setPaystackConfig(config);
+        }
       }
 
       if (donationType === "recurring") {
@@ -241,18 +301,29 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
 
       const { txn_reference: txnRef, amount: amn } = res.data;
       if (donationType === "one-time") {
-        const config = getConfig({
-          amount: amn,
-          currency,
-          desc: title || "Ministry Donation",
-          txnRef,
-          customer: {
+        if (PAYMENT_GATEWAY === "flutterwave") {
+          const config = getConfig({
+            amount: amn,
+            currency,
+            desc: title || "Ministry Donation",
+            txnRef,
+            customer: {
+              email: user?.email,
+              name: `${user?.firstName} ${user?.lastName}`,
+              phone_number: user?.lastName,
+            },
+          });
+          setConfig(config);
+        }
+
+        if (PAYMENT_GATEWAY === "paystack") {
+          const config = getPaystackConfig({
+            amount: amn * 100,
             email: user?.email,
-            name: `${user?.firstName} ${user?.lastName}`,
-            phone_number: user?.lastName,
-          },
-        });
-        setConfig(config);
+            reference: txnRef,
+          });
+          setPaystackConfig(config);
+        }
       }
 
       if (donationType === "recurring") {
@@ -735,13 +806,19 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
         </div>
 
         <Button
-          loading={paymentAuthLoading || verifyingPayment || flutterLoading}
+          loading={
+            paymentAuthLoading ||
+            verifyingPayment ||
+            flutterLoading ||
+            paystackLoading
+          }
           type="submit"
           className="ml-auto mt-8 w-fit space-x-2"
         >
-          {!paymentAuthLoading && !flutterLoading && !verifyingPayment && (
-            <Heart2 set="bold" size={19} />
-          )}
+          {!paymentAuthLoading &&
+            !flutterLoading &&
+            !verifyingPayment &&
+            !paystackLoading && <Heart2 set="bold" size={19} />}
           <span>Donate now</span>
         </Button>
       </form>

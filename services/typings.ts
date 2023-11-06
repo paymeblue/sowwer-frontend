@@ -675,7 +675,7 @@ export type EditProjectRequest = {
 };
 
 export type VerifyPaymentRequest = {
-  txn_id: string;
+  txn_id?: string;
   txn_reference: string;
 };
 export type UserProfileResponse = Response<{

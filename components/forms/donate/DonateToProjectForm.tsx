@@ -38,6 +38,11 @@ import { Button } from "@components/ui/button";
 import { Heart2 } from "react-iconly";
 import { useToast } from "@components/ui/use-toast";
 import useUserAuth from "@hooks/auth/useUserAuth";
+import usePaystackConfig, {
+  IPaystackConfig,
+} from "@hooks/payments/usePaystackConfig";
+import { usePaystackPayment } from "react-paystack";
+import { PAYMENT_GATEWAY } from "@lib/constants";
 
 const DEFAULT_CONFIG = {
   public_key: "",
@@ -57,6 +62,13 @@ const DEFAULT_CONFIG = {
   },
 };
 
+const DEFAULT_PAYSTACK_CONFIG: IPaystackConfig = {
+  email: "",
+  reference: "",
+  publicKey: "",
+  amount: 0,
+};
+
 interface Props {
   id: string;
   title: string;
@@ -66,6 +78,7 @@ interface Props {
 const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
   const { toast } = useToast();
   const [flutterLoading, setFlutterLoading] = useState(false);
+  const [paystackLoading, setPaystackLoading] = useState(false);
   const { isAuthenticated, user } = useUserAuth();
   const form = useForm<z.infer<typeof DonateToProjectValidation>>({
     resolver: zodResolver(DonateToProjectValidation),
@@ -87,10 +100,15 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
   const [initiatePaymentToProjectAuth, { isLoading: loadingPaymentAuth }] =
     useInitiatePaymentToProjectAuthMutation();
   const { getConfig } = useFlutterConfig();
+  const { getConfig: getPaystackConfig } = usePaystackConfig();
   const [verifyProjectPayment, { isLoading: verifyingPayment }] =
     useVerifyProjectPaymentMutation();
   const [config, setConfig] = useState<IConfig>(DEFAULT_CONFIG);
+  const [paystackConfig, setPaystackConfig] = useState<IPaystackConfig>(
+    DEFAULT_PAYSTACK_CONFIG
+  );
   const handleFlutterwavePayment = useFlutterwave(config);
+  const initializePayment = usePaystackPayment(paystackConfig);
 
   /* eslint-disable */
   useEffect(() => {
@@ -131,6 +149,37 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
   }, [config]);
   /* eslint-enable */
 
+  /* eslint-disable */
+  useEffect(() => {
+    if (paystackConfig.publicKey === "" || paystackConfig.reference === "")
+      return;
+    setPaystackLoading(true);
+    initializePayment(() => {
+      const verify = async () => {
+        try {
+          await verifyProjectPayment({
+            // txn_id: "",
+            txn_reference: paystackConfig.reference,
+          });
+
+          setPaymentSuccessful(true);
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Payment failed",
+            description:
+              "Unfortunately, we couldn't process your payment. Please try again later.",
+          });
+        } finally {
+          setFlutterLoading(false);
+        }
+        closePaymentModal();
+      };
+      verify();
+    });
+  }, [paystackConfig]);
+  /* eslint-enable */
+
   const onSubmit = async (
     values: z.infer<typeof DonateToProjectValidation>
   ) => {
@@ -160,18 +209,29 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
       }).unwrap();
 
       const { txn_reference: txnRef, amount: amn } = res.data.donation;
-      const config = getConfig({
-        amount: amn,
-        currency,
-        desc: title || "Project Donation",
-        txnRef,
-        customer: {
+      if (PAYMENT_GATEWAY === "flutterwave") {
+        const config = getConfig({
+          amount: amn,
+          currency,
+          desc: title || "Project Donation",
+          txnRef,
+          customer: {
+            email,
+            name: `${firstName} ${lastName}`,
+            phone_number: phoneNumber,
+          },
+        });
+        setConfig(config);
+      }
+
+      if (PAYMENT_GATEWAY === "paystack") {
+        const config = getPaystackConfig({
+          amount: amn * 100,
           email,
-          name: `${firstName} ${lastName}`,
-          phone_number: phoneNumber,
-        },
-      });
-      setConfig(config);
+          reference: txnRef,
+        });
+        setPaystackConfig(config);
+      }
     } catch (err) {
       toast({
         variant: "destructive",
@@ -193,18 +253,29 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
       }).unwrap();
 
       const { txn_reference: txnRef, amount: amn } = res.data;
-      const config = getConfig({
-        amount: amn,
-        currency,
-        desc: title || "Project Donation",
-        txnRef,
-        customer: {
+      if (PAYMENT_GATEWAY === "flutterwave") {
+        const config = getConfig({
+          amount: amn,
+          currency,
+          desc: title || "Project Donation",
+          txnRef,
+          customer: {
+            email: user?.email || "",
+            name: `${user?.firstName} ${user?.lastName}`,
+            phone_number: user?.phone || "",
+          },
+        });
+        setConfig(config);
+      }
+
+      if (PAYMENT_GATEWAY === "paystack") {
+        const config = getPaystackConfig({
+          amount: amn * 100,
           email: user?.email || "",
-          name: `${user?.firstName} ${user?.lastName}`,
-          phone_number: user?.phone || "",
-        },
-      });
-      setConfig(config);
+          reference: txnRef,
+        });
+        setPaystackConfig(config);
+      }
     } catch (err) {
       toast({
         variant: "destructive",
@@ -516,13 +587,16 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
         </div>
 
         <Button
-          loading={isLoading || verifyingPayment || flutterLoading}
+          loading={
+            isLoading || verifyingPayment || flutterLoading || paystackLoading
+          }
           type="submit"
           className="ml-auto mt-8 w-fit space-x-2"
         >
-          {!flutterLoading && !isLoading && !verifyingPayment && (
-            <Heart2 set="bold" size={19} />
-          )}
+          {!flutterLoading &&
+            !isLoading &&
+            !verifyingPayment &&
+            !paystackLoading && <Heart2 set="bold" size={19} />}
           <span>Donate now</span>
         </Button>
       </form>

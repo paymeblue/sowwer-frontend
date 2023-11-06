@@ -12,3 +12,5 @@ export enum Status {
   completed = "completed",
 }
 /* eslint-enable */
+
+export const PAYMENT_GATEWAY: "paystack" | "flutterwave" = "paystack";

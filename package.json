@@ -61,6 +61,7 @@
     "react-hook-form": "^7.46.1",
     "react-iconly": "^2.2.10",
     "react-no-ssr": "^1.1.0",
+    "react-paystack": "^4.0.3",
     "react-quill": "^2.0.0",
     "react-redux": "^8.1.2",
     "react-window": "^1.8.9",
