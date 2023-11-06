@@ -8,7 +8,7 @@ export interface IPaystackConfig extends IProps {
   publicKey: string;
 }
 
-const PAYSTACK_PB_KEY = "pk_test_f5807ad37ee9fcc97b16ac7c5d87e65b9455bebe";
+const PAYSTACK_PB_KEY = "pk_test_32512b19e1b42d0c2b1b88faec024f5e8293e53c";
 
 const usePaystackConfig = () => {
   const getConfig = ({ amount, email, reference }: IProps) => {
