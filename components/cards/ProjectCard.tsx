@@ -8,6 +8,7 @@ import { truncateTextWithEllipsis } from "@lib/capitalize";
 import Link from "next/link";
 import { ImageIcon } from "lucide-react";
 import { formatCurrency } from "@lib/functions";
+import { Status } from "@lib/constants";
 
 export interface IProject {
   id: string;
@@ -23,6 +24,7 @@ export interface IProject {
   donors?: number;
   variant?: "default" | "featured" | "general";
   cover_photo?: string | null | undefined;
+  status?: Status;
 }
 
 const ProjectCard = ({
@@ -37,8 +39,10 @@ const ProjectCard = ({
   id,
   variant = "default",
   cover_photo,
+  status,
 }: IProject) => {
-  const isCompleted = Number(amountRaised) >= Number(targetAmount);
+  const isCompleted =
+    status === Status.completed || Number(amountRaised) >= Number(targetAmount);
   const getColorForTag = (category: string | null | undefined) => {
     if (!category) return;
     switch (category) {

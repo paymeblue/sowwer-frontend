@@ -420,6 +420,7 @@ export type DonorProjectDonationsResponse = TResponse<{
   donorCount: string;
   amountDonated: string;
   donationPercent: string;
+  status: Status;
 }>;
 export type DonorGeneralDonations = {
   id: string;
