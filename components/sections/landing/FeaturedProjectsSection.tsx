@@ -1,10 +1,8 @@
 "use client";
 import { Button } from "@components/ui/button";
 import { ArrowRight } from "react-iconly";
-import logo from "public/assets/icons/logo.svg";
 import SectionContainer from "../SectionContainer";
 import ProjectCard, { IProject } from "@components/cards/ProjectCard";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   DEFAULT_VIEWPORT,
@@ -19,15 +17,18 @@ export const featuredProjects: IProject[] = [
     category: "widows",
     id: "db7e493b-fe92-4a11-b0e5-505943300ssa2",
     targetAmount: "1000000.00",
-
-    title: "Name of project",
+    title: "Healing Hearts",
     organisedBy: "BY FAMILY WORSHIP CENTER",
     description:
-      "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
-    amountRaised: "2 million",
+      "Offering financial stability, emotional assistance, and a sense of belonging to widows, helping them rebuild their lives and find hope in their journey of healing.",
+    amountRaised: "2million",
     createdAt: "2023-08-31T14:37:36.000Z",
     donors: 12,
     donationPercent: "67.94",
+    featuredStat: {
+      metric: "widows impacted",
+      value: "10,321",
+    },
   },
   {
     image: "/assets/images/wom_busy.png",
@@ -39,10 +40,14 @@ export const featuredProjects: IProject[] = [
     organisedBy: "BY FAMILY WORSHIP CENTER",
     description:
       "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
-    amountRaised: "2 million",
+    amountRaised: "3.72million",
     createdAt: "2023-08-31T14:37:36.000Z",
     donors: 12,
     donationPercent: "67.94",
+    featuredStat: {
+      metric: "orphans impacted",
+      value: "52,000",
+    },
   },
   {
     image: "/assets/images/children_running.png",
@@ -54,10 +59,14 @@ export const featuredProjects: IProject[] = [
     organisedBy: "BY FAMILY WORSHIP CENTER",
     description:
       "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
-    amountRaised: "2 million",
+    amountRaised: "1.5million",
     createdAt: "2023-08-31T14:37:36.000Z",
     donors: 12,
     donationPercent: "67.94",
+    featuredStat: {
+      metric: "missions impacted",
+      value: "2,000",
+    },
   },
 ];
 
@@ -76,10 +85,9 @@ const FeaturedProjectSection = () => {
               Some of our featured projects
             </h2>
             <p className="text_medium_body_p text-center">
-              Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
-              imperdiet pellentesque. Urna eros interdum est sollicitudin
-              dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
-              dolor sit amet consectetur.
+              Explore some of our past projects, each one exemplifying the
+              impact of our collective faith, generosity, and compassion in
+              action.
             </p>
             <Link href="/projects" className="self-center">
               <Button
@@ -110,7 +118,7 @@ const FeaturedProjectSection = () => {
             })}
           </motion.div>
 
-          <div
+          {/* <div
             aria-label="Some of our partners"
             className="mt-16 hidden lg:block"
           >
@@ -124,7 +132,7 @@ const FeaturedProjectSection = () => {
               <Image src={logo} alt="soower patners" />
               <Image src={logo} alt="soower patners" />
             </div>
-          </div>
+          </div> */}
         </motion.section>
       </SectionContainer>
     </div>

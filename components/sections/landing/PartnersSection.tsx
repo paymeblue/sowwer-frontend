@@ -1,27 +1,22 @@
 "use client";
-import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
 
-import LeftCirlceArrow from "@components/assets/svg/leftCirlceArrow";
 import SectionContainer from "../SectionContainer";
-import RightCircleArrow from "@components/assets/svg/rightCircleArrow";
-import { useCallback, useRef } from "react";
 import PartnerCard from "@components/cards/PartnerCard";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
 const PartnersSection = () => {
-  const sliderRef = useRef<SwiperRef | null>(null);
+  // const sliderRef = useRef<SwiperRef | null>(null);
 
-  const handlePrev = useCallback(() => {
-    if (!sliderRef.current) return;
-    sliderRef.current.swiper.slidePrev();
-  }, []);
+  // const handlePrev = useCallback(() => {
+  //   if (!sliderRef.current) return;
+  //   sliderRef.current.swiper.slidePrev();
+  // }, []);
 
-  const handleNext = useCallback(() => {
-    if (!sliderRef.current) return;
-    sliderRef.current.swiper.slideNext();
-  }, []);
+  // const handleNext = useCallback(() => {
+  //   if (!sliderRef.current) return;
+  //   sliderRef.current.swiper.slideNext();
+  // }, []);
   return (
     <motion.section
       variants={defaultVariant({})}
@@ -29,19 +24,38 @@ const PartnersSection = () => {
       whileInView="visible"
       viewport={DEFAULT_VIEWPORT}
       aria-label="Partners"
-      className="hidden w-full bg-white py-20 lg:block"
+      className="w-full bg-white py-20"
     >
       <SectionContainer>
         <div className="mx-auto flex flex-col items-center space-y-4">
           <h2 className="text_variant_h2 text-center">Some of our partners</h2>
-          <p className="text_small_body_p w-[60%] text-center">
-            Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
-            imperdiet pellentesque. Urna eros interdum est sollicitid dignissim
-            ipsum arcu imperdiet pellentesque.
+          <p className="text_small_body_p w-full text-center lg:w-[60%]">
+            Meet some of our passionate and dedicated partners who share our
+            commitment to making a positive impact in the world.
           </p>
         </div>
 
         <motion.div
+          variants={defaultVariant({ delay: 0.6 })}
+          initial="hidden"
+          whileInView="visible"
+          viewport={DEFAULT_VIEWPORT}
+          className="mt-20 flex w-full flex-col items-center justify-center max-lg:space-y-8 lg:flex-row lg:space-x-8"
+        >
+          <PartnerCard
+            name="Jonathan Agwunobi"
+            position="CO-FOUNDER"
+            className="w-full lg:w-[30%]"
+            imgUrl="/assets/images/johnathan.png"
+          />
+          <PartnerCard
+            name="Tobenna Nwokike"
+            position="CO-FOUNDER"
+            className="w-full lg:w-[30%]"
+            imgUrl="/assets/images/tobenna.png"
+          />
+        </motion.div>
+        {/* <motion.div
           variants={defaultVariant({ delay: 0.6 })}
           initial="hidden"
           whileInView="visible"
@@ -110,7 +124,7 @@ const PartnersSection = () => {
           <div onClick={handleNext} className="cursor-pointer">
             <RightCircleArrow />
           </div>
-        </motion.div>
+        </motion.div> */}
       </SectionContainer>
     </motion.section>
   );

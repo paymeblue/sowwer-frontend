@@ -16,17 +16,17 @@ const effectOfGiving = [
   {
     image: "/assets/images/grid_images.png",
     title: "Ministries",
-    desc: " Lorem ipsum dolo consecteur, faucibus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitudin dignissim.",
+    desc: "The ripple effect of giving emanates from their dedicated work, strengthening their ability to serve their communities, share the gospel, and expand their outreach.",
   },
   {
     image: "/assets/images/hands.png",
     title: "Donors",
-    desc: " Lorem ipsum dolo consecteur, faucibus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitudin dignissim.",
+    desc: "Your generosity doesn't just help those in need; it also triggers a chain reaction of giving, inspiring compassion in others, and amplifying the overall influence of your contribution.",
   },
   {
     image: "/assets/images/group_images.png",
     title: "Impact",
-    desc: " Lorem ipsum dolo consecteur, faucibus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitudin dignissim.",
+    desc: "Each donation, no matter how small, amplifies the impact of our mission, transforming lives, and spreading God's love far and wide, making a lasting difference in the world.",
   },
 ];
 
@@ -48,12 +48,14 @@ const AboutsUsSection = () => {
             </h2>
 
             <p className="text_medium_body_p w-full lg:w-[76%]">
-              Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
-              imperdiet pellentesque. Urna eros interdum est sollicitudin
-              dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
-              dolor sit amet consectetur. Faucibus risus risus arcu imperdiet
-              pellentesque. Urna eros interdum est sollicitudin dignissim.
-              Convallis iaculis blandit ultrices posuere.
+              We believe that we are all called to be a beacon of hope and
+              compassion in the world. Our mission is to be perfectly positioned
+              to lend a helping hand to those in need, just as Jesus taught us.
+              Through your support and generosity, we can extend our reach and
+              make a profound impact on the lives of individuals and communities
+              in need. Together, we can be the hands and feet of Christ,
+              spreading love, kindness, and assistance to those who require it
+              most.
             </p>
 
             <Link href="/about">
@@ -103,16 +105,17 @@ const AboutsUsSection = () => {
           fill
           className="-z-10 object-cover pb-10 max-lg:mt-20 max-lg:opacity-50 lg:object-contain"
         />
-        <motion.div className="flex w-full flex-col space-y-4 lg:w-[60%]">
+        <motion.div className="flex w-full flex-col space-y-4 lg:w-[90%]">
           <h2 className="font-title text-[1.8rem] leading-[2.2rem] text-black lg:text-[2.8rem] lg:leading-[3rem]">
             The Ripple Effect of Giving
           </h2>
 
           <p className="text_medium_body_p">
-            Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
-            imperdiet pellentesque. Urna eros interdum est sollicitudin
-            dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
-            dolor sit amet consectetur.
+            When you give with a generous heart, your act of kindness creates a
+            ripple effect of love and positivity that extends far beyond the
+            initial gift. You’re not only transforming individual lives but also
+            igniting a chain reaction of hope, inspiring others to join in
+            spreading God's love and making a difference in the world.
           </p>
         </motion.div>
         <motion.div
@@ -120,7 +123,7 @@ const AboutsUsSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="grid grid-cols-1 gap-12 lg:grid-cols-3"
+          className="grid grid-cols-1 gap-14 lg:grid-cols-3 lg:gap-20"
         >
           {effectOfGiving.map((item) => {
             return (
@@ -142,7 +145,9 @@ const AboutsUsSection = () => {
                   <h4 className="font-title text-[24px] font-normal leading-[27px]">
                     {item.title}
                   </h4>
-                  <p className="text_regular_body_p text-center">{item.desc}</p>
+                  <p className="text_regular_body_p text-center lg:w-[95%]">
+                    {item.desc}
+                  </p>
                 </div>
               </motion.div>
             );

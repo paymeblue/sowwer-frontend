@@ -20,12 +20,13 @@ const AboutIntroSection = () => {
             a helping hand.
           </h2>
           <p className="text_variant_caption">
-            Lorem ipsum dolor sit amet consectetur. Sed ut venenatis id lectus.
-            Pretium quam sit eu senectus ullamcorper dui nullam. Fermentum massa
-            semper facilisis elementum amet aenean. Facilisis scelerisque nulla
-            non volutpat mi dolor. Facilisis massa nunc cursus porta porta arcu
-            in. Nec consectetur nunc etiam nulla leo sit magna. Ultrices
-            tristique est nunc.
+            We believe that we are all called to be a beacon of hope and
+            compassion in the world. Our mission is to be perfectly positioned
+            to lend a helping hand to those in need, just as Jesus taught us.
+            Through your support and generosity, we can extend our reach and
+            make a profound impact on the lives of individuals and communities
+            in need. Together, we can be the hands and feet of Christ, spreading
+            love, kindness, and assistance to those who require it most.
           </p>
         </motion.div>
       </SectionContainer>

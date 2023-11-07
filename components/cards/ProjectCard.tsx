@@ -25,8 +25,11 @@ export interface IProject {
   variant?: "default" | "featured" | "general";
   cover_photo?: string | null | undefined;
   status?: Status;
+  featuredStat?: {
+    metric: string;
+    value: string;
+  };
 }
-// trigger deploy
 const ProjectCard = ({
   category,
   title,
@@ -40,6 +43,7 @@ const ProjectCard = ({
   variant = "default",
   cover_photo,
   status,
+  featuredStat,
 }: IProject) => {
   const isCompleted =
     status === Status.completed || Number(amountRaised) >= Number(targetAmount);
@@ -155,11 +159,11 @@ const ProjectCard = ({
               <Soower />
               <p className="font-body  text-xs text-body-2">
                 <strong className="font-sub-title text-[.85rem] font-bold leading-[15.36px] text-black">
-                  52,000
+                  {featuredStat?.value}
                 </strong>
                 <br />
                 <small className="font-body text-[.7rem] leading-[12.49px] text-body-2">
-                  widows impacted
+                  {featuredStat?.metric}
                 </small>
               </p>
             </div>

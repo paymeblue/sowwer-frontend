@@ -30,9 +30,9 @@ const AboutMidSection = () => {
                 Explore projects and ministries
               </h3>
               <p className="text_small_body_p">
-                Lorem ipsum dolor sit amet consectetur. Faucibus risus risus
-                arcu imperdiet pellentesque. Urna eros interdum est sollicitid
-                dignissim ipsum arcu imperdiet pellentesque.
+                Browse through various projects being organized for widows,
+                orphans and missions, by ministries (i.e., Churches & Christian
+                Organizations) in Nigeria.
               </p>
             </div>
           </div>
@@ -43,9 +43,9 @@ const AboutMidSection = () => {
             <div className="flex flex-col space-y-2">
               <h3 className="text_small_header">Make a donation</h3>
               <p className="text_small_body_p">
-                Lorem ipsum dolor sit amet consectetur. Faucibus risus risus
-                arcu imperdiet pellentesque. Urna eros interdum est sollicitid
-                dignissim ipsum arcu imperdiet pellentesque.
+                Make a kingdom investment by donating to any project of your
+                choice, or by making one-time or recurring donations to support
+                any ministry of your choice.
               </p>
             </div>
           </div>
@@ -56,9 +56,9 @@ const AboutMidSection = () => {
             <div className="flex flex-col space-y-2">
               <h3 className="text_small_header">Get audit reports</h3>
               <p className="text_small_body_p">
-                Lorem ipsum dolor sit amet consectetur. Faucibus risus risus
-                arcu imperdiet pellentesque. Urna eros interdum est sollicitid
-                dignissim ipsum arcu imperdiet pellentesque.
+                Request for audit reports on completed projects to get more
+                information and progress reports on the impacts of your donation
+                to these projects.
               </p>
             </div>
           </div>
