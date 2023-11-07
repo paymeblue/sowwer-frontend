@@ -2,9 +2,6 @@
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
-import HeartHand from "@components/assets/svg/HeartHand";
-import Lens from "@components/assets/svg/Lens";
-import Receipt from "@components/assets/svg/Receipt";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Button } from "@components/ui/button";
 import Link from "next/link";
@@ -18,18 +15,16 @@ const ForMinstriesPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="mx-auto flex flex-col items-center justify-center"
+          className="mx-auto mb-20 flex flex-col items-center justify-center"
         >
           <h2 className="text_variant_h2 w-full text-center max-lg:text-[2.6rem] max-lg:leading-[3.3rem] lg:w-[60%]">
             Are you a ministry with widow, orphan or mission programs? Register
             with us today!
           </h2>
           <p className="text_medium_body_p  mt-4 w-full text-center lg:w-[70%]">
-            Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu
-            imperdiet pellentesque. Urna eros interdum est sollicitudin
-            dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum
-            dolor sit amet consectetur. Faucibus risus risus arcu imperdiet
-            pellentesque.
+            With Soower, Churches and Christian Organizations have the
+            opportunity to raise funds for various projects tailored to support
+            widows, orphans and missions across Nigeria.
           </p>
           <div className="mt-6 flex items-center space-x-4">
             <Link href="/auth/ministry/sign-up">
@@ -41,7 +36,7 @@ const ForMinstriesPage = () => {
           </div>
         </motion.div>
 
-        <motion.section
+        {/* <motion.section
           variants={defaultVariant({ delay: 0.6 })}
           initial="hidden"
           whileInView="visible"
@@ -102,7 +97,7 @@ const ForMinstriesPage = () => {
             </div>
           </div>
           <div className="relative mt-10 aspect-square w-full bg-gray-200 lg:mt-0 lg:w-[45%]" />
-        </motion.section>
+        </motion.section> */}
       </SectionContainer>
     </div>
   );

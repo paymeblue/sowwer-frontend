@@ -35,7 +35,7 @@ const JoinRegistryPage = () => {
   return (
     <SideLayoutWrapper
       title="Are you a widow or a missionary? We’d love to know more about you!"
-      desc="Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitudin dignissim."
+      desc="Join the Soower Registry as a widow (or on behalf of a widow) or as a serving missionary (or aspiring missionary) and we would be in touch."
     >
       <div className="w-full overflow-hidden">
         <Stepper steps={steps} activeStep={activeStep} />

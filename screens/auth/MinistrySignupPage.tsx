@@ -159,7 +159,7 @@ const MinistrySignupPageComp = () => {
     <SideLayoutWrapper
       showSignPrompt
       title="Are you a ministry with widow, orphan or mission programs? Register with us today!"
-      desc="Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitudin dignissim. Convallis iaculis blandit ultrices posuere. Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. "
+      desc="With Soower, Churches and Christian Organizations have the opportunity to raise funds for various projects tailored to support widows, orphans and missions across Nigeria."
     >
       <div className="w-full overflow-hidden">
         <Stepper steps={steps} activeStep={activeStep} />
