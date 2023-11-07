@@ -260,19 +260,30 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
       }
 
       if (donationType === "recurring") {
-        const config = getRecuringConfig({
-          amount: amn,
-          currency,
-          desc: title || "Ministry Donation",
-          txnRef,
-          customer: {
-            email,
-            name: `${firstName} ${lastName}`,
-            phone_number: phoneNumber,
-          },
-          paymentPlan: frequency,
-        });
-        setConfig(config);
+        if (PAYMENT_GATEWAY === "flutterwave") {
+          const config = getRecuringConfig({
+            amount: amn,
+            currency,
+            desc: title || "Ministry Donation",
+            txnRef,
+            customer: {
+              email,
+              name: `${firstName} ${lastName}`,
+              phone_number: phoneNumber,
+            },
+            paymentPlan: frequency,
+          });
+          setConfig(config);
+        }
+
+        if (PAYMENT_GATEWAY === "paystack") {
+          const config = getPaystackConfig({
+            amount: amn * 100,
+            email: email,
+            reference: txnRef,
+          });
+          setPaystackConfig(config);
+        }
       }
     } catch (error) {
       toast({
@@ -327,19 +338,30 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
       }
 
       if (donationType === "recurring") {
-        const config = getRecuringConfig({
-          amount: amn,
-          currency,
-          desc: title || "Ministry Donation",
-          txnRef,
-          customer: {
+        if (PAYMENT_GATEWAY === "flutterwave") {
+          const config = getRecuringConfig({
+            amount: amn,
+            currency,
+            desc: title || "Ministry Donation",
+            txnRef,
+            customer: {
+              email: user?.email,
+              name: `${user?.firstName} ${user?.lastName}`,
+              phone_number: user?.lastName,
+            },
+            paymentPlan: frequency,
+          });
+          setConfig(config);
+        }
+
+        if (PAYMENT_GATEWAY === "paystack") {
+          const config = getPaystackConfig({
+            amount: amn * 100,
             email: user?.email,
-            name: `${user?.firstName} ${user?.lastName}`,
-            phone_number: user?.lastName,
-          },
-          paymentPlan: frequency,
-        });
-        setConfig(config);
+            reference: txnRef,
+          });
+          setPaystackConfig(config);
+        }
       }
     } catch (error) {
       toast({
