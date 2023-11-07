@@ -26,7 +26,7 @@ export interface IProject {
   cover_photo?: string | null | undefined;
   status?: Status;
 }
-
+// trigger deploy
 const ProjectCard = ({
   category,
   title,
