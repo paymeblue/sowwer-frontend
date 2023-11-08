@@ -19,7 +19,6 @@ const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
       <SuccessState
         title="Thanks for joining our registry!"
         className="mt-10"
-        desc="Lorem ipsum dolor sit amet consectetur. Iaculis a ut faucibus nibh tempor felis. Vitae eget semper vel porttitor diam."
         action={
           <Link href="/">
             <Button variant="secondary">Back to homepage</Button>

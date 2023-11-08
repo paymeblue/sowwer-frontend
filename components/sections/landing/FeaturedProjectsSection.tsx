@@ -31,15 +31,15 @@ export const featuredProjects: IProject[] = [
     },
   },
   {
-    image: "/assets/images/wom_busy.png",
+    image: "/assets/images/children_running.png",
     category: "orphans",
     id: "db7e493b-fe92-4a11-b0e5-505943300ssa2",
     targetAmount: "1000000.00",
 
-    title: "Name of project",
+    title: "Bright Futures for Orphans",
     organisedBy: "BY FAMILY WORSHIP CENTER",
     description:
-      "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
+      "We provided orphans with access to education, healthcare, and a loving environment. Giving them  a chance at a brighter, more promising tomorrow.",
     amountRaised: "3.72million",
     createdAt: "2023-08-31T14:37:36.000Z",
     donors: 12,
@@ -50,15 +50,15 @@ export const featuredProjects: IProject[] = [
     },
   },
   {
-    image: "/assets/images/children_running.png",
+    image: "/assets/images/wom_busy.png",
     category: "missions",
     id: "db7e493b-fe92-4a11-b0e5-505943300ssa2",
     targetAmount: "1000000.00",
 
-    title: "Name of project",
+    title: "Spreading Faith",
     organisedBy: "BY FAMILY WORSHIP CENTER",
     description:
-      "Lorem ipsum dolor sit amet consectetur. Faucibus risus risus arcu imperdiet pellentesque. Urna eros interdum est sollicitid dignissim ipsum arcu imperdiet pellentesque.",
+      "Support missionaries in their journey to provide humanitarian aid, spiritual guidance, and sustainable development to communities in need.",
     amountRaised: "1.5million",
     createdAt: "2023-08-31T14:37:36.000Z",
     donors: 12,

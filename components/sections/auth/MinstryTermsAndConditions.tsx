@@ -35,20 +35,66 @@ const MinistryTermsAndConditions = ({
     <section className="mt-10 p-8">
       <h2 className="text_small_header">Soower’s Terms and Conditions</h2>
       <div className="mt-8 flex flex-col space-y-8">
-        {[1, 2, 3, 4, 5, 6, 7].map((_, i) => {
-          return (
-            <div className="flex flex-col space-y-2" key={"tac" + i}>
-              <h3>SECTION 1</h3>
-              <p className="text_small_body_p">
-                Lorem ipsum dolor sit amet consectetur. Faucibus risus risus
-                arcu imperdiet pellentesque. Urna eros interdum est sollicitudin
-                dignissim. Convallis iaculis blandit ultrices posuere. Lorem
-                ipsum dolor sit amet consectetur. Faucibus risus risus arcu
-                imperdiet pellentesque.{" "}
-              </p>
-            </div>
-          );
-        })}
+        <div className="flex flex-col space-y-2">
+          <h3>ELIGIBILTY</h3>
+          <p className="text_small_body_p">
+            Only registered Christian ministries, churches, and nonprofit
+            Christian organizations are eligible to create projects and receive
+            donations on Soower.
+          </p>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <h3>PROJECT CREATION</h3>
+          <p className="text_small_body_p">
+            Ministries are responsible for providing accurate and transparent
+            information about their projects, including the purpose, funding
+            goals, and how donations will be utilized.
+          </p>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <h3>VERIFICATION</h3>
+          <p className="text_small_body_p">
+            Soower reserves the right to verify the legitimacy and compliance of
+            the ministry with our eligibility criteria.
+          </p>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <h3>RESPONSIBILITY & TRANSPARENCY</h3>
+          <p className="text_small_body_p">
+            Ministries are solely responsible for managing their projects,
+            ensuring that they comply with applicable laws and regulations.
+            Ministries are encouraged to provide regular updates on project
+            progress to donors and the Platform to maintain transparency.
+          </p>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <h3>TERMINATION</h3>
+          <p className="text_small_body_p">
+            Soower reserves the right to suspend or terminate the participation
+            of any ministry on the Platform for any violation of these terms and
+            conditions or for any other reason at our discretion.
+          </p>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <h3>PRIVACY</h3>
+          <p className="text_small_body_p">
+            We respect your privacy. Information collected is used only in
+            accordance with our Privacy Policy.
+          </p>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <h3>CHANGES TO TERMS</h3>
+          <p className="text_small_body_p">
+            Soower may update these terms and conditions as necessary. Any
+            changes will be communicated to ministries and donors.
+          </p>
+        </div>
       </div>
       <div className="mt-4 flex items-center space-x-2">
         <Checkbox

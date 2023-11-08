@@ -21,12 +21,12 @@ const SelectCategory = ({ setActiveStep, setSelectedCategory }: Props) => {
         <CardSelector
           onClick={() => handleClick("Widow")}
           title="Widow"
-          desc=" Lorem ipsum dolor sit amet consectetur."
+          desc="Register as a widow or on behalf of a widow."
         />
         <CardSelector
           title="Missionary"
           onClick={() => handleClick("Missionary")}
-          desc=" Lorem ipsum dolor sit amet consectetur."
+          desc="Register as a serving missionary or an aspiring missionary."
         />
       </div>
     </section>
