@@ -28,7 +28,7 @@ import Script from "next/script";
 import { useToast } from "@components/ui/use-toast";
 
 const FList = List as any;
-
+// Trigger deploy
 const ContactForm = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
