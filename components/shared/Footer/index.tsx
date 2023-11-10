@@ -112,10 +112,10 @@ const Footer = ({ variant = "default" }: Props) => {
               <ul className="flex flex-col items-center space-y-4 lg:items-start">
                 <li>
                   <Link
-                    href="tel:+2341234567890"
+                    href="tel:+2348162324609"
                     className="footerlink_sub flex items-center space-x-2"
                   >
-                    <Calling /> <span>(+234) 123 456 7890</span>
+                    <Calling /> <span>(+234) 816 232 4609</span>
                   </Link>
                 </li>
                 <li>
