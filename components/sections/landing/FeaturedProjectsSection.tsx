@@ -2,13 +2,9 @@
 import { Button } from "@components/ui/button";
 import { ArrowRight } from "react-iconly";
 import SectionContainer from "../SectionContainer";
-import ProjectCard, { IProject } from "@components/cards/ProjectCard";
+import { IProject } from "@components/cards/ProjectCard";
 import { motion } from "framer-motion";
-import {
-  DEFAULT_VIEWPORT,
-  cardContainerVariant,
-  defaultVariant,
-} from "lib/variants";
+import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import Link from "next/link";
 
 export const featuredProjects: IProject[] = [
@@ -100,7 +96,7 @@ const FeaturedProjectSection = () => {
             </Link>
           </div>
 
-          <motion.div
+          {/* <motion.div
             variants={cardContainerVariant}
             initial="hidden"
             whileInView="visible"
@@ -116,7 +112,7 @@ const FeaturedProjectSection = () => {
                 />
               );
             })}
-          </motion.div>
+          </motion.div> */}
 
           {/* <div
             aria-label="Some of our partners"

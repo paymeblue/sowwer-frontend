@@ -70,7 +70,6 @@ const ExploreMinistriesTab = () => {
               <EmptyState
                 image={<EmptySpeaker />}
                 title={`No ministry in this category`}
-                desc="We are working hard to spread to the word about Soower"
               />
             </div>
           )}

@@ -60,8 +60,11 @@ const ExploreProjectsTab = () => {
             <div className="col-span-3">
               <EmptyState
                 image={<EmptySpeaker />}
-                title={`No published projects yet for this category`}
-                desc="We are working hard to have more projects soon."
+                title={
+                  category === "all"
+                    ? `No published projects yet`
+                    : `No published projects yet for this category`
+                }
               />
             </div>
           )}

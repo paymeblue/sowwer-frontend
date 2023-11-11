@@ -1,5 +1,4 @@
 import SectionContainer from "@components/sections/SectionContainer";
-import PartnersSection from "@components/sections/landing/PartnersSection";
 
 // Import Swiper styles
 import "swiper/css";
@@ -16,7 +15,7 @@ const Aboutpage = () => {
         <AboutMidSection />
       </SectionContainer>
 
-      <PartnersSection />
+      {/* <PartnersSection /> */}
     </div>
   );
 };
