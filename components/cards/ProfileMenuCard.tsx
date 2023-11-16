@@ -47,7 +47,11 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
               <Avatar>
                 <AvatarFallback>{`${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`}</AvatarFallback>
               </Avatar>
-              <div className="flex flex-col space-y-0">
+              <div
+                className={`flex flex-col space-y-0 ${
+                  context === "ministry" && "max-lg:hidden"
+                }`}
+              >
                 <h5 className="text_small_body_sb text-[.8rem] capitalize">
                   {firstName} {lastName}
                 </h5>
