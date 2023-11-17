@@ -45,8 +45,8 @@ const RightContent = ({
   };
 
   return (
-    <div className="flex w-fit max-w-[50%] items-center space-x-3 rounded-full bg-[#EBEFFF] p-1">
-      <span className="text_small_body_sb ml-4 truncate text-[.8rem] text-accent">
+    <div className="flex w-fit items-center rounded-full bg-[#EBEFFF] p-1 lg:max-w-[50%] lg:space-x-3">
+      <span className="text_small_body_sb ml-4 truncate text-[.8rem] text-accent max-lg:hidden">
         {id && status === "active"
           ? `${window.location.origin}/projects/${id}`
           : "Publish to get shareable link"}
@@ -105,6 +105,7 @@ const ProjectEditorComp = ({ id }: Props) => {
 
   return (
     <MainContentWrapper
+      responsive={true}
       title={project?.data ? project?.data?.title : "New Project Name"}
       top={
         <Button

@@ -197,7 +197,7 @@ const OverviewComp = ({ id }: Props) => {
     <Form {...form}>
       <TabWrapper>
         <TabSectionWrapper
-          contentClassname="w-[50%]"
+          contentClassname=""
           title="Main Details"
           desc="Choose a title, goal and category for your project.
 "
@@ -210,7 +210,7 @@ const OverviewComp = ({ id }: Props) => {
         </TabSectionWrapper>
 
         <TabSectionWrapper
-          contentClassname="w-[50%]"
+          contentClassname=""
           title="Cover Photo"
           desc="Add a cover photo to your project."
           spaceTop
@@ -242,7 +242,7 @@ const OverviewComp = ({ id }: Props) => {
             <Button
               onClick={form.handleSubmit(saveDraft)}
               variant="outline"
-              className="w-fit border-accent text-accent"
+              className="w-fit whitespace-nowrap border-accent text-accent"
               loading={togglingProject || isLoading}
             >
               Save as draft

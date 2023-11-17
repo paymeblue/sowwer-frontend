@@ -47,12 +47,12 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
               <Avatar>
                 <AvatarFallback>{`${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`}</AvatarFallback>
               </Avatar>
-              <div
-                className={`flex flex-col space-y-0 ${
-                  context === "ministry" && "max-lg:hidden"
-                }`}
-              >
-                <h5 className="text_small_body_sb text-[.8rem] capitalize">
+              <div className={`flex flex-col space-y-0`}>
+                <h5
+                  className={`text_small_body_sb text-[.8rem] capitalize ${
+                    context === "ministry" && "text-white"
+                  }`}
+                >
                   {firstName} {lastName}
                 </h5>
                 <span className="text_tiny_body_r max-lg:hidden">{email}</span>
@@ -69,7 +69,7 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
                 if (onMenuClick) {
                   onMenuClick();
                 }
-                router.push("/donor/settings");
+                setTimeout(() => router.push("/donor/settings"), 300);
               }}
             >
               <DropdownMenuItem>
@@ -84,7 +84,7 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
                 if (onMenuClick) {
                   onMenuClick();
                 }
-                router.push(getAccountUrl());
+                setTimeout(() => router.push(getAccountUrl()), 300);
               }}
             >
               <DropdownMenuItem>
@@ -100,7 +100,7 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
               if (onMenuClick) {
                 onMenuClick();
               }
-              logout();
+              setTimeout(() => logout(), 300);
             }}
           >
             <LogOut className="mr-2 h-4 w-4" />

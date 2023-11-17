@@ -7,7 +7,7 @@ const ContactsSocial = () => {
     <TabWrapper>
       <TabSectionWrapper
         title="Contact Details"
-        contentClassname="w-[50%]"
+        // contentClassname="w-[50%]"
         desc={
           <span>
             Your ministry’s email address and <br /> phone number
@@ -20,7 +20,7 @@ const ContactsSocial = () => {
       <TabSectionWrapper
         title="Social Accounts"
         spaceTop
-        contentClassname="w-[50%]"
+        // contentClassname="w-[50%]"
         desc="Add your social links for visibilty."
       >
         <SocialAccountsForm />

@@ -10,7 +10,7 @@ const MinistryHomepageComp = () => {
   const { user } = useUserAuth();
   return (
     <div className="flex h-full items-center justify-center">
-      <div className="w-[50%] rounded-[10px] bg-white">
+      <div className="w-full rounded-[10px] bg-white md:w-[70%] lg:w-[50%]">
         <div className="flex w-full flex-col border-b-[2px] border-accent p-4">
           <h2 className="text_large_header_b capitalize">
             Welcome, {user?.firstName}!

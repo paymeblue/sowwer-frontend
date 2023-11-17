@@ -27,20 +27,20 @@ const TabSectionWrapper = ({
   return (
     <section
       className={cn(
-        "flex w-full items-start justify-between pb-10",
+        "flex w-full flex-col pb-10 lg:flex-row lg:items-start lg:justify-between",
         orientation === "vertical" && "flex-col justify-normal space-y-4",
         spaceTop && "mt-6 border-t-[.3px] border-[#C4C4C4] pt-10",
         className
       )}
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col max-lg:w-full">
         <h4 className="text_medium_body_p font-[600]">{title}</h4>
         <p className="text_regular_body_p ">{desc}</p>
       </div>
 
       <div
         className={cn(
-          "w-[40%]",
+          "w-full max-lg:mt-6 lg:w-[50%]",
           orientation === "vertical" && "w-full",
           contentClassname
         )}

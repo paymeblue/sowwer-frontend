@@ -6,7 +6,7 @@ const PasswordSettings = () => {
     <TabWrapper>
       <TabSectionWrapper
         title="Personal Settings"
-        contentClassname="w-[50%]"
+        // contentClassname="w-[50%]"
         desc="Change your current password"
       >
         <MinistryPasswordSettingsForm />

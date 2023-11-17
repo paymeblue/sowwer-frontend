@@ -15,8 +15,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Setting, Wallet } from "react-iconly";
 
-const base = "/ministry";
-const sidebarItems = [
+export const base = "/ministry";
+export const sidebarItems = [
   {
     route: "",
     label: "Home",

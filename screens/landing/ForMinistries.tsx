@@ -26,11 +26,11 @@ const ForMinstriesPage = () => {
             opportunity to raise funds for various projects tailored to support
             widows, orphans and missions across Nigeria.
           </p>
-          <div className="mt-6 flex items-center space-x-4">
-            <Link href="/auth/ministry/sign-up">
-              <Button>Register as a ministry</Button>
+          <div className="mt-6 flex w-fit flex-col items-center max-lg:space-y-4 lg:flex-row lg:space-x-4">
+            <Link href="/auth/ministry/sign-up" className="max-lg:w-full">
+              <Button className="max-lg:w-full">Register as a ministry</Button>
             </Link>
-            <Link href="/auth/ministry/sign-in" className="hidden lg:inline">
+            <Link href="/auth/ministry/sign-in">
               <Button variant="outline">Login to ministry account</Button>
             </Link>
           </div>
