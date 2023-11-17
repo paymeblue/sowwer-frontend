@@ -259,6 +259,40 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    getIncomingDonationsForMinistryUser: build.query<
+      MinistryDonationResponse,
+      { page?: number; type: "project" | "ministry"; id?: string }
+    >({
+      query: ({ page, type, id }) =>
+        `ministries/${id}/incoming-donations?limit=10&page=${page}&type=${type}`,
+      providesTags: cacher.providesNestedList("Projects"),
+      transformResponse: (
+        response: MinistryDonationResponse,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getOutgoingDonationsForMinistryUser: build.query<
+      MinistryDonationResponse,
+      { page?: number; type: "project" | "ministry"; id?: string }
+    >({
+      query: ({ page, type, id }) =>
+        `ministries/${id}/outgoing-donations?limit=10&page=${page}&type=${type}`,
+      providesTags: cacher.providesNestedList("Projects"),
+      transformResponse: (
+        response: MinistryDonationResponse,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
     closeMinistryProject: build.mutation<
       PlainResponse,
       { id?: string; password: string }
@@ -320,4 +354,6 @@ export const {
   useGetMinistryProjectDonorsQuery,
   useDeleteMinistryProjectMutation,
   useCloseMinistryProjectMutation,
+  useGetIncomingDonationsForMinistryUserQuery,
+  useGetOutgoingDonationsForMinistryUserQuery,
 } = projects;

@@ -50,7 +50,7 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
               <div className={`flex flex-col space-y-0`}>
                 <h5
                   className={`text_small_body_sb text-[.8rem] capitalize ${
-                    context === "ministry" && "text-white"
+                    context === "ministry" && "max-lg:text-white"
                   }`}
                 >
                   {firstName} {lastName}
