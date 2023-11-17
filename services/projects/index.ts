@@ -13,6 +13,8 @@ import {
   MinistryDonationResponse,
   MinistryGeneralDonationsRequest,
   MinistryGeneralDonationsResponse,
+  MinistryOutgoingGeneralDonationsResponse,
+  MinistryOutgoingProjectDonationsResponse,
   MinistryProjectsRequest,
   MinistryProjectsResponse,
   PlainResponse,
@@ -276,15 +278,32 @@ const projects = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    getOutgoingDonationsForMinistryUser: build.query<
-      MinistryDonationResponse,
-      { page?: number; type: "project" | "ministry"; id?: string }
+    getOutgoingProjectDonationsForMinistryUser: build.query<
+      MinistryOutgoingProjectDonationsResponse,
+      { page?: number; id?: string }
     >({
-      query: ({ page, type, id }) =>
-        `ministries/${id}/outgoing-donations?limit=10&page=${page}&type=${type}`,
+      query: ({ page, id }) =>
+        `ministries/${id}/outgoing-donations?limit=10&page=${page}&type=project`,
       providesTags: cacher.providesNestedList("Projects"),
       transformResponse: (
-        response: MinistryDonationResponse,
+        response: MinistryOutgoingProjectDonationsResponse,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    getOutgoingGeneralDonationsForMinistryUser: build.query<
+      MinistryOutgoingGeneralDonationsResponse,
+      { page?: number; id?: string }
+    >({
+      query: ({ page, id }) =>
+        `ministries/${id}/outgoing-donations?limit=10&page=${page}&type=ministry`,
+      providesTags: cacher.providesNestedList("Projects"),
+      transformResponse: (
+        response: MinistryOutgoingGeneralDonationsResponse,
         meta,
         arg
       ): any => {
@@ -355,5 +374,6 @@ export const {
   useDeleteMinistryProjectMutation,
   useCloseMinistryProjectMutation,
   useGetIncomingDonationsForMinistryUserQuery,
-  useGetOutgoingDonationsForMinistryUserQuery,
+  useGetOutgoingProjectDonationsForMinistryUserQuery,
+  useGetOutgoingGeneralDonationsForMinistryUserQuery,
 } = projects;
