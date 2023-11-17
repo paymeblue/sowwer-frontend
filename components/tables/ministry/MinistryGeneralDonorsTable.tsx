@@ -5,7 +5,7 @@ import useUserAuth from "@hooks/auth/useUserAuth";
 import usePagination from "@hooks/general/usePagination";
 import moment from "moment";
 import { ColumnDef } from "@tanstack/react-table";
-import { useGetDonationsForMinistryUserQuery } from "services/projects";
+import { useGetIncomingDonationsForMinistryUserQuery } from "services/projects";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import EmptyState from "@components/shared/EmptyState";
 import Emptydonor from "@components/assets/svg/emptyDonor";
@@ -80,7 +80,7 @@ const MinistryGeneralDonorsTableComp = () => {
     data: donors,
     isLoading,
     isFetching,
-  } = useGetDonationsForMinistryUserQuery({
+  } = useGetIncomingDonationsForMinistryUserQuery({
     id: user?.ministry?.id,
     page: pagination?.current,
     type: "ministry",

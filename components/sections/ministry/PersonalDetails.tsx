@@ -6,7 +6,7 @@ const PersonalDetails = () => {
     <TabWrapper>
       <TabSectionWrapper
         title="Personal Details"
-        contentClassname="w-[50%]"
+        // contentClassname="w-[50%]"
         desc="Administrator’s personal/account information."
       >
         <MinistryPersonalDetailsForm />

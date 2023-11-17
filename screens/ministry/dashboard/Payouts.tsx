@@ -51,7 +51,7 @@ const PayoutsPageComp = () => {
             </div>
           </div>
         ) : (
-          <div className="w-[35%] rounded-[6px] bg-white p-4">
+          <div className="w-full rounded-[6px] bg-white p-4 lg:w-[35%]">
             <div className="flex items-center justify-between">
               <h4 className="font-body text-[.8rem] font-[600] text-accent">
                 Payout Information

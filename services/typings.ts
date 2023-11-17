@@ -422,6 +422,24 @@ export type DonorProjectDonationsResponse = TResponse<{
   donationPercent: string;
   status: Status;
 }>;
+
+export type MinistryOutgoingProjectDonationsResponse = TResponse<{
+  id: string;
+  title: string;
+  category: "widows" | "orphans" | "widows";
+  organisedBy: string;
+  description: string | null;
+  targetAmount: string;
+  image: string | null;
+  amountRaised: string;
+  createdAt: string;
+  payment_id: string;
+  donorCount: string;
+  amountDonated: string;
+  donationPercent: string;
+  status: Status;
+}>;
+
 export type DonorGeneralDonations = {
   id: string;
   payment_id: string;
@@ -439,6 +457,24 @@ export type DonorGeneralDonations = {
   createdAt: string;
 };
 export type DonorGeneralDonationsResponse = TResponse<{
+  id: string;
+  payment_id: string;
+  plan_id: string;
+  state: string;
+  type: "one-time" | "recurring";
+  interval: "monthly" | "quarterly" | "yearly";
+  logo: string | null;
+  plan_status: string;
+  organisedBy: string;
+  description: string;
+  donorCount: string;
+  amountDonated: string;
+  amountRaised: string;
+  donationPercent: string;
+  createdAt: string;
+}>;
+
+export type MinistryOutgoingGeneralDonationsResponse = TResponse<{
   id: string;
   payment_id: string;
   plan_id: string;

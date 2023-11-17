@@ -23,7 +23,7 @@ const ProfileInformation = ({ ministryId }: Props) => {
     <TabWrapper>
       <TabSectionWrapper
         title="General Details"
-        contentClassname="w-[50%]"
+        // contentClassname="w-[50%]"
         desc={
           <span>
             Name, address and more information <br /> about your ministry.
@@ -44,7 +44,7 @@ const ProfileInformation = ({ ministryId }: Props) => {
       <TabSectionWrapper
         title="Logo"
         spaceTop
-        contentClassname="w-[50%]"
+        // contentClassname="w-[50%]"
         desc="Add your logo for easy identification."
       >
         <MinistryUploadLogo

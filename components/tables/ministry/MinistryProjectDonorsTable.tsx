@@ -8,7 +8,7 @@ import useUserAuth from "@hooks/auth/useUserAuth";
 import usePagination from "@hooks/general/usePagination";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
-import { useGetDonationsForMinistryUserQuery } from "services/projects";
+import { useGetIncomingDonationsForMinistryUserQuery } from "services/projects";
 
 export type ProjectDonor = {
   id: string;
@@ -80,7 +80,7 @@ const MinistryProjectDonorsTableComp = () => {
     data: donors,
     isLoading,
     isFetching,
-  } = useGetDonationsForMinistryUserQuery({
+  } = useGetIncomingDonationsForMinistryUserQuery({
     id: user?.ministry?.id,
     page: pagination?.current,
     type: "project",
