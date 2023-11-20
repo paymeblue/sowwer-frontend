@@ -41,29 +41,31 @@ const Topbar = () => {
                     onMenuClick={() => setOpen(false)}
                   />
                 </div>
-                {sidebarItems.map((link) => {
-                  const isActive =
-                    (pathname?.includes(base + link.route) &&
-                      link.route.length > 1) ||
-                    pathname === base + link.route;
-                  return (
-                    <div
-                      onClick={() => {
-                        router.push(`${base}${link.route}`);
-                        setOpen(false);
-                      }}
-                      key={link.route}
-                      className={`flex w-full cursor-pointer items-center rounded-[5px] px-4 py-3 text-white transition-all duration-200 hover:bg-[#FFFFFF1A] ${
-                        isActive && "bg-[#FFFFFF1A]"
-                      }`}
-                    >
-                      <div className="w-[18%]">{link.icon}</div>
-                      <span className="text_tiny_body_r text-[0.78rem] text-white">
-                        {link.label}
-                      </span>
-                    </div>
-                  );
-                })}
+                <div className="flex w-full flex-col space-y-2">
+                  {sidebarItems.map((link) => {
+                    const isActive =
+                      (pathname?.includes(base + link.route) &&
+                        link.route.length > 1) ||
+                      pathname === base + link.route;
+                    return (
+                      <div
+                        onClick={() => {
+                          router.push(`${base}${link.route}`);
+                          setOpen(false);
+                        }}
+                        key={link.route}
+                        className={`flex w-full cursor-pointer items-center rounded-[5px] px-4 py-3 text-white transition-all duration-200 hover:bg-[#FFFFFF1A] ${
+                          isActive && "bg-[#FFFFFF1A]"
+                        }`}
+                      >
+                        <div className="w-[18%]">{link.icon}</div>
+                        <span className="text_tiny_body_r text-[0.78rem] text-white">
+                          {link.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="mt-10 w-full">

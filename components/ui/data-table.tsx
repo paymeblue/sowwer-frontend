@@ -66,7 +66,7 @@ export default function DataTable<TData, TValue>({
         <Table>
           <TableHeader className="">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="">
+              <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id} className="whitespace-nowrap">
