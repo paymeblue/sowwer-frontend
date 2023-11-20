@@ -77,12 +77,8 @@ const DonationsPage = () => {
     <MainContentWrapper title="Donations">
       <Tabs defaultValue="incoming-donations" className="mt-4 w-full">
         <TabsList>
-          <TabsTrigger value="incoming-donations">
-            Incoming Donations
-          </TabsTrigger>
-          <TabsTrigger value="outgoing-donations">
-            Outgoing Donations
-          </TabsTrigger>
+          <TabsTrigger value="incoming-donations">Received</TabsTrigger>
+          <TabsTrigger value="outgoing-donations">Sent</TabsTrigger>
         </TabsList>
 
         <TabsContent value="incoming-donations">
