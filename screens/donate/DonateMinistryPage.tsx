@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useGetMinistryDetailsQuery } from "services/ministry";
 
 import DonateToMinistryForm from "@components/forms/donate/DonateToMinistryForm";
@@ -12,6 +12,9 @@ import Link from "next/link";
 import { Button } from "@components/ui/button";
 import SuccessState from "@components/shared/SuccessState";
 import Image from "next/image";
+import { useVerifyMinistryPaymentMutation } from "services/payouts";
+import { useSearchParams } from "next/navigation";
+import { useToast } from "@components/ui/use-toast";
 
 interface Props {
   ministryId: string;
@@ -24,9 +27,41 @@ const DonateMinistryComp = ({ ministryId }: Props) => {
     isFetching,
     isError,
   } = useGetMinistryDetailsQuery(ministryId);
+  const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const txnId = searchParams.get("txnId");
+  const txnRef = searchParams.get("txnRef");
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+  const [verifyMinistryPayment, { isLoading: verifyingPayment }] =
+    useVerifyMinistryPaymentMutation();
+
+  const handleVerify = useCallback(async () => {
+    try {
+      await verifyMinistryPayment({
+        txn_id: txnId!,
+        txn_reference: txnRef!,
+      }).unwrap();
+      setPaymentSuccessful(true);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Payment failed",
+        description:
+          "Unfortunately, we couldn't verify your payment. Please try again later or contact support.",
+      });
+    }
+  }, [txnId, txnRef, toast, verifyMinistryPayment]);
+
+  useEffect(() => {
+    if (!txnId || !txnRef) return;
+    handleVerify();
+  }, [txnId, txnRef, handleVerify]);
 
   if (!ministryData?.data && (isLoading || isFetching)) {
+    return <Loader className="h-[70vh]" />;
+  }
+
+  if (verifyingPayment) {
     return <Loader className="h-[70vh]" />;
   }
 

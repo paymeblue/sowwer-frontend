@@ -120,7 +120,9 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
         try {
           const txnId = response.transaction_id.toString();
           const txnRef = response.tx_ref;
-          window.location.href = `${window.location.href}?txnId=${txnId}&txnRef=${txnRef}`;
+          window.location.href = `${
+            window.location.origin + window.location.pathname
+          }?txnId=${txnId}&txnRef=${txnRef}`;
         } catch (error) {
           toast({
             variant: "destructive",
