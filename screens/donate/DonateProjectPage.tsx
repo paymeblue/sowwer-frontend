@@ -10,15 +10,22 @@ import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import { Button } from "@components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SuccessState from "@components/shared/SuccessState";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import { useSearchParams } from "next/navigation";
+import { useVerifyProjectPaymentMutation } from "services/payouts";
+import { useToast } from "@components/ui/use-toast";
 
 interface Props {
   projectId: string;
 }
 
 const DonateProjectComp = ({ projectId }: Props) => {
+  const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const txnId = searchParams.get("txnId");
+  const txnRef = searchParams.get("txnRef");
   const {
     data: projectData,
     isLoading,
@@ -26,8 +33,36 @@ const DonateProjectComp = ({ projectId }: Props) => {
     isError,
   } = useGetProjectDetailsQuery(projectId);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+  const [verifyProjectPayment, { isLoading: verifyingPayment }] =
+    useVerifyProjectPaymentMutation();
+
+  const handleVerify = useCallback(async () => {
+    try {
+      await verifyProjectPayment({
+        txn_id: txnId!,
+        txn_reference: txnRef!,
+      }).unwrap();
+      setPaymentSuccessful(true);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Payment failed",
+        description:
+          "Unfortunately, we couldn't verify your payment. Please try again later or contact support.",
+      });
+    }
+  }, [txnId, txnRef, toast, verifyProjectPayment]);
+
+  useEffect(() => {
+    if (!txnId || !txnRef) return;
+    handleVerify();
+  }, [txnId, txnRef, handleVerify]);
 
   if (!projectData?.data && (isLoading || isFetching)) {
+    return <Loader className="h-[70vh]" />;
+  }
+
+  if (verifyingPayment) {
     return <Loader className="h-[70vh]" />;
   }
 

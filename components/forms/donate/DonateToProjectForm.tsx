@@ -118,12 +118,9 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
     handleFlutterwavePayment({
       callback: async (response) => {
         try {
-          await verifyProjectPayment({
-            txn_id: response.transaction_id.toString(),
-            txn_reference: response.tx_ref,
-          });
-          setConfig(DEFAULT_CONFIG);
-          setPaymentSuccessful(true);
+          const txnId = response.transaction_id.toString();
+          const txnRef = response.tx_ref;
+          window.location.href = `${window.location.href}?txnId=${txnId}&txnRef=${txnRef}`;
         } catch (error) {
           toast({
             variant: "destructive",
