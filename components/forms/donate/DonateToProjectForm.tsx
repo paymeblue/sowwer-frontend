@@ -122,7 +122,7 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
             txn_id: response.transaction_id.toString(),
             txn_reference: response.tx_ref,
           });
-
+          setConfig(DEFAULT_CONFIG);
           setPaymentSuccessful(true);
         } catch (error) {
           toast({
@@ -161,9 +161,10 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
             // txn_id: "",
             txn_reference: paystackConfig.reference,
           });
-
+          setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
           setPaymentSuccessful(true);
         } catch (error) {
+          setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
           toast({
             variant: "destructive",
             title: "Payment failed",

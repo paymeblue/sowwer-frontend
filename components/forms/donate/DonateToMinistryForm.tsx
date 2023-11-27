@@ -143,6 +143,7 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
               "Unfortunately, we couldn't process your payment. Please try again later.",
           });
         } finally {
+          setConfig(DEFAULT_CONFIG);
           setFlutterLoading(false);
         }
         closePaymentModal();
@@ -181,6 +182,7 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
               "Unfortunately, we couldn't process your payment. Please try again later.",
           });
         } finally {
+          setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
           setFlutterLoading(false);
         }
         closePaymentModal();
