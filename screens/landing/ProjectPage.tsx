@@ -21,6 +21,7 @@ import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import useCopyToClipboard from "@hooks/general/useCopyToClipboard";
 import { useToast } from "@components/ui/use-toast";
 import ProjectDonationsDialog from "@components/dialogs/landing/ProjectDonationsDialog";
+import { getColorForTag } from "@components/cards/ProjectCard";
 
 interface Props {
   projectId: string;
@@ -76,7 +77,6 @@ const PageComp = ({ projectId }: Props) => {
     donors,
     image,
     donationPercent,
-    link,
     id,
     logo,
   } = projectDetails?.data!;
@@ -110,8 +110,12 @@ const PageComp = ({ projectId }: Props) => {
           <div className="flex h-full w-full flex-col justify-between">
             <div className="flex flex-col space-y-4 lg:space-y-2">
               <Tag
-                color={"#9B51E0"}
-                backgroundColor={"#9747FF24"}
+                color={
+                  getColorForTag(category.toLowerCase())?.tagColor || "#9B51E0"
+                }
+                backgroundColor={
+                  getColorForTag(category.toLowerCase())?.bgColor || "#9747FF24"
+                }
                 className="text-[.75rem]"
               >
                 {category.toUpperCase()}
@@ -169,7 +173,7 @@ const PageComp = ({ projectId }: Props) => {
                 <Button
                   variant="link"
                   className="space-x-2 text-accent max-lg:px-0"
-                  onClick={() => copyToClipboard(link)}
+                  onClick={() => copyToClipboard(`${window.location.href}`)}
                 >
                   <LinkIcon size={19} />
                   <span className="whitespace-nowrap">Share this project</span>

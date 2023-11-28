@@ -73,10 +73,10 @@ const projectDonationsColumns: ColumnDef<ProjectDonation>[] = [
 
 const generalDonationsColumn: ColumnDef<GeneralDonation>[] = [
   {
-    accessorKey: "organisedBy",
+    accessorKey: "ministry_name",
     header: "Ministry's Name",
     cell: ({ row }) => {
-      const name = row.getValue("organisedBy") as string;
+      const name = row.getValue("ministry_name") as string;
       return <span className="font-[600] capitalize">{name}</span>;
     },
   },

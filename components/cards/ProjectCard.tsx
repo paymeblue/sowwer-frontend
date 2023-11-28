@@ -30,6 +30,23 @@ export interface IProject {
     value: string;
   };
 }
+
+export const getColorForTag = (category: string | null | undefined) => {
+  if (!category) return;
+  switch (category) {
+    case "widows":
+      return { bgColor: "#9747FF24", tagColor: "#9B51E0" };
+    case "one-time":
+      return { bgColor: "#9747FF24", tagColor: "#9B51E0" };
+    case "orphans":
+      return { bgColor: "#F2994A24", tagColor: "#F2994A" };
+    case "recurring":
+      return { bgColor: "#F2994A24", tagColor: "#F2994A" };
+    default:
+      return { bgColor: "#2F80ED24", tagColor: "#2F80ED" };
+  }
+};
+
 const ProjectCard = ({
   category,
   title,
@@ -47,21 +64,6 @@ const ProjectCard = ({
 }: IProject) => {
   const isCompleted =
     status === Status.completed || Number(amountRaised) >= Number(targetAmount);
-  const getColorForTag = (category: string | null | undefined) => {
-    if (!category) return;
-    switch (category) {
-      case "widows":
-        return { bgColor: "#9747FF24", tagColor: "#9B51E0" };
-      case "one-time":
-        return { bgColor: "#9747FF24", tagColor: "#9B51E0" };
-      case "orphans":
-        return { bgColor: "#F2994A24", tagColor: "#F2994A" };
-      case "recurring":
-        return { bgColor: "#F2994A24", tagColor: "#F2994A" };
-      default:
-        return { bgColor: "#2F80ED24", tagColor: "#2F80ED" };
-    }
-  };
 
   return (
     <div className="group overflow-hidden rounded-[15px] bg-white shadow-featured-project-card">

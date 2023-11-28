@@ -67,7 +67,8 @@ const payouts = api.injectEndpoints({
     }),
     pauseRecurringPayment: build.mutation<PlainResponse, string>({
       query: (id) => `plans/${id}/cancel`,
-      invalidatesTags: cacher.providesProperty("General"),
+      // invalidatesTags: cacher.providesProperty("General"),
+      invalidatesTags: ["General", "Projects"],
       transformResponse: (response: PlainResponse, meta, arg): any => {
         return response;
       },
@@ -76,7 +77,9 @@ const payouts = api.injectEndpoints({
     }),
     resumeRecurringPayment: build.mutation<PlainResponse, string>({
       query: (id) => `plans/${id}/resume-payment`,
-      invalidatesTags: cacher.providesProperty("General"),
+      invalidatesTags: ["General", "Projects"],
+      // invalidatesTags: cacher.providesProperty("General"),
+
       transformResponse: (response: PlainResponse, meta, arg): any => {
         return response;
       },
