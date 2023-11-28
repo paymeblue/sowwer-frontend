@@ -236,6 +236,32 @@ const MinistryDetails = ({
 
                 <FormField
                   control={form.control}
+                  name="utilityBill"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2">
+                      <FormLabel required>Upload Utility bill</FormLabel>
+                      <FormControl>
+                        <FileUpload
+                          onFileChange={(file: string) => {
+                            field.onChange(file);
+                          }}
+                          title="Upload Utility Bill"
+                          desc="(.jpg, .png or .pdf file format supported)"
+                          file={field.value}
+                          fileName="Utility_Bill"
+                          acceptedFiles=".jpg, .jpeg, .png, .pdf"
+                          onDelete={() => {
+                            field.onChange(null);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem className="col-span-2">

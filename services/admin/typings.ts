@@ -14,6 +14,7 @@ export interface AdminMinistry extends AdminMinistryBase {
   address: string;
   state: string;
   cac_document: string;
+  utility_bill: string;
   donation_description: string;
   website: string;
   logo: string | null;

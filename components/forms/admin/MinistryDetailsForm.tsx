@@ -45,10 +45,15 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
     state,
     website,
     cac_document,
+    utility_bill,
   } = ministry.data;
 
   const handleClick = () => {
     saveAs(cac_document, `${name}_cac_document`);
+  };
+
+  const handleUtilityBillClick = () => {
+    saveAs(utility_bill, `${name}_utility_bill`);
   };
 
   return (
@@ -104,9 +109,6 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
                 {name?.split(" ").join("_")}_cac
               </Label>
               <div className="flex items-center space-x-2">
-                {/* <Label className="text-[.8rem] text-[#8F8F8F]">
-                  .JPG • 2MB
-                </Label> */}
                 <Label
                   className="cursor-pointer leading-[1rem] text-accent hover:underline"
                   onClick={handleClick}
@@ -117,6 +119,32 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
             </div>
           </div>
         </div>
+
+        <div className="space-y-1">
+          <Label>Utility Bill</Label>
+          <div className="flex items-center space-x-2">
+            <Image
+              src="/assets/icons/imageplaceholder.svg"
+              alt="CAC Image"
+              width={32}
+              height={32}
+            />
+            <div className="flex flex-col">
+              <Label className="font-[500] lowercase">
+                {name?.split(" ").join("_")}_utility_bill
+              </Label>
+              <div className="flex items-center space-x-2">
+                <Label
+                  className="cursor-pointer leading-[1rem] text-accent hover:underline"
+                  onClick={handleUtilityBillClick}
+                >
+                  Download
+                </Label>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="col-span-2 space-y-1">
           <Label>
             What projects would you be receiving donations for on Soower?{" "}
