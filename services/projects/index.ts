@@ -266,7 +266,7 @@ const projects = api.injectEndpoints({
       { page?: number; type: "project" | "ministry"; id?: string }
     >({
       query: ({ page, type, id }) =>
-        `ministries/${id}/incoming-donations?limit=10&page=${page}&type=${type}`,
+        `ministries/incoming-donations?limit=10&page=${page}&type=${type}`,
       providesTags: cacher.providesNestedList("Projects"),
       transformResponse: (
         response: MinistryDonationResponse,
@@ -283,7 +283,7 @@ const projects = api.injectEndpoints({
       { page?: number; id?: string }
     >({
       query: ({ page, id }) =>
-        `ministries/${id}/outgoing-donations?limit=10&page=${page}&type=project`,
+        `ministries/outgoing-donations?limit=10&page=${page}&type=project`,
       providesTags: cacher.providesNestedList("Projects"),
       transformResponse: (
         response: MinistryOutgoingProjectDonationsResponse,
@@ -300,7 +300,7 @@ const projects = api.injectEndpoints({
       { page?: number; id?: string }
     >({
       query: ({ page, id }) =>
-        `ministries/${id}/outgoing-donations?limit=10&page=${page}&type=ministry`,
+        `ministries/outgoing-donations?limit=10&page=${page}&type=ministry`,
       providesTags: cacher.providesNestedList("Projects"),
       transformResponse: (
         response: MinistryOutgoingGeneralDonationsResponse,
