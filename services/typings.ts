@@ -191,6 +191,7 @@ export type MinistrySignupRequest = {
   ministrySocialLink: string | undefined;
   ministryAddress: string;
   cacDocument: File;
+  utilityBill: File;
   phone: string;
   email: string;
   firstName: string;

@@ -62,6 +62,7 @@ const MinistrySignupPageComp = () => {
       phoneNumber,
       state,
       websiteLink,
+      utilityBill,
     } = ministryDetailsForm.getValues();
     const {
       email: adminEmail,
@@ -85,6 +86,11 @@ const MinistrySignupPageComp = () => {
         cacDocument: convertBase64toFile(
           cacDocument,
           "CAC_document",
+          "image/png"
+        ),
+        utilityBill: convertBase64toFile(
+          utilityBill,
+          "Utility_Bill",
           "image/png"
         ),
         ministryEmail: email,
