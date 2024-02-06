@@ -71,14 +71,15 @@ const AdminUploadCacDocumentForm = ({
                   title={
                     <span className="text-[#333333]">Upload your file</span>
                   }
-                  desc="(.jpg, .jpeg or .png file format supported)"
+                  desc="(.jpg, .png, or pdf file format supported)"
                   containerClassname="w-full aspect-[1/.3] border-black"
-                  fileName="logo"
+                  fileName="cac_document"
                   editMode={false}
                   onDelete={() => {
                     form.resetField("cacDocument");
                   }}
                   uploadIcon={<UploadIconAdmin />}
+                  acceptedFiles=".jpg, .jpeg, .png, .pdf"
                 />
               </FormControl>
               <FormMessage />

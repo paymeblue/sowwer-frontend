@@ -71,13 +71,14 @@ const AdminUploadUtilityForm = ({
                   title={
                     <span className="text-[#333333]">Upload your file</span>
                   }
-                  desc="(.jpg, .jpeg or .png file format supported)"
+                  desc="(.jpg, .png, or pdf file format supported)"
                   containerClassname="w-full aspect-[1/.3] border-black"
-                  fileName="logo"
+                  fileName="utility_bill"
                   editMode={false}
                   onDelete={() => {
                     form.resetField("utilityBill");
                   }}
+                  acceptedFiles=".jpg, .jpeg, .png, .pdf"
                   uploadIcon={<UploadIconAdmin />}
                 />
               </FormControl>
