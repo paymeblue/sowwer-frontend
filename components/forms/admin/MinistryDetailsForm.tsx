@@ -6,10 +6,20 @@ import { Input } from "@components/ui/input";
 import { Label } from "@components/ui/label";
 import { Textarea } from "@components/ui/textarea";
 import Image from "next/image";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useGetAdminMinistryAdministratorQuery } from "services/admin";
 import { saveAs } from "file-saver";
 import { GetAdminMinistryResponse } from "services/admin/typings";
+import EditIcon from "@components/assets/svg/EditIcon";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@components/ui/dialog";
+import AdminUploadCacDocumentForm from "./AdminUploadCacDocument";
+import AdminUploadUtilityForm from "./AdminUploadUitliiy";
 
 interface Props {
   id: string;
@@ -25,6 +35,8 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
 };
 
 export const MinistryDetailsForm = ({ ministry }: Props) => {
+  const [openCacUpload, setOpenCacUpload] = useState(false);
+  const [openUtilityUpload, setOpenUtilityUpload] = useState(false);
   if (!ministry?.data) {
     return (
       <EmptyState
@@ -46,6 +58,7 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
     website,
     cac_document,
     utility_bill,
+    id,
   } = ministry.data;
 
   const handleClick = () => {
@@ -105,9 +118,31 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
               height={32}
             />
             <div className="flex flex-col">
-              <Label className="font-[500] lowercase">
-                {name?.split(" ").join("_")}_cac
-              </Label>
+              <div className="flex items-center">
+                <Label className="w-fit max-w-[200px] truncate font-[500] lowercase ">
+                  {name?.split(" ").join("_")}_cac
+                </Label>
+                <Dialog open={openCacUpload} onOpenChange={setOpenCacUpload}>
+                  <DialogTrigger asChild>
+                    <Label className="flex cursor-pointer items-center space-x-2 text-[0.78rem] text-[#0000009E]">
+                      <EditIcon /> <span>Edit</span>
+                    </Label>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Upload CAC Document</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="mb-4 mt-2 flex flex-col space-y-4 border-t-[.5px] border-[#DEDEDE] px-4 pt-4">
+                      {/* Update CAC Docuemnt Admin Form */}
+                      <AdminUploadCacDocumentForm
+                        id={id}
+                        onClose={() => setOpenCacUpload(false)}
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
               <div className="flex items-center space-x-2">
                 <Label
                   className="cursor-pointer leading-[1rem] text-accent hover:underline"
@@ -130,9 +165,34 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
               height={32}
             />
             <div className="flex flex-col">
-              <Label className="font-[500] lowercase">
-                {name?.split(" ").join("_")}_utility_bill
-              </Label>
+              <div className="flex items-center">
+                <Label className="max-w-[200px] truncate font-[500] lowercase">
+                  {name?.split(" ").join("_")}_utility_bill
+                </Label>
+                <Dialog
+                  open={openUtilityUpload}
+                  onOpenChange={setOpenUtilityUpload}
+                >
+                  <DialogTrigger asChild>
+                    <Label className="flex cursor-pointer items-center space-x-2 text-[0.78rem] text-[#0000009E]">
+                      <EditIcon /> <span>Edit</span>
+                    </Label>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Upload Utility Bill</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="mb-4 mt-2 flex flex-col space-y-4 border-t-[.5px] border-[#DEDEDE] px-4 pt-4">
+                      {/* Update CAC Docuemnt Admin Form */}
+                      <AdminUploadUtilityForm
+                        id={id}
+                        onClose={() => setOpenUtilityUpload(false)}
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
               <div className="flex items-center space-x-2">
                 <Label
                   className="cursor-pointer leading-[1rem] text-accent hover:underline"

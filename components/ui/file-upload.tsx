@@ -2,7 +2,13 @@ import FileUploadIcon from "@components/assets/svg/FileUpload";
 import { cn } from "@lib/cn";
 import { Trash } from "lucide-react";
 import Image from "next/image";
-import React, { useState, useRef, useEffect, HTMLAttributes } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  HTMLAttributes,
+  ReactNode,
+} from "react";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
@@ -10,7 +16,8 @@ interface Props {
   onFileChange?: (file: string) => void;
   file?: string;
   containerClassname?: HTMLAttributes<HTMLDivElement>["className"];
-  title: string;
+  uploadIcon?: ReactNode;
+  title: string | ReactNode;
   desc: string;
   fileName: string;
   fileUrl?: string;
@@ -30,6 +37,7 @@ const FileUpload = ({
   editMode = false,
   onDelete,
   acceptedFiles = ".jpg, .jpeg, .png",
+  uploadIcon,
 }: Props) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
@@ -151,7 +159,7 @@ const FileUpload = ({
             style={{ display: "none" }}
             onChange={handleFileChange}
           />
-          <FileUploadIcon />
+          {uploadIcon ? uploadIcon : <FileUploadIcon />}
           <h4 className="font-body text-[.8rem] text-primary">{title}</h4>
           <p className="text-center font-body text-[.7rem] text-[#848484]">
             {desc}
