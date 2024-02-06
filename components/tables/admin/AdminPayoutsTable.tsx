@@ -187,8 +187,8 @@ const AdminPayoutsTable = ({ type }: Props) => {
     return (
       <EmptyState
         image={<EmptySpeaker />}
-        title="No ministries"
-        desc="This page will be populated once you have ministries"
+        title="No payouts"
+        desc="This page will be populated once you have payouts"
       />
     );
   }

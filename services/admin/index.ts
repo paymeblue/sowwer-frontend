@@ -8,6 +8,7 @@ import {
   GetAdminMinistryAdministratorResponse,
   GetAdminPayoutHistoryResponse,
   GetAdminPayoutHistoryRequest,
+  AdminUploadCacDocumentRequest,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -60,6 +61,7 @@ const admin = api.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["Admin_Ministry"],
       transformResponse: (reponse: GetAdminMinistryResponse) => {
         return reponse;
       },
@@ -97,6 +99,29 @@ const admin = api.injectEndpoints({
         };
       },
     }),
+    uploadMinistryDocuments: build.mutation<any, AdminUploadCacDocumentRequest>(
+      {
+        query: (payload) => {
+          const formData = new FormData();
+          const { id, cacDocument, utilityBill } = payload;
+
+          if (cacDocument) {
+            formData.append("cacDocument", cacDocument);
+          }
+
+          if (utilityBill) {
+            formData.append("utilityBill", utilityBill);
+          }
+
+          return {
+            url: `admins/ministries/${id}`,
+            method: "PATCH",
+            body: formData,
+          };
+        },
+        invalidatesTags: ["Admin_Ministry"],
+      }
+    ),
   }),
   overrideExisting: true,
 });
@@ -107,4 +132,5 @@ export const {
   useGetAdminMinistryQuery,
   useGetAdminMinistryAdministratorQuery,
   useGetAdminPayoutHistoryQuery,
+  useUploadMinistryDocumentsMutation,
 } = admin;

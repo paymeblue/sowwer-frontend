@@ -72,6 +72,13 @@ export interface GetAdminPayoutHistoryRequest {
   limit: number;
 }
 
+export type AdminUploadCacDocumentRequest = {
+  [key: string]: File | undefined | string;
+  cacDocument?: File;
+  utilityBill?: File;
+  id: string;
+};
+
 // Responses
 export type GetAdminMinistriesResponse = TResponse<AdminMinistryBase>;
 export type GetAdminMinistryResponse = Response<AdminMinistry>;
