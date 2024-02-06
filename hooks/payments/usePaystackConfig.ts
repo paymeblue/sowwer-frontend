@@ -8,6 +8,8 @@ export interface IPaystackConfig extends IProps {
   publicKey: string;
 }
 
+// trigger deploy
+
 const PAYSTACK_PB_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PB_LIVE_KEY!;
 
 const usePaystackConfig = () => {
