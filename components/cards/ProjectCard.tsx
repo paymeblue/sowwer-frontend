@@ -113,7 +113,7 @@ const ProjectCard = ({
         {variant === "default" && (
           <div className="mt-8 flex w-full flex-col space-y-6">
             <div className="flex w-full flex-col space-y-2">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
                 <h5
                   className={`font-sub-title text-[.8rem] font-bold ${
                     isCompleted && "text-[#27AE60]"
@@ -121,7 +121,7 @@ const ProjectCard = ({
                 >
                   ₦{formatCurrency(amountRaised || "0")}{" "}
                   <span className="font-body text-[.7rem] font-[400]">
-                    raised
+                    raised out of
                   </span>
                 </h5>
                 <h5 className="font-title text-[1rem] font-bold">

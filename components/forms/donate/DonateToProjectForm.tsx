@@ -153,30 +153,36 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
     if (paystackConfig.publicKey === "" || paystackConfig.reference === "")
       return;
     setPaystackLoading(true);
-    initializePayment(() => {
-      const verify = async () => {
-        try {
-          await verifyProjectPayment({
-            // txn_id: "",
-            txn_reference: paystackConfig.reference,
-          });
-          setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
-          setPaymentSuccessful(true);
-        } catch (error) {
-          setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
-          toast({
-            variant: "destructive",
-            title: "Payment failed",
-            description:
-              "Unfortunately, we couldn't process your payment. Please try again later.",
-          });
-        } finally {
-          setFlutterLoading(false);
-        }
-        closePaymentModal();
-      };
-      verify();
-    });
+    initializePayment(
+      () => {
+        const verify = async () => {
+          try {
+            await verifyProjectPayment({
+              // txn_id: "",
+              txn_reference: paystackConfig.reference,
+            });
+            setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+            setPaymentSuccessful(true);
+          } catch (error) {
+            setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+            toast({
+              variant: "destructive",
+              title: "Payment failed",
+              description:
+                "Unfortunately, we couldn't process your payment. Please try again later.",
+            });
+          } finally {
+            setFlutterLoading(false);
+          }
+          closePaymentModal();
+        };
+        verify();
+      },
+      () => {
+        setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+        setPaystackLoading(false);
+      }
+    );
   }, [paystackConfig]);
   /* eslint-enable */
 

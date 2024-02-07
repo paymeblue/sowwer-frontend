@@ -164,30 +164,36 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
     if (paystackConfig.publicKey === "" || paystackConfig.reference === "")
       return;
     setPaystackLoading(true);
-    initializePayment(() => {
-      const verify = async () => {
-        try {
-          await verifyProjectPayment({
-            // txn_id: "",
-            txn_reference: paystackConfig.reference,
-          });
+    initializePayment(
+      () => {
+        const verify = async () => {
+          try {
+            await verifyProjectPayment({
+              // txn_id: "",
+              txn_reference: paystackConfig.reference,
+            });
 
-          setPaymentSuccessful(true);
-        } catch (error) {
-          toast({
-            variant: "destructive",
-            title: "Payment failed",
-            description:
-              "Unfortunately, we couldn't process your payment. Please try again later.",
-          });
-        } finally {
-          setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
-          setFlutterLoading(false);
-        }
-        closePaymentModal();
-      };
-      verify();
-    });
+            setPaymentSuccessful(true);
+          } catch (error) {
+            toast({
+              variant: "destructive",
+              title: "Payment failed",
+              description:
+                "Unfortunately, we couldn't process your payment. Please try again later.",
+            });
+          } finally {
+            setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+            setFlutterLoading(false);
+          }
+          closePaymentModal();
+        };
+        verify();
+      },
+      () => {
+        setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+        setPaystackLoading(false);
+      }
+    );
   }, [paystackConfig]);
   /* eslint-enable */
 

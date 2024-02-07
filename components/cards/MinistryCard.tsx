@@ -27,7 +27,7 @@ const MinistryCard = ({ name, location, logoUrl, id }: IMinistryCard) => {
           </div>
         )}
         <div className="flex flex-col items-center justify-center">
-          <h4 className="text_small_header capitalize">{name}</h4>
+          <h4 className="text_small_header text-center capitalize">{name}</h4>
           <div className="mt-2 flex items-center space-x-1">
             <Location size={19} />
             <p className="text_small_body_p">{location}</p>

@@ -147,11 +147,11 @@ const PageComp = ({ projectId }: Props) => {
 
             <div className="mt-8 flex w-full flex-col lg:mt-0">
               <div className="flex flex-col space-y-2">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
                   <h5 className="font-sub-title text-[1rem] font-bold">
                     ₦{formatCurrency(amountRaised)}{" "}
                     <span className="font-body text-[.75rem] font-[400] text-body-2">
-                      raised
+                      raised out of
                     </span>
                   </h5>
                   <h5 className="font-title text-[1.2rem] font-bold">
