@@ -14,7 +14,7 @@ import { useCallback, useEffect, useState } from "react";
 import SuccessState from "@components/shared/SuccessState";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { useSearchParams } from "next/navigation";
-import { useVerifyProjectPaymentMutation } from "services/payouts";
+import { useVerifyPaymemtProjectMutation } from "services/payouts";
 import { useToast } from "@components/ui/use-toast";
 
 interface Props {
@@ -34,7 +34,7 @@ const DonateProjectComp = ({ projectId }: Props) => {
   } = useGetProjectDetailsQuery(projectId);
   const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const [verifyProjectPayment, { isLoading: verifyingPayment }] =
-    useVerifyProjectPaymentMutation();
+    useVerifyPaymemtProjectMutation();
 
   const handleVerify = useCallback(async () => {
     try {

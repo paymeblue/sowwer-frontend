@@ -68,7 +68,7 @@ const auth = api.injectEndpoints({
       query: (credentials) => {
         const { id, ...rest } = credentials;
         return {
-          url: `projects/${id}/p-initiate`,
+          url: `projects/${id}/initiate-donation`,
           method: "POST",
           body: rest,
         };
@@ -93,7 +93,7 @@ const auth = api.injectEndpoints({
       query: (credentials) => {
         const { id, ...rest } = credentials;
         return {
-          url: `projects/${id}/project-donate`,
+          url: `projects/${id}/initiate-donation`,
           method: "POST",
           body: rest,
         };
