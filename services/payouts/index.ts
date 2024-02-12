@@ -13,11 +13,24 @@ import { GetMinistryPayoutsResponse } from "services/ministry/typings";
 
 const payouts = api.injectEndpoints({
   endpoints: (build) => ({
-    verifyProjectPayment: build.mutation<any, VerifyPaymentRequest>({
+    // verifyProjectPayment: build.mutation<any, VerifyPaymentRequest>({
+    //   query: (body) => ({
+    //     url: `payments/verify-project-donation`,
+    //     method: "POST",
+    //     body,
+    //   }),
+    //   // invalidatesTags: cacher.cacheByIdArgProperty("Projects"),
+    //   transformResponse: (response: AccountResponse, meta, arg): any => {
+    //     return response;
+    //   },
+    //   invalidatesTags: ["Projects"],
+    //   transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+    //     response.data.message,
+    // }),
+    verifyPaymemtProject: build.mutation<any, VerifyPaymentRequest>({
       query: (body) => ({
-        url: `payments/verify-project-donation`,
-        method: "POST",
-        body,
+        url: `payments/project-donation-verification?txn_ref=${body.txn_reference}`,
+        method: "GET",
       }),
       // invalidatesTags: cacher.cacheByIdArgProperty("Projects"),
       transformResponse: (response: AccountResponse, meta, arg): any => {
@@ -138,7 +151,7 @@ export const {
   useGetBanksQuery,
   useVerifyAccountMutation,
   useSaveAccountMutation,
-  useVerifyProjectPaymentMutation,
+  // useVerifyProjectPaymentMutation,
   useVerifyMinistryPaymentMutation,
   useGetAccountInfoQuery,
   useRequestPayoutMutation,
@@ -146,4 +159,5 @@ export const {
   usePauseRecurringPaymentMutation,
   useResumeRecurringPaymentMutation,
   usePayoutHistoryQuery,
+  useVerifyPaymemtProjectMutation,
 } = payouts;

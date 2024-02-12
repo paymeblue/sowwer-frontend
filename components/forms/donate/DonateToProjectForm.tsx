@@ -13,7 +13,7 @@ import {
   useInitiatePaymentToProjectUnauthMutation,
   useInitiatePaymentToProjectAuthMutation,
 } from "services/auth";
-import { useVerifyProjectPaymentMutation } from "services/payouts";
+import { useVerifyPaymemtProjectMutation } from "services/payouts";
 import useFlutterConfig, { IConfig } from "@hooks/payments/useFlutterConfig";
 
 import { Checkbox } from "@components/ui/checkbox";
@@ -101,8 +101,10 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
     useInitiatePaymentToProjectAuthMutation();
   const { getConfig } = useFlutterConfig();
   const { getConfig: getPaystackConfig } = usePaystackConfig();
-  const [verifyProjectPayment, { isLoading: verifyingPayment }] =
-    useVerifyProjectPaymentMutation();
+  // const [verifyProjectPayment, { isLoading: verifyingPayment }] =
+  //   useVerifyProjectPaymentMutation();
+  const [verifyPaymentProject, { isLoading: verifyingPayment }] =
+    useVerifyPaymemtProjectMutation();
   const [config, setConfig] = useState<IConfig>(DEFAULT_CONFIG);
   const [paystackConfig, setPaystackConfig] = useState<IPaystackConfig>(
     DEFAULT_PAYSTACK_CONFIG
@@ -157,7 +159,7 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
       () => {
         const verify = async () => {
           try {
-            await verifyProjectPayment({
+            await verifyPaymentProject({
               // txn_id: "",
               txn_reference: paystackConfig.reference,
             });
