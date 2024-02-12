@@ -135,6 +135,30 @@ const auth = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data,
     }),
+    initiatePaymentToMinistryOneTime: build.mutation<
+      InitiateDonationResponseUnauth,
+      InitiateDonationToMinistryRequestUnauth
+    >({
+      query: (credentials) => {
+        const { id, ...rest } = credentials;
+        return {
+          url: `ministries/${id}/initiate-onetime-donation`,
+          method: "POST",
+          body: rest,
+        };
+      },
+      invalidatesTags: cacher.invalidatesList("General"),
+      transformResponse: (
+        response: InitiateDonationResponseUnauth,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
+    }),
     initiatePaymentToMinistryAuth: build.mutation<
       InitiateDonationResponseAuth,
       InitiateDonationToMinistryRequestAuth
@@ -240,4 +264,5 @@ export const {
   useResetPasswordMutation,
   useInitiatePaymentToProjectAuthMutation,
   useInitiatePaymentToProjectUnauthMutation,
+  useInitiatePaymentToMinistryOneTimeMutation,
 } = auth;

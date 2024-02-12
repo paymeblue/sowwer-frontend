@@ -40,6 +40,7 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+
     verifyMinistryPayment: build.mutation<any, VerifyPaymentRequest>({
       query: (body) => ({
         url: `payments/verify-ministry-donation`,
@@ -49,6 +50,19 @@ const payouts = api.injectEndpoints({
       transformResponse: (response: AccountResponse, meta, arg): any => {
         return response;
       },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
+    verifyPaymemtMinistry: build.mutation<any, VerifyPaymentRequest>({
+      query: (body) => ({
+        url: `payments/verify-ministry-donation?txn_ref=${body.txn_reference}`,
+        method: "GET",
+      }),
+      // invalidatesTags: cacher.cacheByIdArgProperty("Projects"),
+      transformResponse: (response: AccountResponse, meta, arg): any => {
+        return response;
+      },
+      invalidatesTags: ["Projects"],
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
@@ -160,4 +174,5 @@ export const {
   useResumeRecurringPaymentMutation,
   usePayoutHistoryQuery,
   useVerifyPaymemtProjectMutation,
+  useVerifyPaymemtMinistryMutation,
 } = payouts;
