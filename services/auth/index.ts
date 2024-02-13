@@ -93,7 +93,7 @@ const auth = api.injectEndpoints({
       query: (credentials) => {
         const { id, ...rest } = credentials;
         return {
-          url: `projects/${id}/initiate-donation`,
+          url: `projects/${id}/project-donation-by-user`,
           method: "POST",
           body: rest,
         };
@@ -142,7 +142,10 @@ const auth = api.injectEndpoints({
       query: (credentials) => {
         const { id, ...rest } = credentials;
         return {
-          url: `ministries/${id}/initiate-onetime-donation`,
+          url:
+            credentials.payment_mode === "recurring"
+              ? `ministries/${id}/ministry-recurring-donation`
+              : `ministries/${id}/initiate-onetime-donation`,
           method: "POST",
           body: rest,
         };
@@ -166,7 +169,7 @@ const auth = api.injectEndpoints({
       query: (credentials) => {
         const { id, ...rest } = credentials;
         return {
-          url: `ministries/${id}/ministry-donate`,
+          url: `ministries/${id}/ministry-donation-by-user`,
           method: "POST",
           body: rest,
         };
