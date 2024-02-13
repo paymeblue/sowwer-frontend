@@ -93,7 +93,7 @@ const auth = api.injectEndpoints({
       query: (credentials) => {
         const { id, ...rest } = credentials;
         return {
-          url: `projects/${id}/initiate-donation`,
+          url: `projects/${id}/project-donation-by-user`,
           method: "POST",
           body: rest,
         };
@@ -135,6 +135,33 @@ const auth = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data,
     }),
+    initiatePaymentToMinistryOneTime: build.mutation<
+      InitiateDonationResponseUnauth,
+      InitiateDonationToMinistryRequestUnauth
+    >({
+      query: (credentials) => {
+        const { id, ...rest } = credentials;
+        return {
+          url:
+            credentials.payment_mode === "recurring"
+              ? `ministries/${id}/ministry-recurring-donation`
+              : `ministries/${id}/initiate-onetime-donation`,
+          method: "POST",
+          body: rest,
+        };
+      },
+      invalidatesTags: cacher.invalidatesList("General"),
+      transformResponse: (
+        response: InitiateDonationResponseUnauth,
+        meta,
+        arg
+      ): any => {
+        return response;
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
+    }),
     initiatePaymentToMinistryAuth: build.mutation<
       InitiateDonationResponseAuth,
       InitiateDonationToMinistryRequestAuth
@@ -142,7 +169,7 @@ const auth = api.injectEndpoints({
       query: (credentials) => {
         const { id, ...rest } = credentials;
         return {
-          url: `ministries/${id}/ministry-donate`,
+          url: `ministries/${id}/ministry-donation-by-user`,
           method: "POST",
           body: rest,
         };
@@ -240,4 +267,5 @@ export const {
   useResetPasswordMutation,
   useInitiatePaymentToProjectAuthMutation,
   useInitiatePaymentToProjectUnauthMutation,
+  useInitiatePaymentToMinistryOneTimeMutation,
 } = auth;

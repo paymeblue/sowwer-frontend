@@ -18,10 +18,10 @@ import usePaystackConfig, {
 } from "@hooks/payments/usePaystackConfig";
 import { usePaystackPayment } from "react-paystack";
 
-import { useVerifyMinistryPaymentMutation } from "services/payouts";
+import { useVerifyPaymemtMinistryMutation } from "services/payouts";
 import {
-  useInitiatePaymentToMinistryUnauthMutation,
   useInitiatePaymentToMinistryAuthMutation,
+  useInitiatePaymentToMinistryOneTimeMutation,
 } from "services/auth";
 
 import { Checkbox } from "@components/ui/checkbox";
@@ -103,15 +103,17 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
   const { getConfig } = useFlutterConfig();
   const { getConfig: getRecuringConfig } = useFlutterConfigReccuring();
   const { getConfig: getPaystackConfig } = usePaystackConfig();
+  // const [initiatePaymentToMinistryUnauth, { isLoading: paymentAuthLoading }] =
+  //   useInitiatePaymentToMinistryUnauthMutation();
   const [initiatePaymentToMinistryUnauth, { isLoading: paymentAuthLoading }] =
-    useInitiatePaymentToMinistryUnauthMutation();
+    useInitiatePaymentToMinistryOneTimeMutation();
   const { isAuthenticated, user } = useUserAuth();
   const [
     initiatePaymentToMinistryAuth,
     { isLoading: paymentLoadingForAuthUsers },
   ] = useInitiatePaymentToMinistryAuthMutation();
   const [verifyProjectPayment, { isLoading: verifyingPayment }] =
-    useVerifyMinistryPaymentMutation();
+    useVerifyPaymemtMinistryMutation();
   const [config, setConfig] = useState<IConfig | IConfigReccuring>(
     DEFAULT_CONFIG
   );
