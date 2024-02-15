@@ -55,7 +55,7 @@ const payouts = api.injectEndpoints({
     }),
     verifyPaymemtMinistry: build.mutation<any, VerifyPaymentRequest>({
       query: (body) => ({
-        url: `payments/verify-ministry-donation?txn_ref=${body.txn_reference}`,
+        url: `payments/ministry-donation-verification?txn_ref=${body.txn_reference}`,
         method: "GET",
       }),
       // invalidatesTags: cacher.cacheByIdArgProperty("Projects"),
