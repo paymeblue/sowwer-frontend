@@ -5,8 +5,8 @@ export const DonateToProjectValidation = z
     amount: z.string(),
     currency: z.enum(["USD", "NGN"]),
     shouldSignup: z.boolean(),
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().min(1, "Required"),
+    lastName: z.string().min(1, "Required"),
     email: z
       .string()
       .email("Please enter a valid email address")

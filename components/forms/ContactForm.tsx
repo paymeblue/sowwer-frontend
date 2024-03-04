@@ -39,6 +39,7 @@ const ContactForm = () => {
       fullName: "",
       message: "",
       countryCode: "🇳🇬,+234",
+      phoneNumber: "",
     },
   });
   const selectedCode = form.watch("countryCode");

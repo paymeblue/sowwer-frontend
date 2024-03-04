@@ -63,8 +63,8 @@ export const MinistrySignupMinistryDetailsValidation = z.object({
 });
 
 export const MinistrySignupPersonalInformationValidation = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
+  firstName: z.string().min(1, "Required"),
+  lastName: z.string().min(1, "Required"),
   role: z.string(),
   email: z
     .string()
