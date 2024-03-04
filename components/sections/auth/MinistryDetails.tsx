@@ -153,7 +153,7 @@ const MinistryDetails = ({
                       <FormLabel required>Address line</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter your organization’s address"
+                          placeholder={`Enter the address of your ${selectedCategory}`}
                           type="text"
                           {...field}
                         />

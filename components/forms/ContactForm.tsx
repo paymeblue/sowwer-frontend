@@ -66,6 +66,7 @@ const ContactForm = () => {
         toast({
           title: "Contact message sent successfully",
         });
+        form.reset();
       } else {
         throw new Error(result);
       }
