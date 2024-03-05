@@ -290,7 +290,9 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
             amount: amn * 100,
             email: email,
             reference: txnRef,
+            channels: ["card"],
           });
+          console.log({ config });
           setPaystackConfig(config);
         }
       }
