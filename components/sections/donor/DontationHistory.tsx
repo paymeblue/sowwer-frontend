@@ -15,7 +15,7 @@ const DonationHistory = () => {
           Project Donations
         </TabsTrigger>
         <TabsTrigger orientation="vertical" value="general-donations">
-          General Donations
+          Ministry Donations
         </TabsTrigger>
       </TabsList>
       <TabsContent orientation="vertical" value="project-donations">

@@ -18,7 +18,7 @@ const IncomingDonations = () => {
     <Tabs defaultValue="general-donors" className="mt-4 w-full">
       <TabsList variant="line">
         <TabsTrigger value="general-donors" variant="line">
-          General
+          Ministry
         </TabsTrigger>
         <TabsTrigger value="project-donors" variant="line">
           Project
@@ -40,7 +40,7 @@ const OutgoingDonations = () => {
     <Tabs defaultValue="general-donors" className="mt-4 w-full">
       <TabsList variant="line">
         <TabsTrigger value="general-donors" variant="line">
-          General
+          Ministry
         </TabsTrigger>
         <TabsTrigger value="project-donors" variant="line">
           Project
