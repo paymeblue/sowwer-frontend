@@ -39,7 +39,7 @@ export const MinistryGeneralLogoValidation = z.object({
 });
 
 export const MinistryContactDetailsValidation = z.object({
-  email: z.string().email(),
+  email: z.string().email().toLowerCase(),
   phone: z.string(),
 });
 
