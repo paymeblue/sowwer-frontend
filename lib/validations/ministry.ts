@@ -42,14 +42,14 @@ export const MinistryContactDetailsValidation = z.object({
   email: z.string().email().toLowerCase(),
   phone: z.string(),
 });
-
+const validUrl = z.string().url();
 export const MinistrySocialAccountsValidation = z.object({
-  website: z.string().optional(),
-  facebook: z.string().optional(),
-  instagram: z.string().optional(),
-  twitter: z.string().optional(),
-  linkedIn: z.string().optional(),
-  youtube: z.string().optional(),
+  website: validUrl,
+  facebook: validUrl.includes("facebook.com"),
+  instagram: validUrl.includes("instagram.com"),
+  twitter: validUrl,
+  linkedIn: validUrl.includes("linkedin.com"),
+  youtube: validUrl.includes("youtube.com"),
 });
 
 export const MinistryPersonalDetailsValidation = z.object({

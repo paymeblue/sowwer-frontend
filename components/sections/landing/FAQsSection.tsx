@@ -5,11 +5,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@components/ui/accordion";
-import SectionContainer from "../SectionContainer";
 import { Button } from "@components/ui/button";
-import { Heart2 } from "react-iconly";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+import Link from "next/link";
+import { Heart2 } from "react-iconly";
+import SectionContainer from "../SectionContainer";
 
 const FAQsSection = () => {
   return (
@@ -50,12 +51,14 @@ const FAQsSection = () => {
           <p className="text_large_body_r mt-2 lg:mt-4">
             — Galatians 6:10 (NIV)
           </p>
-          <Button className="mt-10 px-9 py-7">
-            <div className="flex items-center space-x-2">
-              <Heart2 set="bold" size={19} />
-              <span>Make a Donation</span>
-            </div>
-          </Button>
+          <Link href="/projects">
+            <Button className="mt-10 px-9 py-7">
+              <div className="flex items-center space-x-2">
+                <Heart2 set="bold" size={19} />
+                <span>Make a Donation</span>
+              </div>
+            </Button>
+          </Link>
         </motion.div>
       </SectionContainer>
     </section>
