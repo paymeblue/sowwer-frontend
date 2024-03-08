@@ -1,4 +1,5 @@
 "use client";
+import * as z from "zod";
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
 import { useGetProjectQuery } from "services/projects";
 import { Button } from "@components/ui/button";
@@ -14,6 +15,9 @@ import Loader from "@components/shared/Loader";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import useCopyToClipboard from "@hooks/general/useCopyToClipboard";
 import { useToast } from "@components/ui/use-toast";
+import { useForm } from "react-hook-form";
+import { MinistryCreateProjectValidation } from "lib/validations/ministry";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const RightContent = ({
   id,
@@ -86,6 +90,9 @@ interface Props {
 const ProjectEditorComp = ({ id }: Props) => {
   const router = useRouter();
   const { data: project, isLoading } = useGetProjectQuery(id);
+  const form = useForm<z.infer<typeof MinistryCreateProjectValidation>>({
+    resolver: zodResolver(MinistryCreateProjectValidation),
+  });
 
   if (isLoading) {
     return <Loader className="h-[80vh]" />;
@@ -130,7 +137,7 @@ const ProjectEditorComp = ({ id }: Props) => {
           <TabsTrigger value="sharing-details">Sharing Details</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-          <Overview id={project?.data?.id || null} />
+          <Overview id={project?.data?.id || null} form={form} />
         </TabsContent>
         <TabsContent value="sharing-details">
           {!id || project?.data.status !== "active" ? (
