@@ -52,11 +52,11 @@ const projectDonationsColumns: ColumnDef<ProjectDonation>[] = [
     },
   },
   {
-    accessorKey: "targetAmount",
+    accessorKey: "amountDonated",
     header: "Amount Donated",
     cell: ({ row }) => {
       const formatedAmmount = formatCurrency(
-        row.getValue("targetAmount") as string
+        row.getValue("amountDonated") as string
       );
       return <span>₦{formatedAmmount}</span>;
     },

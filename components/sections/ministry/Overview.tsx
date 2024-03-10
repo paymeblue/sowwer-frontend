@@ -1,7 +1,6 @@
 "use client";
 import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { UseFormReturn } from "react-hook-form";
 import { MinistryCreateProjectValidation } from "lib/validations/ministry";
 import {
   useGetProjectQuery,
@@ -26,14 +25,15 @@ import { useRouter } from "next/navigation";
 
 interface Props {
   id?: string | null;
+  form: UseFormReturn<z.infer<typeof MinistryCreateProjectValidation>>;
 }
 
-const OverviewComp = ({ id }: Props) => {
+const OverviewComp = ({ id, form }: Props) => {
   const { data: project } = useGetProjectQuery(id);
   const router = useRouter();
-  const form = useForm<z.infer<typeof MinistryCreateProjectValidation>>({
-    resolver: zodResolver(MinistryCreateProjectValidation),
-  });
+  // const form = useForm<z.infer<typeof MinistryCreateProjectValidation>>({
+  //   resolver: zodResolver(MinistryCreateProjectValidation),
+  // });
   const { toast } = useToast();
   const [createProject, { isLoading }] = useCreateProjectMutation();
   const [editProject, { isLoading: updatingProject }] =
@@ -285,10 +285,10 @@ const OverviewComp = ({ id }: Props) => {
   );
 };
 
-const Overview = ({ id }: Props) => {
+const Overview = ({ id, form }: Props) => {
   return (
     <NoSSRWrapper>
-      <OverviewComp id={id} />
+      <OverviewComp id={id} form={form} />
     </NoSSRWrapper>
   );
 };
