@@ -1,23 +1,20 @@
 "use client";
+import EmptyWallet from "@components/assets/svg/emptyWallet";
+import EmptyState from "@components/shared/EmptyState";
+import Loader from "@components/shared/Loader";
+import { Button } from "@components/ui/button";
+import DataTable from "@components/ui/data-table";
+import { useToast } from "@components/ui/use-toast";
+import usePagination from "@hooks/general/usePagination";
+import { formatCurrency } from "@lib/functions";
+import { ColumnDef } from "@tanstack/react-table";
+import moment from "moment";
+import Link from "next/link";
+import { useToggleRecurringPaymentMutation } from "services/payouts";
 import {
   useGetOutgoingGeneralDonationsForMinistryUserQuery,
   useGetOutgoingProjectDonationsForMinistryUserQuery,
 } from "services/projects";
-import {
-  useResumeRecurringPaymentMutation,
-  usePauseRecurringPaymentMutation,
-} from "services/payouts";
-import { Button } from "@components/ui/button";
-import DataTable from "@components/ui/data-table";
-import { formatCurrency } from "@lib/functions";
-import { ColumnDef } from "@tanstack/react-table";
-import usePagination from "@hooks/general/usePagination";
-import Loader from "@components/shared/Loader";
-import EmptyState from "@components/shared/EmptyState";
-import EmptyWallet from "@components/assets/svg/emptyWallet";
-import moment from "moment";
-import Link from "next/link";
-import { useToast } from "@components/ui/use-toast";
 
 export type ProjectDonation = {
   id: string;
@@ -34,8 +31,8 @@ export type GeneralDonation = {
   interval: "monthly" | "quarterly" | "yearly" | null;
   amountDonated: string;
   createdAt: string;
-  plan_status: string;
-  plan_id: string;
+  recurring_status: string;
+  recurring_id: string;
 };
 
 const projectDonationsColumns: ColumnDef<ProjectDonation>[] = [
@@ -125,69 +122,66 @@ const generalDonationsColumn: ColumnDef<GeneralDonation>[] = [
 ];
 
 const ActionComp = ({ donation }: { donation: GeneralDonation }) => {
-  const [resumePayment, { isLoading: resumingPaymentLoading }] =
-    useResumeRecurringPaymentMutation();
-  const [pausePayment, { isLoading: pausingPayment }] =
-    usePauseRecurringPaymentMutation();
+  const [togglePayment, { isLoading: togglingPayment }] =
+    useToggleRecurringPaymentMutation();
   const { toast } = useToast();
 
-  const handleResumePayment = async () => {
-    const { plan_id } = donation;
+  // const handleResumePayment = async () => {
+  //   const { plan_id } = donation;
 
+  //   try {
+  //     await resumePayment(plan_id).unwrap();
+  //     toast({
+  //       title: "Donation recurring payment resumed successfully",
+  //     });
+  //   } catch (err) {
+  //     toast({
+  //       variant: "destructive",
+  //       title: "Unable to resume payment",
+  //     });
+  //   }
+  // };
+
+  const handleTogglePayment = async () => {
+    const { recurring_id } = donation;
     try {
-      await resumePayment(plan_id).unwrap();
+      await togglePayment(recurring_id).unwrap();
       toast({
-        title: "Donation recurring payment resumed successfully",
+        title: `${
+          donation.recurring_status === "cancelled"
+            ? "Donation recurring payment resumed successfully"
+            : "Donation recurring payment paused successfully"
+        }`,
       });
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Unable to resume payment",
-      });
-    }
-  };
-
-  const handlePausePayment = async () => {
-    const { plan_id } = donation;
-
-    try {
-      await pausePayment(plan_id).unwrap();
-      toast({
-        title: "Donation recurring payment paused successfully",
-      });
-    } catch (err) {
-      toast({
-        variant: "destructive",
-        title: "Unable to pause payment",
+        title: `${
+          donation.recurring_status === "cancelled"
+            ? "Unable to pause payment"
+            : "Unable to resume payment"
+        }`,
       });
     }
   };
   return (
     <>
       {donation.type === "recurring" ? (
-        <>
-          {donation.plan_status === "cancelled" ? (
-            <Button
-              variant="outline"
-              className="w-full border-accent px-3 text-[.75rem] text-accent"
-              size="sm"
-              onClick={handleResumePayment}
-              loading={resumingPaymentLoading}
-            >
-              Resume payment
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              className="w-full border-[#EB5757] px-3 text-[.75rem] text-[#EB5757]"
-              size="sm"
-              onClick={handlePausePayment}
-              loading={pausingPayment}
-            >
-              Pause payment
-            </Button>
-          )}
-        </>
+        <Button
+          variant="outline"
+          className={`${
+            donation.recurring_status === "cancelled"
+              ? "border-accent text-accent"
+              : "border-[#EB5757] text-[#EB5757]"
+          } w-full px-3 text-[.75rem]`}
+          size="sm"
+          onClick={handleTogglePayment}
+          loading={togglingPayment}
+        >
+          {donation.recurring_status === "cancelled"
+            ? "Resume payment"
+            : "Pause payment"}
+        </Button>
       ) : null}
     </>
   );
