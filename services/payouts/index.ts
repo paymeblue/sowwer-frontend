@@ -1,3 +1,6 @@
+import api from "services/api/apiSlice";
+import { cacher } from "services/api/rtkQueryCacheUtils";
+import { GetMinistryPayoutsResponse } from "services/ministry/typings";
 import {
   AccountResponse,
   ErrorResponse,
@@ -7,9 +10,6 @@ import {
   VerifyAccountRequest,
   VerifyPaymentRequest,
 } from "../typings";
-import api from "services/api/apiSlice";
-import { cacher } from "services/api/rtkQueryCacheUtils";
-import { GetMinistryPayoutsResponse } from "services/ministry/typings";
 
 const payouts = api.injectEndpoints({
   endpoints: (build) => ({
@@ -92,8 +92,8 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    pauseRecurringPayment: build.mutation<PlainResponse, string>({
-      query: (id) => `plans/${id}/cancel`,
+    toggleRecurringPayment: build.mutation<PlainResponse, string>({
+      query: (id) => `recurring-donation/${id}/toggle`,
       // invalidatesTags: cacher.providesProperty("General"),
       invalidatesTags: ["General", "Projects"],
       transformResponse: (response: PlainResponse, meta, arg): any => {
@@ -102,6 +102,16 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    // pauseRecurringPayment: build.mutation<PlainResponse, string>({
+    //   query: (id) => `plans/${id}/cancel`,
+    //   // invalidatesTags: cacher.providesProperty("General"),
+    //   invalidatesTags: ["General", "Projects"],
+    //   transformResponse: (response: PlainResponse, meta, arg): any => {
+    //     return response;
+    //   },
+    //   transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+    //     response.data.message,
+    // }),
     resumeRecurringPayment: build.mutation<PlainResponse, string>({
       query: (id) => `plans/${id}/resume-payment`,
       invalidatesTags: ["General", "Projects"],
@@ -170,7 +180,8 @@ export const {
   useGetAccountInfoQuery,
   useRequestPayoutMutation,
   useRequestMinistryPayoutMutation,
-  usePauseRecurringPaymentMutation,
+  // usePauseRecurringPaymentMutation,
+  useToggleRecurringPaymentMutation,
   useResumeRecurringPaymentMutation,
   usePayoutHistoryQuery,
   useVerifyPaymemtProjectMutation,

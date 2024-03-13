@@ -460,12 +460,12 @@ export type DonorGeneralDonations = {
 export type DonorGeneralDonationsResponse = TResponse<{
   id: string;
   payment_id: string;
-  plan_id: string;
+  recurring_id: string;
   state: string;
   type: "one-time" | "recurring";
   interval: "monthly" | "quarterly" | "yearly";
   logo: string | null;
-  plan_status: string;
+  recurring_status: "active" | "cancelled";
   organisedBy: string;
   description: string;
   donorCount: string;
@@ -478,12 +478,12 @@ export type DonorGeneralDonationsResponse = TResponse<{
 export type MinistryOutgoingGeneralDonationsResponse = TResponse<{
   id: string;
   payment_id: string;
-  plan_id: string;
+  recurring_id: string;
   state: string;
   type: "one-time" | "recurring";
   interval: "monthly" | "quarterly" | "yearly";
   logo: string | null;
-  plan_status: string;
+  recurring_status: "active" | "cancelled";
   organisedBy: string;
   description: string;
   donorCount: string;

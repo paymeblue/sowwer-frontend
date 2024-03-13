@@ -7,8 +7,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@components/ui/form";
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 import { useForm } from "react-hook-form";
 import {
@@ -16,20 +16,20 @@ import {
   useUpdateSocialLinksMutation,
 } from "services/ministry";
 
-import { MinistrySocialAccountsValidation } from "lib/validations/ministry";
-import { Input } from "@components/ui/input-with-icon";
-import { Button } from "@components/ui/button";
-import { Globe } from "lucide-react";
 import Facebook from "@components/assets/svg/Facebook";
 import InstaColor from "@components/assets/svg/instaColor";
-import Twitter from "@components/assets/svg/twitter";
 import LinkedInColor from "@components/assets/svg/linkedInColor";
+import Twitter from "@components/assets/svg/twitter";
 import YoutubeColor from "@components/assets/svg/youtubeColor";
+import Loader from "@components/shared/Loader";
+import { Button } from "@components/ui/button";
+import { Input } from "@components/ui/input-with-icon";
+import { useToast } from "@components/ui/use-toast";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import Loader from "@components/shared/Loader";
+import { MinistrySocialAccountsValidation } from "lib/validations/ministry";
+import { Globe } from "lucide-react";
 import { useEffect } from "react";
-import { useToast } from "@components/ui/use-toast";
 
 const SocialAccountsForm = () => {
   const { user } = useUserAuth();
@@ -202,7 +202,7 @@ const SocialAccountsForm = () => {
           />
           <FormField
             control={form.control}
-            name="linkedIn"
+            name="youtube"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>YouTube</FormLabel>

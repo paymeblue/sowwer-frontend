@@ -1,15 +1,15 @@
 "use client";
+import Calling from "@components/assets/svg/Calling";
+import Facebook from "@components/assets/svg/Facebook";
+import Message from "@components/assets/svg/Message";
+import Twitter from "@components/assets/svg/twitter";
+import YoutubeColor from "@components/assets/svg/youtubeColor";
+import SectionContainer from "@components/sections/SectionContainer";
+import { Instagram } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import appleStore from "public/assets/icons/app-store.svg";
 import playStore from "public/assets/icons/google-play.svg";
-import { Instagram } from "lucide-react";
-import Facebook from "@components/assets/svg/Facebook";
-import Twitter from "@components/assets/svg/twitter";
-import YoutubeColor from "@components/assets/svg/youtubeColor";
-import Calling from "@components/assets/svg/Calling";
-import Message from "@components/assets/svg/Message";
-import SectionContainer from "@components/sections/SectionContainer";
 import Logo from "../Logo";
 
 interface Props {
@@ -17,11 +17,12 @@ interface Props {
 }
 
 const Footer = ({ variant = "default" }: Props) => {
+  const year = new Date().getFullYear();
   if (variant === "minimal") {
     return (
       <footer className="flex w-full flex-col items-center justify-center border-t-[.3px] border-body-2 px-4 py-4 lg:flex-row lg:justify-between">
         <span className="text_small_body_sb">
-          © 2023 Soower. All rights reserved.
+          © 2023 - {year} Soower. All rights reserved.
         </span>
         <div className="flex flex-col items-center space-x-0 max-lg:justify-center lg:flex-row lg:space-x-2">
           <Link href="#">
@@ -133,7 +134,7 @@ const Footer = ({ variant = "default" }: Props) => {
         <div className="mt-10 border-t-[0.3px] border-[#C4C4C4] py-8">
           <div className="flex flex-col items-center space-x-6 lg:flex-row">
             <span className="lg: text-center font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] lg:text-start">
-              © 2023 Soower. All rights reserved.
+              © 2023 - {year} Soower. All rights reserved.
             </span>
             <Link href="/">
               <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">

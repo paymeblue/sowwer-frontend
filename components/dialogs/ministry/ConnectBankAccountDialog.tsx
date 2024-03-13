@@ -1,10 +1,5 @@
 "use client";
 import {
-  useGetBanksQuery,
-  useVerifyAccountMutation,
-  useSaveAccountMutation,
-} from "services/payouts";
-import {
   Form,
   FormControl,
   FormField,
@@ -12,36 +7,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@components/ui/form";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  useGetBanksQuery,
+  useSaveAccountMutation,
+  useVerifyAccountMutation,
+} from "services/payouts";
+import * as z from "zod";
 
 import EmptyState from "@components/shared/EmptyState";
-import { Button } from "@components/ui/button";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@components/ui/dialog";
-import { InfoCircle } from "react-iconly";
-import { useToast } from "@components/ui/use-toast";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-import { MinistryConnectBankAccount } from "lib/validations/ministry";
-import { Input } from "@components/ui/input";
 import Loader from "@components/shared/Loader";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@components/ui/popover";
-import { cn } from "@lib/cn";
-import { Check, ChevronDown } from "lucide-react";
+import { Button } from "@components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -49,6 +26,30 @@ import {
   CommandInput,
   CommandItem,
 } from "@components/ui/command";
+import {
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@components/ui/dialog";
+import { Input } from "@components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@components/ui/popover";
+import { useToast } from "@components/ui/use-toast";
+import { cn } from "@lib/cn";
+import { MinistryConnectBankAccount } from "lib/validations/ministry";
+import { Check, ChevronDown } from "lucide-react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { InfoCircle } from "react-iconly";
 
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -124,7 +125,13 @@ const ConnectBankAccountDialog = ({ setOpen, defaultStep }: Props) => {
       verifyEnteredAccount();
     }
   }, [form.formState.isValid, verifyEnteredAccount]);
-
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value.trim();
+    let cleaned = inputValue.replace(/\D/g, "");
+    // Limit the cleaned input to a maximum of 10 digits
+    cleaned = cleaned.slice(0, 10);
+    return cleaned;
+  };
   return (
     <DialogContent>
       <div>
@@ -244,11 +251,14 @@ const ConnectBankAccountDialog = ({ setOpen, defaultStep }: Props) => {
                             <FormLabel required>Account number</FormLabel>
                             <FormControl>
                               <Input
+                                {...field}
                                 placeholder="1234567890"
                                 disabled={verifying}
-                                type="number"
+                                // type="number"
                                 inputMode="numeric"
-                                {...field}
+                                onChange={(e) =>
+                                  field.onChange(handleChange(e))
+                                }
                               />
                             </FormControl>
                             <FormMessage />

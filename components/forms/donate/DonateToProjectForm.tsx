@@ -1,21 +1,22 @@
 "use client";
-import * as z from "zod";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
 import {
   DonateToProjectAuthValidation,
   DonateToProjectValidation,
 } from "lib/validations/donate";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
+import * as z from "zod";
 
+import useFlutterConfig, { IConfig } from "@hooks/payments/useFlutterConfig";
 import {
-  useInitiatePaymentToProjectUnauthMutation,
   useInitiatePaymentToProjectAuthMutation,
+  useInitiatePaymentToProjectUnauthMutation,
 } from "services/auth";
 import { useVerifyPaymemtProjectMutation } from "services/payouts";
-import useFlutterConfig, { IConfig } from "@hooks/payments/useFlutterConfig";
 
+import { Button } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
 import {
   Form,
@@ -34,15 +35,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui/select";
-import { Button } from "@components/ui/button";
-import { Heart2 } from "react-iconly";
 import { useToast } from "@components/ui/use-toast";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import usePaystackConfig, {
   IPaystackConfig,
 } from "@hooks/payments/usePaystackConfig";
-import { usePaystackPayment } from "react-paystack";
 import { PAYMENT_GATEWAY } from "@lib/constants";
+import { Heart2 } from "react-iconly";
+import { usePaystackPayment } from "react-paystack";
 
 const DEFAULT_CONFIG = {
   public_key: "",
@@ -200,6 +200,8 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
       isAnonymous,
       phoneNumber,
       shouldSignup,
+      password,
+      confirmPassword,
     } = values;
     try {
       const res = await initiatePaymentToProjectUnauth({
@@ -211,8 +213,8 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
         amount: Number(amount.replace(/,/g, "")),
         createAccount: shouldSignup,
         phone: phoneNumber,
-        password: "",
-        confirm_password: "",
+        password: shouldSignup ? password! : "",
+        confirm_password: shouldSignup ? confirmPassword! : "",
         currency,
       }).unwrap();
 
