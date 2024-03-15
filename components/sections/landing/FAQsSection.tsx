@@ -66,7 +66,7 @@ const FAQsSection = () => {
 };
 const data = [
   {
-    header: "What type of ministries can I donate to on Soower?",
+    header: "What type of ministries and projects can I donate to on Soower?",
     body: "You can donate to various ministries across Nigeria, as long as they have a ministry account with Soower. This includes Churches & Christian Organizations. Projects on Soower are classified into 3 categories: Widows, Orphans and Missions.",
     id: "1",
   },
