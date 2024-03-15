@@ -2,7 +2,6 @@
 
 import { Button } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
-import { useWidowMutation } from "services/join-soower-registry";
 import {
   Form,
   FormControl,
@@ -13,13 +12,6 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { WidowRegistrationForSomeone } from "lib/validations/join-registry";
-import { ArrowRight } from "react-iconly";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
-import { useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -28,7 +20,15 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { useToast } from "@components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { WidowRegistrationForSomeone } from "lib/validations/join-registry";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { ArrowRight } from "react-iconly";
+import { useWidowMutation } from "services/join-soower-registry";
 import { WidowJoinSoowerRequest2 } from "services/typings";
+import * as z from "zod";
+import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
 
 const RegistrationForSomeone = ({
   onSuccess,
@@ -67,11 +67,13 @@ const RegistrationForSomeone = ({
       widowPhone,
     } = values;
 
-    if (acceptTerms) {
+    if (!acceptTerms) {
       toast({
         variant: "destructive",
         title: "You must accept the declaration.",
+        duration: 2000,
       });
+      return;
     }
 
     try {
@@ -93,11 +95,17 @@ const RegistrationForSomeone = ({
       await joinWidowRegistry(data).unwrap();
       toast({
         title: "Widow registration successful",
+        duration: 2500,
       });
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Unable to complete registration. Please try again later.",
+        title: "Unable to complete registration.",
+        description: `${
+          err ||
+          "There seems to be a problem with your registration, please try again later."
+        }`,
+        duration: 2500,
       });
     }
   };

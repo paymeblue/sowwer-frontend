@@ -12,11 +12,6 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { WidowRegistration } from "lib/validations/join-registry";
-import { ArrowRight } from "react-iconly";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import {
   Select,
   SelectContent,
@@ -25,9 +20,14 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { useToast } from "@components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { WidowRegistration } from "lib/validations/join-registry";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { ArrowRight } from "react-iconly";
 import { useWidowMutation } from "services/join-soower-registry";
 import { WidowJoinSoowerRequest1 } from "services/typings";
-import { useEffect } from "react";
+import * as z from "zod";
 import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
 
 const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
@@ -64,6 +64,7 @@ const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
       toast({
         variant: "destructive",
         title: "You must accept the declaration.",
+        duration: 2000,
       });
       return;
     }
@@ -88,7 +89,12 @@ const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
     } catch (err) {
       toast({
         variant: "destructive",
-        title: "Unable to complete registration. Please try again later.",
+        title: "Unable to complete registration.",
+        description: `${
+          err ||
+          "There seems to be a problem with your registration, please try again later."
+        }`,
+        duration: 2500,
       });
     }
   };

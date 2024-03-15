@@ -12,16 +12,6 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ExisitingMissionRegistration } from "lib/validations/join-registry";
-import { ArrowRight } from "react-iconly";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Textarea } from "@components/ui/textarea";
-import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
-import { useToast } from "@components/ui/use-toast";
-import { useMissionaryMutation } from "services/join-soower-registry";
-import { useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -29,7 +19,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui/select";
+import { Textarea } from "@components/ui/textarea";
+import { useToast } from "@components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ExisitingMissionRegistration } from "lib/validations/join-registry";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { ArrowRight } from "react-iconly";
+import { useMissionaryMutation } from "services/join-soower-registry";
 import { MissionaryJoinSoowerRequest2 } from "services/typings";
+import * as z from "zod";
+import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
 
 const ExistingMissionaryForm = ({
   onSuccess,
@@ -65,7 +65,14 @@ const ExistingMissionaryForm = ({
       serviceArea,
       range,
     } = values;
-
+    if (!acceptTerms) {
+      toast({
+        variant: "destructive",
+        title: "You must accept the declaration.",
+        duration: 2000,
+      });
+      return;
+    }
     try {
       const data = {
         address,

@@ -14,16 +14,16 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
+import { Textarea } from "@components/ui/textarea";
+import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewMissionaryRegistration } from "lib/validations/join-registry";
-import { ArrowRight } from "react-iconly";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Textarea } from "@components/ui/textarea";
-import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
 import { useEffect } from "react";
-import { useToast } from "@components/ui/use-toast";
+import { useForm } from "react-hook-form";
+import { ArrowRight } from "react-iconly";
 import { MissionaryJoinSoowerRequest1 } from "services/typings";
+import * as z from "zod";
+import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
 
 const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
   const form = useForm<z.infer<typeof NewMissionaryRegistration>>({
@@ -55,7 +55,14 @@ const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
       phoneNumber,
       reason,
     } = values;
-
+    if (!acceptTerms) {
+      toast({
+        variant: "destructive",
+        title: "You must accept the declaration.",
+        duration: 2000,
+      });
+      return;
+    }
     try {
       const data = {
         address,
@@ -73,6 +80,7 @@ const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
       await joinMissionaryRegistry(data).unwrap();
       toast({
         title: "Missionary registration successful, we will be in touch.",
+        duration: 2500,
       });
     } catch (err: any) {
       toast({
@@ -81,6 +89,7 @@ const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
         description:
           err ||
           "There seems to be a problem with your registration, please try again later.",
+        duration: 2500,
       });
     }
   };
