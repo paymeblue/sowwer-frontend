@@ -1,16 +1,16 @@
 "use client";
-import { useGetGeneralDonationsForDonorUserQuery } from "services/projects";
+import Emptydonor from "@components/assets/svg/emptyDonor";
 import ProjectCard, { IProject } from "@components/cards/ProjectCard";
+import EmptyState from "@components/shared/EmptyState";
+import Loader from "@components/shared/Loader";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import Pagination from "@components/shared/Pagination";
+import { Button } from "@components/ui/button";
+import usePagination from "@hooks/general/usePagination";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, cardContainerVariant } from "lib/variants";
-import usePagination from "@hooks/general/usePagination";
-import Loader from "@components/shared/Loader";
-import EmptyState from "@components/shared/EmptyState";
-import Emptydonor from "@components/assets/svg/emptyDonor";
 import Link from "next/link";
-import { Button } from "@components/ui/button";
-import Pagination from "@components/shared/Pagination";
-import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import { useGetGeneralDonationsForDonorUserQuery } from "services/projects";
 
 export const donations: IProject[] = [
   {
@@ -88,7 +88,7 @@ const GeneralDonationsComp = () => {
             return index === self.findIndex((d) => d.id === donation.id);
           })
           .map((donation, i) => {
-            const { id, organisedBy, type, description } = donation;
+            const { id, organisedBy, type, description, logo } = donation;
             return (
               <ProjectCard
                 variant="general"
@@ -97,6 +97,7 @@ const GeneralDonationsComp = () => {
                 key={donation.id}
                 description={description}
                 id={id}
+                image={logo}
               />
             );
           })}

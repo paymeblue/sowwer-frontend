@@ -1,11 +1,11 @@
 "use client";
 
-import { DonorSigninValidation } from "lib/validations/donor";
-import { useLoginMutation } from "services/auth";
-import { useDispatch } from "react-redux";
-import * as z from "zod";
-import { setCredentials } from "redux/auth/reducer";
 import { useToast } from "@components/ui/use-toast";
+import { DonorSigninValidation } from "lib/validations/donor";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "redux/auth/reducer";
+import { useLoginMutation } from "services/auth";
+import * as z from "zod";
 
 const useDonorSignin = () => {
   const [login, { isLoading }] = useLoginMutation();
@@ -34,6 +34,7 @@ const useDonorSignin = () => {
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: "Please check your email and password and try again",
+        // description: `${error.message} || ''`,
       });
     }
   };

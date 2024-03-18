@@ -1,11 +1,11 @@
 "use client";
 
-import { useLoginMutation } from "services/auth";
-import { useDispatch } from "react-redux";
-import * as z from "zod";
-import { setCredentials } from "redux/auth/reducer";
 import { useToast } from "@components/ui/use-toast";
 import { MinistrySigninValidation } from "lib/validations/ministry";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "redux/auth/reducer";
+import { useLoginMutation } from "services/auth";
+import * as z from "zod";
 
 const useMinistrySignin = () => {
   const [login, { isLoading }] = useLoginMutation();
@@ -32,10 +32,12 @@ const useMinistrySignin = () => {
       );
       // router.push("/ministry");
     } catch (error: any) {
+      console.log(error, "err");
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: "Please check your email and password and try again",
+        // description: `${error.message} || ''`,
       });
     }
   };
