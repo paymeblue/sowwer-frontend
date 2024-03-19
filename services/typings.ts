@@ -569,6 +569,18 @@ export type GetMinistryDetailsResponse = Response<{
   donation_description: string;
   about: string;
   logo: string;
+  social_links: {
+    id: string;
+    ministry_id: string;
+    website: string | null;
+    facebook: string | null;
+    instagram: string | null;
+    twitter: string | null;
+    linkedin: string | null;
+    youtube: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
 }>;
 export type SocialLinks = {
   id: string;

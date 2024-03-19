@@ -141,8 +141,8 @@ const ActionComp = ({ donation }: { donation: GeneralDonation }) => {
   //     });
   //   }
   // };
-
   const handleTogglePayment = async () => {
+    console.log(donation, "donation");
     const { recurring_id } = donation;
     try {
       await togglePayment(recurring_id).unwrap();

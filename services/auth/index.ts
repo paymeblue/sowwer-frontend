@@ -1,3 +1,5 @@
+import api from "services/api/apiSlice";
+import { cacher } from "services/api/rtkQueryCacheUtils";
 import {
   ErrorResponse,
   InitiateDonationResponseAuth,
@@ -14,8 +16,6 @@ import {
   ResetPassowrdRequest,
   SignupResponse,
 } from "../typings";
-import api from "services/api/apiSlice";
-import { cacher } from "services/api/rtkQueryCacheUtils";
 
 const auth = api.injectEndpoints({
   endpoints: (build) => ({

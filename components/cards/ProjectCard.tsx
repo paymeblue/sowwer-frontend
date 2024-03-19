@@ -1,14 +1,14 @@
-import Tag from "@components/ui/tag";
-import { Heart2 } from "react-iconly";
 import Soower from "@components/assets/svg/Soower";
-import Image from "next/image";
 import { Button } from "@components/ui/button";
 import { Progress } from "@components/ui/progress";
+import Tag from "@components/ui/tag";
 import { truncateTextWithEllipsis } from "@lib/capitalize";
-import Link from "next/link";
-import { ImageIcon } from "lucide-react";
-import { formatCurrency } from "@lib/functions";
 import { Status } from "@lib/constants";
+import { formatCurrency } from "@lib/functions";
+import { ImageIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Heart2 } from "react-iconly";
 
 export interface IProject {
   id: string;
@@ -75,12 +75,12 @@ const ProjectCard = ({
         {image || cover_photo ? (
           <Image
             src={(image || cover_photo) as string}
-            alt="happy woman"
+            alt={title}
             fill
             className="object-cover transition-all duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="spae-y-2 flex flex-col items-center text-gray-400">
+          <div className="flex flex-col items-center space-y-2 text-gray-400">
             <ImageIcon />
             <p className="text_tiny_body_r text-gray-400">No cover photo</p>
           </div>

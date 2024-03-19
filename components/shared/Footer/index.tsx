@@ -25,12 +25,12 @@ const Footer = ({ variant = "default" }: Props) => {
           © 2023 - {year} Soower. All rights reserved.
         </span>
         <div className="flex flex-col items-center space-x-0 max-lg:justify-center lg:flex-row lg:space-x-2">
-          <Link href="#">
+          <Link href="terms-of-use">
             <span className="text_small_body_r max-lg:text-center">
               Terms of Use
             </span>
           </Link>
-          <Link href="#">
+          <Link href="privacy-policy">
             <span className="text_small_body_r max-lg:text-center">
               Privacy Policy
             </span>
@@ -136,12 +136,12 @@ const Footer = ({ variant = "default" }: Props) => {
             <span className="lg: text-center font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] lg:text-start">
               © 2023 - {year} Soower. All rights reserved.
             </span>
-            <Link href="/">
+            <Link href="terms-of-use">
               <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
                 Terms of use
               </span>
             </Link>
-            <Link href="/">
+            <Link href="privacy-policy">
               <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
                 Privacy policy
               </span>

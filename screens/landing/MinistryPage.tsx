@@ -9,18 +9,18 @@ import { Globe } from "lucide-react";
 import { Heart2, InfoCircle, Location } from "react-iconly";
 
 import Facebook from "@components/assets/svg/Facebook";
-import InstaColor from "@components/assets/svg/instaColor";
-import Twitter from "@components/assets/svg/twitter";
-import LinkedInColor from "@components/assets/svg/linkedInColor";
-import YoutubeColor from "@components/assets/svg/youtubeColor";
-import { Button } from "@components/ui/button";
-import { useGetMinistryDetailsQuery } from "services/ministry";
-import Loader from "@components/shared/Loader";
-import EmptyState from "@components/shared/EmptyState";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
+import InstaColor from "@components/assets/svg/instaColor";
+import LinkedInColor from "@components/assets/svg/linkedInColor";
+import Twitter from "@components/assets/svg/twitter";
+import YoutubeColor from "@components/assets/svg/youtubeColor";
 import MinistryProjectsSection from "@components/sections/landing/MinistryProjectsSection";
-import Link from "next/link";
+import EmptyState from "@components/shared/EmptyState";
+import Loader from "@components/shared/Loader";
+import { Button } from "@components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
+import { useGetMinistryDetailsQuery } from "services/ministry";
 
 interface Props {
   ministryId: string;
@@ -46,7 +46,8 @@ const MinistryPageComp = ({ ministryId }: Props) => {
     );
   }
 
-  const { about, state, website, name, id, logo } = ministryDetails?.data!;
+  const { about, state, website, name, id, logo, social_links } =
+    ministryDetails?.data!;
 
   return (
     <SectionContainer>
@@ -91,39 +92,74 @@ const MinistryPageComp = ({ ministryId }: Props) => {
               </div>
 
               <div className="mt-10 w-full rounded-[15px] bg-white p-6 lg:mt-0 lg:w-[25%]">
-                <div className="flex flex-col space-y-8">
+                <div className="flex flex-col space-y-4">
                   <div className="flex items-center space-x-3">
                     <Location size={24} />
                     <p className="text_small_body_p">{state}</p>
                   </div>
 
-                  <div className="flex items-center space-x-3">
-                    <Globe size={24} />
-                    <p className="text_small_body_p">{website}</p>
-                  </div>
-
-                  <div className="flex items-center space-x-8">
-                    <div className="text-[#1877F2]">
-                      <Facebook />
+                  {website && website !== "undefined" && (
+                    <div className="flex items-center space-x-3">
+                      <Globe size={24} />
+                      <Link
+                        href={`http://${website}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text_small_body_p"
+                      >
+                        {website}
+                      </Link>
                     </div>
+                  )}
 
-                    <div className="text-[#1877F2]">
-                      <InstaColor />
+                  {Object.keys(social_links).length > 0 && (
+                    <div className="flex items-center space-x-4">
+                      {social_links.facebook && (
+                        <Link
+                          href={`http://${social_links.facebook}`}
+                          className="text-[#1877F2]"
+                        >
+                          <Facebook />
+                        </Link>
+                      )}
+                      {social_links.facebook && (
+                        <Link
+                          href={`http://${social_links.instagram}`}
+                          className="text-[#1877F2]"
+                        >
+                          <InstaColor />
+                        </Link>
+                      )}
+                      {social_links.facebook && (
+                        <Link
+                          href={`http://${social_links.twitter}`}
+                          className="text-[#1877F2]"
+                        >
+                          <Twitter />
+                        </Link>
+                      )}
+                      {social_links.facebook && (
+                        <Link
+                          href={`http://${social_links.linkedin}`}
+                          className="text-[#1877F2]"
+                        >
+                          <LinkedInColor />
+                        </Link>
+                      )}
+
+                      {social_links.facebook && (
+                        <Link
+                          href={`http://${social_links.youtube}`}
+                          className="text-[#1877F2]"
+                        >
+                          <YoutubeColor playColor="white" />
+                        </Link>
+                      )}
                     </div>
-
-                    <div className="text-[#1DA1F2]">
-                      <Twitter />
-                    </div>
-
-                    <LinkedInColor />
-
-                    <div className="text-[#FF0000]">
-                      <YoutubeColor playColor="white" />
-                    </div>
-                  </div>
+                  )}
                 </div>
 
-                <div className="mt-8 w-fit rounded-[6px] bg-[#FFF8D9] p-3">
+                <div className="mt-4 w-fit rounded-[6px] bg-[#FFF8D9] p-3">
                   <div className="flex space-x-2">
                     <div>
                       <InfoCircle />
