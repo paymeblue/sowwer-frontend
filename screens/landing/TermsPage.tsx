@@ -63,7 +63,7 @@ const TermsPage = () => {
         <div className="rounded-[.9375rem] bg-white px-8 py-12">
           {content.map((item) => (
             <div key={item.id} className="mb-8 space-y-1">
-              <h5 className="font-jakarta text-sm font-semibold leading-[15.12px] tracking-[2%] text-[#333333]">
+              <h5 className="text-sm font-semibold leading-[15.12px] tracking-[2%] text-[#333333]">
                 {item.title}
               </h5>
               <p className="mt-2 text-[.8125rem] leading-[1.4375rem] tracking-[-2%] text-[#555]">
@@ -72,7 +72,7 @@ const TermsPage = () => {
             </div>
           ))}
           <div className="mb-8 space-y-1">
-            <h5 className="font-jakarta text-sm font-semibold leading-[15.12px] tracking-[2%] text-[#333333]">
+            <h5 className="text-sm font-semibold leading-[15.12px] tracking-[2%] text-[#333333]">
               CONTACT US
             </h5>
             <p className="mt-2 text-[.8125rem] leading-[1.4375rem] tracking-[-2%] text-[#555]">

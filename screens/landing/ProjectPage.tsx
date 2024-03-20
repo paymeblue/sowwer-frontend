@@ -8,20 +8,20 @@ import { Button } from "@components/ui/button";
 import { Progress } from "@components/ui/progress";
 import Tag from "@components/ui/tag";
 import { formatCurrency } from "@lib/functions";
+import { motion } from "framer-motion";
 import { Link as LinkIcon } from "lucide-react";
 import { Heart2 } from "react-iconly";
-import { motion } from "framer-motion";
 
-import { useGetProjectDetailsQuery } from "services/projects";
-import Image from "next/image";
-import EmptyState from "@components/shared/EmptyState";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
-import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
-import NoSSRWrapper from "@components/shared/NoSSRWrapper";
-import useCopyToClipboard from "@hooks/general/useCopyToClipboard";
-import { useToast } from "@components/ui/use-toast";
-import ProjectDonationsDialog from "@components/dialogs/landing/ProjectDonationsDialog";
 import { getColorForTag } from "@components/cards/ProjectCard";
+import ProjectDonationsDialog from "@components/dialogs/landing/ProjectDonationsDialog";
+import EmptyState from "@components/shared/EmptyState";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import { useToast } from "@components/ui/use-toast";
+import useCopyToClipboard from "@hooks/general/useCopyToClipboard";
+import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+import Image from "next/image";
+import { useGetProjectDetailsQuery } from "services/projects";
 
 interface Props {
   projectId: string;
@@ -150,7 +150,7 @@ const PageComp = ({ projectId }: Props) => {
                 <div className="flex items-center space-x-2">
                   <h5 className="font-sub-title text-[1rem] font-bold">
                     ₦{formatCurrency(amountRaised)}{" "}
-                    <span className="font-body text-[.75rem] font-[400] text-body-2">
+                    <span className="text-[.75rem] font-[400] text-body-2">
                       raised out of
                     </span>
                   </h5>
