@@ -83,8 +83,9 @@ const auth = api.injectEndpoints({
         return { message, data };
       },
       // Pick out errors and prevent nested properties in a hook or selector
-      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
-        response.data,
+      transformErrorResponse: (response: ErrorResponse, meta, arg) => {
+        return response.data;
+      },
     }),
     initiatePaymentToProjectAuth: build.mutation<
       InitiateDonationResponseAuth,

@@ -461,6 +461,7 @@ export type DonorGeneralDonationsResponse = TResponse<{
   id: string;
   payment_id: string;
   recurring_id: string;
+  donor_id: string;
   state: string;
   type: "one-time" | "recurring";
   interval: "monthly" | "quarterly" | "yearly";
@@ -479,6 +480,7 @@ export type MinistryOutgoingGeneralDonationsResponse = TResponse<{
   id: string;
   payment_id: string;
   recurring_id: string;
+  donor_id: string;
   state: string;
   type: "one-time" | "recurring";
   interval: "monthly" | "quarterly" | "yearly";

@@ -1,27 +1,27 @@
 "use client";
-import * as z from "zod";
-import { UseFormReturn } from "react-hook-form";
 import { MinistryCreateProjectValidation } from "lib/validations/ministry";
+import { UseFormReturn } from "react-hook-form";
 import {
-  useGetProjectQuery,
-  useEditProjectMutation,
-  usePublishOrDraftProjectMutation,
   useCreateProjectMutation,
+  useEditProjectMutation,
+  useGetProjectQuery,
+  usePublishOrDraftProjectMutation,
 } from "services/projects";
+import * as z from "zod";
 
+import QuestionRounded from "@components/assets/svg/QuestionRounded";
 import MinistryProjectCreateForm, {
   ProjectDescription,
   UploadCoverPhoto,
 } from "@components/forms/ministry/MinistryProjectCreateForm";
-import TabSectionWrapper, { TabWrapper } from "./TabContentWrapper";
-import QuestionRounded from "@components/assets/svg/QuestionRounded";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { Button } from "@components/ui/button";
 import { Form } from "@components/ui/form";
 import { useToast } from "@components/ui/use-toast";
-import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import { convertBase64toFile, formatCurrency } from "@lib/functions";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import TabSectionWrapper, { TabWrapper } from "./TabContentWrapper";
 
 interface Props {
   id?: string | null;
@@ -86,7 +86,9 @@ const OverviewComp = ({ id, form }: Props) => {
         variant: "destructive",
         title: "Unable to create project",
         description:
+          `${error.message}` ||
           "A problem occured when creating the project, please try again later.",
+        duration: 2500,
       });
       return { id: null };
     }

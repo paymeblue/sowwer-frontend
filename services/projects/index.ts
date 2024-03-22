@@ -1,3 +1,5 @@
+import api from "services/api/apiSlice";
+import { cacher } from "services/api/rtkQueryCacheUtils";
 import {
   CoverPhotoRequest,
   CreateProjectRequest,
@@ -22,8 +24,6 @@ import {
   PublishOrDraftResponse,
   ResultResponse,
 } from "../typings";
-import api from "services/api/apiSlice";
-import { cacher } from "services/api/rtkQueryCacheUtils";
 
 const projects = api.injectEndpoints({
   endpoints: (build) => ({

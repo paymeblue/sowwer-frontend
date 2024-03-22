@@ -2,20 +2,20 @@
 
 import { useGetProjectDetailsQuery } from "services/projects";
 
+import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import DonateToProjectForm from "@components/forms/donate/DonateToProjectForm";
+import EmptyState from "@components/shared/EmptyState";
 import DonateLayoutWrapper from "@components/shared/Layouts/Donate/DonateLayoutWrapper";
 import Loader from "@components/shared/Loader";
-import EmptyState from "@components/shared/EmptyState";
-import EmptySpeaker from "@components/assets/svg/emptySpeaker";
-import { Button } from "@components/ui/button";
-import Link from "next/link";
-import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
-import SuccessState from "@components/shared/SuccessState";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
-import { useSearchParams } from "next/navigation";
-import { useVerifyPaymemtProjectMutation } from "services/payouts";
+import SuccessState from "@components/shared/SuccessState";
+import { Button } from "@components/ui/button";
 import { useToast } from "@components/ui/use-toast";
+import Image from "next/image";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useVerifyPaymemtProjectMutation } from "services/payouts";
 
 interface Props {
   projectId: string;

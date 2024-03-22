@@ -32,12 +32,13 @@ const useMinistrySignin = () => {
       );
       // router.push("/ministry");
     } catch (error: any) {
-      console.log(error, "err");
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "Please check your email and password and try again",
-        // description: `${error.message} || ''`,
+        description:
+          `${error.message}` ||
+          "Please check your email and password and try again",
+        duration: 2500,
       });
     }
   };

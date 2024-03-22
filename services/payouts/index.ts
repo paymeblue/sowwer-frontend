@@ -92,8 +92,12 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
-    toggleRecurringPayment: build.mutation<PlainResponse, string>({
-      query: (id) => `recurring-donation/${id}/toggle`,
+    toggleRecurringPayment: build.mutation<
+      PlainResponse,
+      { id: string; donor_id: string }
+    >({
+      query: ({ id, donor_id }) =>
+        `recurring-donation/${id}/donor/${donor_id}/toggle`,
       // invalidatesTags: cacher.providesProperty("General"),
       invalidatesTags: ["General", "Projects"],
       transformResponse: (response: PlainResponse, meta, arg): any => {

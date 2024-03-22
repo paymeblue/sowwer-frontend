@@ -1,29 +1,30 @@
 "use client";
-import * as z from "zod";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  DonateToMinistryAuthValidation,
-  DonateToMinistryValidation,
-} from "lib/validations/donate";
-import { useForm } from "react-hook-form";
-import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import useFlutterConfig, {
-  useFlutterConfigReccuring,
   IConfig,
   IConfigReccuring,
+  useFlutterConfigReccuring,
 } from "@hooks/payments/useFlutterConfig";
 import usePaystackConfig, {
   IPaystackConfig,
 } from "@hooks/payments/usePaystackConfig";
+import { closePaymentModal, useFlutterwave } from "flutterwave-react-v3";
+import {
+  DonateToMinistryAuthValidation,
+  DonateToMinistryValidation,
+} from "lib/validations/donate";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { usePaystackPayment } from "react-paystack";
+import * as z from "zod";
 
-import { useVerifyPaymemtMinistryMutation } from "services/payouts";
 import {
   useInitiatePaymentToMinistryAuthMutation,
   useInitiatePaymentToMinistryOneTimeMutation,
 } from "services/auth";
+import { useVerifyPaymemtMinistryMutation } from "services/payouts";
 
+import { Button } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
 import {
   Form,
@@ -33,9 +34,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
 import { Input } from "@components/ui/input";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
+import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -43,12 +44,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui/select";
-import { Button } from "@components/ui/button";
-import { Heart2, InfoCircle } from "react-iconly";
 import { Toggle } from "@components/ui/toggle";
 import { useToast } from "@components/ui/use-toast";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import { PAYMENT_GATEWAY } from "@lib/constants";
+import { Heart2, InfoCircle } from "react-iconly";
 
 interface Props {
   id: string;
@@ -105,7 +105,7 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
   const { getConfig: getPaystackConfig } = usePaystackConfig();
   // const [initiatePaymentToMinistryUnauth, { isLoading: paymentAuthLoading }] =
   //   useInitiatePaymentToMinistryUnauthMutation();
-  const [initiatePaymentToMinistryUnauth, { isLoading: paymentAuthLoading }] =
+  const [initiatePaymentToMinistryOneTime, { isLoading: paymentAuthLoading }] =
     useInitiatePaymentToMinistryOneTimeMutation();
   const { isAuthenticated, user } = useUserAuth();
   const [
@@ -225,7 +225,7 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
     } = values;
 
     try {
-      const res = await initiatePaymentToMinistryUnauth({
+      const res = await initiatePaymentToMinistryOneTime({
         amount: Number(amount.replace(/,/g, "")),
         id,
         firstName,
@@ -296,10 +296,11 @@ const DonateToMinistryForm = ({ setPaymentSuccessful, id, title }: Props) => {
           setPaystackConfig(config);
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error occured initiating payment, please try again later",
+        title: `${error.message}` || "Error occured initiating payment.",
+        duration: 2500,
       });
     }
   };
