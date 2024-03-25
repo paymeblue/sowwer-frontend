@@ -97,6 +97,7 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
   });
   const [initiatePaymentToProjectUnauth, { isLoading }] =
     useInitiatePaymentToProjectUnauthMutation();
+
   const [initiatePaymentToProjectAuth, { isLoading: loadingPaymentAuth }] =
     useInitiatePaymentToProjectAuthMutation();
   const { getConfig } = useFlutterConfig();
@@ -217,7 +218,8 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
         confirm_password: shouldSignup ? confirmPassword! : "",
         currency,
       }).unwrap();
-
+      console.log("res");
+      console.log(res, "res");
       const { txn_reference: txnRef, amount: amn } = res.data.donation;
       if (PAYMENT_GATEWAY === "flutterwave") {
         const config = getConfig({
@@ -242,10 +244,11 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
         });
         setPaystackConfig(config);
       }
-    } catch (err) {
+    } catch (err: any) {
       toast({
         variant: "destructive",
-        title: "Error occured initiating payment, please try again later",
+        title: `${err.message}` || "Error occured initiating payment.",
+        duration: 2500,
       });
     }
   };
@@ -286,10 +289,11 @@ const DonateToProjectForm = ({ id, title, setPaymentSuccessful }: Props) => {
         });
         setPaystackConfig(config);
       }
-    } catch (err) {
+    } catch (err: any) {
       toast({
         variant: "destructive",
-        title: "Error occured initiating payment, please try again later",
+        title: `${err.message}` || "Error occured initiating payment.",
+        duration: 2500,
       });
     }
   };

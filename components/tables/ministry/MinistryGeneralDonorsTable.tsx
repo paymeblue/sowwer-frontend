@@ -1,38 +1,38 @@
 "use client";
+import Emptydonor from "@components/assets/svg/emptyDonor";
+import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import DataTable from "@components/ui/data-table";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import usePagination from "@hooks/general/usePagination";
-import moment from "moment";
 import { ColumnDef } from "@tanstack/react-table";
+import moment from "moment";
 import { useGetIncomingDonationsForMinistryUserQuery } from "services/projects";
-import NoSSRWrapper from "@components/shared/NoSSRWrapper";
-import EmptyState from "@components/shared/EmptyState";
-import Emptydonor from "@components/assets/svg/emptyDonor";
 
 export type GeneralDonor = {
   id: string;
   amount: string;
-  donorName: string;
-  donorType: string | null;
+  donor_name: string;
+  type: string | null;
   donorInterval: string | null;
   createdAt: string;
 };
 
 const columns: ColumnDef<GeneralDonor>[] = [
   {
-    accessorKey: "donorName",
+    accessorKey: "donor_name",
     header: "Donor's name",
     cell: ({ row }) => {
-      const value = row.getValue("donorName") as string;
+      const value = row.getValue("donor_name") as string;
       return <span className="capitalize">{value}</span>;
     },
   },
   {
-    accessorKey: "donorType",
+    accessorKey: "type",
     header: "Donation Type",
     cell: ({ row }) => {
-      const value = row.getValue("donorType") as string | null;
+      const value = row.getValue("type") as string | null;
       return value ? (
         <span className="capitalize">{value} donation</span>
       ) : (
@@ -85,7 +85,6 @@ const MinistryGeneralDonorsTableComp = () => {
     page: pagination?.current,
     type: "ministry",
   });
-
   if (!donors?.data?.length && isLoading) {
     return <Loader className="h-[50vh]" />;
   }
@@ -100,7 +99,7 @@ const MinistryGeneralDonorsTableComp = () => {
     );
   }
   return (
-    <div className="w-full">
+    <div className="mb-16 w-full">
       <DataTable
         columns={columns}
         data={donors?.data || []}

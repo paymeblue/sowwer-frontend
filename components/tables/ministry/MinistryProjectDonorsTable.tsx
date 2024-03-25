@@ -12,7 +12,7 @@ import { useGetIncomingDonationsForMinistryUserQuery } from "services/projects";
 
 export type ProjectDonor = {
   id: string;
-  donorName: string;
+  donor_name: string;
   title: string;
   category: "widows" | "orphans";
   amount: number;
@@ -21,10 +21,10 @@ export type ProjectDonor = {
 
 const columns: ColumnDef<ProjectDonor>[] = [
   {
-    accessorKey: "donorName",
+    accessorKey: "donor_name",
     header: "Donor's name",
     cell: ({ row }) => {
-      const value = row.getValue("donorName") as string;
+      const value = row.getValue("donor_name") as string;
       return <span className="capitalize">{value}</span>;
     },
   },
@@ -101,7 +101,7 @@ const MinistryProjectDonorsTableComp = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="mb-16 w-full">
       <DataTable
         columns={columns}
         data={(donors?.data as unknown as ProjectDonor[]) || []}

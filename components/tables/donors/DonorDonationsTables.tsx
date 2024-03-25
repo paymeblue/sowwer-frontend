@@ -33,6 +33,7 @@ export type GeneralDonation = {
   createdAt: string;
   recurring_status: string;
   recurring_id: string;
+  donor_id: string;
 };
 
 const projectDonationsColumns: ColumnDef<ProjectDonation>[] = [
@@ -127,9 +128,9 @@ const ActionComp = ({ donation }: { donation: GeneralDonation }) => {
   const { toast } = useToast();
 
   const handleTogglePayment = async () => {
-    const { recurring_id } = donation;
+    const { donor_id, recurring_id } = donation;
     try {
-      await togglePayment(recurring_id).unwrap();
+      await togglePayment({ donor_id, id: recurring_id }).unwrap();
       toast({
         title: `${
           donation.recurring_status === "cancelled"
