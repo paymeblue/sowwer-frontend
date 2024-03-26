@@ -15,8 +15,8 @@ export type GeneralDonor = {
   amount: string;
   donor_name: string;
   type: string | null;
-  donorInterval: string | null;
-  createdAt: string;
+  frequency: string | null;
+  created_at: string;
 };
 
 const columns: ColumnDef<GeneralDonor>[] = [
@@ -41,10 +41,10 @@ const columns: ColumnDef<GeneralDonor>[] = [
     },
   },
   {
-    accessorKey: "donorInterval",
+    accessorKey: "frequency",
     header: "Frequency",
     cell: ({ row }) => {
-      const value = row.getValue("donorInterval") as string;
+      const value = row.getValue("frequency") as string;
       return value ? <span className="capitalize">{value}</span> : "-";
     },
   },
@@ -64,10 +64,10 @@ const columns: ColumnDef<GeneralDonor>[] = [
     },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "created_at",
     header: "Date Donated",
     cell: ({ row }) => {
-      const value = row.getValue("createdAt") as string;
+      const value = row.getValue("created_at") as string;
       return <span>{moment(value).format("Do MMMM YYYY; h:mm:ss a")}</span>;
     },
   },

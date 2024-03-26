@@ -16,7 +16,7 @@ export type ProjectDonor = {
   title: string;
   category: "widows" | "orphans";
   amount: number;
-  createdAt: string;
+  created_at: string;
 };
 
 const columns: ColumnDef<ProjectDonor>[] = [
@@ -64,10 +64,10 @@ const columns: ColumnDef<ProjectDonor>[] = [
     },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "created_at",
     header: "Date Donated",
     cell: ({ row }) => {
-      const value = row.getValue("createdAt") as string;
+      const value = row.getValue("created_at") as string;
       return <span>{moment(value).format("Do MMMM YYYY; h:mm:ss a")}</span>;
     },
   },
