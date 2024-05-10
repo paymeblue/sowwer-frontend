@@ -25,7 +25,7 @@ const Logo = ({ className, logoVariant = "normal" }: Props) => {
     return src;
   };
   return (
-    <Link href="/">
+    <Link href="#">
       <div className={cn("relative h-[4rem] w-[8rem] lg:w-[11rem]", className)}>
         <Image
           src={getLogoSrc()}
