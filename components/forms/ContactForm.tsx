@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useEffect, useState } from "react";
+import { Button } from "@components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,13 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ContactUsValidation } from "lib/validations/contactUs";
-import * as z from "zod";
 import { Input } from "@components/ui/input";
-import { Textarea } from "@components/ui/textarea";
-import { Button } from "@components/ui/button";
 import {
   Select,
   SelectContent,
@@ -22,10 +16,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui/select";
-import codes from "@lib/CountryCode";
-import { FixedSizeList as List } from "react-window";
-import Script from "next/script";
+import { Textarea } from "@components/ui/textarea";
 import { useToast } from "@components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import codes from "@lib/CountryCode";
+import { ContactUsValidation } from "lib/validations/contactUs";
+import Script from "next/script";
+import { Fragment, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { FixedSizeList as List } from "react-window";
+import * as z from "zod";
 
 const FList = List as any;
 // Trigger deploy
@@ -211,6 +211,7 @@ const ContactForm = () => {
               className="cf-turnstile"
               data-theme="light"
               data-retry-interval={3000}
+              data-refresh-expired="manual"
               data-sitekey={
                 process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
               }

@@ -73,6 +73,7 @@ export const ExisitingMissionRegistration = z.object({
     .string()
     .min(3, { message: "Name must be more than three characters" }),
   email: z.string().email("Please enter a valid email"),
+  affliateChurch: z.string(),
   phoneNumber: z
     .string()
     .min(3, { message: "Name must be more than three characters" }),

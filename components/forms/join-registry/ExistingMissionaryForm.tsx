@@ -24,7 +24,7 @@ import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ExisitingMissionRegistration } from "lib/validations/join-registry";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { ArrowRight } from "react-iconly";
 import { useMissionaryMutation } from "services/join-soower-registry";
 import { MissionaryJoinSoowerRequest2 } from "services/typings";
@@ -39,6 +39,10 @@ const ExistingMissionaryForm = ({
     defaultValues: {
       range: "year",
     },
+  });
+  const isAffliate = useWatch({
+    control: form.control,
+    name: "isAffiliatedWithChurch",
   });
   const { toast } = useToast();
   const [joinMissionaryRegistry, { isLoading, isSuccess }] =
@@ -64,6 +68,7 @@ const ExistingMissionaryForm = ({
       previousWork,
       serviceArea,
       range,
+      affliateChurch,
     } = values;
     if (!acceptTerms) {
       toast({
@@ -86,6 +91,7 @@ const ExistingMissionaryForm = ({
         duration: Number(duration),
         timestamp: range,
         reason_about: previousWork,
+        affliate_church: affliateChurch,
       } as MissionaryJoinSoowerRequest2;
       await joinMissionaryRegistry(data).unwrap();
       toast({
@@ -286,7 +292,27 @@ const ExistingMissionaryForm = ({
               </FormItem>
             )}
           />
-
+          {isAffliate === "Yes" && (
+            <FormField
+              control={form.control}
+              name="affliateChurch"
+              render={({ field }) => (
+                <FormItem className="col-span-2">
+                  <FormLabel required>
+                    If yes, what church are you affiliated with?
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Name of church"
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="acceptTerms"
