@@ -91,7 +91,7 @@ const ExistingMissionaryForm = ({
         duration: Number(duration),
         timestamp: range,
         reason_about: previousWork,
-        affliate_church: affliateChurch,
+        affiliated_church_name: affliateChurch,
       } as MissionaryJoinSoowerRequest2;
       await joinMissionaryRegistry(data).unwrap();
       toast({
