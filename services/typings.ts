@@ -673,7 +673,7 @@ export type MissionaryRequest = {
   timestamp: "month" | "year";
   service_area: string;
   affiliated_to_church: boolean;
-  affliate_church: string;
+  affiliated_church_name: string;
 };
 export type MissionaryJoinSoowerRequest2 = MissionaryJoinSoowerRequest1 &
   MissionaryRequest;
