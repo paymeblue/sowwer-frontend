@@ -23,9 +23,9 @@ const EmptyState = ({ image, title, desc, className, action }: Props) => {
         {title}
       </h4>
       {desc && (
-        <desc className="text_small_body_r mt-2 max-w-[70vw] text-center lg:max-w-[30vw]">
+        <p className="text_small_body_r mt-2 max-w-[70vw] text-center lg:max-w-[30vw]">
           {desc}
-        </desc>
+        </p>
       )}
       {action}
     </div>

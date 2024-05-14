@@ -9,6 +9,8 @@ export const DonateToProjectValidation = z
     lastName: z.string().min(1, "Required"),
     email: z
       .string()
+      .trim()
+      .toLowerCase()
       .email("Please enter a valid email address")
       .min(3, { message: "Minimum 3 characters" })
       .max(30),
@@ -48,6 +50,8 @@ export const DonateToMinistryValidation = z
     lastName: z.string(),
     email: z
       .string()
+      .trim()
+      .toLowerCase()
       .email("Please enter a valid email address")
       .min(3, { message: "Minimum 3 characters" })
       .max(30),

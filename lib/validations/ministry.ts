@@ -4,6 +4,8 @@ import { isValidPassword } from "./auth";
 export const MinistrySigninValidation = z.object({
   email: z
     .string()
+    .trim()
+    .toLowerCase()
     .email("Please enter a valid email address")
     .min(3, { message: "Minimum 3 characters" })
     .max(30),
