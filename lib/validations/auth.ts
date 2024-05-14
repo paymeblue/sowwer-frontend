@@ -80,9 +80,21 @@ export const MinistrySignupPersonalInformationValidation = z.object({
   phoneNumber: z.string().min(10, { message: "Minimum 10 characters" }),
   password: z
     .string()
-    .min(3, { message: "Minimum 3 characters" })
-    .refine(isValidPassword, {
-      message:
-        "Password must contain at least one number and one special character",
-    }),
+    .refine((value) => value && value.length > 0, "Your password is required")
+    .refine(
+      (value) => {
+        return (
+          value &&
+          value.length >= 8 &&
+          /\d/.test(value) &&
+          /[A-Z]/.test(value) &&
+          /[a-z]/.test(value) &&
+          /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)
+        );
+      },
+      {
+        message:
+          "Password must have at least one lowercase character, one uppercase character, one digit, one special character, and be at least 8 characters long",
+      }
+    ),
 });
