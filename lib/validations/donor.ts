@@ -7,6 +7,8 @@ export const DonorSignupValidation = z
     lastName: z.string().min(3, { message: "Minimum 3 characters" }).max(30),
     email: z
       .string()
+      .trim()
+      .toLowerCase()
       .email("Please enter a valid email address")
       .min(3, { message: "Minimum 3 characters" })
       .max(30),
@@ -24,6 +26,8 @@ export const DonorSignupValidation = z
 export const DonorSigninValidation = z.object({
   email: z
     .string()
+    .trim()
+    .toLowerCase()
     .email("Please enter a valid email address")
     .min(3, { message: "Minimum 3 characters" })
     .max(30),
@@ -33,6 +37,8 @@ export const DonorSigninValidation = z.object({
 export const AdminSigninValidation = z.object({
   email: z
     .string()
+    .trim()
+    .toLowerCase()
     .email("Please enter a valid email address")
     .min(3, { message: "Minimum 3 characters" })
     .max(30),
@@ -44,6 +50,8 @@ export const DonorPersonalDetailsValidation = z.object({
   lastName: z.string().min(3, { message: "Minimum 3 characters" }).max(30),
   email: z
     .string()
+    .trim()
+    .toLowerCase()
     .email("Please enter a valid email address")
     .min(3, { message: "Minimum 3 characters" })
     .max(30),

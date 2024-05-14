@@ -4,6 +4,8 @@ export const ContactUsValidation = z.object({
   fullName: z.string().min(3, { message: "Minimum 3 characters" }).max(30),
   email: z
     .string()
+    .trim()
+    .toLowerCase()
     .email("Please enter a valid email address")
     .min(3, { message: "Minimum 3 characters" })
     .max(30),
