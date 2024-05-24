@@ -22,7 +22,7 @@ const useMinistrySignin = () => {
         password,
         type: "ministry",
       }).unwrap();
-      await dispatch(
+      dispatch(
         setCredentials({
           user: res.data.user,
           token: res.data.token.accessToken,

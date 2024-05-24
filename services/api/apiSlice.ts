@@ -60,11 +60,14 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
-    const refreshToken = (api.getState() as RootState).auth.refreshToken;
-
+  const refreshToken = (api.getState() as RootState).auth.refreshToken;
+  if (result.error && result.error.status === 401 && refreshToken) {
     const refreshResult: any = await baseQuery(
-      { url: "users/refreshtoken", method: "POST", body: refreshToken },
+      {
+        url: "users/refreshtoken",
+        method: "POST",
+        body: JSON.stringify(refreshToken),
+      },
       api,
       extraOptions
     );

@@ -1,10 +1,10 @@
 "use client";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "redux/auth/reducer";
 import {
-  selectCurrentUser,
   selectAccessToken,
   selectAuthContext,
+  selectCurrentUser,
 } from "redux/auth/selectors";
 import api from "services/api/apiSlice";
 
@@ -14,8 +14,8 @@ const useUserAuth = () => {
   const context = useSelector(selectAuthContext);
   const dispatch = useDispatch();
 
-  const logout = async () => {
-    await dispatch(
+  const logout = () => {
+    dispatch(
       setCredentials({
         user: null,
         token: null,
@@ -23,7 +23,7 @@ const useUserAuth = () => {
         context: null,
       })
     );
-    await dispatch(api.util.resetApiState());
+    dispatch(api.util.resetApiState());
   };
 
   return {

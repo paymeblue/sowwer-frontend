@@ -1,5 +1,5 @@
 "use client";
-import { useResetPasswordMutation } from "services/auth";
+import { Button } from "@components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,13 +8,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@components/ui/form";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ResetPassword } from "lib/validations/auth";
-import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input-with-icon";
 import { useToast } from "@components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ResetPassword } from "lib/validations/auth";
+import { useForm } from "react-hook-form";
+import { useResetPasswordMutation } from "services/auth";
+import * as z from "zod";
 
 interface Props {
   onSuccess: () => void;
@@ -44,9 +44,10 @@ const ResetPasswordForm = ({ onSuccess, token }: Props) => {
       toast({
         variant: "destructive",
         title: "Unable to reset your password",
-        description:
-          err ||
-          "There was a problem reseting your password, please try again later.",
+        description: err.message
+          ? err.message
+          : err ||
+            "There was a problem reseting your password, please try again later.",
       });
     }
   };
