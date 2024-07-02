@@ -3,9 +3,8 @@ import Calling from "@components/assets/svg/Calling";
 import Facebook from "@components/assets/svg/Facebook";
 import Message from "@components/assets/svg/Message";
 import Twitter from "@components/assets/svg/twitter";
-import YoutubeColor from "@components/assets/svg/youtubeColor";
 import SectionContainer from "@components/sections/SectionContainer";
-import { Instagram } from "lucide-react";
+import { Instagram, LinkedinIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import appleStore from "public/assets/icons/app-store.svg";
@@ -51,16 +50,36 @@ const Footer = ({ variant = "default" }: Props) => {
               helping hand.
             </p>
             <div className="mt-4 flex items-center gap-6">
-              <div className="cursor-pointer text-white">
-                <Twitter />
-              </div>
-              <Instagram fill="white" className="cursor-pointer" />
-              <div className="cursor-pointer text-white">
-                <Facebook />
-              </div>
-              <div className="cursor-pointer text-white">
-                <YoutubeColor />
-              </div>
+              <Link
+                href="https://x.com/soowerMission?t=G0zmS8PLLu6RxcJkzdo42w&s=09"
+                target="__blank"
+              >
+                <div className="cursor-pointer rounded-md bg-white">
+                  <Twitter />
+                </div>
+              </Link>
+              <Link
+                href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
+                target="__blank"
+              >
+                <Instagram fill="white" className="cursor-pointer" />
+              </Link>
+              <Link
+                href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
+                target="__blank"
+              >
+                <div className="cursor-pointer text-white">
+                  <Facebook />
+                </div>
+              </Link>
+              <Link
+                href="https://www.linkedin.com/company/soower"
+                target="__blank"
+              >
+                <div className="cursor-pointer text-white">
+                  <LinkedinIcon />
+                </div>
+              </Link>
             </div>
             <div className="mt-8 flex flex-col space-y-2 lg:flex-row lg:space-x-4 lg:space-y-0">
               <Link href="#" target="_blank">

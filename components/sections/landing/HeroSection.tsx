@@ -34,12 +34,12 @@ const Hero = () => {
             className="flex flex-col items-center"
           >
             <p className="text_large_body_r mt-2 w-full text-center lg:w-[75%]">
-              "In all things I have shown you that by working hard in this way
-              we must help the weak and remember the words of the Lord Jesus,
-              how He himself said it is more blessed to give than to receive."
+              "Now may He who supplies seed to the sower, and bread for food,
+              supply and multiply the seed you have sown and increase the fruits
+              of your righteousness."
             </p>
             <span className="text_large_body_r mt-2 text-center text-[.8rem]">
-              — Acts 20:35 (ESV)
+              — 2 Corinthians 9:10 (NKJV)
             </span>
             <Link href="/projects">
               <Button className="mt-6 px-8">
