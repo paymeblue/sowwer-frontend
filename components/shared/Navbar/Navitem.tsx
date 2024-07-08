@@ -28,11 +28,12 @@ const Navitem = ({
   child,
   isActive,
   handleMenuClick,
-}: INavitem) => {
+  index,
+}: INavitem & { index: number }) => {
   const router = useRouter();
 
   return (
-    <NavigationMenu className={`${child && "z-30"}`}>
+    <NavigationMenu style={{ zIndex: 100 - (index + 1) }}>
       <NavigationMenuList>
         <NavigationMenuItem className="relative">
           {!child && (

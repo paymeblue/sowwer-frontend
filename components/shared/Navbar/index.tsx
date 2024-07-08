@@ -133,13 +133,14 @@ const Navbar = ({ variant = "landing" }: Props) => {
           <div className="hidden items-center gap-16 lg:flex">
             <NavigationMenu>
               <NavigationMenuList>
-                {navItems.map((item) => {
+                {navItems.map((item, index) => {
                   const { label, route, child } = item;
                   const isActive =
                     (pathname?.includes(item.route) && item.route.length > 1) ||
                     pathname === item.route;
                   return (
                     <Navitem
+                      index={index}
                       key={item.label}
                       isActive={isActive}
                       label={label}
@@ -188,7 +189,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
               {variant === "landing" && (
                 <NavigationMenu>
                   <NavigationMenuList className="flex-col items-start justify-start space-x-0 space-y-2">
-                    {navItems.map((item) => {
+                    {navItems.map((item, index) => {
                       const { label, route, child } = item;
                       const isActive =
                         (pathname?.includes(item.route) &&
@@ -198,6 +199,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
                         <Navitem
                           key={item.label}
                           isActive={isActive}
+                          index={index}
                           label={label}
                           route={route}
                           child={child}
