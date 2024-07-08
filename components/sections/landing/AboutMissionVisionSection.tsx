@@ -27,12 +27,8 @@ const AboutMissionVisionSection = () => {
         <Target />
         <h3 className="text_small_header mt-10">Our Mission</h3>
         <p className="text_regular_body_p mt-2 max-lg:text-[.8rem]">
-          To serve as a beacon of God's love and compassion, fostering positive
-          change and bringing hope to those in need. We are dedicated to
-          empowering Christian communities and individuals to make a difference
-          through acts of kindness and charitable giving. Our aim is to create a
-          world where the ripple effect of love and generosity touches countless
-          hearts and transforms lives.
+          To practice true Christianity, being faithful to God and partnering
+          with others to win souls to Christ (James 1:27, 3 John 1:5,8).
         </p>
       </motion.div>
 
@@ -43,10 +39,7 @@ const AboutMissionVisionSection = () => {
         <Vision />
         <h3 className="text_small_header mt-10">Our Vision</h3>
         <p className="text_regular_body_p mt-2 max-lg:text-[.8rem]">
-          We envision a world where every act of giving and every kindom
-          investment, whether big or small, multiplies in impact, igniting a
-          movement of compassion and service towards widows, orphans and
-          missions.
+          Thy Kingdom Come.
         </p>
       </motion.div>
     </motion.section>
