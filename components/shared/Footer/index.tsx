@@ -98,29 +98,65 @@ const Footer = ({ variant = "default" }: Props) => {
           </div>
 
           {/* right */}
-          <div className="mt-12 flex flex-col space-y-12 lg:mt-0 lg:flex-row lg:space-x-40 lg:space-y-0">
-            {/* Quick Links */}
+          <div className="mt-12 flex flex-col space-y-12 lg:mt-0 lg:flex-row lg:space-x-20 lg:space-y-0">
+            {/* About */}
             <div className="flex flex-col items-center space-y-6 lg:items-start">
-              <h5 className="footerlink_header">Quick Links</h5>
+              <h5 className="footerlink_header">About</h5>
               <ul className="flex flex-col items-center space-y-4 lg:items-start">
                 <li>
-                  <Link href={`/about`} className="footerlink_sub">
-                    About us
+                  <Link href={`/the-foundation`} className="footerlink_sub">
+                    The Foundation
                   </Link>
                 </li>
                 <li>
+                  <Link href={`/our-team`} className="footerlink_sub">
+                    Our Team
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            {/* Explore */}
+            <div className="flex flex-col items-center space-y-6 lg:items-start">
+              <h5 className="footerlink_header">Explore</h5>
+              <ul className="flex flex-col items-center space-y-4 lg:items-start">
+                <li>
                   <Link href={`/projects`} className="footerlink_sub">
-                    Explore projects
+                    Projects
                   </Link>
                 </li>
                 <li>
                   <Link href={`/ministries`} className="footerlink_sub">
-                    Explore ministries
+                    Ministries
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            {/* Quick Links */}
+            <div className="flex flex-col items-center space-y-6 lg:items-start">
+              <h5 className="footerlink_header">Our Registry</h5>
+              <ul className="flex flex-col items-center space-y-4 lg:items-start">
+                <li>
+                  <Link
+                    href={`/registry/join?category=Widow`}
+                    className="footerlink_sub"
+                  >
+                    For widows
                   </Link>
                 </li>
                 <li>
-                  <Link href={`/for-ministries`} className="footerlink_sub">
-                    For ministries
+                  <Link
+                    href={`/registry/join?category=Missionaries`}
+                    className="footerlink_sub"
+                  >
+                    For missionaries
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={`/registry/join?category=Orphanage`}
+                    className="footerlink_sub"
+                  >
+                    For orphanages
                   </Link>
                 </li>
               </ul>
