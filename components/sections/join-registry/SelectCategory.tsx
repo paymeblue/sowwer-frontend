@@ -1,13 +1,16 @@
 import { CardSelector } from "@components/ui/card-selector";
+import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   setActiveStep: Dispatch<SetStateAction<number>>;
-  setSelectedCategory: Dispatch<SetStateAction<"Widow" | "Missionary" | null>>;
+  setSelectedCategory: Dispatch<
+    SetStateAction<"Widow" | "Missionary" | "Orphanage" | null>
+  >;
 }
 
 const SelectCategory = ({ setActiveStep, setSelectedCategory }: Props) => {
-  const handleClick = (category: "Widow" | "Missionary") => {
+  const handleClick = (category: "Widow" | "Missionary" | "Orphanage") => {
     setSelectedCategory(category);
     setActiveStep(1);
   };
@@ -22,11 +25,40 @@ const SelectCategory = ({ setActiveStep, setSelectedCategory }: Props) => {
           onClick={() => handleClick("Widow")}
           title="Widow"
           desc="Register as a widow or on behalf of a widow."
+          left={
+            <Image
+              src="/assets/icons/widow.svg"
+              alt="Widow"
+              width={30}
+              height={30}
+            />
+          }
         />
         <CardSelector
           title="Missionary"
           onClick={() => handleClick("Missionary")}
           desc="Register as a serving missionary or an aspiring missionary."
+          left={
+            <Image
+              src="/assets/icons/missionary.svg"
+              alt="Widow"
+              width={18}
+              height={19}
+            />
+          }
+        />
+        <CardSelector
+          title="Orphanage Home"
+          onClick={() => handleClick("Orphanage")}
+          desc="Register as an orphanage home."
+          left={
+            <Image
+              src="/assets/icons/orphanage.svg"
+              alt="Widow"
+              width={24}
+              height={24}
+            />
+          }
         />
       </div>
     </section>

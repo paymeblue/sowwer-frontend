@@ -1,15 +1,20 @@
 "use client";
 
 import Logo from "@components/shared/Logo";
+import { Button } from "@components/ui/button";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "react-iconly";
 
 interface Props {
   title: string;
   desc: string;
+  shouldGoBack?: boolean;
 }
 
-const SideLeft = ({ title, desc }: Props) => {
+const SideLeft = ({ title, desc, shouldGoBack }: Props) => {
+  const router = useRouter();
   return (
     <div className="w-full bg-primary p-10 lg:h-screen lg:max-h-screen lg:w-1/2 lg:overflow-hidden">
       <motion.div
@@ -20,6 +25,17 @@ const SideLeft = ({ title, desc }: Props) => {
         className="w-full"
       >
         <Logo logoVariant="black" />
+
+        {shouldGoBack && (
+          <Button
+            variant="link"
+            className="space-x-2 px-0 text-black"
+            onClick={router.back}
+          >
+            <ArrowLeft size={15} />
+            <span>Back</span>
+          </Button>
+        )}
 
         <div className="mt-0 space-y-2 lg:mt-10">
           <h2 className="text_variant_h2">{title}</h2>

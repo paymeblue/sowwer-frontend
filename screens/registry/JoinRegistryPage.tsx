@@ -3,14 +3,30 @@ import PersonalInformation from "@components/sections/join-registry/PersonalInfo
 import SelectCategory from "@components/sections/join-registry/SelectCategory";
 import SideLayoutWrapper from "@components/shared/Layouts/Side/SideLayoutWrapper";
 import Stepper from "@components/ui/stepper";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+const categories = ["Widow", "Missionary", "Orphanage"];
 
 const JoinRegistryPage = () => {
+  const searchParams = useSearchParams();
+  const defaultCatgory = searchParams.get("category") as
+    | "Widow"
+    | "Missionary"
+    | "Orphanage"
+    | null;
   const [activeStep, setActiveStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<
-    null | "Widow" | "Missionary"
+    null | "Widow" | "Missionary" | "Orphanage"
   >(null);
   const steps = ["Select Category", "Personal Information"];
+
+  useEffect(() => {
+    if (defaultCatgory && categories.includes(defaultCatgory)) {
+      setSelectedCategory(defaultCatgory);
+      setActiveStep(1);
+    }
+  }, [defaultCatgory]);
 
   function getSectionComponent() {
     switch (activeStep) {
@@ -35,7 +51,8 @@ const JoinRegistryPage = () => {
   return (
     <SideLayoutWrapper
       title="Are you a widow or a missionary? We’d love to know more about you!"
-      desc="Join the Soower Registry as a widow (or on behalf of a widow) or as a serving missionary (or aspiring missionary) and we would be in touch."
+      shouldGoBack
+      desc="Join the Soower Registry as a widow (or on behalf of a widow), a serving missionary (or aspiring missionary) or an orphanage home and we would be in touch."
     >
       <div className="w-full overflow-hidden">
         <Stepper steps={steps} activeStep={activeStep} />
