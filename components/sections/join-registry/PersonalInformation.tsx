@@ -5,6 +5,7 @@ import SuccessState from "@components/shared/SuccessState";
 import { Button } from "@components/ui/button";
 import { CardSelector } from "@components/ui/card-selector";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 
 const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
   const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   if (success) {
     return (
@@ -36,7 +38,10 @@ const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
         right={
           <span
             className="cursor-pointer font-body text-[.8rem] text-body-1"
-            onClick={() => setActiveStep(0)}
+            onClick={() => {
+              setActiveStep(0);
+              router.push("/registry/join");
+            }}
           >
             Edit
           </span>

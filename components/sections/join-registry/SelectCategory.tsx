@@ -1,5 +1,6 @@
 import { CardSelector } from "@components/ui/card-selector";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 
 interface Props {
@@ -10,9 +11,11 @@ interface Props {
 }
 
 const SelectCategory = ({ setActiveStep, setSelectedCategory }: Props) => {
+  const router = useRouter();
   const handleClick = (category: "Widow" | "Missionary" | "Orphanage") => {
-    setSelectedCategory(category);
-    setActiveStep(1);
+    // setSelectedCategory(category);
+    // setActiveStep(1);
+    router.push(`/registry/join?category=${category}`);
   };
   return (
     <section className="mt-6 p-2 lg:mt-0 lg:p-8">
