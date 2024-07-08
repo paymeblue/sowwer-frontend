@@ -49,17 +49,17 @@ const teamMembers: TeamMemberProps[] = [
   },
   {
     imgUrl: "/assets/images/team/member8.png",
-    name: "Jonathan Agwunobi",
+    name: "Pastor Nkwor Sunday",
     position: "Board Member",
   },
   {
     imgUrl: "/assets/images/team/member9.png",
-    name: "Jonathan Agwunobi",
+    name: "Major Gen. Charles Ofoche",
     position: "Board Member",
   },
   {
     imgUrl: "/assets/images/team/member10.png",
-    name: "Jonathan Agwunobi",
+    name: "Ogola Lois Kange",
     position: "Board Member",
   },
 ];
