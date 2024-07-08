@@ -27,7 +27,7 @@ const Logo = ({ className, logoVariant = "normal" }: Props) => {
     return src;
   };
   const pathname = usePathname();
-  const adminRegex = /^\/admin\/(ministries|payouts)$/;
+  const adminRegex = /^\/admin\/(ministries|payouts|registry)$/;
   const isMatch = adminRegex.test(pathname);
   const router = useRouter();
 

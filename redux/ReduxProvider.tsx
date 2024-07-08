@@ -14,7 +14,7 @@ const ReduxProvider = ({ children }: { children: ReactNode }) => {
 
   const auth = !!user && user?.type === "admin";
   useEffect(() => {
-    const adminRegex = /^\/admin\/(ministries|payouts)$/;
+    const adminRegex = /^\/admin\/(ministries|payouts|registry)$/;
     if (auth && !adminRegex.test(pathname)) {
       redirect("/admin/ministries");
     }
