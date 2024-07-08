@@ -164,6 +164,7 @@ const MinistrySignupPageComp = () => {
   return (
     <SideLayoutWrapper
       showSignPrompt
+      shouldGoBack
       title="Are you a ministry with widow, orphan or mission programs? Register with us today!"
       desc="With Soower, Churches and Christian Organizations have the opportunity to raise funds for various projects tailored to support widows, orphans and missions across Nigeria."
     >

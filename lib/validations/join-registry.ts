@@ -101,4 +101,5 @@ export const OrphanageRegistration = z.object({
   acceptTerms: z.boolean({
     required_error: "You must read and accept the declaration",
   }),
+  cacDocument: z.string(),
 });

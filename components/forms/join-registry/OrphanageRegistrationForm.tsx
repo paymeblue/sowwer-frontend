@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { ArrowRight } from "react-iconly";
 import * as z from "zod";
 import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
+import FileUpload from "@components/ui/file-upload";
 
 const OrphanageRegistrationForm = ({
   onSuccess,
@@ -165,6 +166,32 @@ const OrphanageRegistrationForm = ({
                         ""
                       );
                       field.onChange(sanitizedValue);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="cacDocument"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel required>Upload CAC Document</FormLabel>
+                <FormControl>
+                  <FileUpload
+                    onFileChange={(file: string) => {
+                      field.onChange(file);
+                    }}
+                    title="Upload CAC Document"
+                    desc="(.jpg, .png or .pdf file format supported)"
+                    file={field.value}
+                    fileName="CAC_Document"
+                    acceptedFiles=".jpg, .jpeg, .png, .pdf"
+                    onDelete={() => {
+                      field.onChange(null);
                     }}
                   />
                 </FormControl>
