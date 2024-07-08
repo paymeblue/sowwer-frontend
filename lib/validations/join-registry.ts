@@ -87,3 +87,18 @@ export const ExisitingMissionRegistration = z.object({
     required_error: "You must read and accept the declaration",
   }),
 });
+
+export const OrphanageRegistration = z.object({
+  name: z
+    .string()
+    .min(3, { message: "Name must be more than three characters" }),
+  email: z.string().email("Please enter a valid email"),
+  phoneNumber: z
+    .string()
+    .min(3, { message: "Name must be more than three characters" }),
+  address: z.string().min(3),
+  numberOfOrphans: z.string(),
+  acceptTerms: z.boolean({
+    required_error: "You must read and accept the declaration",
+  }),
+});

@@ -1,4 +1,5 @@
 import MissionaryRegistrationForm from "@components/forms/join-registry/MissionaryRegistrationForm";
+import OrphanageRegistrationForm from "@components/forms/join-registry/OrphanageRegistrationForm";
 import WidowRegistrationForm from "@components/forms/join-registry/WidowRegistrationForm";
 import SuccessState from "@components/shared/SuccessState";
 import { Button } from "@components/ui/button";
@@ -52,6 +53,14 @@ const PersonalInformation = ({ selectedCategory, setActiveStep }: Props) => {
         )}
         {selectedCategory === "Missionary" && (
           <MissionaryRegistrationForm
+            onSuccess={() => {
+              setSuccess(true);
+            }}
+          />
+        )}
+
+        {selectedCategory === "Orphanage" && (
+          <OrphanageRegistrationForm
             onSuccess={() => {
               setSuccess(true);
             }}
