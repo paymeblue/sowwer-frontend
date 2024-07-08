@@ -25,7 +25,17 @@ const navItems: INavitem[] = [
   },
   {
     label: "About",
-    route: "/about",
+    route: "",
+    child: [
+      {
+        label: "The Foundation",
+        route: "/the-foundation",
+      },
+      {
+        label: "Our Team",
+        route: "/our-team",
+      },
+    ],
   },
   {
     label: "Explore",
@@ -38,6 +48,10 @@ const navItems: INavitem[] = [
       {
         label: "Ministries",
         route: "/ministries",
+      },
+      {
+        label: "Testimonies",
+        route: "/testimonies",
       },
     ],
   },

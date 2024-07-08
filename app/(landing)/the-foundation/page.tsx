@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About | Soower",
+  title: "The Foundation | Soower",
 };
 
 const DynamicAboutpage = dynamic(() => import("screens/landing/Aboutpage"), {
