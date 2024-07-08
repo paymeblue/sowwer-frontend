@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Dispatch, SetStateAction, useState } from "react";
 
 interface Props {
-  selectedCategory: "Widow" | "Missionary" | null;
+  selectedCategory: "Widow" | "Missionary" | "Orphanage" | null;
   setActiveStep: Dispatch<SetStateAction<number>>;
 }
 

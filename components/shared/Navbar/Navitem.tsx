@@ -53,7 +53,7 @@ const Navitem = ({
           {child && <NavigationMenuTrigger>{label}</NavigationMenuTrigger>}
           {child && (
             <NavigationMenuContent className="z-[100]">
-              <ul className="z-[90] flex w-[10rem] flex-col space-y-4 p-4">
+              <ul className="z-[90] flex w-[12rem] flex-col space-y-4 p-4">
                 {child.map((item) => {
                   return (
                     <div

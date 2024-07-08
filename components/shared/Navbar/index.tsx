@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import ProfileMenuCard from "@components/cards/ProfileMenuCard";
 import { Sheet, SheetContent, SheetTrigger } from "@components/ui/sheet";
 import { AlignJustify } from "lucide-react";
+import Link from "next/link";
 
 const navItems: INavitem[] = [
   {
@@ -58,6 +59,24 @@ const navItems: INavitem[] = [
   {
     label: "For ministries",
     route: "/for-ministries",
+  },
+  {
+    label: "Registry",
+    route: "",
+    child: [
+      {
+        label: "Join as a widow",
+        route: "/registry/join?category=Widow",
+      },
+      {
+        label: "Join as a missionary",
+        route: "/registry/join?category=Missionary",
+      },
+      {
+        label: "Join as an orphanage",
+        route: "/registry/join?category=Orphanage",
+      },
+    ],
   },
   {
     label: "Contact us",
@@ -151,10 +170,10 @@ const Navbar = ({ variant = "landing" }: Props) => {
             Login
           </Button>
         )}
-        {variant === "landing" && (
-          <Button onClick={() => router.push("/registry/join")}>
-            Join Soower's Registry
-          </Button>
+        {variant === "landing" && !isAuthenticated && (
+          <Link href="/auth/donor/sign-up">
+            <Button>Create account</Button>
+          </Link>
         )}
       </div>
 
@@ -214,17 +233,15 @@ const Navbar = ({ variant = "landing" }: Props) => {
                     Login
                   </Button>
                 )}
-                {variant === "landing" && (
+                {variant === "landing" && !isAuthenticated && (
                   <Button
                     className="w-full"
                     onClick={() => {
                       setOpen(false);
-                      router.push("/registry/join");
+                      router.push("/auth/donor/sign-up");
                     }}
                   >
-                    <span className="whitespace-nowrap">
-                      Join Soower's Registry
-                    </span>
+                    <span className="whitespace-nowrap">Create acconut</span>
                   </Button>
                 )}
               </div>

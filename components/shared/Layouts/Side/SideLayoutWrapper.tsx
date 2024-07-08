@@ -10,6 +10,7 @@ interface Props {
   title: string;
   desc: string;
   showSignPrompt?: boolean;
+  shouldGoBack?: boolean;
 }
 
 const SideLayoutWrapper = ({
@@ -17,6 +18,7 @@ const SideLayoutWrapper = ({
   title,
   desc,
   showSignPrompt = false,
+  shouldGoBack,
 }: Props) => {
   useEffect(() => {
     document.body.classList.add("body_on_center_layout");
@@ -29,7 +31,7 @@ const SideLayoutWrapper = ({
 
   return (
     <div className="flex h-fit w-screen flex-col lg:h-screen lg:flex-row lg:overflow-hidden">
-      <SideLeft title={title} desc={desc} />
+      <SideLeft title={title} desc={desc} shouldGoBack={shouldGoBack} />
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"
