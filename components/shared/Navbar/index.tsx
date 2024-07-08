@@ -49,10 +49,10 @@ const navItems: INavitem[] = [
         label: "Ministries",
         route: "/ministries",
       },
-      {
-        label: "Testimonies",
-        route: "/testimonies",
-      },
+      // {
+      //   label: "Testimonies",
+      //   route: "/testimonies",
+      // },
     ],
   },
   {
