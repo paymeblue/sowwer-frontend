@@ -26,7 +26,7 @@ const JoinCouncil = () => {
         </>
       }
     >
-      <div className="mx-auto w-full lg:max-w-[500px]">
+      <div className="mx-auto w-full max-lg:px-6 lg:max-w-[500px]">
         <JoinCouncilForm />
       </div>
     </SideLayoutWrapper>
