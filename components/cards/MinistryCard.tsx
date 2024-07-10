@@ -1,7 +1,7 @@
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart2, Location } from "react-iconly";
+import { Location } from "react-iconly";
 
 export interface IMinistryCard {
   name: string;
@@ -36,8 +36,8 @@ const MinistryCard = ({ name, location, logoUrl, id }: IMinistryCard) => {
       </div>
       <Link href={`/ministries/${id}`}>
         <Button className="w-full space-x-2">
-          <Heart2 set="bold" size={19} />
-          <span>Make a donation</span>
+          {/* <Heart2 set="bold" size={19} /> */}
+          <span>Our story</span>
         </Button>
       </Link>
     </div>

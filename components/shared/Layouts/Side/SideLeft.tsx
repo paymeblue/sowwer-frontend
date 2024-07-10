@@ -5,11 +5,12 @@ import { Button } from "@components/ui/button";
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import { useRouter } from "next/navigation";
+import { ReactNode } from "react";
 import { ArrowLeft } from "react-iconly";
 
 interface Props {
   title: string;
-  desc: string;
+  desc: string | ReactNode;
   shouldGoBack?: boolean;
 }
 

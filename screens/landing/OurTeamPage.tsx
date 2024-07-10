@@ -48,7 +48,7 @@ const OurTeamPage = () => {
                   meaningful and sustainable change.
                 </p>
 
-                <Link href="/#">
+                <Link href="/join-council">
                   <Button className="w-fit space-x-2">
                     <span>Join the council</span>
                     <ArrowRight set="light" size={18} />

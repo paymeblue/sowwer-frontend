@@ -8,7 +8,7 @@ import Link from "next/link";
 interface Props {
   children: ReactNode;
   title: string;
-  desc: string;
+  desc: string | ReactNode;
   showSignPrompt?: boolean;
   shouldGoBack?: boolean;
 }
