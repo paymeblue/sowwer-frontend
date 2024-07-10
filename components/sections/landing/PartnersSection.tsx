@@ -46,7 +46,7 @@ const PartnersSection = () => {
             name="Jonathan Agwunobi"
             position="CO-FOUNDER"
             className="w-full lg:w-[30%]"
-            imgUrl="/assets/images/johnathan.png"
+            imgUrl="/assets/images/johnathan.jpg"
           />
           <PartnerCard
             name="Tobenna Nwokike"

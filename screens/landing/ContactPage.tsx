@@ -4,10 +4,9 @@ import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
 import SectionContainer from "@components/sections/SectionContainer";
-import { Instagram } from "lucide-react";
+import { Instagram, LinkedinIcon } from "lucide-react";
 import Facebook from "@components/assets/svg/Facebook";
 import Twitter from "@components/assets/svg/twitter";
-import YoutubeColor from "@components/assets/svg/youtubeColor";
 import Link from "next/link";
 import Calling from "@components/assets/svg/Calling";
 import Message from "@components/assets/svg/Message";
@@ -33,25 +32,47 @@ const ContactPage = () => {
             24hours.
           </p>
           <div className="mt-8 flex items-center gap-6">
-            <div className="cursor-pointer text-black">
-              <Twitter />
-            </div>
-            <Instagram fill="black" color="white" className="cursor-pointer" />
-            <div className="cursor-pointer text-black">
-              <Facebook />
-            </div>
-            <div className="cursor-pointer text-black">
-              <YoutubeColor playColor="white" />
-            </div>
+            <Link
+              href="https://x.com/soowerMission?t=G0zmS8PLLu6RxcJkzdo42w&s=09"
+              target="__blank"
+            >
+              <div className="cursor-pointer text-black">
+                <Twitter />
+              </div>
+            </Link>
+            <Link
+              href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
+              target="__blank"
+            >
+              <Instagram
+                fill="black"
+                color="white"
+                className="cursor-pointer"
+              />
+            </Link>
+            <Link
+              href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
+              target="__blank"
+            >
+              <div className="cursor-pointer text-black">
+                <Facebook />
+              </div>
+            </Link>
+            <Link
+              href="https://www.linkedin.com/company/soower"
+              target="__blank"
+            >
+              <LinkedinIcon />
+            </Link>
           </div>
 
           <ul className="mt-8 flex flex-col space-y-4">
             <li>
               <Link
-                href="tel:+2348162324609"
+                href="tel:+2347077583345"
                 className="contactlink_sub flex items-center space-x-2"
               >
-                <Calling /> <span>(+234) 816 232 4609</span>
+                <Calling /> <span>(+234) 707 758 3345</span>
               </Link>
             </li>
             <li>

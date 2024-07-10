@@ -13,7 +13,7 @@ interface TeamMemberProps {
 
 const teamMembers: TeamMemberProps[] = [
   {
-    imgUrl: "/assets/images/team/johnathan.png",
+    imgUrl: "/assets/images/team/johnathan.jpg",
     name: "Jonathan Agwunobi",
     position: "Co-Founder",
   },
@@ -27,16 +27,7 @@ const teamMembers: TeamMemberProps[] = [
     name: "Tobenna Nwokike",
     position: "Co-Founder",
   },
-  {
-    imgUrl: "/assets/images/team/imelda.png",
-    name: "Prof. Imelda Udoh",
-    position: "Executive Director",
-  },
-  {
-    imgUrl: "/assets/images/team/chris.png",
-    name: "Chris A. Umar (SAN)",
-    position: "Legal Adviser",
-  },
+
   {
     imgUrl: "/assets/images/team/regina.png",
     name: "Pastor Regina Nuhu",
@@ -62,6 +53,16 @@ const teamMembers: TeamMemberProps[] = [
     name: "Ogola Lois Kange",
     position: "Board Member",
   },
+  {
+    imgUrl: "/assets/images/team/imelda.png",
+    name: "Prof. Imelda Udoh",
+    position: "Executive Director",
+  },
+  {
+    imgUrl: "/assets/images/team/chris.png",
+    name: "Chris A. Umar (SAN)",
+    position: "Legal Adviser",
+  },
 ];
 
 const TeamMember = ({ imgUrl, name, position }: TeamMemberProps) => {
@@ -73,9 +74,11 @@ const TeamMember = ({ imgUrl, name, position }: TeamMemberProps) => {
         alt={name}
         className="z-[1] object-cover transition-all duration-200 group-hover:scale-105"
       />
-      <div className="team-member-blur z-[10] mx-2 mb-2 mt-auto h-fit w-full px-5 py-4">
-        <h4 className="text_small_header text-[1.2rem]">{name}</h4>
-        <p className="text_small_body_p mt-2">{position}</p>
+      <div className="team-member-blur z-[10] mx-2 mb-2 mt-auto h-fit w-full px-3 py-3">
+        <h4 className="text_small_header text-[1.2rem] leading-[1.1rem] lg:text-[1rem]">
+          {name}
+        </h4>
+        <p className="text_small_body_p mt-1">{position}</p>
       </div>
     </div>
   );
@@ -112,7 +115,7 @@ const TeamTopSection = () => {
           viewport={DEFAULT_VIEWPORT}
           className="my-10 w-full lg:my-20"
         >
-          <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
             {teamMembers.map((member) => {
               return <TeamMember key={member.imgUrl} {...member} />;
             })}
