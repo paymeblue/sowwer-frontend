@@ -59,7 +59,7 @@ const OrphanageRegistrationForm = ({
         declaration: acceptTerms,
         email,
         name,
-        number_of_ophans: numberOfOrphans,
+        number_of_orphans: numberOfOrphans,
         phone: phoneNumber,
       };
       await joinOrphanageRequest(data).unwrap();

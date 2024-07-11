@@ -4,7 +4,7 @@ export type OrphanageRegistrationRequest = {
   email: string;
   phone: string;
   address: string;
-  number_of_ophans: string;
+  number_of_orphans: string;
   cac_document: File;
   declaration: boolean;
 };
