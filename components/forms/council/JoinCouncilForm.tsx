@@ -1,5 +1,6 @@
 "use client";
 
+import SuccessState from "@components/shared/SuccessState";
 import { Button } from "@components/ui/button";
 import { Checkbox } from "@components/ui/checkbox";
 import {
@@ -24,12 +25,16 @@ import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import statesInNigeria from "@lib/NigeriaStates";
 import { JoinSoowerCouncil as JoinSoowerCouncilValidation } from "lib/validations/council";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { ArrowRight } from "react-iconly";
+import { useJoinCouncilMutation } from "services/join-council";
+import { JoinCouncilRegistrationRequest } from "services/join-council/typings";
 import * as z from "zod";
 
 const JoinCouncilForm = () => {
   const { toast } = useToast();
+  const [joinCouncil, { isLoading, isSuccess }] = useJoinCouncilMutation();
   const form = useForm<z.infer<typeof JoinSoowerCouncilValidation>>({
     resolver: zodResolver(JoinSoowerCouncilValidation),
   });
@@ -37,7 +42,16 @@ const JoinCouncilForm = () => {
   const onSubmit = async (
     values: z.infer<typeof JoinSoowerCouncilValidation>
   ) => {
-    const { acceptTerms } = values;
+    const {
+      acceptTerms,
+      address,
+      email,
+      name,
+      nameOfChurch,
+      phoneNumber,
+      reason,
+      state,
+    } = values;
 
     if (!acceptTerms) {
       toast({
@@ -47,7 +61,46 @@ const JoinCouncilForm = () => {
       });
       return;
     }
+
+    try {
+      const data: JoinCouncilRegistrationRequest = {
+        address,
+        church_name: nameOfChurch,
+        declaration: acceptTerms,
+        email,
+        name,
+        phone: phoneNumber,
+        reason_to_join: reason,
+        residential_state: state,
+      };
+      await joinCouncil(data).unwrap();
+      toast({
+        title: "Success",
+      });
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: "Unable to complete registration.",
+        description: `${"There seems to be a problem with your registration, please try again later."}`,
+        duration: 2500,
+      });
+    }
   };
+
+  if (isSuccess) {
+    return (
+      <SuccessState
+        title="Successful"
+        desc="Thanks for showing interest to join the council. We will be in touch."
+        className="h-[80vh]"
+        action={
+          <Link href="/">
+            <Button variant="secondary">Back to homepage</Button>
+          </Link>
+        }
+      />
+    );
+  }
 
   return (
     <Form {...form}>
@@ -196,7 +249,7 @@ const JoinCouncilForm = () => {
         </div>
         <Button
           variant="secondary"
-          //   loading={isLoading}
+          loading={isLoading}
           type="submit"
           className="ml-auto mt-10 w-fit space-x-2"
         >
