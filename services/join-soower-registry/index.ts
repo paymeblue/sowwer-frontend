@@ -6,6 +6,7 @@ import {
 } from "../typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
+import { OrphanageRegistrationRequest } from "./typings";
 
 const joinSoower = api.injectEndpoints({
   endpoints: (build) => ({
@@ -35,6 +36,23 @@ const joinSoower = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    orphanage: build.mutation<void, OrphanageRegistrationRequest>({
+      query: (payload) => {
+        const formData = new FormData();
+
+        for (const key in payload) {
+          if (payload.hasOwnProperty(key)) {
+            formData.append(key, payload[key]!);
+          }
+        }
+
+        return {
+          url: "/registry/orphanages",
+          method: "POST",
+          body: formData,
+        };
+      },
+    }),
     refetchErroredQueries: build.mutation<null, void>({
       queryFn: () => ({ data: null }),
       invalidatesTags: cacher.invalidatesUnknownErrors(),
@@ -43,4 +61,5 @@ const joinSoower = api.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useWidowMutation, useMissionaryMutation } = joinSoower;
+export const { useWidowMutation, useMissionaryMutation, useOrphanageMutation } =
+  joinSoower;

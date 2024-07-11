@@ -20,26 +20,28 @@ import { ArrowRight } from "react-iconly";
 import * as z from "zod";
 import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
 import FileUpload from "@components/ui/file-upload";
+import { OrphanageRegistrationRequest } from "services/join-soower-registry/typings";
+import { useOrphanageMutation } from "services/join-soower-registry";
+import { convertBase64toFile } from "@lib/functions";
 
 const OrphanageRegistrationForm = ({
   onSuccess,
 }: RegistryRegistrationFormProps) => {
   const { toast } = useToast();
+  const [joinOrphanageRequest, { isLoading }] = useOrphanageMutation();
   const form = useForm<z.infer<typeof OrphanageRegistration>>({
     resolver: zodResolver(OrphanageRegistration),
-    // defaultValues: {
-    //   range: "year",
-    // },
   });
-
-  //   useEffect(() => {
-  //     if (isSuccess && onSuccess) {
-  //       onSuccess();
-  //     }
-  //   }, [isSuccess, onSuccess]);
-
   const onSubmit = async (values: z.infer<typeof OrphanageRegistration>) => {
-    const { acceptTerms } = values;
+    const {
+      acceptTerms,
+      address,
+      cacDocument,
+      email,
+      name,
+      numberOfOrphans,
+      phoneNumber,
+    } = values;
 
     if (!acceptTerms) {
       toast({
@@ -50,34 +52,33 @@ const OrphanageRegistrationForm = ({
       return;
     }
 
-    // try {
-    //   const data = {
-    //     address,
-    //     age: Number(age),
-    //     christianity: isWidowChristian === "Yes" ? true : false,
-    //     declaration: acceptTerms,
-    //     duration: Number(duration),
-    //     timestamp: range,
-    //     email,
-    //     kids: doesWidowHaveKids === "Yes" ? true : false,
-    //     name,
-    //     phone: String(phoneNumber),
-    //   } as WidowJoinSoowerRequest1;
-    //   await joinWidowRegistry(data).unwrap();
-    //   toast({
-    //     title: "Widow registration successful",
-    //   });
-    // } catch (err) {
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Unable to complete registration.",
-    //     description: `${
-    //       err ||
-    //       "There seems to be a problem with your registration, please try again later."
-    //     }`,
-    //     duration: 2500,
-    //   });
-    // }
+    try {
+      const data: OrphanageRegistrationRequest = {
+        address,
+        cac_document: convertBase64toFile(cacDocument, "cac"),
+        declaration: acceptTerms,
+        email,
+        name,
+        number_of_ophans: numberOfOrphans,
+        phone: phoneNumber,
+      };
+      await joinOrphanageRequest(data).unwrap();
+      toast({
+        title: "Orphanage registration successful, we will be in touch.",
+        duration: 2500,
+      });
+      onSuccess();
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to complete registration.",
+        description:
+          typeof err === "string"
+            ? err
+            : "There seems to be a problem with your registration, please try again later.",
+        duration: 2500,
+      });
+    }
   };
 
   return (
@@ -156,7 +157,7 @@ const OrphanageRegistrationForm = ({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Age"
+                    placeholder="Enter number"
                     type="text"
                     {...field}
                     inputMode="numeric"
@@ -227,7 +228,7 @@ const OrphanageRegistrationForm = ({
         </div>
         <Button
           variant="secondary"
-          //   loading={isLoading}
+          loading={isLoading}
           type="submit"
           className="ml-auto mt-10 w-fit space-x-2"
         >
