@@ -210,6 +210,27 @@ const auth = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data,
     }),
+    loginAdmin: build.mutation<LoginResponse, LoginRequest>({
+      query: (credentials) => ({
+        url: "admins/login",
+        method: "POST",
+        body: credentials,
+      }),
+      // on successful login, will refetch all currently
+      // 'UNAUTHORIZED' queries
+      invalidatesTags: cacher.invalidatesUnauthorized(),
+      // invalidatesTags: (result) =>
+      //   result ? cacher.invalidatesUnauthorized() : [],
+
+      // Pick out data and prevent nested properties in a hook or selector
+      transformResponse: (response: LoginResponse, meta, arg): any => {
+        const { message, data } = response;
+        return { message, data };
+      },
+      // Pick out errors and prevent nested properties in a hook or selector
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data,
+    }),
     forgotPassword: build.mutation<PlainResponse, { email: string }>({
       query: (body) => ({
         url: "users/forgot-password",
@@ -262,6 +283,7 @@ export const {
   useMinistrySignupMutation,
   useDonorRegisterMutation,
   useLoginMutation,
+  useLoginAdminMutation,
   useInitiatePaymentToMinistryUnauthMutation,
   useInitiatePaymentToMinistryAuthMutation,
   useForgotPasswordMutation,

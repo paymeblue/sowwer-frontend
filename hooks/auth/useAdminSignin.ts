@@ -4,11 +4,11 @@ import { useToast } from "@components/ui/use-toast";
 import { DonorSigninValidation } from "lib/validations/donor";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "redux/auth/reducer";
-import { useLoginMutation } from "services/auth";
+import { useLoginAdminMutation } from "services/auth";
 import * as z from "zod";
 
 const useAdminSignin = () => {
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginAdminMutation();
   const dispatch = useDispatch();
   const { toast } = useToast();
 
@@ -18,7 +18,6 @@ const useAdminSignin = () => {
       const res = await login({
         identifier: email,
         password,
-        type: "admin",
       }).unwrap();
 
       if (res.data.user && res?.data?.user?.type !== "admin") {

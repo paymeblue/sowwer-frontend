@@ -77,7 +77,7 @@ export type SignupResponse = Response<{
 export type LoginRequest = {
   identifier: string;
   password: string;
-  type: "ministry" | "donor" | "admin";
+  type?: "ministry" | "donor" | "admin";
 };
 export type RefreshTokenResponse = Response<{
   type: string;
