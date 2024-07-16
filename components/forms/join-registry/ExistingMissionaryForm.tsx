@@ -30,6 +30,7 @@ import { useMissionaryMutation } from "services/join-soower-registry";
 import { MissionaryJoinSoowerRequest2 } from "services/typings";
 import * as z from "zod";
 import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
+import statesInNigeria from "@lib/NigeriaStates";
 
 const ExistingMissionaryForm = ({
   onSuccess,
@@ -69,6 +70,9 @@ const ExistingMissionaryForm = ({
       serviceArea,
       range,
       affliateChurch,
+      nextOfKinName,
+      nextOfKinPhone,
+      state,
     } = values;
     if (!acceptTerms) {
       toast({
@@ -92,6 +96,9 @@ const ExistingMissionaryForm = ({
         timestamp: range,
         reason_about: previousWork,
         affiliated_church_name: affliateChurch,
+        next_of_kin_name: nextOfKinName,
+        next_of_kin_phone: nextOfKinPhone,
+        state_of_origin: state,
       } as MissionaryJoinSoowerRequest2;
       await joinMissionaryRegistry(data).unwrap();
       toast({
@@ -130,6 +137,34 @@ const ExistingMissionaryForm = ({
           />
           <FormField
             control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel required className="">
+                  State of origin
+                </FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger defaultValue={field.value}>
+                      <SelectValue placeholder="--Select--" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="max-h-[30vh]">
+                    {statesInNigeria.map((state, i) => {
+                      return (
+                        <SelectItem value={state} key={state + i}>
+                          {state}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem className="">
@@ -153,6 +188,33 @@ const ExistingMissionaryForm = ({
                 <FormLabel required>Phone Number</FormLabel>
                 <FormControl>
                   <Input placeholder="Phone number" type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="nextOfKinName"
+            render={({ field }) => (
+              <FormItem className="">
+                <FormLabel required>Next of Kin Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter name" type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nextOfKinPhone"
+            render={({ field }) => (
+              <FormItem className="">
+                <FormLabel required>Next of Kin Phone</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter phone" type="number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -24,6 +24,14 @@ import { ArrowRight } from "react-iconly";
 import { MissionaryJoinSoowerRequest1 } from "services/typings";
 import * as z from "zod";
 import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
+import statesInNigeria from "@lib/NigeriaStates";
 
 const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
   const form = useForm<z.infer<typeof NewMissionaryRegistration>>({
@@ -54,6 +62,9 @@ const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
       occupation,
       phoneNumber,
       reason,
+      nextOfKinName,
+      nextOfKinPhone,
+      state,
     } = values;
     if (!acceptTerms) {
       toast({
@@ -76,6 +87,9 @@ const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
         phone: phoneNumber,
         reason_about: reason,
         status: "new",
+        next_of_kin_name: nextOfKinName,
+        next_of_kin_phone: nextOfKinPhone,
+        state_of_origin: state,
       } as MissionaryJoinSoowerRequest1;
       await joinMissionaryRegistry(data).unwrap();
       toast({
@@ -116,6 +130,34 @@ const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
           />
           <FormField
             control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel required className="">
+                  State of origin
+                </FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger defaultValue={field.value}>
+                      <SelectValue placeholder="--Select--" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="max-h-[30vh]">
+                    {statesInNigeria.map((state, i) => {
+                      return (
+                        <SelectItem value={state} key={state + i}>
+                          {state}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem className="">
@@ -139,6 +181,33 @@ const NewMissionaryForm = ({ onSuccess }: RegistryRegistrationFormProps) => {
                 <FormLabel required>Phone Number</FormLabel>
                 <FormControl>
                   <Input placeholder="Phone number" type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="nextOfKinName"
+            render={({ field }) => (
+              <FormItem className="">
+                <FormLabel required>Next of Kin Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter name" type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nextOfKinPhone"
+            render={({ field }) => (
+              <FormItem className="">
+                <FormLabel required>Next of Kin Phone</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter phone" type="number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

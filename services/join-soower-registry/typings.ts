@@ -7,4 +7,5 @@ export type OrphanageRegistrationRequest = {
   number_of_orphans: string;
   cac_document: File;
   declaration: boolean;
+  location: string;
 };

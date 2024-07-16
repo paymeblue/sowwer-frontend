@@ -29,6 +29,7 @@ import { useWidowMutation } from "services/join-soower-registry";
 import { WidowJoinSoowerRequest1 } from "services/typings";
 import * as z from "zod";
 import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
+import statesInNigeria from "@lib/NigeriaStates";
 
 const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
   const { toast } = useToast();
@@ -58,6 +59,9 @@ const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
       name,
       phoneNumber,
       range,
+      nextOfKinName,
+      nextOfKinPhone,
+      state,
     } = values;
 
     if (!acceptTerms) {
@@ -81,6 +85,9 @@ const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
         kids: doesWidowHaveKids === "Yes" ? true : false,
         name,
         phone: String(phoneNumber),
+        next_of_kin_name: nextOfKinName,
+        next_of_kin_phone: nextOfKinPhone,
+        state_of_origin: state,
       } as WidowJoinSoowerRequest1;
       await joinWidowRegistry(data).unwrap();
       toast({
@@ -115,6 +122,34 @@ const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
                 <FormControl>
                   <Input placeholder="Name" type="text" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel required className="">
+                  State of origin
+                </FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger defaultValue={field.value}>
+                      <SelectValue placeholder="--Select--" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="max-h-[30vh]">
+                    {statesInNigeria.map((state, i) => {
+                      return (
+                        <SelectItem value={state} key={state + i}>
+                          {state}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -225,6 +260,32 @@ const Registration = ({ onSuccess }: RegistryRegistrationFormProps) => {
                 <FormLabel required>Phone Number</FormLabel>
                 <FormControl>
                   <Input placeholder="Phone Number" type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nextOfKinName"
+            render={({ field }) => (
+              <FormItem className="">
+                <FormLabel required>Next of Kin Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter name" type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nextOfKinPhone"
+            render={({ field }) => (
+              <FormItem className="">
+                <FormLabel required>Next of Kin Phone</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter phone" type="number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -636,6 +636,8 @@ export type WidowJoinSoowerRequest1 = {
   age: number;
   kids: boolean;
   state_of_origin: string;
+  next_of_kin_name: string;
+  next_of_kin_phone: string;
 };
 export type WidowJoinSoowerRequest2 = {
   name: string;
@@ -652,6 +654,8 @@ export type WidowJoinSoowerRequest2 = {
   age: number;
   kids: boolean;
   state_of_origin: string;
+  next_of_kin_name: string;
+  next_of_kin_phone: string;
 };
 export type WidowJoinSoowerRequest =
   | WidowJoinSoowerRequest1
@@ -670,6 +674,8 @@ export type MissionaryJoinSoowerRequest1 = {
   occupation: string;
   reason_about: string;
   state_of_origin: string;
+  next_of_kin_name: string;
+  next_of_kin_phone: string;
 };
 export type MissionaryRequest = {
   duration: number;

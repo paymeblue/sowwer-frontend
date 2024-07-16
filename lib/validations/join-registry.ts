@@ -26,6 +26,9 @@ export const WidowRegistrationForSomeone = z.object({
   acceptTerms: z.boolean({
     required_error: "You must read and accept the declaration",
   }),
+  nextOfKinName: z.string().min(1, { message: "Required" }),
+  nextOfKinPhone: z.string().min(1, { message: "Required" }),
+  state: z.string().min(1, { message: "Please enter a state" }),
 });
 
 export const WidowRegistration = z.object({
@@ -43,6 +46,9 @@ export const WidowRegistration = z.object({
   acceptTerms: z.boolean({
     required_error: "You must read and accept the declaration",
   }),
+  nextOfKinName: z.string().min(1, { message: "Required" }),
+  nextOfKinPhone: z.string().min(1, { message: "Required" }),
+  state: z.string().min(1, { message: "Please enter a state" }),
 });
 
 export const MissionaryRegistrationStart = z.object({
@@ -66,6 +72,9 @@ export const NewMissionaryRegistration = z.object({
   acceptTerms: z.boolean({
     required_error: "You must read and accept the declaration",
   }),
+  nextOfKinName: z.string().min(1, { message: "Required" }),
+  nextOfKinPhone: z.string().min(1, { message: "Required" }),
+  state: z.string().min(1, { message: "Please enter a state" }),
 });
 
 export const ExisitingMissionRegistration = z.object({
@@ -86,6 +95,9 @@ export const ExisitingMissionRegistration = z.object({
   acceptTerms: z.boolean({
     required_error: "You must read and accept the declaration",
   }),
+  nextOfKinName: z.string().min(1, { message: "Required" }),
+  nextOfKinPhone: z.string().min(1, { message: "Required" }),
+  state: z.string().min(1, { message: "Please enter a state" }),
 });
 
 export const OrphanageRegistration = z.object({
@@ -102,4 +114,5 @@ export const OrphanageRegistration = z.object({
     required_error: "You must read and accept the declaration",
   }),
   cacDocument: z.string(),
+  location: z.string().min(1, { message: "Required" }),
 });

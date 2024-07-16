@@ -29,6 +29,7 @@ import { useWidowMutation } from "services/join-soower-registry";
 import { WidowJoinSoowerRequest2 } from "services/typings";
 import * as z from "zod";
 import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
+import statesInNigeria from "@lib/NigeriaStates";
 
 const RegistrationForSomeone = ({
   onSuccess,
@@ -65,6 +66,9 @@ const RegistrationForSomeone = ({
       widowEmail,
       widowName,
       widowPhone,
+      nextOfKinName,
+      nextOfKinPhone,
+      state,
     } = values;
 
     if (!acceptTerms) {
@@ -91,6 +95,9 @@ const RegistrationForSomeone = ({
         registrar_name: name,
         registrar_email: email,
         registrar_phone: phoneNumber,
+        next_of_kin_name: nextOfKinName,
+        next_of_kin_phone: nextOfKinPhone,
+        state_of_origin: state,
       } as WidowJoinSoowerRequest2;
       await joinWidowRegistry(data).unwrap();
       toast({
@@ -175,6 +182,34 @@ const RegistrationForSomeone = ({
                   <FormControl>
                     <Input placeholder="Name" type="text" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="state"
+              render={({ field }) => (
+                <FormItem className="col-span-2">
+                  <FormLabel required className="">
+                    State of origin
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger defaultValue={field.value}>
+                        <SelectValue placeholder="--Select--" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="max-h-[30vh]">
+                      {statesInNigeria.map((state, i) => {
+                        return (
+                          <SelectItem value={state} key={state + i}>
+                            {state}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -289,6 +324,32 @@ const RegistrationForSomeone = ({
                       type="number"
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="nextOfKinName"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel required>Next of Kin Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter name" type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="nextOfKinPhone"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel required>Next of Kin Phone</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter phone" type="number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -23,6 +23,14 @@ import FileUpload from "@components/ui/file-upload";
 import { OrphanageRegistrationRequest } from "services/join-soower-registry/typings";
 import { useOrphanageMutation } from "services/join-soower-registry";
 import { convertBase64toFile } from "@lib/functions";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
+import statesInNigeria from "@lib/NigeriaStates";
 
 const OrphanageRegistrationForm = ({
   onSuccess,
@@ -41,6 +49,7 @@ const OrphanageRegistrationForm = ({
       name,
       numberOfOrphans,
       phoneNumber,
+      location,
     } = values;
 
     if (!acceptTerms) {
@@ -61,6 +70,7 @@ const OrphanageRegistrationForm = ({
         name,
         number_of_orphans: numberOfOrphans,
         phone: phoneNumber,
+        location,
       };
       await joinOrphanageRequest(data).unwrap();
       toast({
@@ -75,7 +85,8 @@ const OrphanageRegistrationForm = ({
         description:
           typeof err === "string"
             ? err
-            : "There seems to be a problem with your registration, please try again later.",
+            : err?.data?.message ||
+              "There seems to be a problem with your registration, please try again later.",
         duration: 2500,
       });
     }
@@ -93,10 +104,39 @@ const OrphanageRegistrationForm = ({
             name="name"
             render={({ field }) => (
               <FormItem className="col-span-2">
-                <FormLabel required>Name</FormLabel>
+                <FormLabel required>Name of orphanage</FormLabel>
                 <FormControl>
                   <Input placeholder="Name" type="text" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel required className="">
+                  State
+                </FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger defaultValue={field.value}>
+                      <SelectValue placeholder="--Select--" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="max-h-[30vh]">
+                    {statesInNigeria.map((state, i) => {
+                      return (
+                        <SelectItem value={state} key={state + i}>
+                          {state}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
