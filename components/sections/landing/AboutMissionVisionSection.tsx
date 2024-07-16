@@ -27,8 +27,9 @@ const AboutMissionVisionSection = () => {
         <Target />
         <h3 className="text_small_header mt-10">Our Mission</h3>
         <p className="text_regular_body_p mt-2 max-lg:text-[.8rem]">
-          To practice true Christianity, being faithful to God and partnering
-          with others to win souls to Christ (James 1:27, 3 John 1:5,8).
+          To provide holistic support to widows, orphans, and missionaries
+          through educational, economic, emotional, and spiritual assistance, to
+          foster an environment of growth, hope, and empowerment.
         </p>
       </motion.div>
 
@@ -39,7 +40,8 @@ const AboutMissionVisionSection = () => {
         <Vision />
         <h3 className="text_small_header mt-10">Our Vision</h3>
         <p className="text_regular_body_p mt-2 max-lg:text-[.8rem]">
-          Thy Kingdom Come.
+          A world were widows, orphans and marginalized communities flourish
+          through faith-driven support.
         </p>
       </motion.div>
     </motion.section>

@@ -16,8 +16,7 @@ const AboutIntroSection = () => {
           className="flex flex-col space-y-4"
         >
           <h2 className="text_variant_h2 max-lg:text-[2.6rem] max-lg:leading-[3.3rem]">
-            The Kingdom Investment Platform. <br /> Perfectly positioned to lend
-            a helping hand.
+            Perfectly positioned to lend a helping hand.
           </h2>
           <p className="text_variant_caption">
             We believe that we are all called to be a beacon of hope and
