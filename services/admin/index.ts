@@ -9,6 +9,10 @@ import {
   GetAdminPayoutHistoryResponse,
   GetAdminPayoutHistoryRequest,
   AdminUploadCacDocumentRequest,
+  GetAdminWidowsResponse,
+  GetAdminRegistryRequest,
+  GetAdminMissionsResponse,
+  GetAdminOrphanageResponse,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -94,8 +98,44 @@ const admin = api.injectEndpoints({
       query: (payload) => {
         const { type } = payload;
         return {
-          url: `payouts?type=${type}`,
+          url: `admins/payouts?type=${type}`,
           method: "GET",
+        };
+      },
+    }),
+    getAdminWidowsHistory: build.query<
+      GetAdminWidowsResponse,
+      GetAdminRegistryRequest
+    >({
+      query: (payload) => {
+        return {
+          url: `admins/fetch-widows`,
+          method: "GET",
+          params: payload,
+        };
+      },
+    }),
+    getAdminMissionsHistory: build.query<
+      GetAdminMissionsResponse,
+      GetAdminRegistryRequest
+    >({
+      query: (payload) => {
+        return {
+          url: `admins/fetch-widows`,
+          method: "GET",
+          params: payload,
+        };
+      },
+    }),
+    getAdminOrphanageHistory: build.query<
+      GetAdminOrphanageResponse,
+      GetAdminRegistryRequest
+    >({
+      query: (payload) => {
+        return {
+          url: `admins/fetch-widows`,
+          method: "GET",
+          params: payload,
         };
       },
     }),
@@ -133,4 +173,7 @@ export const {
   useGetAdminMinistryAdministratorQuery,
   useGetAdminPayoutHistoryQuery,
   useUploadMinistryDocumentsMutation,
+  useGetAdminMissionsHistoryQuery,
+  useGetAdminOrphanageHistoryQuery,
+  useGetAdminWidowsHistoryQuery,
 } = admin;

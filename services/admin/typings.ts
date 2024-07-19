@@ -43,6 +43,38 @@ export interface AdminPayoutHistory {
   project_goal: number;
 }
 
+export interface AdminWidowHistory {
+  id: string;
+  state_of_origin: string;
+  registrar_email: string;
+  registrar_name: string;
+  next_of_kin_name: string;
+  next_of_kin_phone: string;
+  createdAt: string;
+}
+
+export interface AdminMissionHistory {
+  id: string;
+  church: string;
+  occupation: string;
+  service_area: string;
+  next_of_kin_name: string;
+  next_of_kin_phone: string;
+  createdAt: string;
+}
+export interface AdminOrphanageHistory {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  cac_document: string;
+  declaration: string;
+  number_of_orphans: string;
+  location: string;
+  created_at: string;
+}
+
 export interface AdminPayoutHistoryGeneral {
   id: string;
   payout_date: string;
@@ -72,6 +104,11 @@ export interface GetAdminPayoutHistoryRequest {
   limit: number;
 }
 
+export interface GetAdminRegistryRequest {
+  limit: number;
+  page: number;
+}
+
 export type AdminUploadCacDocumentRequest = {
   [key: string]: File | undefined | string;
   cacDocument?: File;
@@ -85,3 +122,6 @@ export type GetAdminMinistryResponse = Response<AdminMinistry>;
 export type GetAdminMinistryAdministratorResponse =
   Response<AdminMinistryAdmin>;
 export type GetAdminPayoutHistoryResponse = TResponse<AdminPayoutHistory>;
+export type GetAdminWidowsResponse = TResponse<AdminWidowHistory[]>;
+export type GetAdminMissionsResponse = TResponse<AdminMissionHistory[]>;
+export type GetAdminOrphanageResponse = TResponse<AdminOrphanageHistory[]>;

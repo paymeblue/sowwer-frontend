@@ -1,5 +1,6 @@
 import ContentWrapper from "@components/shared/Layouts/Admin/ContentWrapper";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import AdminWidowRegistryTable from "@components/tables/admin/AdminWidowRegistryTable";
 // import AdminPayoutsTable from "@components/tables/admin/AdminPayoutsTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 
@@ -13,7 +14,7 @@ const RegistryComp = () => {
           <TabsTrigger value="orphanages">Orphanages</TabsTrigger>
         </TabsList>
         <TabsContent value="widows">
-          {/* <AdminPayoutsTable type="project" /> */}
+          <AdminWidowRegistryTable />
         </TabsContent>
         <TabsContent value="missionaries">
           {/* <AdminPayoutsTable type="ministry" /> */}
