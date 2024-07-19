@@ -22,7 +22,7 @@ const admin = api.injectEndpoints({
       query: (body) => {
         const { limit, page, status } = body;
         return {
-          url: `admins/ministries?limit=${limit}&page=${page}&status=${status}`,
+          url: `admins/fetch-ministries?limit=${limit}&page=${page}&status=${status}`,
           method: "GET",
         };
       },
@@ -38,7 +38,7 @@ const admin = api.injectEndpoints({
       query: (payload) => {
         const { id } = payload;
         return {
-          url: `admins/ministries/${id}/verify`,
+          url: `admins/fetch-ministry/${id}/verify`,
           method: "GET",
         };
       },
@@ -57,7 +57,7 @@ const admin = api.injectEndpoints({
       query: (payload) => {
         const { id } = payload;
         return {
-          url: `admins/ministries/${id}`,
+          url: `admins/fetch-ministry/${id}`,
           method: "GET",
         };
       },
@@ -76,7 +76,7 @@ const admin = api.injectEndpoints({
       query: (payload) => {
         const { id } = payload;
         return {
-          url: `admins/ministries/${id}/administrator`,
+          url: `admins/fetch-ministry/${id}/administrator`,
           method: "GET",
         };
       },
@@ -114,7 +114,7 @@ const admin = api.injectEndpoints({
           }
 
           return {
-            url: `admins/ministries/${id}`,
+            url: `admins/ministries/${id}/upload-docs`,
             method: "PATCH",
             body: formData,
           };

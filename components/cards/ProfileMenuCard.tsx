@@ -38,6 +38,7 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
   };
 
   const { firstName, lastName, email } = user;
+  console.log({ user });
   return (
     <DropdownMenu>
       <div className="w-fit">
@@ -45,7 +46,7 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
           <div className="flex cursor-pointer items-center space-x-4 max-lg:w-full max-lg:justify-between">
             <div className="flex items-center space-x-2">
               <Avatar>
-                <AvatarFallback>{`${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`}</AvatarFallback>
+                <AvatarFallback>{`${firstName[0]?.toUpperCase()}${lastName[0]?.toUpperCase()}`}</AvatarFallback>
               </Avatar>
               <div className={`flex flex-col space-y-0`}>
                 <h5

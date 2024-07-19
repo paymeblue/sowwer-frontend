@@ -1,6 +1,7 @@
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
 import {
+  AdminLoginResponse,
   ErrorResponse,
   InitiateDonationResponseAuth,
   InitiateDonationResponseUnauth,
@@ -210,7 +211,7 @@ const auth = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data,
     }),
-    loginAdmin: build.mutation<LoginResponse, LoginRequest>({
+    loginAdmin: build.mutation<AdminLoginResponse, LoginRequest>({
       query: (credentials) => ({
         url: "admins/login",
         method: "POST",

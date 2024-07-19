@@ -69,6 +69,22 @@ export type LoginResponse = Response<{
   token: Token;
 }>;
 
+export type AdminLoginResponse = Response<{
+  id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  created_at: string;
+  token: {
+    type: string;
+    access_token: string;
+    expires_in: string;
+    refresh_token: string;
+    refresh_token_expires_in: string;
+  };
+}>;
+
 export type SignupResponse = Response<{
   user: User;
   token: Token;
