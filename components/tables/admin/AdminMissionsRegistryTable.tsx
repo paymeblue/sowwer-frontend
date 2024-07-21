@@ -9,7 +9,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useGetAdminMissionsHistoryQuery } from "services/admin";
 import { AdminMissionHistory } from "services/admin/typings";
 
-const adminWidowsColumn: ColumnDef<AdminMissionHistory[]>[] = [
+const adminWidowsColumn: ColumnDef<AdminMissionHistory>[] = [
   {
     accessorKey: "",
     header: "Name",

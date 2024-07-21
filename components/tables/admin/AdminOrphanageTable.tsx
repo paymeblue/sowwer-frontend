@@ -6,10 +6,11 @@ import Loader from "@components/shared/Loader";
 import DataTable from "@components/ui/data-table";
 import usePagination from "@hooks/general/usePagination";
 import { ColumnDef } from "@tanstack/react-table";
+import moment from "moment";
 import { useGetAdminOrphanageHistoryQuery } from "services/admin";
 import { AdminOrphanageHistory } from "services/admin/typings";
 
-const adminWidowsColumn: ColumnDef<AdminOrphanageHistory[]>[] = [
+const adminWidowsColumn: ColumnDef<AdminOrphanageHistory>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -70,7 +71,7 @@ const adminWidowsColumn: ColumnDef<AdminOrphanageHistory[]>[] = [
     cell: ({ row }) => {
       return (
         <span className="font-[600] capitalize">
-          {row.getValue("created_at")}
+          {moment(row.getValue("created_at")).format("Do MMMM YYYY; h:mm:ss a")}
         </span>
       );
     },

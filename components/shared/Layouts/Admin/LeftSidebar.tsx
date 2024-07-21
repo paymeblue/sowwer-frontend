@@ -2,6 +2,7 @@
 
 import AdminMenuUser from "@components/assets/svg/AdminMenuUser";
 import AdminPayouts from "@components/assets/svg/AdminPayouts";
+import AdminProjects from "@components/assets/svg/AdminProjects";
 import AdminRegistryIcon from "@components/assets/svg/AdminRegistry";
 import Logo from "@components/shared/Logo";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,6 +13,11 @@ const sidebarItems = [
     route: "/ministries",
     label: "Ministries",
     icon: <AdminMenuUser />,
+  },
+  {
+    route: "/projects",
+    label: "Projects",
+    icon: <AdminProjects />,
   },
   {
     route: "/payouts",

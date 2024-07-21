@@ -13,6 +13,8 @@ import {
   GetAdminRegistryRequest,
   GetAdminMissionsResponse,
   GetAdminOrphanageResponse,
+  GetAdminProjectRequest,
+  GetAdminProjectsResponse,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -139,6 +141,18 @@ const admin = api.injectEndpoints({
         };
       },
     }),
+    getAdminProjectsHistory: build.query<
+      GetAdminProjectsResponse,
+      GetAdminProjectRequest
+    >({
+      query: (payload) => {
+        return {
+          url: `admins/fetch-projects`,
+          method: "GET",
+          params: payload,
+        };
+      },
+    }),
     uploadMinistryDocuments: build.mutation<any, AdminUploadCacDocumentRequest>(
       {
         query: (payload) => {
@@ -176,4 +190,5 @@ export const {
   useGetAdminMissionsHistoryQuery,
   useGetAdminOrphanageHistoryQuery,
   useGetAdminWidowsHistoryQuery,
+  useGetAdminProjectsHistoryQuery,
 } = admin;
