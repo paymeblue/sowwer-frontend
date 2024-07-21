@@ -121,7 +121,7 @@ const admin = api.injectEndpoints({
     >({
       query: (payload) => {
         return {
-          url: `admins/fetch-widows`,
+          url: `admins/fetch-missionaries`,
           method: "GET",
           params: payload,
         };
@@ -133,7 +133,7 @@ const admin = api.injectEndpoints({
     >({
       query: (payload) => {
         return {
-          url: `admins/fetch-widows`,
+          url: `admins/fetch-orphanages`,
           method: "GET",
           params: payload,
         };

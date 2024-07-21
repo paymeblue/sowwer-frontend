@@ -6,12 +6,12 @@ import Loader from "@components/shared/Loader";
 import DataTable from "@components/ui/data-table";
 import usePagination from "@hooks/general/usePagination";
 import { ColumnDef } from "@tanstack/react-table";
-import { useGetAdminWidowsHistoryQuery } from "services/admin";
-import { AdminWidowHistory } from "services/admin/typings";
+import { useGetAdminMissionsHistoryQuery } from "services/admin";
+import { AdminMissionHistory } from "services/admin/typings";
 
-const adminWidowsColumn: ColumnDef<AdminWidowHistory[]>[] = [
+const adminWidowsColumn: ColumnDef<AdminMissionHistory[]>[] = [
   {
-    accessorKey: "registrar_name",
+    accessorKey: "",
     header: "Name",
     cell: ({ row }) => {
       const val = row.getValue("registrar_name") as string;
@@ -61,9 +61,9 @@ const adminWidowsColumn: ColumnDef<AdminWidowHistory[]>[] = [
   },
 ];
 
-const AdminWidowRegistryTable = () => {
+const AdminMissionsRegistryTable = () => {
   const { pagination, handleNext, handlePrevious } = usePagination();
-  const { data, isLoading, isFetching } = useGetAdminWidowsHistoryQuery({
+  const { data, isLoading, isFetching } = useGetAdminMissionsHistoryQuery({
     limit: pagination.pageSize,
     page: pagination.current,
   });
@@ -76,8 +76,8 @@ const AdminWidowRegistryTable = () => {
     return (
       <EmptyState
         image={<EmptySpeaker />}
-        title="No widows"
-        desc="Widows registry will appear here"
+        title="No missionaries"
+        desc="Missionary registry will appear here"
       />
     );
   }
@@ -101,4 +101,4 @@ const AdminWidowRegistryTable = () => {
   );
 };
 
-export default AdminWidowRegistryTable;
+export default AdminMissionsRegistryTable;

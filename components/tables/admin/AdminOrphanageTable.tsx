@@ -6,26 +6,24 @@ import Loader from "@components/shared/Loader";
 import DataTable from "@components/ui/data-table";
 import usePagination from "@hooks/general/usePagination";
 import { ColumnDef } from "@tanstack/react-table";
-import { useGetAdminWidowsHistoryQuery } from "services/admin";
-import { AdminWidowHistory } from "services/admin/typings";
+import { useGetAdminOrphanageHistoryQuery } from "services/admin";
+import { AdminOrphanageHistory } from "services/admin/typings";
 
-const adminWidowsColumn: ColumnDef<AdminWidowHistory[]>[] = [
+const adminWidowsColumn: ColumnDef<AdminOrphanageHistory[]>[] = [
   {
-    accessorKey: "registrar_name",
+    accessorKey: "name",
     header: "Name",
     cell: ({ row }) => {
-      const val = row.getValue("registrar_name") as string;
+      const val = row.getValue("name") as string;
       return <span className="font-[600] capitalize">{val || "N/A"}</span>;
     },
   },
   {
-    accessorKey: "state_of_origin",
-    header: "State of origin",
+    accessorKey: "email",
+    header: "Email",
     cell: ({ row }) => {
       return (
-        <span className="font-[600] capitalize">
-          {row.getValue("state_of_origin")}
-        </span>
+        <span className="font-[600] capitalize">{row.getValue("email")}</span>
       );
     },
   },
@@ -38,32 +36,50 @@ const adminWidowsColumn: ColumnDef<AdminWidowHistory[]>[] = [
     },
   },
   {
-    accessorKey: "next_of_kin_name",
-    header: "Next of kin name",
+    accessorKey: "phone",
+    header: "Phone",
+    cell: ({ row }) => {
+      return (
+        <span className="font-[600] capitalize">{row.getValue("phone")}</span>
+      );
+    },
+  },
+  {
+    accessorKey: "address",
+    header: "Address",
+    cell: ({ row }) => {
+      return (
+        <span className="font-[600] capitalize">{row.getValue("address")}</span>
+      );
+    },
+  },
+  {
+    accessorKey: "number_of_orphans",
+    header: "Number of orphans",
     cell: ({ row }) => {
       return (
         <span className="font-[600] capitalize">
-          {row.getValue("next_of_kin_name")}
+          {row.getValue("number_of_orphans")}
         </span>
       );
     },
   },
   {
-    accessorKey: "next_of_kin_phone",
-    header: "Next of kin phone",
+    accessorKey: "created_at",
+    header: "Created At",
     cell: ({ row }) => {
       return (
         <span className="font-[600] capitalize">
-          {row.getValue("next_of_kin_phone")}
+          {row.getValue("created_at")}
         </span>
       );
     },
   },
 ];
 
-const AdminWidowRegistryTable = () => {
+const AdminOrphanageTable = () => {
   const { pagination, handleNext, handlePrevious } = usePagination();
-  const { data, isLoading, isFetching } = useGetAdminWidowsHistoryQuery({
+  const { data, isLoading, isFetching } = useGetAdminOrphanageHistoryQuery({
     limit: pagination.pageSize,
     page: pagination.current,
   });
@@ -76,8 +92,8 @@ const AdminWidowRegistryTable = () => {
     return (
       <EmptyState
         image={<EmptySpeaker />}
-        title="No widows"
-        desc="Widows registry will appear here"
+        title="No orphanages"
+        desc="Orphanages registry will appear here"
       />
     );
   }
@@ -101,4 +117,4 @@ const AdminWidowRegistryTable = () => {
   );
 };
 
-export default AdminWidowRegistryTable;
+export default AdminOrphanageTable;

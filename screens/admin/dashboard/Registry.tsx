@@ -1,5 +1,7 @@
 import ContentWrapper from "@components/shared/Layouts/Admin/ContentWrapper";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import AdminMissionsRegistryTable from "@components/tables/admin/AdminMissionsRegistryTable";
+import AdminOrphanageTable from "@components/tables/admin/AdminOrphanageTable";
 import AdminWidowRegistryTable from "@components/tables/admin/AdminWidowRegistryTable";
 // import AdminPayoutsTable from "@components/tables/admin/AdminPayoutsTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
@@ -17,7 +19,10 @@ const RegistryComp = () => {
           <AdminWidowRegistryTable />
         </TabsContent>
         <TabsContent value="missionaries">
-          {/* <AdminPayoutsTable type="ministry" /> */}
+          <AdminMissionsRegistryTable />
+        </TabsContent>
+        <TabsContent value="orphanages">
+          <AdminOrphanageTable />
         </TabsContent>
       </Tabs>
     </ContentWrapper>
