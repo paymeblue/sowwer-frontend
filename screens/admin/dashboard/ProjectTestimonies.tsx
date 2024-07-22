@@ -1,3 +1,5 @@
+"use client";
+
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import EmptyState from "@components/shared/EmptyState";
 import ContentWrapper from "@components/shared/Layouts/Admin/ContentWrapper";
@@ -5,12 +7,17 @@ import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import AdminProjectsTestimoniesTable from "@components/tables/admin/AdminProjectsTestimonies";
 import { Button } from "@components/ui/button";
 import { PlusIcon } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
   id: string;
 }
 
 const ProjectTestimoniesComp = ({ id }: Props) => {
+  const params = useSearchParams();
+  const title = params.get("name");
+
   if (!id) {
     return (
       <EmptyState
@@ -23,8 +30,12 @@ const ProjectTestimoniesComp = ({ id }: Props) => {
   return (
     <ContentWrapper
       title={
-        <div className="text-lg font-[600]">
-          <span className="font-[400] text-[#555555]">Project Name &gt;</span>{" "}
+        <div className="text-md font-[600]">
+          <Link href="/admin/projects" className="hover:underline">
+            <span className="font-[400] capitalize text-[#555555]">
+              {title} &gt;
+            </span>
+          </Link>{" "}
           Testimonies
         </div>
       }

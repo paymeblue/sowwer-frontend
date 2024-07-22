@@ -101,13 +101,25 @@ const adminProjectsColumn: ColumnDef<AdminProjectHistory>[] = [
       const project = row.original;
 
       return (
-        <ActionComp id={project.id} status={project.status.toLowerCase()} />
+        <ActionComp
+          id={project.id}
+          status={project.status.toLowerCase()}
+          title={project.title}
+        />
       );
     },
   },
 ];
 
-const ActionComp = ({ id, status }: { id: string; status: string }) => {
+const ActionComp = ({
+  id,
+  status,
+  title,
+}: {
+  id: string;
+  status: string;
+  title: string;
+}) => {
   return (
     <>
       <DropdownMenu>
@@ -120,7 +132,12 @@ const ActionComp = ({ id, status }: { id: string; status: string }) => {
           </DropdownMenuTrigger>
         )}
         <DropdownMenuContent align="end">
-          <Link href={`/admin/projects/${id}/testimonies`}>
+          <Link
+            href={{
+              pathname: `/admin/projects/${id}/testimonies`,
+              query: { name: title },
+            }}
+          >
             <DropdownMenuItem className="space-x-2">
               <FileIcon />
               <span className="text_tiny_body_r">Testimonies</span>
@@ -162,10 +179,10 @@ const AdminProjectsTable = () => {
       data={ministries.data || []}
       columns={adminProjectsColumn}
       isLoading={isFetching}
-      rowClassName="cursor-pointer"
-      navigateOptions={{
-        base: "/admin/ministries",
-      }}
+      // rowClassName="cursor-pointer"
+      // navigateOptions={{
+      //   base: "/admin/ministries",
+      // }}
       paginationInfo={{
         handleNext,
         handlePrevious,
