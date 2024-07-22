@@ -40,10 +40,12 @@ const ProjectTestimoniesComp = ({ id }: Props) => {
         </div>
       }
       right={
-        <Button variant="secondary" className="space-x-2" size="md">
-          <PlusIcon size={18} />
-          <span>New Testimony</span>
-        </Button>
+        <Link href={`/admin/projects/${id}/create-testimony`}>
+          <Button variant="secondary" className="space-x-2" size="md">
+            <PlusIcon size={18} />
+            <span>New Testimony</span>
+          </Button>
+        </Link>
       }
     >
       <AdminProjectsTestimoniesTable />

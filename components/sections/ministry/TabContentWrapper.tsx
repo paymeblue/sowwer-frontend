@@ -11,8 +11,18 @@ interface Props {
   contentClassname?: HTMLAttributes<HTMLDivElement>["className"];
 }
 
-export const TabWrapper = ({ children }: { children: ReactNode }) => {
-  return <div className="w-full rounded-[10px] bg-white p-8">{children}</div>;
+export const TabWrapper = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn("w-full rounded-[10px] bg-white p-8", className)}>
+      {children}
+    </div>
+  );
 };
 
 const TabSectionWrapper = ({
