@@ -104,10 +104,10 @@ const AdminOrphanageTable = () => {
       data={data.data || []}
       columns={adminWidowsColumn}
       isLoading={isFetching}
-      rowClassName="cursor-pointer"
-      navigateOptions={{
-        base: "/admin/ministries",
-      }}
+      // rowClassName="cursor-pointer"
+      // navigateOptions={{
+      //   base: "/admin/ministries",
+      // }}
       paginationInfo={{
         handleNext,
         handlePrevious,

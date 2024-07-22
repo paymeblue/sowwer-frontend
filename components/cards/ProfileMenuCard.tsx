@@ -38,7 +38,6 @@ const ProfileMenuCard = ({ variant = "landing", onMenuClick }: Props) => {
   };
 
   const { firstName, lastName, email } = user;
-  console.log({ user });
   return (
     <DropdownMenu>
       <div className="w-fit">

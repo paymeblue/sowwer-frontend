@@ -87,6 +87,17 @@ export interface AdminProjectHistory {
   donors: number;
 }
 
+export interface AdminProjectTestimony {
+  id: string;
+  title: string;
+  number_of_people_impacted: string;
+  cover_photo: string;
+  story: string;
+  status: string;
+  amount_raised: string;
+  created_at: string;
+}
+
 export interface AdminPayoutHistoryGeneral {
   id: string;
   payout_date: string;
@@ -124,6 +135,10 @@ export interface GetAdminProjectRequest {
   limit: number;
   page: number;
 }
+export interface GetAdminProjectTestiomoniesRequest {
+  limit: number;
+  page: number;
+}
 
 export type AdminUploadCacDocumentRequest = {
   [key: string]: File | undefined | string;
@@ -142,3 +157,5 @@ export type GetAdminWidowsResponse = TResponse<AdminWidowHistory>;
 export type GetAdminMissionsResponse = TResponse<AdminMissionHistory>;
 export type GetAdminOrphanageResponse = TResponse<AdminOrphanageHistory>;
 export type GetAdminProjectsResponse = TResponse<AdminProjectHistory>;
+export type GetAdminProjectTestimoniesResponse =
+  TResponse<AdminProjectTestimony>;

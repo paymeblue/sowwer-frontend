@@ -15,6 +15,8 @@ import {
   GetAdminOrphanageResponse,
   GetAdminProjectRequest,
   GetAdminProjectsResponse,
+  GetAdminProjectTestiomoniesRequest,
+  GetAdminProjectTestimoniesResponse,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -153,6 +155,18 @@ const admin = api.injectEndpoints({
         };
       },
     }),
+    getAdminProjectTestimoniesHistory: build.query<
+      GetAdminProjectTestimoniesResponse,
+      GetAdminProjectTestiomoniesRequest
+    >({
+      query: (payload) => {
+        return {
+          url: `admins/project-testimonies`,
+          method: "GET",
+          params: payload,
+        };
+      },
+    }),
     uploadMinistryDocuments: build.mutation<any, AdminUploadCacDocumentRequest>(
       {
         query: (payload) => {
@@ -191,4 +205,5 @@ export const {
   useGetAdminOrphanageHistoryQuery,
   useGetAdminWidowsHistoryQuery,
   useGetAdminProjectsHistoryQuery,
+  useGetAdminProjectTestimoniesHistoryQuery,
 } = admin;
