@@ -108,6 +108,7 @@ const api = createApi({
     "General",
     "Ministries",
     "Admin_Ministry",
+    "Admin_Projects_Testimonies",
   ],
   endpoints: (builder) => ({}),
 });

@@ -138,6 +138,31 @@ export interface GetAdminProjectRequest {
 export interface GetAdminProjectTestiomoniesRequest {
   limit: number;
   page: number;
+  projectId: string;
+}
+
+export interface CreateAdminTestimonyRequest {
+  [key: string]: string | File | number | any;
+  project_id: string;
+  title: string;
+  cover_photo: File;
+  story: string;
+  status: "draft" | "published";
+  number_of_people_impacted: number;
+  amount_raised: number;
+}
+
+export interface UpdateAdminTestimonyRequest {
+  id: string;
+  project_id: string;
+  title: string;
+  status: string;
+  number_of_people_impacted: string;
+  amount_raised: string;
+}
+
+export interface DeleteAdminTestimonyRequest {
+  id: string;
 }
 
 export type AdminUploadCacDocumentRequest = {

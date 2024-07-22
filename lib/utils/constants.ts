@@ -10,6 +10,7 @@ export enum Status {
   active = "active",
   drafted = "drafted",
   completed = "completed",
+  published = "published",
 }
 /* eslint-enable */
 

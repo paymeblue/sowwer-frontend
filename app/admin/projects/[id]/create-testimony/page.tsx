@@ -8,6 +8,10 @@ const DynamicMinistryTestimonyEditor = dynamic(
   }
 ) as any;
 
-export default function MinistryTestimonyCreate() {
-  return <DynamicMinistryTestimonyEditor />;
+export default function MinistryTestimonyCreate({
+  params,
+}: {
+  params: { id: string };
+}) {
+  return <DynamicMinistryTestimonyEditor projectId={params.id} />;
 }

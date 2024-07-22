@@ -17,6 +17,9 @@ import {
   GetAdminProjectsResponse,
   GetAdminProjectTestiomoniesRequest,
   GetAdminProjectTestimoniesResponse,
+  CreateAdminTestimonyRequest,
+  UpdateAdminTestimonyRequest,
+  DeleteAdminTestimonyRequest,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -160,12 +163,52 @@ const admin = api.injectEndpoints({
       GetAdminProjectTestiomoniesRequest
     >({
       query: (payload) => {
+        const { projectId, ...rest } = payload;
         return {
-          url: `admins/project-testimonies`,
+          url: `admins/project/${projectId}/testimonies`,
           method: "GET",
-          params: payload,
+          params: rest,
         };
       },
+      providesTags: ["Admin_Projects_Testimonies"],
+    }),
+    createTestimony: build.mutation<void, CreateAdminTestimonyRequest>({
+      query: (credentials) => {
+        const formData = new FormData();
+
+        for (const key in credentials) {
+          if (credentials.hasOwnProperty(key)) {
+            formData.append(key, credentials[key]);
+          }
+        }
+
+        return {
+          url: "admins/testimonies",
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Admin_Projects_Testimonies"],
+    }),
+    updateTestimony: build.mutation<void, UpdateAdminTestimonyRequest>({
+      query: (payload) => {
+        const { id, ...rest } = payload;
+
+        return {
+          url: `admins/project-testimonies/${id}`,
+          method: "PATCH",
+          body: rest,
+        };
+      },
+      invalidatesTags: ["Admin_Projects_Testimonies"],
+    }),
+    deleteTestimony: build.mutation<void, DeleteAdminTestimonyRequest>({
+      query: (payload) => {
+        return {
+          url: `admins/project-testimonies/${payload.id}`,
+        };
+      },
+      invalidatesTags: ["Admin_Projects_Testimonies"],
     }),
     uploadMinistryDocuments: build.mutation<any, AdminUploadCacDocumentRequest>(
       {
@@ -206,4 +249,7 @@ export const {
   useGetAdminWidowsHistoryQuery,
   useGetAdminProjectsHistoryQuery,
   useGetAdminProjectTestimoniesHistoryQuery,
+  useCreateTestimonyMutation,
+  useDeleteTestimonyMutation,
+  useUpdateTestimonyMutation,
 } = admin;

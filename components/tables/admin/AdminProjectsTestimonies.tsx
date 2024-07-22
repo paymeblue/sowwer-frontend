@@ -54,6 +54,7 @@ const columns: ColumnDef<AdminProjectTestimony>[] = [
         [Status.active]: "bg-[#3466FF]",
         [Status.drafted]: "bg-[#FFCD39]",
         [Status.completed]: "bg-[#4FAE64]",
+        [Status.published]: "bg-[#3466FF]",
       };
       const color = statusColors[status];
 
@@ -78,12 +79,17 @@ const columns: ColumnDef<AdminProjectTestimony>[] = [
   },
 ];
 
-const AdminProjectsTestimoniesTable = () => {
+const AdminProjectsTestimoniesTable = ({
+  projectId,
+}: {
+  projectId: string;
+}) => {
   const { pagination, handleNext, handlePrevious } = usePagination();
   const { data, isLoading, isFetching } =
     useGetAdminProjectTestimoniesHistoryQuery({
       limit: pagination.pageSize,
       page: pagination.current,
+      projectId,
     });
 
   if (isLoading) {

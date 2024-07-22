@@ -10,7 +10,7 @@ import { Button } from "@components/ui/button";
 import { useToast } from "@components/ui/use-toast";
 import useCopyToClipboard from "@hooks/general/useCopyToClipboard";
 import { Copy, Eye } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { ArrowLeft } from "react-iconly";
 import { AdminCreteTestimonyValidation } from "lib/validations/admin";
@@ -26,9 +26,11 @@ import {
 import { Input } from "@components/ui/input";
 import FileUpload from "@components/ui/file-upload";
 import { Textarea } from "@components/ui/textarea";
+import { useCreateTestimonyMutation } from "services/admin";
+import { convertBase64toFile } from "@lib/functions";
 
 interface Props {
-  projectId?: string;
+  projectId: string;
 }
 
 const RightContent = ({
@@ -97,13 +99,47 @@ const RightContent = ({
 
 const TestimonyEditorComp = ({ projectId }: Props) => {
   const router = useRouter();
+  const params = useSearchParams();
+  const { toast } = useToast();
+  const title = params.get("name");
   const form = useForm<z.infer<typeof AdminCreteTestimonyValidation>>({
     resolver: zodResolver(AdminCreteTestimonyValidation),
   });
+  const [createTestimony, { isLoading: creatingTestimony }] =
+    useCreateTestimonyMutation();
 
-  const publishTestimony = (
+  const publishTestimony = async (
     values: z.infer<typeof AdminCreteTestimonyValidation>
-  ) => {};
+  ) => {
+    try {
+      const { amountRaised, cover_photo, peopleImpacted, story, title } =
+        values;
+
+      await createTestimony({
+        amount_raised: Number(amountRaised.replace(/[₦,]/g, "")),
+        cover_photo: convertBase64toFile(
+          cover_photo,
+          "cover_photo",
+          "image/png"
+        ),
+        number_of_people_impacted: Number(peopleImpacted.replace(/[₦,]/g, "")),
+        title,
+        story,
+        project_id: projectId,
+        status: "published",
+      }).unwrap();
+      router.back();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to create project",
+        description:
+          `${error.message}` ||
+          "A problem occured when creating the project, please try again later.",
+        duration: 2500,
+      });
+    }
+  };
 
   return (
     <Form {...form}>
@@ -132,11 +168,11 @@ const TestimonyEditorComp = ({ projectId }: Props) => {
                 <FormField
                   control={form.control}
                   name="project"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem className="col-span-2">
                       <FormLabel>Project</FormLabel>
                       <FormControl>
-                        <Input disabled value="A great prpoject" />
+                        <Input disabled value={title || "x"} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -295,6 +331,7 @@ const TestimonyEditorComp = ({ projectId }: Props) => {
             </Button>
             <Button
               variant="secondary"
+              loading={creatingTestimony}
               onClick={form.handleSubmit(publishTestimony)}
             >
               Publish
