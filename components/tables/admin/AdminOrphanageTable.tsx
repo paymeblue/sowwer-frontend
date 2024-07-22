@@ -29,14 +29,6 @@ const adminWidowsColumn: ColumnDef<AdminOrphanageHistory>[] = [
     },
   },
   {
-    accessorKey: "registrar_email",
-    header: "Email",
-    cell: ({ row }) => {
-      const val = row.getValue("registrar_email") as string;
-      return <span className="font-[600] capitalize">{val || "N/A"}</span>;
-    },
-  },
-  {
     accessorKey: "phone",
     header: "Phone",
     cell: ({ row }) => {
@@ -104,10 +96,6 @@ const AdminOrphanageTable = () => {
       data={data.data || []}
       columns={adminWidowsColumn}
       isLoading={isFetching}
-      // rowClassName="cursor-pointer"
-      // navigateOptions={{
-      //   base: "/admin/ministries",
-      // }}
       paginationInfo={{
         handleNext,
         handlePrevious,

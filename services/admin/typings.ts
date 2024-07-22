@@ -50,16 +50,27 @@ export interface AdminWidowHistory {
   registrar_name: string;
   next_of_kin_name: string;
   next_of_kin_phone: string;
+  benefactor_name: string;
+  benefactor_email: string;
+  benefactor_phone: string;
+  benefactor_address: string;
   createdAt: string;
 }
 
 export interface AdminMissionHistory {
   id: string;
+  status: string;
   church: string;
   occupation: string;
+  reason_about: string;
   service_area: string;
   next_of_kin_name: string;
   next_of_kin_phone: string;
+  state_of_origin: string;
+  benefactor_name: string;
+  benefactor_email: string;
+  benefactor_phone: string;
+  benefactor_address: string;
   createdAt: string;
 }
 export interface AdminOrphanageHistory {

@@ -11,11 +11,35 @@ import { AdminWidowHistory } from "services/admin/typings";
 
 const adminWidowsColumn: ColumnDef<AdminWidowHistory>[] = [
   {
-    accessorKey: "registrar_name",
+    accessorKey: "benefactor_name",
     header: "Name",
     cell: ({ row }) => {
-      const val = row.getValue("registrar_name") as string;
+      const val = row.getValue("benefactor_name") as string;
       return <span className="font-[600] capitalize">{val || "N/A"}</span>;
+    },
+  },
+  {
+    accessorKey: "benefactor_email",
+    header: "Email",
+    cell: ({ row }) => {
+      const val = row.getValue("benefactor_email") as string;
+      return <span className="capitalize">{val || "N/A"}</span>;
+    },
+  },
+  {
+    accessorKey: "benefactor_phone",
+    header: "Phone",
+    cell: ({ row }) => {
+      const val = row.getValue("benefactor_phone") as string;
+      return <span className="capitalize">{val || "N/A"}</span>;
+    },
+  },
+  {
+    accessorKey: "benefactor_address",
+    header: "Address",
+    cell: ({ row }) => {
+      const val = row.getValue("benefactor_address") as string;
+      return <span className="capitalize">{val || "N/A"}</span>;
     },
   },
   {
@@ -23,18 +47,24 @@ const adminWidowsColumn: ColumnDef<AdminWidowHistory>[] = [
     header: "State of origin",
     cell: ({ row }) => {
       return (
-        <span className="font-[600] capitalize">
-          {row.getValue("state_of_origin")}
-        </span>
+        <span className="capitalize">{row.getValue("state_of_origin")}</span>
       );
     },
   },
   {
+    accessorKey: "registrar_name",
+    header: "Registrar Name",
+    cell: ({ row }) => {
+      const val = row.getValue("registrar_name") as string;
+      return <span className="capitalize">{val || "N/A"}</span>;
+    },
+  },
+  {
     accessorKey: "registrar_email",
-    header: "Email",
+    header: "Registrar Email",
     cell: ({ row }) => {
       const val = row.getValue("registrar_email") as string;
-      return <span className="font-[600] capitalize">{val || "N/A"}</span>;
+      return <span className="capitalize">{val || "N/A"}</span>;
     },
   },
   {
@@ -42,9 +72,7 @@ const adminWidowsColumn: ColumnDef<AdminWidowHistory>[] = [
     header: "Next of kin name",
     cell: ({ row }) => {
       return (
-        <span className="font-[600] capitalize">
-          {row.getValue("next_of_kin_name")}
-        </span>
+        <span className="capitalize">{row.getValue("next_of_kin_name")}</span>
       );
     },
   },
@@ -53,9 +81,7 @@ const adminWidowsColumn: ColumnDef<AdminWidowHistory>[] = [
     header: "Next of kin phone",
     cell: ({ row }) => {
       return (
-        <span className="font-[600] capitalize">
-          {row.getValue("next_of_kin_phone")}
-        </span>
+        <span className="capitalize">{row.getValue("next_of_kin_phone")}</span>
       );
     },
   },
@@ -87,10 +113,6 @@ const AdminWidowRegistryTable = () => {
       data={data.data || []}
       columns={adminWidowsColumn}
       isLoading={isFetching}
-      rowClassName="cursor-pointer"
-      navigateOptions={{
-        base: "/admin/ministries",
-      }}
       paginationInfo={{
         handleNext,
         handlePrevious,

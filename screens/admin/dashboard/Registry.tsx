@@ -15,13 +15,13 @@ const RegistryComp = () => {
           <TabsTrigger value="missionaries">Missionaries</TabsTrigger>
           <TabsTrigger value="orphanages">Orphanages</TabsTrigger>
         </TabsList>
-        <TabsContent value="widows">
+        <TabsContent value="widows" className="max-w-[1100px]">
           <AdminWidowRegistryTable />
         </TabsContent>
-        <TabsContent value="missionaries">
+        <TabsContent value="missionaries" className="max-w-[1100px]">
           <AdminMissionsRegistryTable />
         </TabsContent>
-        <TabsContent value="orphanages">
+        <TabsContent value="orphanages" className="max-w-[1100px]">
           <AdminOrphanageTable />
         </TabsContent>
       </Tabs>
