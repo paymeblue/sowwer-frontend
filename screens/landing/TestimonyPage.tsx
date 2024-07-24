@@ -53,6 +53,7 @@ const PageComp = ({ testimonyId }: Props) => {
     project_name,
     story,
     title,
+    ministry_id,
   } = details?.data!;
 
   return (
@@ -106,7 +107,7 @@ const PageComp = ({ testimonyId }: Props) => {
                 <p className="text-sm">
                   ORGANIZED BY{" "}
                   <Link
-                    href={`/ministries/123`}
+                    href={`/ministries/${ministry_id}`}
                     className="text-accent underline"
                   >
                     {ministry_name}

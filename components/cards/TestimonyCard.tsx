@@ -110,7 +110,8 @@ const TestimonyCard = ({
             href={`/testimonies/${id}`}
             className="text-accent hover:underline"
           >
-            Read more
+            {" "}
+            (Read more)
           </Link>
         </p>
 

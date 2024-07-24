@@ -68,6 +68,7 @@ const FeaturedProjectSection = () => {
                 project_name,
                 story,
                 title,
+                ministry_id,
               } = testimony;
 
               return (
@@ -88,7 +89,7 @@ const FeaturedProjectSection = () => {
                   }}
                   ministry={{
                     name: ministry_name,
-                    id: "123",
+                    id: ministry_id,
                   }}
                 />
               );

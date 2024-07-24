@@ -312,7 +312,6 @@ const TestimonyEditorComp = ({ projectId }: Props) => {
               name="story"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>What is this project about?</FormLabel>
                   <FormControl>
                     <Textarea rows={16} {...field} />
                   </FormControl>

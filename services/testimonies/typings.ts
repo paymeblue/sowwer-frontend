@@ -4,6 +4,8 @@ export interface Testimony {
   id: string;
   title: string;
   project_name: string;
+  project_id: string;
+  ministry_id: string;
   ministry_name: string;
   number_of_people_impacted: string;
   cover_photo: string;
