@@ -102,6 +102,10 @@ export interface AdminProjectTestimony {
   id: string;
   title: string;
   number_of_people_impacted: string;
+  project_id: string;
+  ministry_id: string;
+  project_name: string;
+  ministry_name: string;
   cover_photo: string;
   story: string;
   status: string;
@@ -165,13 +169,18 @@ export interface CreateAdminTestimonyRequest {
 
 export interface UpdateAdminTestimonyRequest {
   id: string;
-  project_id: string;
+  // project_id: string;
   title: string;
   status: string;
   number_of_people_impacted: string;
   amount_raised: string;
+  story: string;
 }
 
+export interface UploadTestimonyCoverPhotoRequest {
+  testimonyId: string;
+  cover_photo: File;
+}
 export interface DeleteAdminTestimonyRequest {
   id: string;
 }

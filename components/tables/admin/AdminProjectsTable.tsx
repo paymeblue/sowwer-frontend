@@ -83,6 +83,7 @@ const adminProjectsColumn: ColumnDef<AdminProjectHistory>[] = [
       const statusColors = {
         [Status.active]: "bg-[#3466FF]",
         [Status.drafted]: "bg-[#FFCD39]",
+        [Status.draft]: "bg-[#FFCD39]",
         [Status.completed]: "bg-[#4FAE64]",
         [Status.published]: "bg-[#3466FF]",
       };
@@ -136,7 +137,6 @@ const ActionComp = ({
           <Link
             href={{
               pathname: `/admin/projects/${id}/testimonies`,
-              query: { name: title },
             }}
           >
             <DropdownMenuItem className="space-x-2">

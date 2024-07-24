@@ -22,8 +22,6 @@ const useAdminSignin = () => {
         password,
       }).unwrap();
 
-      console.log({ res });
-
       if (!res.data) {
         toast({
           variant: "destructive",

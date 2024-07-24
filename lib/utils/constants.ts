@@ -9,6 +9,7 @@ export const setMockAuthetnication = (val: boolean) => {
 export enum Status {
   active = "active",
   drafted = "drafted",
+  draft = "draft",
   completed = "completed",
   published = "published",
 }

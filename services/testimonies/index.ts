@@ -15,6 +15,7 @@ const testimonies = api.injectEndpoints({
           params: payload,
         };
       },
+      providesTags: ["Testimonies"],
     }),
     getTestimony: build.query<
       GetSingleTestimonyResponse,
@@ -25,6 +26,7 @@ const testimonies = api.injectEndpoints({
           url: `testimonies/${payload.id}`,
         };
       },
+      providesTags: ["Testimony"],
     }),
   }),
   overrideExisting: true,

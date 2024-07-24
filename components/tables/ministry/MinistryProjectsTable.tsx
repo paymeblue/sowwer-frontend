@@ -87,6 +87,7 @@ const columns: ColumnDef<MinistryProject>[] = [
       const statusColors = {
         [Status.active]: "bg-[#3466FF]",
         [Status.drafted]: "bg-[#FFCD39]",
+        [Status.draft]: "bg-[#FFCD39]",
         [Status.completed]: "bg-[#4FAE64]",
         [Status.published]: "bg-[#3466FF]",
       };

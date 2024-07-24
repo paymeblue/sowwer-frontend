@@ -20,6 +20,7 @@ import {
   CreateAdminTestimonyRequest,
   UpdateAdminTestimonyRequest,
   DeleteAdminTestimonyRequest,
+  UploadTestimonyCoverPhotoRequest,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -195,12 +196,37 @@ const admin = api.injectEndpoints({
         const { id, ...rest } = payload;
 
         return {
-          url: `admins/project-testimonies/${id}`,
+          url: `admins/testimonies/${id}`,
           method: "PATCH",
           body: rest,
         };
       },
-      invalidatesTags: ["Admin_Projects_Testimonies"],
+      invalidatesTags: [
+        "Admin_Projects_Testimonies",
+        "Testimonies",
+        "Testimony",
+      ],
+    }),
+    uploadTestimonyCoverPhoto: build.mutation<
+      void,
+      UploadTestimonyCoverPhotoRequest
+    >({
+      query: (payload) => {
+        const { testimonyId, cover_photo } = payload;
+        const formData = new FormData();
+        formData.append("cover_photo", cover_photo);
+
+        return {
+          url: `admins/testimonies/${testimonyId}/update-cover-photo`,
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: [
+        "Admin_Projects_Testimonies",
+        "Testimony",
+        "Testimonies",
+      ],
     }),
     deleteTestimony: build.mutation<void, DeleteAdminTestimonyRequest>({
       query: (payload) => {
@@ -208,7 +234,11 @@ const admin = api.injectEndpoints({
           url: `admins/project-testimonies/${payload.id}`,
         };
       },
-      invalidatesTags: ["Admin_Projects_Testimonies"],
+      invalidatesTags: [
+        "Admin_Projects_Testimonies",
+        "Testimonies",
+        "Testimony",
+      ],
     }),
     uploadMinistryDocuments: build.mutation<any, AdminUploadCacDocumentRequest>(
       {
@@ -252,4 +282,5 @@ export const {
   useCreateTestimonyMutation,
   useDeleteTestimonyMutation,
   useUpdateTestimonyMutation,
+  useUploadTestimonyCoverPhotoMutation,
 } = admin;

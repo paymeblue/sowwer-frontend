@@ -26,8 +26,16 @@ import {
 import { Input } from "@components/ui/input";
 import FileUpload from "@components/ui/file-upload";
 import { Textarea } from "@components/ui/textarea";
-import { useCreateTestimonyMutation } from "services/admin";
-import { convertBase64toFile } from "@lib/functions";
+import {
+  useCreateTestimonyMutation,
+  useUpdateTestimonyMutation,
+  useUploadTestimonyCoverPhotoMutation,
+} from "services/admin";
+import { convertBase64toFile, formatCurrency } from "@lib/functions";
+import { useGetProjectDetailsQuery } from "services/projects";
+import Loader from "@components/shared/Loader";
+import { useGetTestimonyQuery } from "services/testimonies";
+import { useEffect } from "react";
 
 interface Props {
   projectId: string;
@@ -98,18 +106,49 @@ const RightContent = ({
 };
 
 const TestimonyEditorComp = ({ projectId }: Props) => {
+  const searchParams = useSearchParams();
+  const testimonyId = searchParams.get("id");
+  const { data: testimonyDetails, isLoading: loadingTestimony } =
+    useGetTestimonyQuery({
+      id: testimonyId!,
+    });
+  const { data: project, isLoading } = useGetProjectDetailsQuery(projectId);
   const router = useRouter();
-  const params = useSearchParams();
   const { toast } = useToast();
-  const title = params.get("name");
   const form = useForm<z.infer<typeof AdminCreteTestimonyValidation>>({
     resolver: zodResolver(AdminCreteTestimonyValidation),
   });
   const [createTestimony, { isLoading: creatingTestimony }] =
     useCreateTestimonyMutation();
+  const [updateTestimony, { isLoading: loadingUpdate }] =
+    useUpdateTestimonyMutation();
+  const [uploadCoverPhoto, { isLoading: uploadingPhoto }] =
+    useUploadTestimonyCoverPhotoMutation();
+  const updatingTestimony = loadingUpdate || uploadingPhoto;
+  useEffect(() => {
+    if (!testimonyDetails?.data) return;
 
-  const publishTestimony = async (
-    values: z.infer<typeof AdminCreteTestimonyValidation>
+    const {
+      amount_raised,
+      cover_photo,
+      number_of_people_impacted,
+      story,
+      title,
+    } = testimonyDetails.data;
+    form.setValue("title", title);
+    form.setValue("amountRaised", `₦ ${formatCurrency(amount_raised)}`);
+    form.setValue("peopleImpacted", formatCurrency(number_of_people_impacted));
+    form.setValue("story", story);
+    form.setValue("cover_photo", cover_photo);
+  }, [form, testimonyDetails]);
+
+  if (isLoading || loadingTestimony) {
+    return <Loader className="h-[80vh]" />;
+  }
+
+  const handleCreateTestimony = async (
+    values: z.infer<typeof AdminCreteTestimonyValidation>,
+    status?: "draft" | "published"
   ) => {
     try {
       const { amountRaised, cover_photo, peopleImpacted, story, title } =
@@ -126,8 +165,49 @@ const TestimonyEditorComp = ({ projectId }: Props) => {
         title,
         story,
         project_id: projectId,
-        status: "published",
+        status: status || "published",
       }).unwrap();
+      router.back();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Unable to create project",
+        description:
+          `${error.message}` ||
+          "A problem occured when creating the project, please try again later.",
+        duration: 2500,
+      });
+    }
+  };
+
+  const handleUpdateTestimony = async (
+    values: z.infer<typeof AdminCreteTestimonyValidation>,
+    status?: "draft" | "published"
+  ) => {
+    try {
+      const { amountRaised, peopleImpacted, story, title, cover_photo } =
+        values;
+
+      await updateTestimony({
+        id: testimonyId || "",
+        amount_raised: String(amountRaised.replace(/[₦,]/g, "")),
+        number_of_people_impacted: String(peopleImpacted.replace(/[₦,]/g, "")),
+        title,
+        story,
+        // project_id: projectId,
+        status: status || testimonyDetails?.data.status || "draft",
+      }).unwrap();
+
+      if (
+        cover_photo !== testimonyDetails?.data.cover_photo &&
+        cover_photo.length > 10
+      ) {
+        const photoFile = convertBase64toFile(cover_photo, "cover_photo");
+        await uploadCoverPhoto({
+          cover_photo: photoFile,
+          testimonyId: testimonyId || "",
+        }).unwrap();
+      }
       router.back();
     } catch (error: any) {
       toast({
@@ -172,7 +252,7 @@ const TestimonyEditorComp = ({ projectId }: Props) => {
                     <FormItem className="col-span-2">
                       <FormLabel>Project</FormLabel>
                       <FormControl>
-                        <Input disabled value={title || "x"} />
+                        <Input disabled value={project?.data.title} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -291,8 +371,8 @@ const TestimonyEditorComp = ({ projectId }: Props) => {
                       title="Upload Cover Photo"
                       desc="(.jpg, .jpeg or .png file format supported)"
                       fileName="cover_photo"
-                      //   editMode={id ? true : false}
-                      //   fileUrl={fileUrl}
+                      editMode={testimonyId ? true : false}
+                      fileUrl={testimonyDetails?.data.cover_photo}
                     />
                   </FormControl>
                   <FormMessage />
@@ -321,21 +401,60 @@ const TestimonyEditorComp = ({ projectId }: Props) => {
             />
           </TabSectionWrapper>
 
-          <div className="ml-auto flex w-fit space-x-4">
-            <Button
-              variant="outline"
-              className="w-fit whitespace-nowrap border-accent text-accent"
-            >
-              Save as draft
-            </Button>
-            <Button
-              variant="secondary"
-              loading={creatingTestimony}
-              onClick={form.handleSubmit(publishTestimony)}
-            >
-              Publish
-            </Button>
-          </div>
+          {testimonyId ? (
+            <div className="ml-auto flex w-fit space-x-4">
+              {testimonyDetails?.data.status === "draft" && (
+                <Button
+                  variant="outline"
+                  className="w-fit whitespace-nowrap border-accent text-accent"
+                  onClick={form.handleSubmit((v) =>
+                    handleUpdateTestimony(v, "published")
+                  )}
+                  loading={updatingTestimony}
+                >
+                  Publish testimony
+                </Button>
+              )}
+              {testimonyDetails?.data.status === "published" && (
+                <Button
+                  variant="outline"
+                  className="w-fit whitespace-nowrap border-accent text-accent"
+                  onClick={form.handleSubmit((v) =>
+                    handleUpdateTestimony(v, "draft")
+                  )}
+                  loading={updatingTestimony}
+                >
+                  Unpublish testimony
+                </Button>
+              )}
+              <Button
+                variant="secondary"
+                loading={updatingTestimony}
+                onClick={form.handleSubmit((v) => handleUpdateTestimony(v))}
+              >
+                Update changes
+              </Button>
+            </div>
+          ) : (
+            <div className="ml-auto flex w-fit space-x-4">
+              <Button
+                variant="outline"
+                className="w-fit whitespace-nowrap border-accent text-accent"
+                onClick={form.handleSubmit((v) =>
+                  handleCreateTestimony(v, "draft")
+                )}
+              >
+                Save as draft
+              </Button>
+              <Button
+                variant="secondary"
+                loading={creatingTestimony}
+                onClick={form.handleSubmit((v) => handleCreateTestimony(v))}
+              >
+                Publish
+              </Button>
+            </div>
+          )}
         </TabWrapper>
       </MainContentWrapper>
     </Form>

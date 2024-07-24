@@ -3,20 +3,24 @@
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import EmptyState from "@components/shared/EmptyState";
 import ContentWrapper from "@components/shared/Layouts/Admin/ContentWrapper";
+import Loader from "@components/shared/Loader";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import AdminProjectsTestimoniesTable from "@components/tables/admin/AdminProjectsTestimonies";
 import { Button } from "@components/ui/button";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useGetProjectDetailsQuery } from "services/projects";
 
 interface Props {
   id: string;
 }
 
 const ProjectTestimoniesComp = ({ id }: Props) => {
-  const params = useSearchParams();
-  const title = params.get("name");
+  const { data: project, isLoading } = useGetProjectDetailsQuery(id);
+
+  if (isLoading) {
+    return <Loader className="h-[80vh]" />;
+  }
 
   if (!id) {
     return (
@@ -33,7 +37,7 @@ const ProjectTestimoniesComp = ({ id }: Props) => {
         <div className="text-md font-[600]">
           <Link href="/admin/projects" className="hover:underline">
             <span className="font-[400] capitalize text-[#555555]">
-              {title} &gt;
+              {project?.data.title} &gt;
             </span>
           </Link>{" "}
           Testimonies
@@ -43,7 +47,6 @@ const ProjectTestimoniesComp = ({ id }: Props) => {
         <Link
           href={{
             pathname: `/admin/projects/${id}/create-testimony`,
-            query: { name: title },
           }}
         >
           <Button variant="secondary" className="space-x-2" size="md">
