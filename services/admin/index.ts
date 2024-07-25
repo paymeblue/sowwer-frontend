@@ -21,6 +21,8 @@ import {
   UpdateAdminTestimonyRequest,
   DeleteAdminTestimonyRequest,
   UploadTestimonyCoverPhotoRequest,
+  GetAdminCouncilsRequest,
+  GetAdminCouncilsResponse,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -159,6 +161,18 @@ const admin = api.injectEndpoints({
         };
       },
     }),
+    getAdminCouncilsHistory: build.query<
+      GetAdminCouncilsResponse,
+      GetAdminCouncilsRequest
+    >({
+      query: (payload) => {
+        return {
+          url: `admins/fetch-councils`,
+          method: "GET",
+          params: payload,
+        };
+      },
+    }),
     getAdminProjectTestimoniesHistory: build.query<
       GetAdminProjectTestimoniesResponse,
       GetAdminProjectTestiomoniesRequest
@@ -284,4 +298,5 @@ export const {
   useDeleteTestimonyMutation,
   useUpdateTestimonyMutation,
   useUploadTestimonyCoverPhotoMutation,
+  useGetAdminCouncilsHistoryQuery,
 } = admin;

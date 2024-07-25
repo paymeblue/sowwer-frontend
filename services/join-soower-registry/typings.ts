@@ -8,4 +8,5 @@ export type OrphanageRegistrationRequest = {
   cac_document: File;
   declaration: boolean;
   location: string;
+  administrator_name: string;
 };

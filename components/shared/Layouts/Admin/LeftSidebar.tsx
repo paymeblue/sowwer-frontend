@@ -1,5 +1,6 @@
 "use client";
 
+import AdminCouncil from "@components/assets/svg/AdminCouncil";
 import AdminMenuUser from "@components/assets/svg/AdminMenuUser";
 import AdminPayouts from "@components/assets/svg/AdminPayouts";
 import AdminProjects from "@components/assets/svg/AdminProjects";
@@ -28,6 +29,11 @@ const sidebarItems = [
     route: "/registry",
     label: "Registry",
     icon: <AdminRegistryIcon />,
+  },
+  {
+    route: "/council",
+    label: "Council",
+    icon: <AdminCouncil />,
   },
 ];
 

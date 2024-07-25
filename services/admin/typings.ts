@@ -113,6 +113,16 @@ export interface AdminProjectTestimony {
   created_at: string;
 }
 
+export interface AdminCouncil {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  church_name: string;
+  created_at: string;
+}
+
 export interface AdminPayoutHistoryGeneral {
   id: string;
   payout_date: string;
@@ -147,6 +157,10 @@ export interface GetAdminRegistryRequest {
   page: number;
 }
 export interface GetAdminProjectRequest {
+  limit: number;
+  page: number;
+}
+export interface GetAdminCouncilsRequest {
   limit: number;
   page: number;
 }
@@ -204,3 +218,4 @@ export type GetAdminOrphanageResponse = TResponse<AdminOrphanageHistory>;
 export type GetAdminProjectsResponse = TResponse<AdminProjectHistory>;
 export type GetAdminProjectTestimoniesResponse =
   TResponse<AdminProjectTestimony>;
+export type GetAdminCouncilsResponse = TResponse<AdminCouncil>;

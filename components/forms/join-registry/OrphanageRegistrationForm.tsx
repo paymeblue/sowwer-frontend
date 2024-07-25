@@ -50,6 +50,7 @@ const OrphanageRegistrationForm = ({
       numberOfOrphans,
       phoneNumber,
       location,
+      administratorName,
     } = values;
 
     if (!acceptTerms) {
@@ -71,6 +72,7 @@ const OrphanageRegistrationForm = ({
         number_of_orphans: numberOfOrphans,
         phone: phoneNumber,
         location,
+        administrator_name: administratorName,
       };
       await joinOrphanageRequest(data).unwrap();
       toast({
@@ -107,6 +109,23 @@ const OrphanageRegistrationForm = ({
                 <FormLabel required>Name of orphanage</FormLabel>
                 <FormControl>
                   <Input placeholder="Name" type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="administratorName"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel required>Administrator name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Administrator Name"
+                    type="text"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

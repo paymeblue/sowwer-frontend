@@ -115,4 +115,5 @@ export const OrphanageRegistration = z.object({
   }),
   cacDocument: z.string(),
   location: z.string().min(1, { message: "Required" }),
+  administratorName: z.string().min(1, { message: "Required" }),
 });
