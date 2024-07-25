@@ -1,6 +1,7 @@
 "use client";
 
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
+import DeleteTestimonyDialog from "@components/dialogs/admin/DeleteTestimonyDIalog";
 import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
 import { Button } from "@components/ui/button";
@@ -137,6 +138,13 @@ const ActionDialog = ({ testimony }: { testimony: AdminProjectTestimony }) => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        {openDeleteModal ? (
+          <DeleteTestimonyDialog
+            id={testimony.id}
+            setOpen={setOpenDeleteModal}
+            title={testimony.title}
+          />
+        ) : null}
       </Dialog>
     </>
   );

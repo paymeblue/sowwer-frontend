@@ -232,7 +232,11 @@ const ActionDialog = ({ project }: { project: MinistryProject }) => {
           )}
         </DropdownMenu>
         {openDeleteModal ? (
-          <DeleteProjectDialog id={project.id} setOpen={setOpenDeleteModal} />
+          <DeleteProjectDialog
+            id={project.id}
+            setOpen={setOpenDeleteModal}
+            name={project.title}
+          />
         ) : null}
         {openViewModal ? (
           <ViewProjectDonorsDialog

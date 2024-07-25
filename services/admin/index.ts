@@ -231,7 +231,8 @@ const admin = api.injectEndpoints({
     deleteTestimony: build.mutation<void, DeleteAdminTestimonyRequest>({
       query: (payload) => {
         return {
-          url: `admins/project-testimonies/${payload.id}`,
+          url: `admins/testimonies/${payload.id}`,
+          method: "DELETE",
         };
       },
       invalidatesTags: [

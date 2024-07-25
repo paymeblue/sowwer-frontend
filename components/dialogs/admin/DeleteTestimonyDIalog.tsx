@@ -1,28 +1,29 @@
-import { useDeleteMinistryProjectMutation } from "services/projects";
-
 import EmptyState from "@components/shared/EmptyState";
 import { Button } from "@components/ui/button";
 import { DialogContent } from "@components/ui/dialog";
 import { InfoCircle } from "react-iconly";
 import { useToast } from "@components/ui/use-toast";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { useDeleteTestimonyMutation } from "services/admin";
 
 interface Props {
   id: string;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  name: string;
+  title: string;
 }
 
-const DeleteProjectDialog = ({ id, setOpen, name }: Props) => {
-  const [deleteMinistryProject, { isLoading: deleteLoading }] =
-    useDeleteMinistryProjectMutation();
+const DeleteTestimonyDialog = ({ id, setOpen, title }: Props) => {
+  const [deleteTestimony, { isLoading: deleteLoading }] =
+    useDeleteTestimonyMutation();
   const { toast } = useToast();
 
   const handleDelete = async () => {
     try {
-      await deleteMinistryProject(id).unwrap();
+      await deleteTestimony({
+        id,
+      }).unwrap();
       toast({
-        title: "Project deleted successfully",
+        title: "Testimony deleted successfully",
       });
       setOpen(false);
     } catch (err) {
@@ -43,15 +44,15 @@ const DeleteProjectDialog = ({ id, setOpen, name }: Props) => {
       <div className="flex h-full w-full items-center justify-center px-10">
         <EmptyState
           image={<InfoCircle primaryColor="#EB5757" size={60} stroke="light" />}
-          title="Delete this project?"
-          desc={`Are you sure you want to delete “${name}”? Please note that this action cannot be undone.`}
+          title="Delete this testimony?"
+          desc={`Are you sure you want to delete “${title}”? Please note that this action cannot be undone.`}
           action={
             <Button
               loading={deleteLoading}
               onClick={handleDelete}
               className="w-fit bg-[#EB5757] text-white hover:bg-[#EB5757]"
             >
-              Yes, delete project
+              Yes, delete testimony
             </Button>
           }
         />
@@ -60,4 +61,4 @@ const DeleteProjectDialog = ({ id, setOpen, name }: Props) => {
   );
 };
 
-export default DeleteProjectDialog;
+export default DeleteTestimonyDialog;
