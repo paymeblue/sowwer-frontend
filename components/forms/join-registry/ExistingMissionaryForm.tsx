@@ -170,11 +170,7 @@ const ExistingMissionaryForm = ({
               <FormItem className="">
                 <FormLabel required>Email address</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="johnsmith@gmail.com"
-                    type="text"
-                    {...field}
-                  />
+                  <Input placeholder="Email address" type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

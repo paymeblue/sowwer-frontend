@@ -82,7 +82,7 @@ const MinistryPersonalDetailsForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel required>Email</FormLabel>
+                <FormLabel required>Email address</FormLabel>
                 <FormControl>
                   <Input
                     disabled

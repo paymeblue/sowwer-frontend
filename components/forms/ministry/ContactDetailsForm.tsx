@@ -56,7 +56,7 @@ const ContactDetailsForm = () => {
                 <FormControl>
                   <Input
                     disabled
-                    placeholder="Name of ministry"
+                    placeholder="Email address"
                     type="text"
                     value={field.value}
                     //   {...field}

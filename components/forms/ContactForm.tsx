@@ -123,13 +123,9 @@ const ContactForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem className="">
-                  <FormLabel required>Email</FormLabel>
+                  <FormLabel required>Email address</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter email address"
-                      type="text"
-                      {...field}
-                    />
+                    <Input placeholder="Email address" type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
