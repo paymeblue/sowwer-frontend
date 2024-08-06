@@ -96,6 +96,10 @@ const AdminOrphanageTable = () => {
       data={data.data || []}
       columns={adminWidowsColumn}
       isLoading={isFetching}
+      rowClassName="cursor-pointer"
+      navigateOptions={{
+        base: "/admin/orphanages",
+      }}
       paginationInfo={{
         handleNext,
         handlePrevious,

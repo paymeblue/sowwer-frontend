@@ -69,3 +69,17 @@ function blobToBase64(blob: Blob): Promise<string> {
     reader.readAsDataURL(blob);
   });
 }
+
+export function formatString(input: string) {
+  if (!input) return "";
+
+  // Replace underscores with spaces
+  let formattedString = input.replace(/_/g, " ");
+
+  // Capitalize the first letter of each word
+  formattedString = formattedString.replace(/\b\w/g, (char) =>
+    char.toUpperCase()
+  );
+
+  return formattedString;
+}

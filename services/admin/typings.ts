@@ -44,6 +44,7 @@ export interface AdminPayoutHistory {
 }
 
 export interface AdminWidowHistory {
+  [key: string]: string;
   id: string;
   state_of_origin: string;
   registrar_email: string;
@@ -58,6 +59,7 @@ export interface AdminWidowHistory {
 }
 
 export interface AdminMissionHistory {
+  [key: string]: string;
   id: string;
   status: string;
   church: string;
@@ -74,6 +76,7 @@ export interface AdminMissionHistory {
   createdAt: string;
 }
 export interface AdminOrphanageHistory {
+  [key: string]: string;
   id: string;
   name: string;
   email: string;
@@ -206,6 +209,11 @@ export type AdminUploadCacDocumentRequest = {
   id: string;
 };
 
+export type GetSingleRegistryRequest = {
+  type: "orphanages" | "widows" | "missionaries";
+  registry_id: string;
+};
+
 // Responses
 export type GetAdminMinistriesResponse = TResponse<AdminMinistryBase>;
 export type GetAdminMinistryResponse = Response<AdminMinistry>;
@@ -219,3 +227,6 @@ export type GetAdminProjectsResponse = TResponse<AdminProjectHistory>;
 export type GetAdminProjectTestimoniesResponse =
   TResponse<AdminProjectTestimony>;
 export type GetAdminCouncilsResponse = TResponse<AdminCouncil>;
+export type GetSingleRegistryResponse = Response<
+  AdminWidowHistory | AdminMissionHistory | AdminOrphanageHistory
+>;
