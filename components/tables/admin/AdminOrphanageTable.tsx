@@ -63,7 +63,9 @@ const adminWidowsColumn: ColumnDef<AdminOrphanageHistory>[] = [
     cell: ({ row }) => {
       return (
         <span className="font-[600] capitalize">
-          {moment(row.getValue("created_at")).format("Do MMMM YYYY; h:mm:ss a")}
+          {moment(row.getValue("created_at"))
+            .utc()
+            .format("Do MMMM YYYY; h:mm:ss a")}
         </span>
       );
     },

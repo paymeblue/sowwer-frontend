@@ -54,7 +54,9 @@ const adminMinistriesColumn: ColumnDef<AdminMinistryBase>[] = [
     header: "Date Joined",
     cell: ({ row }) => {
       const value = row.getValue("createdAt") as string;
-      return <span>{moment(value).format("Do MMMM YYYY; h:mm:ss a")}</span>;
+      return (
+        <span>{moment(value).utc().format("Do MMMM YYYY; h:mm:ss a")}</span>
+      );
     },
   },
   {

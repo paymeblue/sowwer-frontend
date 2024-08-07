@@ -90,7 +90,9 @@ const columns: ColumnDef<AdminProjectTestimony>[] = [
     cell: ({ row }) => {
       return (
         <span className="capitalize">
-          {moment(row.getValue("created_at")).format("Do MMMM YYYY; h:mm:ss a")}
+          {moment(row.getValue("created_at"))
+            .utc()
+            .format("Do MMMM YYYY; h:mm:ss a")}
         </span>
       );
     },

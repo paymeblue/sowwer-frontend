@@ -48,7 +48,9 @@ const adminProjectsColumn: ColumnDef<AdminCouncil>[] = [
     cell: ({ row }) => {
       return (
         <span className="capitalize">
-          {moment(row.getValue("created_at")).format("Do MMMM YYYY; h:mm:ss a")}
+          {moment(row.getValue("created_at"))
+            .utc()
+            .format("Do MMMM YYYY; h:mm:ss a")}
         </span>
       );
     },
@@ -85,10 +87,10 @@ const AdminCouncilTable = () => {
       data={ministries.data || []}
       columns={adminProjectsColumn}
       isLoading={isFetching}
-      // rowClassName="cursor-pointer"
-      // navigateOptions={{
-      //   base: "/admin/ministries",
-      // }}
+      rowClassName="cursor-pointer"
+      navigateOptions={{
+        base: "/admin/council",
+      }}
       paginationInfo={{
         handleNext,
         handlePrevious,

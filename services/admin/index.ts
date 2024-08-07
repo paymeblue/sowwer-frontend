@@ -25,6 +25,8 @@ import {
   GetAdminCouncilsResponse,
   GetSingleRegistryRequest,
   GetSingleRegistryResponse,
+  GetSingleCouncilRequest,
+  GetSingleConcilResponse,
 } from "./typings";
 import api from "services/api/apiSlice";
 import { cacher } from "services/api/rtkQueryCacheUtils";
@@ -268,6 +270,16 @@ const admin = api.injectEndpoints({
         };
       },
     }),
+    getSingleCouncil: build.query<
+      GetSingleConcilResponse,
+      GetSingleCouncilRequest
+    >({
+      query: (payload) => {
+        return {
+          url: `admins/fetch-councils/${payload.id}`,
+        };
+      },
+    }),
     uploadMinistryDocuments: build.mutation<any, AdminUploadCacDocumentRequest>(
       {
         query: (payload) => {
@@ -313,4 +325,5 @@ export const {
   useUploadTestimonyCoverPhotoMutation,
   useGetAdminCouncilsHistoryQuery,
   useGetSingleRegistryQuery,
+  useGetSingleCouncilQuery,
 } = admin;

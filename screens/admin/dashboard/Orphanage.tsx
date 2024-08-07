@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use client";
 import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import EmptyState from "@components/shared/EmptyState";
@@ -14,6 +15,7 @@ import { useGetSingleRegistryQuery } from "services/admin";
 import { AdminOrphanageHistory } from "services/admin/typings";
 import { saveAs } from "file-saver";
 import { formatString } from "@lib/functions";
+import moment from "moment";
 
 interface Props {
   id: string;
@@ -43,13 +45,19 @@ const OrphanageComp = ({ id }: Props) => {
       <EmptyState
         image={<EmptySpeaker />}
         title="No orphanage found"
-        desc="We could not find a widow with that id"
+        desc="We could not find a orphanage with that id"
       />
     );
   }
 
-  // eslint-disable-next-line no-unused-vars
-  const { id: _, name, cac_document, ...rest } = orphanage;
+  const {
+    id: _,
+    name,
+    declaration,
+    updated_at,
+    cac_document,
+    ...rest
+  } = orphanage;
 
   const handleClick = () => {
     saveAs(cac_document, `${name}_cac_document`);
@@ -69,7 +77,11 @@ const OrphanageComp = ({ id }: Props) => {
       <Wrapper>
         <div className="grid w-full grid-cols-2 gap-x-4 gap-y-4">
           {Object.keys(rest).map((detail, i) => {
-            const value = rest[detail];
+            let value = rest[detail];
+
+            if (detail === "created_at") {
+              value = moment(value).utc().format("Do MMMM YYYY; h:mm:ss a");
+            }
             return (
               <div className="space-y-1" key={String(i)}>
                 <Label>{formatString(detail)}</Label>

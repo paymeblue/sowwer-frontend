@@ -57,7 +57,9 @@ const adminPayoutsColumn: ColumnDef<AdminPayoutHistory>[] = [
     header: "Payout Date",
     cell: ({ row }) => {
       const value = row.getValue("payout_date") as string;
-      return <span>{moment(value).format("Do MMMM YYYY; h:mm:ss a")}</span>;
+      return (
+        <span>{moment(value).utc().format("Do MMMM YYYY; h:mm:ss a")}</span>
+      );
     },
   },
   {

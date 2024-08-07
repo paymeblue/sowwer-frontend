@@ -8,6 +8,7 @@ import { Input } from "@components/ui/input";
 import { Label } from "@components/ui/label";
 import { formatString } from "@lib/functions";
 import { ArrowLeft } from "lucide-react";
+import moment from "moment";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { useGetSingleRegistryQuery } from "services/admin";
@@ -65,7 +66,10 @@ const WidowComp = ({ id }: Props) => {
       <Wrapper>
         <div className="grid w-full grid-cols-2 gap-x-4 gap-y-4">
           {Object.keys(rest).map((detail, i) => {
-            const value = rest[detail];
+            let value = rest[detail];
+            if (detail === "created_at") {
+              value = moment(value).utc().format("Do MMMM YYYY; h:mm:ss a");
+            }
             return (
               <div className="space-y-1" key={String(i)}>
                 <Label>{formatString(detail)}</Label>

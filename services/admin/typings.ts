@@ -117,6 +117,7 @@ export interface AdminProjectTestimony {
 }
 
 export interface AdminCouncil {
+  [key: string]: string;
   id: string;
   name: string;
   email: string;
@@ -214,6 +215,9 @@ export type GetSingleRegistryRequest = {
   registry_id: string;
 };
 
+export type GetSingleCouncilRequest = {
+  id: string;
+};
 // Responses
 export type GetAdminMinistriesResponse = TResponse<AdminMinistryBase>;
 export type GetAdminMinistryResponse = Response<AdminMinistry>;
@@ -230,3 +234,4 @@ export type GetAdminCouncilsResponse = TResponse<AdminCouncil>;
 export type GetSingleRegistryResponse = Response<
   AdminWidowHistory | AdminMissionHistory | AdminOrphanageHistory
 >;
+export type GetSingleConcilResponse = Response<AdminCouncil>;
