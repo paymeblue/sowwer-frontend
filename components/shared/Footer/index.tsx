@@ -34,6 +34,11 @@ const Footer = ({ variant = "default" }: Props) => {
               Privacy Policy
             </span>
           </Link>
+          <Link href="acceptable-use-policy">
+            <span className="text_small_body_r max-lg:text-center">
+              Acceptable use policy
+            </span>
+          </Link>
         </div>
       </footer>
     );
@@ -199,6 +204,11 @@ const Footer = ({ variant = "default" }: Props) => {
             <Link href="privacy-policy">
               <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
                 Privacy policy
+              </span>
+            </Link>
+            <Link href="acceptable-use-policy">
+              <span className="font-body text-[0.8rem] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
+                Acceptable use policy
               </span>
             </Link>
           </div>
