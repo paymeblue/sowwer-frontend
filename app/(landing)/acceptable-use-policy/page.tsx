@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Soower",
+  title: "Acceptable Use Policy | Soower",
 };
 
 const DynamicPrivacyPage = dynamic(
