@@ -15,6 +15,7 @@ export interface AdminMinistry extends AdminMinistryBase {
   state: string;
   cac_document: string;
   utility_bill: string;
+  scuml_certificate: string;
   donation_description: string;
   website: string;
   logo: string | null;
@@ -207,6 +208,7 @@ export type AdminUploadCacDocumentRequest = {
   [key: string]: File | undefined | string;
   cacDocument?: File;
   utilityBill?: File;
+  scumlCertificate?: File;
   id: string;
 };
 

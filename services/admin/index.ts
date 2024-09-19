@@ -284,7 +284,7 @@ const admin = api.injectEndpoints({
       {
         query: (payload) => {
           const formData = new FormData();
-          const { id, cacDocument, utilityBill } = payload;
+          const { id, cacDocument, utilityBill, scumlCertificate } = payload;
 
           if (cacDocument) {
             formData.append("cacDocument", cacDocument);
@@ -292,6 +292,10 @@ const admin = api.injectEndpoints({
 
           if (utilityBill) {
             formData.append("utilityBill", utilityBill);
+          }
+
+          if (scumlCertificate) {
+            formData.append("scumlCertificate", scumlCertificate);
           }
 
           return {

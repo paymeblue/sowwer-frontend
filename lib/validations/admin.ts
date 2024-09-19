@@ -8,6 +8,10 @@ export const AdminUploadUtilityBill = z.object({
   utilityBill: z.string().min(1),
 });
 
+export const AdminUploadScumlCertificateType = z.object({
+  scumlCcertificate: z.string().min(1),
+});
+
 export const AdminCreteTestimonyValidation = z.object({
   title: z.string().min(1, "Please provide a title"),
   amountRaised: z.string().min(1, "Required"),

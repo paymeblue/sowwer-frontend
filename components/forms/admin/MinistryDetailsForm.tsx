@@ -20,6 +20,7 @@ import {
 } from "@components/ui/dialog";
 import AdminUploadCacDocumentForm from "./AdminUploadCacDocument";
 import AdminUploadUtilityForm from "./AdminUploadUitliiy";
+import AdminUploadScumlCertificate from "./AdminUploadScumlCertificate";
 
 interface Props {
   id: string;
@@ -36,6 +37,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
 
 export const MinistryDetailsForm = ({ ministry }: Props) => {
   const [openCacUpload, setOpenCacUpload] = useState(false);
+  const [openScumlUpload, setOpenScumlUpload] = useState(false);
   const [openUtilityUpload, setOpenUtilityUpload] = useState(false);
   if (!ministry?.data) {
     return (
@@ -59,6 +61,7 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
     cac_document,
     utility_bill,
     id,
+    scuml_certificate,
   } = ministry.data;
 
   const handleClick = () => {
@@ -67,6 +70,10 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
 
   const handleUtilityBillClick = () => {
     saveAs(utility_bill, `${name}_utility_bill`);
+  };
+
+  const handleScumlCertificateDownloadClick = () => {
+    saveAs(scuml_certificate, `${name}_scuml_certificate`);
   };
 
   return (
@@ -147,6 +154,55 @@ export const MinistryDetailsForm = ({ ministry }: Props) => {
                 <Label
                   className="cursor-pointer leading-[1rem] text-accent hover:underline"
                   onClick={handleClick}
+                >
+                  Download
+                </Label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-1">
+          <Label>SCUML Certificate</Label>
+          <div className="flex items-center space-x-2">
+            <Image
+              src="/assets/icons/imageplaceholder.svg"
+              alt="CAC Image"
+              width={32}
+              height={32}
+            />
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                <Label className="w-fit max-w-[200px] truncate font-[500] lowercase ">
+                  {name?.split(" ").join("_")}_scuml
+                </Label>
+                <Dialog
+                  open={openScumlUpload}
+                  onOpenChange={setOpenScumlUpload}
+                >
+                  <DialogTrigger asChild>
+                    <Label className="flex cursor-pointer items-center space-x-2 text-[0.78rem] text-[#0000009E]">
+                      <EditIcon /> <span>Edit</span>
+                    </Label>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Upload SCUML Certificate</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="mb-4 mt-2 flex flex-col space-y-4 border-t-[.5px] border-[#DEDEDE] px-4 pt-4">
+                      {/* Update CAC Docuemnt Admin Form */}
+                      <AdminUploadScumlCertificate
+                        id={id}
+                        onClose={() => setOpenScumlUpload(false)}
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Label
+                  className="cursor-pointer leading-[1rem] text-accent hover:underline"
+                  onClick={handleScumlCertificateDownloadClick}
                 >
                   Download
                 </Label>
