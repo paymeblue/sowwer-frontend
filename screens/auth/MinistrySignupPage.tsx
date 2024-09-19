@@ -94,7 +94,7 @@ const MinistrySignupPageComp = () => {
           "Utility_Bill",
           "image/png"
         ),
-        scuml_certificate: convertBase64toFile(
+        scumlCertificate: convertBase64toFile(
           scumlCertificate,
           "SCUML_Certificate",
           "image/png"
