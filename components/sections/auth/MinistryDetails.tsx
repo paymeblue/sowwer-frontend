@@ -233,6 +233,31 @@ const MinistryDetails = ({
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="scumlCertificate"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2">
+                      <FormLabel required>Upload SCUML Certificate</FormLabel>
+                      <FormControl>
+                        <FileUpload
+                          onFileChange={(file: string) => {
+                            field.onChange(file);
+                          }}
+                          title="Upload SCUML Document"
+                          desc="(.jpg, .png or .pdf file format supported)"
+                          file={field.value}
+                          fileName="SCUML_Certificate"
+                          acceptedFiles=".jpg, .jpeg, .png, .pdf"
+                          onDelete={() => {
+                            field.onChange(null);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}

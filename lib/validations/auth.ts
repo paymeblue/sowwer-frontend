@@ -63,6 +63,7 @@ export const MinistrySignupMinistryDetailsValidation = z.object({
   websiteLink: z.string().optional(),
   cacDocument: z.string(),
   utilityBill: z.string(),
+  scumlCertificate: z.string(),
   description: z.string(),
 });
 

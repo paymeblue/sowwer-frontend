@@ -208,6 +208,7 @@ export type MinistrySignupRequest = {
   ministryAddress: string;
   cacDocument: File;
   utilityBill: File;
+  scuml_certificate: File;
   phone: string;
   email: string;
   firstName: string;

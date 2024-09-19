@@ -63,6 +63,7 @@ const MinistrySignupPageComp = () => {
       state,
       websiteLink,
       utilityBill,
+      scumlCertificate,
     } = ministryDetailsForm.getValues();
     const {
       email: adminEmail,
@@ -91,6 +92,11 @@ const MinistrySignupPageComp = () => {
         utilityBill: convertBase64toFile(
           utilityBill,
           "Utility_Bill",
+          "image/png"
+        ),
+        scuml_certificate: convertBase64toFile(
+          scumlCertificate,
+          "SCUML_Certificate",
           "image/png"
         ),
         ministryEmail: email,
