@@ -22,6 +22,7 @@ import {
 import { Textarea } from "@components/ui/textarea";
 import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import statesInNigeria from "@lib/NigeriaStates";
 import { ExisitingMissionRegistration } from "lib/validations/join-registry";
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -30,7 +31,6 @@ import { useMissionaryMutation } from "services/join-soower-registry";
 import { MissionaryJoinSoowerRequest2 } from "services/typings";
 import * as z from "zod";
 import { RegistryRegistrationFormProps } from "./WidowRegistrationForm";
-import statesInNigeria from "@lib/NigeriaStates";
 
 const ExistingMissionaryForm = ({
   onSuccess,
@@ -326,7 +326,7 @@ const ExistingMissionaryForm = ({
             render={({ field }) => (
               <FormItem className="col-span-2">
                 <FormLabel required className="!text_regular_body_b font-[600]">
-                  Are you affiliated to any church?
+                  Are you affiliated to any church or mission body?
                 </FormLabel>
                 <FormControl>
                   <RadioGroup

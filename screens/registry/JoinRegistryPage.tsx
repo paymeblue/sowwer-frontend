@@ -50,7 +50,7 @@ const JoinRegistryPage = () => {
   }
   return (
     <SideLayoutWrapper
-      title="Are you a widow, missionary or orphanage home? We’d love to know more about you!"
+      title="Are you a widow, missionary or an orphanage home? We’d love to know more about you!"
       shouldGoBack
       desc="Join the Soower Registry as a widow (or on behalf of a widow), a serving missionary (or aspiring missionary) or an orphanage home and we would be in touch."
     >
