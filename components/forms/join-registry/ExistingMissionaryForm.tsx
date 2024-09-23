@@ -357,11 +357,11 @@ const ExistingMissionaryForm = ({
               render={({ field }) => (
                 <FormItem className="col-span-2">
                   <FormLabel required>
-                    If yes, what church are you affiliated with?
+                    If yes, what church or mission body are you affiliated with?
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Name of church"
+                      placeholder="Name of church or mission body"
                       type="text"
                       {...field}
                     />
