@@ -81,13 +81,13 @@ const AboutsUsSection = () => {
             className="rounded-[10px] object-cover"
           />
 
-          <Image
+          {/* <Image
             src="/assets/images/statbox.png"
             alt="stats"
             className="absolute -right-5 top-1/2 -translate-y-1/2 lg:-left-[150px]"
             width={224}
             height={279}
-          />
+          /> */}
         </motion.div>
       </section>
 
