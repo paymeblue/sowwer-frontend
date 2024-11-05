@@ -171,20 +171,14 @@ const Footer = ({ variant = "default" }: Props) => {
             <div className="flex flex-col space-y-6">
               <h5 className="footerlink_header">Contact Us</h5>
               <ul className="flex flex-col items-center space-y-4 lg:items-start">
-                <li>
-                  <Link
-                    className="footerlink_sub flex items-center space-x-2"
-                    href="tel:+2349055553431"
-                    target="_blank"
-                  >
-                    <Calling /> <span>(+234) 905 555 3431</span>
-                  </Link>
-                  <Link
-                    href="tel:+2347076016055"
-                    className="footerlink_sub flex items-center space-x-2"
-                  >
-                    <Calling /> <span>(+234) 707 601 6055</span>
-                  </Link>
+                <li className="footerlink_sub flex items-start space-x-2">
+                  <Calling />
+                  <div className="flex flex-col">
+                    <Link href="tel:+2349055553431" target="_blank">
+                      (+234) 905 555 3431
+                    </Link>
+                    <Link href="tel:+2347076016055">(+234) 707 601 6055</Link>
+                  </div>
                 </li>
                 <li>
                   <Link
