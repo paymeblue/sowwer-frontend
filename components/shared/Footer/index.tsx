@@ -57,7 +57,7 @@ const Footer = ({ variant = "default" }: Props) => {
             <div className="mt-4 flex items-center gap-6">
               <Link
                 href="https://x.com/soowerMission?t=G0zmS8PLLu6RxcJkzdo42w&s=09"
-                target="__blank"
+                target="_blank"
               >
                 <div className="cursor-pointer rounded-md bg-white">
                   <Twitter />
@@ -65,13 +65,13 @@ const Footer = ({ variant = "default" }: Props) => {
               </Link>
               <Link
                 href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
-                target="__blank"
+                target="_blank"
               >
                 <Instagram fill="white" className="cursor-pointer" />
               </Link>
               <Link
                 href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
-                target="__blank"
+                target="_blank"
               >
                 <div className="cursor-pointer text-white">
                   <Facebook />
@@ -79,7 +79,7 @@ const Footer = ({ variant = "default" }: Props) => {
               </Link>
               <Link
                 href="https://www.linkedin.com/company/soower"
-                target="__blank"
+                target="_blank"
               >
                 <div className="cursor-pointer text-white">
                   <LinkedinIcon />
