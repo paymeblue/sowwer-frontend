@@ -3,14 +3,14 @@
 import { motion } from "framer-motion";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
+import Calling from "@components/assets/svg/Calling";
+import Facebook from "@components/assets/svg/Facebook";
+import Message from "@components/assets/svg/Message";
+import Twitter from "@components/assets/svg/twitter";
+import ContactForm from "@components/forms/ContactForm";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Instagram, LinkedinIcon } from "lucide-react";
-import Facebook from "@components/assets/svg/Facebook";
-import Twitter from "@components/assets/svg/twitter";
 import Link from "next/link";
-import Calling from "@components/assets/svg/Calling";
-import Message from "@components/assets/svg/Message";
-import ContactForm from "@components/forms/ContactForm";
 
 const ContactPage = () => {
   return (
@@ -28,13 +28,13 @@ const ContactPage = () => {
           </h2>
           <p className="font-body text-[.9rem] leading-[1.5rem] text-body-1">
             Want to make an inquiry or give us some feedback? Fill out the form
-            and <br className="hidden lg:inline" /> we’ll be in touch within
+            and <br className="hidden lg:inline" /> we'll be in touch within
             24hours.
           </p>
           <div className="mt-8 flex items-center gap-6">
             <Link
               href="https://x.com/soowerMission?t=G0zmS8PLLu6RxcJkzdo42w&s=09"
-              target="__blank"
+              target="_blank"
             >
               <div className="cursor-pointer text-black">
                 <Twitter />
@@ -42,7 +42,7 @@ const ContactPage = () => {
             </Link>
             <Link
               href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
-              target="__blank"
+              target="_blank"
             >
               <Instagram
                 fill="black"
@@ -52,7 +52,7 @@ const ContactPage = () => {
             </Link>
             <Link
               href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
-              target="__blank"
+              target="_blank"
             >
               <div className="cursor-pointer text-black">
                 <Facebook />
@@ -60,27 +60,28 @@ const ContactPage = () => {
             </Link>
             <Link
               href="https://www.linkedin.com/company/soower"
-              target="__blank"
+              target="_blank"
             >
               <LinkedinIcon />
             </Link>
           </div>
 
           <ul className="mt-8 flex flex-col space-y-4">
-            <li>
-              <Link
-                href="tel:+2347077583345"
-                className="contactlink_sub flex items-center space-x-2"
-              >
-                <Calling /> <span>(+234) 707 758 3345</span>
+            <li className="contactlink_sub flex items-center space-x-2">
+              <Calling />
+              <Link href="tel:+2349055553431" target="_blank">
+                (+234) 905 555 3431,
+              </Link>
+              <Link href="tel:+2347076016055" target="_blank">
+                (+234) 707 601 6055
               </Link>
             </li>
             <li>
               <Link
-                href={`/`}
+                href="mailto:info@soower.org"
                 className="contactlink_sub flex items-center space-x-2"
               >
-                <Message /> <span>info@soower.com</span>
+                <Message /> <span>info@soower.org</span>
               </Link>
             </li>
           </ul>

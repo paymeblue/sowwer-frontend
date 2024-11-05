@@ -1,16 +1,16 @@
 "use client";
-import { Button } from "@components/ui/button";
-import { Plus } from "lucide-react";
+import EmptySpeaker from "@components/assets/svg/emptySpeaker";
+import EmptyState from "@components/shared/EmptyState";
 import MainContentWrapper from "@components/shared/Layouts/Ministry/MainContentWrapper";
-import Link from "next/link";
+import Loader from "@components/shared/Loader";
+import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 import MinistryProjectsTable from "@components/tables/ministry/MinistryProjectsTable";
+import { Button } from "@components/ui/button";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import usePagination from "@hooks/general/usePagination";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 import { useGetMinistryProjectsQuery } from "services/projects";
-import Loader from "@components/shared/Loader";
-import EmptyState from "@components/shared/EmptyState";
-import EmptySpeaker from "@components/assets/svg/emptySpeaker";
-import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 
 const ProjectsPageComp = () => {
   const { user } = useUserAuth();
@@ -33,7 +33,7 @@ const ProjectsPageComp = () => {
         title="Pending Verification"
         desc="Your ministry is still awaiting verification. Please hang tight while we verify, afterwards you can create projects"
         action={
-          <Link href="mailto:info@soower.com">
+          <Link href="mailto:info@soower.org">
             <Button variant="secondary">Contact Support</Button>
           </Link>
         }

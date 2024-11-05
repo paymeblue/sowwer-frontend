@@ -57,7 +57,7 @@ const Footer = ({ variant = "default" }: Props) => {
             <div className="mt-4 flex items-center gap-6">
               <Link
                 href="https://x.com/soowerMission?t=G0zmS8PLLu6RxcJkzdo42w&s=09"
-                target="__blank"
+                target="_blank"
               >
                 <div className="cursor-pointer rounded-md bg-white">
                   <Twitter />
@@ -65,13 +65,13 @@ const Footer = ({ variant = "default" }: Props) => {
               </Link>
               <Link
                 href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
-                target="__blank"
+                target="_blank"
               >
                 <Instagram fill="white" className="cursor-pointer" />
               </Link>
               <Link
                 href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
-                target="__blank"
+                target="_blank"
               >
                 <div className="cursor-pointer text-white">
                   <Facebook />
@@ -79,7 +79,7 @@ const Footer = ({ variant = "default" }: Props) => {
               </Link>
               <Link
                 href="https://www.linkedin.com/company/soower"
-                target="__blank"
+                target="_blank"
               >
                 <div className="cursor-pointer text-white">
                   <LinkedinIcon />
@@ -171,21 +171,23 @@ const Footer = ({ variant = "default" }: Props) => {
             <div className="flex flex-col space-y-6">
               <h5 className="footerlink_header">Contact Us</h5>
               <ul className="flex flex-col items-center space-y-4 lg:items-start">
-                <li>
-                  <Link
-                    href="tel:+2347077583345"
-                    className="footerlink_sub flex items-center space-x-2"
-                  >
-                    <Calling /> <span>(+234) 707 758 3345</span>
-                  </Link>
+                <li className="footerlink_sub flex items-start space-x-2">
+                  <Calling />
+                  <div className="flex flex-col">
+                    <Link href="tel:+2349055553431" target="_blank">
+                      (+234) 905 555 3431
+                    </Link>
+                    <Link href="tel:+2347076016055">(+234) 707 601 6055</Link>
+                  </div>
                 </li>
                 <li>
-                  <a
-                    href="mailto:info@soower.com"
+                  <Link
+                    href="mailto:info@soower.org"
+                    target="_blank"
                     className="footerlink_sub flex items-center space-x-2"
                   >
-                    <Message /> <span>info@soower.com</span>
-                  </a>
+                    <Message /> <span>info@soower.org</span>
+                  </Link>
                 </li>
               </ul>
             </div>
