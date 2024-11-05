@@ -173,19 +173,27 @@ const Footer = ({ variant = "default" }: Props) => {
               <ul className="flex flex-col items-center space-y-4 lg:items-start">
                 <li>
                   <Link
-                    href="tel:+2347077583345"
+                    className="footerlink_sub flex items-center space-x-2"
+                    href="tel:+2349055553431"
+                    target="_blank"
+                  >
+                    <Calling /> <span>(+234) 905 555 3431</span>
+                  </Link>
+                  <Link
+                    href="tel:+2347076016055"
                     className="footerlink_sub flex items-center space-x-2"
                   >
-                    <Calling /> <span>(+234) 707 758 3345</span>
+                    <Calling /> <span>(+234) 707 601 6055</span>
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="mailto:info@soower.com"
+                  <Link
+                    href="mailto:info@soower.org"
+                    target="_blank"
                     className="footerlink_sub flex items-center space-x-2"
                   >
-                    <Message /> <span>info@soower.com</span>
-                  </a>
+                    <Message /> <span>info@soower.org</span>
+                  </Link>
                 </li>
               </ul>
             </div>

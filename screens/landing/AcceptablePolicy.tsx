@@ -155,7 +155,7 @@ const AcceptablePolicyPage = () => {
             </h2>
             <h5 className="font-jakarta mb-2 mt-4 text-[.8125rem] leading-[1.0237rem] tracking-[2%] text-[#333333]">
               If you encounter or become aware of any violations of this AUP,
-              please report them to SOOWER's support team at info@soower.com. We
+              please report them to SOOWER's support team at info@soower.org. We
               take all reports seriously and will investigate accordingly.
             </h5>
           </div>
@@ -178,10 +178,10 @@ const AcceptablePolicyPage = () => {
               If you have any questions about this Acceptable Use Policy, please
               contact us at{" "}
               <Link
-                href="mailto:info@soower.com"
+                href="mailto:info@soower.org"
                 className="underline underline-offset-2"
               >
-                info@soower.com.
+                info@soower.org.
               </Link>
             </p>
           </div>

@@ -169,18 +169,25 @@ const PrivacyPage = () => {
             <p className="mt-2 text-[.8125rem] leading-[1.4375rem] tracking-[-2%] text-[#555]">
               Please direct all inquiries to{" "}
               <Link
-                href="mailto:info@soower.com"
+                href="mailto:info@soower.org"
                 className="underline underline-offset-2"
               >
-                info@soower.com.
+                info@soower.org.
               </Link>
               <br />
               You may also contact us at:{" "}
               <Link
-                href="tel:+2348162324609"
+                href="tel:+2349055553431"
                 className="underline underline-offset-2"
               >
-                (+234) 816 232 4609
+                (+234) 905 555 3431,
+              </Link>
+              &nbsp;
+              <Link
+                href="tel:+2347076016055"
+                className="underline underline-offset-2"
+              >
+                (+234) 707 601 6055
               </Link>
             </p>
           </div>

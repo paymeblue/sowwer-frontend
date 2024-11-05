@@ -66,7 +66,7 @@ const DonationsPage = () => {
         title="Pending Verification"
         desc="Your ministry is still awaiting verification. Please hang tight while we verify, afterwards you can view your donors"
         action={
-          <Link href="mailto:info@soower.com">
+          <Link href="mailto:info@soower.org">
             <Button variant="secondary">Contact Support</Button>
           </Link>
         }
