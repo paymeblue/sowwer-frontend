@@ -3,12 +3,13 @@ import { cn } from "@lib/cn";
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import React, {
-  useState,
-  useRef,
-  useEffect,
   HTMLAttributes,
   ReactNode,
+  useEffect,
+  useRef,
+  useState,
 } from "react";
+import { useToast } from "./use-toast";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
@@ -43,6 +44,7 @@ const FileUpload = ({
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [editModeState, setEditModeState] = useState(editMode);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!onFileChange) return;
@@ -77,7 +79,12 @@ const FileUpload = ({
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
         // File size exceeds the limit, you can display an error message or take appropriate action
-        alert("File size exceeds the maximum limit of 5MB.");
+        toast({
+          variant: "destructive",
+          title: "Please upload a smaller file size.",
+          description: "File size exceeds the maximum limit of 5MB.",
+        });
+        return;
       } else {
         // Create a new File object with the desired name "CAC_Document"
         const newFileName = fileName;
@@ -97,7 +104,6 @@ const FileUpload = ({
         };
         reader.readAsDataURL(newFile);
       }
-    } else {
     }
   };
 
@@ -114,7 +120,12 @@ const FileUpload = ({
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
         // File size exceeds the limit, you can display an error message or take appropriate action
-        alert("File size exceeds the maximum limit of 5MB.");
+        toast({
+          variant: "destructive",
+          title: "Please upload a smaller file size.",
+          description: "File size exceeds the maximum limit of 5MB.",
+        });
+        return;
       } else {
         // Create a new File object with the desired name "CAC_Document"
         const newFileName = fileName;
@@ -130,7 +141,6 @@ const FileUpload = ({
         };
         reader.readAsDataURL(newFile);
       }
-    } else {
     }
   };
 
