@@ -83,3 +83,11 @@ export function formatString(input: string) {
 
   return formattedString;
 }
+export const formatText = (text: string): string => {
+  return text
+    .replace(/[^a-zA-Z0-9]+/g, " ") // Replace non-text characters with space
+    .trim() // Remove leading/trailing spaces
+    .split(" ") // Split into words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize first letter
+    .join(" "); // Join back into a string
+};

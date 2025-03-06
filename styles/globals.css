@@ -70,10 +70,22 @@ input[type="number"] {
     @apply border-border;
   }
   body {
-    @apply relative bg-grad text-body-1;
+    @apply relative font-montreal text-body-2;
+    /* @apply relative bg-grad text-body-1; */
   }
 }
-
+.header {
+  @apply font-aeonik text-[45px] font-medium leading-[48px] text-black;
+}
+.header2 {
+  @apply font-aeonik text-[40px] font-medium leading-[48px] text-black;
+}
+.mid_header {
+  @apply font-aeonik text-[24px] leading-[27px] text-black;
+}
+.para {
+  @apply font-montreal text-base text-body-2;
+}
 .body_on_center_layout {
   @apply w-screen lg:h-screen lg:overflow-hidden;
 }

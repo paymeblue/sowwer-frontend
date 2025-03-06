@@ -1,0 +1,191 @@
+"use client";
+
+import { Button } from "@components/ui/button";
+import JoinUs from "@shared/JoinUs";
+import Image, { StaticImageData } from "next/image";
+import brand1 from "public/images/brand-1.png";
+import brand2 from "public/images/brand-2.png";
+import brand3 from "public/images/brand-3.png";
+import brand4 from "public/images/brand-4.png";
+import brand5 from "public/images/brand-5.png";
+import brand6 from "public/images/brand-6.png";
+import { ReactNode } from "react";
+import { Heart2 } from "react-iconly";
+import Slider from "./slider";
+
+export type Project =
+  | "widow-care"
+  | "dad-project"
+  | "mission-care"
+  | "partnerships";
+type ImpactItem = {
+  key: string;
+  img: StaticImageData;
+  alt: string;
+  text: string;
+};
+
+type Testimonial = {
+  key: string;
+  testimonial: string;
+  author: string;
+  img?: StaticImageData;
+};
+
+export type WidowCareProgram = {
+  pillColor: string;
+  pillShadow: string;
+  pillText: string;
+  hero_title: string;
+  hero_subtitle: string;
+  hero_img: StaticImageData;
+  yellowSection: ReactNode;
+  impact_title: string;
+  impact_subtitle: string;
+  impact_items: ImpactItem[];
+  testimonials: Testimonial[];
+  joinus_img: StaticImageData;
+  joinus_alt: string;
+};
+type Props = { data: WidowCareProgram };
+const brands = [
+  {
+    img: brand1,
+    alt: "Brand 1",
+    width: 143,
+    height: 32.5,
+  },
+  {
+    img: brand2,
+    alt: "Brand 2",
+    width: 70,
+    height: 44,
+  },
+  {
+    img: brand3,
+    alt: "Brand 3",
+    width: 183.64,
+    height: 36.36,
+  },
+  {
+    img: brand4,
+    alt: "Brand 4",
+    width: 119,
+    height: 30,
+  },
+  {
+    img: brand5,
+    alt: "Brand 5",
+    width: 125,
+    height: 40,
+  },
+  {
+    img: brand6,
+    alt: "Brand 6",
+    width: 135.42,
+    height: 32.05,
+  },
+];
+
+const Program = ({ data }: Props) => {
+  return (
+    <main className="">
+      <section className="flex items-center justify-between p-40">
+        <div>
+          <div
+            className={`my-8 flex w-max items-center justify-center gap-2 rounded-full px-6 py-3 ${data.pillShadow}`}
+          >
+            <div
+              className="h-[6px] w-[6px] rounded-full"
+              style={{ background: data.pillColor }}
+            />
+            <h2
+              className="font-aeonik text-sm font-medium leading-[16.1px]"
+              style={{ color: data.pillColor }}
+            >
+              {data.pillText}
+            </h2>
+          </div>
+          <div className="w-full max-w-[650px] space-y-8">
+            <div className="space-y-2">
+              <h1 className="w-full max-w-[500px] font-aeonik text-[45px] font-medium leading-[48px] text-black">
+                {data.hero_title}
+              </h1>
+              <p className="font-montreal text-lg text-body-2">
+                {data.hero_subtitle}
+              </p>
+            </div>
+            <Button className="gap-2 border-input font-montreal text-black">
+              <span>
+                <Heart2 set="bold" size={19} />
+              </span>
+              <span>Donate now</span>
+            </Button>
+          </div>
+        </div>
+        <div>
+          <Image
+            src={data.hero_img}
+            width={495}
+            height={321}
+            alt="hero image"
+            placeholder="blur"
+            className="aspect-auto object-contain"
+          />
+        </div>
+      </section>
+      <section className="flex items-center justify-center gap-4 bg-[#FCF9F2] p-40">
+        {data.yellowSection}
+      </section>
+      <section className="p-20">
+        <div className="w-full max-w-[1037px]">
+          <h3 className="font-aeonik text-[40px] font-medium leading-[48px] text-black">
+            {data.impact_title}
+          </h3>
+          <p className="font-montreal text-lg text-body-2">
+            {data.impact_subtitle}
+          </p>
+        </div>
+        <div className="my-16 flex items-center gap-4">
+          {data.impact_items.map((item) => (
+            <div key={item.key} className="relative">
+              <Image
+                src={item.img}
+                alt={item.alt}
+                className="object-contain"
+                width={585}
+                height={515}
+                placeholder="blur"
+              />
+              <p className="absolute bottom-8 left-8 w-full max-w-[380px] font-aeonik text-[30px] font-medium leading-7 text-white">
+                {item.text}
+              </p>
+            </div>
+          ))}
+        </div>
+        <Slider data={data.testimonials} />
+        <div className="mx-auto w-full max-w-[1151.06px] pb-12 pt-20">
+          <p className="text-center font-aeonik text-[32px] font-medium leading-[36.8px] text-black">
+            Churches and faith-based nonprofits partnering with us:
+          </p>
+          <div className="mt-8 flex items-center justify-between gap-4">
+            {brands.map((brand) => (
+              <Image
+                key={brand.alt}
+                src={brand.img}
+                alt={brand.alt}
+                width={brand.width}
+                height={brand.height}
+                className="object-contain"
+                placeholder="blur"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+      <JoinUs img={data.joinus_img} alt={data.joinus_alt} />
+    </main>
+  );
+};
+
+export default Program;

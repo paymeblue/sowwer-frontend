@@ -1,36 +1,15 @@
 import { Toaster } from "@components/ui/toaster";
 import "@styles/globals.css";
-import { NextFontWithVariable } from "next/dist/compiled/@next/font";
-import {
-  Libre_Baskerville as LibreBaskerville,
-  Plus_Jakarta_Sans as PlusJarkataSans,
-} from "next/font/google";
-import localFont from "next/font/local";
 import "react-quill/dist/quill.snow.css";
 import ReduxProvider from "redux/ReduxProvider";
-
-const plusJakarta = PlusJarkataSans({
-  subsets: ["latin"],
-  weight: "variable",
-  variable: "--font-plus-jakarta",
-  display: "swap",
-  adjustFontFallback: false,
-});
-
-const libreBaskerville = LibreBaskerville({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  display: "swap",
-  variable: "--font-libre-baskerville",
-});
-
-const baskerville = localFont({
-  src: "../components/assets/fonts/Baskerville.ttf",
-  weight: "400",
-  display: "swap",
-  variable: "--font-baskerville",
-}) as NextFontWithVariable;
-export { baskerville, libreBaskerville, plusJakarta };
+import {
+  aeonik,
+  baskerville,
+  baskervville,
+  libreBaskerville,
+  montreal,
+  plusJakarta,
+} from "./fonts";
 
 export default function RootLayout({
   children,
@@ -44,7 +23,7 @@ export default function RootLayout({
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
       />
       <body
-        className={`${libreBaskerville.variable} ${plusJakarta.className} ${baskerville.variable} ${plusJakarta.variable}`}
+        className={`${plusJakarta.className} ${libreBaskerville.variable} ${baskerville.variable} ${baskervville.variable} ${plusJakarta.variable} ${aeonik.variable} ${montreal.variable} antialiased`}
       >
         <ReduxProvider>{children}</ReduxProvider>
         <Toaster />
