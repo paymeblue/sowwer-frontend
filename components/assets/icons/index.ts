@@ -1,6 +1,14 @@
+export { default as BookIcon } from "./book";
+export { default as BuildingIcon } from "./building";
+export { default as CrossIcon } from "./cross";
 export { default as DownloadIcon } from "./download";
 export { default as FacebookIcon } from "./facebook";
+export { default as FamilyHomeIcon } from "./family-home";
+export { default as FemaleIcon } from "./female";
+export { default as FileIcon } from "./file";
+export { default as GiftIcon } from "./gift";
 export { default as InstagramIcon } from "./instagram";
 export { default as LinkedinIcon } from "./linkedin";
 export { default as QuoteIcon } from "./quote";
 export { default as TickIcon } from "./tick";
+export { default as UserIcon } from "./user";

@@ -1,6 +1,6 @@
-import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
+import * as React from "react";
 import {
   Controller,
   ControllerProps,
@@ -10,8 +10,8 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-import { cn } from "lib/utils/cn";
 import { Label } from "components/ui/label";
+import { cn } from "lib/utils/cn";
 
 const Form = FormProvider;
 
@@ -86,27 +86,35 @@ FormItem.displayName = "FormItem";
 
 interface IFormLabelCustom {
   required?: boolean;
+  desc?: string;
 }
 
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & IFormLabelCustom
->(({ className, required, ...props }, ref) => {
+>(({ className, required, desc, ...props }, ref) => {
   const { formItemId } = useFormField();
 
   return (
-    <div className="flex items-center space-x-1">
-      <Label
-        ref={ref}
-        className={cn("!text-form-label leading-[1.3rem]", className)}
-        htmlFor={formItemId}
-        {...props}
-      />
-      {required && (
-        <span className="text-form-label ml-1 leading-none text-[#EB5757]">
-          *
+    <div className="flex flex-col">
+      <div className={cn("flex items-center space-x-1", desc && "-mt-1")}>
+        <Label
+          ref={ref}
+          className={cn("leading-[1.3rem]", className)}
+          htmlFor={formItemId}
+          {...props}
+        />
+        {required && (
+          <span className="text-form-label ml-1 leading-none text-[#EB5757]">
+            *
+          </span>
+        )}
+      </div>
+      {desc ? (
+        <span className="font-montreal text-[13px] font-normal text-[#75808A]">
+          {desc}
         </span>
-      )}
+      ) : null}
     </div>
   );
 });
@@ -180,12 +188,12 @@ const FormMessage = React.forwardRef<
 FormMessage.displayName = "FormMessage";
 
 export {
-  useFormField,
   Form,
-  FormItem,
-  FormLabel,
   FormControl,
   FormDescription,
-  FormMessage,
   FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormField,
 };

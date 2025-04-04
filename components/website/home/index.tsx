@@ -74,7 +74,7 @@ const list = [
 const HomePage = () => {
   return (
     <main>
-      <section className="relative h-[49.125rem] w-full">
+      <section className="relative w-full lg:h-screen 2xl:h-[49.125rem]">
         <Image
           src={homeBg}
           alt="happy woman"

@@ -46,9 +46,8 @@ const Footer = ({ variant = "default" }: Props) => {
   }
   return (
     <footer className="mt-auto min-h-[40vh] w-full flex-col bg-[#121422] pt-8 lg:flex-row">
-      <SectionContainer>
+      <SectionContainer className="max-w-[1440px]">
         <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
-          {/* left */}
           <div className="flex flex-col items-center lg:items-start">
             <Logo logoVariant="white" />
             <p className="mb-0 mt-0 max-w-sm text-center font-baskervville text-base italic text-white lg:text-start">

@@ -25,12 +25,10 @@
       "@components/*": ["components/*"],
       "@assets/*": ["components/assets/*"],
       "@styles/*": ["styles/*"],
-      "@shared/*": ["components/shared/*"],
       "@lib/*": ["lib/utils/*"],
       "@hooks/*": ["hooks/*"],
       "@shared/*": ["shared/*"],
-      "@store/*": ["store/*"],
-      "react": ["./node_modules/@types/react"]
+      "@store/*": ["store/*"]
     },
     "incremental": true,
     "plugins": [
@@ -44,9 +42,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "middleware",
-    "app/(yellow_pages)/join-registry/context/registry-context",
-    "hooks/useMultiTabLogout"
+    "middleware"
   ],
   "exclude": ["node_modules", ".next"]
 }

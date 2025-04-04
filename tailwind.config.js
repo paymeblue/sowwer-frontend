@@ -42,6 +42,7 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        error: "#D11E1E",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -90,6 +91,10 @@ module.exports = {
         dad_project: "0px 0px 0px 2px #FAB80F, 0px 0px 0px 6px #FAB80F38",
         mission_care: "0px 0px 0px 2px #3466FF, 0px 0px 0px 6px #3466FF38",
         partnerships: "0px 0px 0px 2px #1AA551, 0px 0px 0px 6px #1AA55138",
+        "tab-layout": "0px 4px 20px 0px #0000000F",
+        "tab-layout-content": "-3px 0px 45px 0px #898A8F40",
+        input: "0px 2px 7px 0px #FAB80F36",
+        "input-error": "0px 2px 7px 0px #B0262636",
       },
       screens: {
         xs: "400px",
