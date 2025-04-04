@@ -51,9 +51,9 @@ const MinistryPageComp = ({ ministryId }: Props) => {
 
   return (
     <SectionContainer>
-      <head>
+      {/* <head>
         <title>{`${name} | Soower`}</title>
-      </head>
+      </head> */}
       <motion.div
         variants={defaultVariant({})}
         initial="hidden"
