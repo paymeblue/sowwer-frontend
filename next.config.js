@@ -12,6 +12,7 @@ const nextConfig = {
     // loader: "custom",
     // loaderFile: "./imageLoader.ts",
   },
+  swcMinify: false,
 };
 
 module.exports = nextConfig;
