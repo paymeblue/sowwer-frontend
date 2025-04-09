@@ -22,7 +22,7 @@ const Footer = ({ variant = "default" }: Props) => {
     return (
       <footer className="flex w-full flex-col items-center justify-between border-t-[.3px] border-body-2 px-4 py-4 lg:flex-row lg:justify-between">
         <span className="text_small_body_sb">
-          © 2023 - {year} SOOWER. All rights reserved.Z
+          © 2023 - {year} SOOWER. All rights reserved.
         </span>
         <div className="flex flex-col items-center space-x-0 max-lg:justify-center lg:flex-row lg:space-x-2">
           <Link href="terms-of-use">
@@ -60,13 +60,13 @@ const Footer = ({ variant = "default" }: Props) => {
                   <Link
                     href="tel:+2349055553431"
                     target="_blank"
-                    className="text-sm leading-[22px]"
+                    className="text-sm leading-[22px] hover:text-white/80"
                   >
                     (+234) 905 555 3431
                   </Link>
                   <Link
                     href="tel:+2347076016055"
-                    className="text-sm leading-[22px]"
+                    className="text-sm leading-[22px] hover:text-white/80"
                   >
                     (+234) 707 601 6055
                   </Link>
@@ -76,7 +76,7 @@ const Footer = ({ variant = "default" }: Props) => {
                 <Link
                   href="mailto:info@soower.org"
                   target="_blank"
-                  className="flex items-center gap-2 text-sm leading-[22px] text-white"
+                  className="flex items-center gap-2 text-sm leading-[22px] text-white hover:text-white/80"
                 >
                   <Message set="bold" size={17} />
                   <span>info@soower.org</span>
@@ -119,24 +119,24 @@ const Footer = ({ variant = "default" }: Props) => {
                 <ul className="flex flex-col items-center gap-2 lg:items-start">
                   <li>
                     <Link
-                      href="/website/about-us"
-                      className="text-xs text-white"
+                      href="/about-us"
+                      className="text-xs text-white hover:text-white/80"
                     >
                       About Us
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/website/registry"
-                      className="text-xs text-white"
+                      href="/registry/widow"
+                      className="text-xs text-white hover:text-white/80"
                     >
                       Registry
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/webiste/contact-us"
-                      className="text-xs text-white"
+                      href="/contact-us"
+                      className="text-xs text-white hover:text-white/80"
                     >
                       Contact Us
                     </Link>
@@ -150,29 +150,32 @@ const Footer = ({ variant = "default" }: Props) => {
                 <ul className="flex flex-col items-center gap-2 lg:items-start">
                   <li>
                     <Link
-                      href="/website/widow-care"
-                      className="text-xs text-white"
+                      href="/programs/widow-care"
+                      className="text-xs text-white hover:text-white/80"
                     >
                       WidowCare
                     </Link>
                   </li>
                   <li>
-                    <Link href="/website/dad" className="text-xs text-white">
+                    <Link
+                      href="/programs/dad-project"
+                      className="text-xs text-white hover:text-white/80"
+                    >
                       The DAD Project
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/website/mission-care"
-                      className="text-xs text-white"
+                      href="/programs/mission-care"
+                      className="text-xs text-white hover:text-white/80"
                     >
                       MissionCare
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/website/partnerships"
-                      className="text-xs text-white"
+                      href="/programs/partnerships"
+                      className="text-xs text-white hover:text-white/80"
                     >
                       Partnerships
                     </Link>
@@ -181,7 +184,7 @@ const Footer = ({ variant = "default" }: Props) => {
               </div>
             </div>
             <div className="mt-8 flex flex-col space-y-2 lg:flex-row lg:space-x-4 lg:space-y-0">
-              <Link href="/webiste#" target="_blank">
+              <Link href="#" target="_blank">
                 <Image
                   src={appleStore}
                   width={148.53}
@@ -191,7 +194,7 @@ const Footer = ({ variant = "default" }: Props) => {
                   alt="Download app on iOS devices from Apple Store"
                 />
               </Link>
-              <Link href="/webiste#" target="_blank">
+              <Link href="#" target="_blank">
                 <Image
                   src={playStore}
                   width={148.53}
@@ -210,17 +213,17 @@ const Footer = ({ variant = "default" }: Props) => {
               © 2023 - {year} SOOWER. All rights reserved.
             </span>
             <div className="flex items-center justify-center gap-4">
-              <Link href="terms-of-use">
+              <Link href="/terms-of-use">
                 <span className="font-body text-xs leading-[14.4px] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
                   Terms of use
                 </span>
               </Link>
-              <Link href="privacy-policy">
+              <Link href="/privacy-policy">
                 <span className="font-body text-xs leading-[14.4px] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
                   Privacy policy
                 </span>
               </Link>
-              <Link href="acceptable-use-policy">
+              <Link href="/acceptable-use-policy">
                 <span className="font-body text-xs leading-[14.4px] text-[rgba(255,_255,_255,_0.8)] hover:text-white">
                   Acceptable use policy
                 </span>

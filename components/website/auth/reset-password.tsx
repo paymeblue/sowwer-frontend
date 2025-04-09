@@ -5,8 +5,10 @@ import FormButton from "@components/ui/formButton";
 import FormInput from "@components/ui/formInput";
 import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import SuccessCard from "./success-card";
 
 const schema = z
   .object({
@@ -39,6 +41,7 @@ const schema = z
 type FormType = z.infer<typeof schema>;
 
 const ResetPasswordPage = () => {
+  const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
   const form = useForm({
     mode: "onBlur",
@@ -59,10 +62,7 @@ const ResetPasswordPage = () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log(values);
-      toast({
-        title: "Thank you for signing up!",
-        description: "Your message has been sent successfully.",
-      });
+      setShowSuccess(true);
       reset();
     } catch (error) {
       // More specific error handling
@@ -78,50 +78,56 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div
-      className="m-6 w-full -translate-y-[40%] space-y-6 rounded-xl bg-white p-6 text-center shadow-[0rem_.25rem_1.25rem_0rem_#0000000F]
+    <Fragment>
+      {showSuccess ? (
+        <SuccessCard />
+      ) : (
+        <div
+          className="m-6 w-full -translate-y-[40%] space-y-6 rounded-xl bg-white p-6 text-center shadow-[0rem_.25rem_1.25rem_0rem_#0000000F]
 lg:mx-auto lg:w-[500px]"
-    >
-      <div className="my-4 w-full">
-        <h5 className="m-0 p-0 text-center font-aeonik text-[22px] font-medium leading-[-0.12px] text-black">
-          Reset Password
-        </h5>
-        <p className="m-0 to-body-2 p-0 text-center font-montreal text-sm">
-          Enter and confirm your new password below
-        </p>
-      </div>
-      <Form {...form}>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full space-y-5 text-start"
         >
-          <FormInput
-            name="new_password"
-            label="New Password"
-            inputProps={{
-              placeholder: "Create new password",
-              type: "password",
-            }}
-          />
-          <FormInput
-            name="confirm_password"
-            label="Confirm Password"
-            inputProps={{
-              placeholder: "Confirm new password",
-              type: "password",
-            }}
-          />
+          <div className="my-4 w-full">
+            <h5 className="m-0 p-0 text-center font-aeonik text-[22px] font-medium leading-[-0.12px] text-black">
+              Reset Password
+            </h5>
+            <p className="m-0 to-body-2 p-0 text-center font-montreal text-sm">
+              Enter and confirm your new password below
+            </p>
+          </div>
+          <Form {...form}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full space-y-5 text-start"
+            >
+              <FormInput
+                name="new_password"
+                label="New Password"
+                inputProps={{
+                  placeholder: "Create new password",
+                  type: "password",
+                }}
+              />
+              <FormInput
+                name="confirm_password"
+                label="Confirm Password"
+                inputProps={{
+                  placeholder: "Confirm new password",
+                  type: "password",
+                }}
+              />
 
-          <FormButton
-            text="Log in"
-            loading={isSubmitting}
-            loadingText="Submitting..."
-            disabled={!isDirty || !isValid}
-            className="w-full"
-          />
-        </form>
-      </Form>
-    </div>
+              <FormButton
+                text="Reset password"
+                loading={isSubmitting}
+                loadingText="Submitting..."
+                disabled={!isDirty || !isValid}
+                className="w-full"
+              />
+            </form>
+          </Form>
+        </div>
+      )}
+    </Fragment>
   );
 };
 

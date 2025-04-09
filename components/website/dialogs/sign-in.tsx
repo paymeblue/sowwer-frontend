@@ -9,7 +9,8 @@ import FormButton from "@components/ui/formButton";
 import FormInput from "@components/ui/formInput";
 import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -76,6 +77,7 @@ const SignIn = ({
       });
       setOpen(false);
       reset();
+      router.push("/website?isAuth=true");
     } catch (error) {
       // More specific error handling
       const errorMessage =
@@ -89,8 +91,20 @@ const SignIn = ({
     }
   };
 
+  const query = useSearchParams();
+  const router = useRouter();
+  const login = query.get("login") === "true";
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      setOpen(open);
+      if (login) {
+        router.replace("?");
+      }
+    },
+    [login]
+  );
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="rounded-3xl">
         <div className="my-4">
           <DialogTitle className="m-0 p-0 text-center font-aeonik text-[22px] font-medium leading-[-0.12px] text-black">

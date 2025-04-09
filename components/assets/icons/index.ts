@@ -1,6 +1,7 @@
 export { default as BookIcon } from "./book";
 export { default as BuildingIcon } from "./building";
 export { default as CrossIcon } from "./cross";
+export { default as DashboardIcon } from "./dashboard";
 export { default as DownloadIcon } from "./download";
 export { default as FacebookIcon } from "./facebook";
 export { default as FamilyHomeIcon } from "./family-home";

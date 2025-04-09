@@ -1,15 +1,12 @@
-import Loader from "@components/shared/Loader";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
+const TermsPage = dynamic(() => import("@components/website/terms-of-use"));
+
 export const metadata: Metadata = {
-  title: "Terms of Use | Soower",
+  title: "Terms of Use",
 };
 
-const DynamicTermsPage = dynamic(() => import("screens/landing/TermsPage"), {
-  loading: () => <Loader />,
-}) as any;
+const Terms = () => <TermsPage />;
 
-export default function Terms() {
-  return <DynamicTermsPage />;
-}
+export default Terms;

@@ -1,6 +1,13 @@
 "use client";
 
+import { DashboardIcon, UserIcon } from "@components/assets/icons";
 import { Button } from "@components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@components/ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -16,26 +23,32 @@ import Success from "@components/website/dialogs/success";
 import { cn } from "@lib/cn";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useSelectedLayoutSegment } from "next/navigation";
+import {
+  usePathname,
+  useRouter,
+  useSearchParams,
+  useSelectedLayoutSegment,
+} from "next/navigation";
 import logo from "public/images/logo.png";
-import { Fragment, ReactNode, useState } from "react";
+import { Fragment, ReactNode, useEffect, useState } from "react";
+import { ChevronDown, ChevronUp, Logout, Setting } from "react-iconly";
 
 const subMenu = [
   {
     text: "WidowCare",
-    href: "/website/programs/widow-care",
+    href: "/programs/widow-care",
   },
   {
     text: "The DAD Project",
-    href: "/website/programs/dad-project",
+    href: "/programs/dad-project",
   },
   {
     text: "MissionCare",
-    href: "/website/programs/mission-care",
+    href: "/programs/mission-care",
   },
   {
     text: "Partnerships",
-    href: "/website/programs/partnerships",
+    href: "/programs/partnerships",
   },
 ];
 const Navbar = () => {
@@ -43,10 +56,24 @@ const Navbar = () => {
   const pathname = usePathname();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState<string | ReactNode>("");
+  const [open, setOpen] = useState(false);
   const [openSignUpModal, setOpenSignUpModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
+  const router = useRouter();
+  const query = useSearchParams();
+  const login = query.get("login") === "true";
+  const isAuth = query.get("isAuth") === "true";
+  useEffect(() => {
+    if (login) {
+      setOpenLoginModal(true);
+    }
+  }, [login]);
+  const mockLogout = () => {
+    router.push("?");
+  };
+
   return (
     <Fragment>
       {openSignUpModal ? (
@@ -85,7 +112,7 @@ const Navbar = () => {
       <header className="fixed left-1/2 top-6 z-[1000] mx-auto w-4/5 max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-6 pr-2 text-body-1 shadow-navbar">
         <nav className="grid grid-cols-6 items-center gap-4">
           <div className="col-span-1 shrink-0">
-            <Link href="/website">
+            <Link href="/">
               <Image
                 src={logo}
                 width={225}
@@ -98,7 +125,7 @@ const Navbar = () => {
           <ul className="col-span-4 flex items-center justify-center gap-6">
             <li>
               <Link
-                href="/website/about-us"
+                href="/about-us"
                 className={cn(
                   "font-montreal text-sm font-normal leading-4 hover:text-primary",
                   segment === "about-us" && "font-medium text-black"
@@ -140,7 +167,7 @@ const Navbar = () => {
             </NavigationMenu>
             <li>
               <Link
-                href="/website/registry/widow"
+                href="/registry/widow"
                 className={cn(
                   "font-montreal text-sm font-normal leading-4 hover:text-primary",
                   segment === "registry" && "font-medium text-black"
@@ -151,7 +178,7 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                href="/website/contact-us"
+                href="/contact-us"
                 className={cn(
                   "font-montreal text-sm font-normal leading-4 hover:text-primary",
                   segment === "contact-us" && "font-medium text-black"
@@ -161,23 +188,63 @@ const Navbar = () => {
               </Link>
             </li>
           </ul>
-          <ul className="col-span-1 flex shrink-0 items-center justify-center gap-2 justify-self-end">
-            <Button
-              variant="outline"
-              size="md"
-              className="font-montreal font-medium"
-              onClick={() => setOpenLoginModal(true)}
-            >
-              Log in
-            </Button>
-            <Button
-              size="md"
-              className="font-montreal font-medium"
-              onClick={() => setOpenSignUpModal(true)}
-            >
-              Sign up
-            </Button>
-          </ul>
+          {isAuth ? (
+            <DropdownMenu open={open} onOpenChange={setOpen}>
+              <DropdownMenuTrigger asChild className="cursor-pointer">
+                <div className="flex items-center justify-center gap-2">
+                  <UserIcon />
+                  <p className="font-montreal text-sm font-medium">
+                    Adebanjo Mary
+                  </p>
+                  {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="z-[1000] w-56 rounded-xl border-none shadow-[0px_4px_20px_0px_#00000036]
+"
+              >
+                <DropdownMenuItem
+                  className="items-center gap-2"
+                  onClick={mockLogout}
+                >
+                  <DashboardIcon />
+                  <span>My dashboard</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="items-center gap-2"
+                  onClick={mockLogout}
+                >
+                  <Setting stroke="light" />
+                  <span>Account settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="items-center gap-2 text-[#D11E1E]"
+                  onClick={mockLogout}
+                >
+                  <Logout primaryColor="#D11E1E" stroke="light" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <ul className="col-span-1 flex shrink-0 items-center justify-center gap-2 justify-self-end">
+              <Button
+                variant="outline"
+                size="md"
+                className="font-montreal font-medium"
+                onClick={() => setOpenLoginModal(true)}
+              >
+                Log in
+              </Button>
+              <Button
+                size="md"
+                className="font-montreal font-medium"
+                onClick={() => setOpenSignUpModal(true)}
+              >
+                Sign up
+              </Button>
+            </ul>
+          )}
         </nav>
       </header>
     </Fragment>

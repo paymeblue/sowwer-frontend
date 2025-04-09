@@ -1,18 +1,12 @@
-import Loader from "@components/shared/Loader";
-import dynamic from "next/dynamic";
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
+
+const ContactPage = dynamic(() => import("@components/website/contact-us"));
 
 export const metadata: Metadata = {
-  title: "Contact Us | Soower",
+  title: "Contact Us",
 };
 
-const DynamicContactPage = dynamic(
-  () => import("screens/landing/ContactPage"),
-  {
-    loading: () => <Loader />,
-  }
-) as any;
+const Contact = () => <ContactPage />;
 
-export default function Contact() {
-  return <DynamicContactPage />;
-}
+export default Contact;

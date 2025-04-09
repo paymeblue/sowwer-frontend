@@ -9,17 +9,17 @@ const BasicFooter = () => {
           © 2023 - {year} SOOWER. All rights reserved.
         </span>
         <div className="flex items-center justify-center gap-4">
-          <Link href="terms-of-use">
+          <Link href="/terms-of-use">
             <span className="font-body text-xs font-normal leading-[14.4px] text-body-2 hover:text-white">
               Terms of use
             </span>
           </Link>
-          <Link href="privacy-policy">
+          <Link href="/privacy-policy">
             <span className="font-body text-xs font-normal leading-[14.4px] text-body-2 hover:text-white">
               Privacy policy
             </span>
           </Link>
-          <Link href="acceptable-use-policy">
+          <Link href="/acceptable-use-policy">
             <span className="font-body text-xs font-normal leading-[14.4px] text-body-2 hover:text-white">
               Acceptable use policy
             </span>

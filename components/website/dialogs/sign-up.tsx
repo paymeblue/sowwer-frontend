@@ -197,7 +197,7 @@ const SignUp = ({
               <small className="text-[13px]">
                 By creating an account you agree to our&nbsp;
                 <Link
-                  href="/website/terms-of-use"
+                  href="/terms-of-use"
                   onClick={() => setOpen(false)}
                   className="text-primary underline"
                 >
@@ -205,7 +205,7 @@ const SignUp = ({
                 </Link>
                 &nbsp; and&nbsp;
                 <Link
-                  href="/website/privacy-policy"
+                  href="/privacy-policy"
                   onClick={() => setOpen(false)}
                   className="text-primary underline"
                 >

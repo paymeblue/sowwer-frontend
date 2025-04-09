@@ -53,21 +53,21 @@ const cards = [
     title: "WidowCare",
     description:
       "Providing financial aid and support to help widows rebuild their lives.",
-    link: "/website/programs/widow-care",
+    link: "/programs/widow-care",
   },
   {
     key: "2",
     img: img8,
     title: "The DAD Project",
     description: "Giving orphans a future through educational sponsorships.",
-    link: "/website/programs/dad-project",
+    link: "/programs/dad-project",
   },
   {
     key: "3",
     img: img9,
     title: "MissionCare",
     description: "Supporting missionaries with resources to spread the gospel.",
-    link: "/website/programs/mission-care",
+    link: "/programs/mission-care",
   },
   // {
   //   key: "4",
@@ -75,7 +75,7 @@ const cards = [
   //   title: "Partnerships",
   //   description:
   //     "Collaborating with other organizations to support those in need of assistance.",
-  //   link: "/website/programs/partnerships",
+  //   link: "/programs/partnerships",
   // },
 ];
 const directors = [
@@ -143,7 +143,8 @@ const directors = [
 const AboutPage = () => {
   return (
     <main>
-      <section className="bg-soft-gradient">
+      <section className="relative">
+        <div className="absolute left-14 top-[400.58px] h-[108px] w-[522.26px] rotate-[7.66deg] bg-[#B854FF] blur-[450px]" />
         <div className="mx-auto w-full max-w-[920px] py-40 text-center">
           <p className="font-montreal text-sm font-medium leading-[22.99px] text-[#75808A]">
             ABOUT SOOWER
@@ -153,21 +154,22 @@ const AboutPage = () => {
             for Those in Need
           </h1>
         </div>
-        <div className="flex flex-wrap items-end justify-between">
+        <div className="mx-auto flex w-full max-w-[1560px] flex-wrap items-end justify-between gap-4 lg:flex-nowrap">
           {images.map((image) => (
-            <div key={image.key} className="relative">
+            <div key={image.key}>
               <Image
                 src={image.img}
                 alt={image.key}
                 width={305}
                 placeholder="blur"
-                className="aspect-auto w-full"
+                className="aspect-auto w-auto"
               />
             </div>
           ))}
         </div>
+        <div className="absolute left-[1154px] top-[580.57px] h-[180.11px] w-[310.39px] rotate-[26.72deg] bg-[#34E1FF] blur-[606.7px]" />
       </section>
-      <section className="flex w-full justify-between gap-4 px-36 py-40">
+      <section className="mx-auto flex w-full max-w-[1560px] justify-between gap-4 px-20 py-40">
         <p className="header2 w-full max-w-[400px]">
           Rooted in faith. Driven by love. Committed to transforming lives
         </p>
@@ -195,9 +197,9 @@ const AboutPage = () => {
           </Link>
         </div>
       </section>
-      <section className="mx-6 mb-12 rounded-3xl bg-[#FCF9F2] px-0 py-16">
+      <section className="mx-6 mb-12 w-full max-w-[1560px] rounded-3xl bg-[#FCF9F2] px-0 py-16 lg:mx-auto">
         <div className="mx-auto flex w-full items-center justify-around">
-          <div className="w-full max-w-[708px]">
+          <div className="w-full max-w-[708px] space-y-12">
             <div>
               <small className="font-montreal text-[13px] font-medium leading-[22.99px]">
                 OUR MISSION
@@ -278,11 +280,11 @@ const AboutPage = () => {
         </div>
       </section>
       <section className="p-20">
-        <div className="w-full max-w-[1037px]">
+        <div className="mx-auto w-full max-w-7xl">
           <h3 className="font-aeonik text-[40px] font-medium leading-[48px] text-black">
             Our Board of Directors
           </h3>
-          <p className="font-montreal text-lg text-body-2">
+          <p className="w-full max-w-[1037px] font-montreal text-lg text-body-2">
             At the heart of SOOWER&apos;s mission is a team of visionary leaders
             dedicated to driving impact and transformation. Our Board of
             Directors brings together individuals with deep faith, vast

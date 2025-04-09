@@ -1,18 +1,14 @@
-import Loader from "@components/shared/Loader";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
+const PrivacyPolicyPage = dynamic(
+  () => import("@components/website/privacy-policy")
+);
+
 export const metadata: Metadata = {
-  title: "Privacy Policy | Soower",
+  title: "Privacy Policy",
 };
 
-const DynamicPrivacyPage = dynamic(
-  () => import("screens/landing/PrivacyPage"),
-  {
-    loading: () => <Loader />,
-  }
-) as any;
+const PrivacyPolicy = () => <PrivacyPolicyPage />;
 
-export default function Privacy() {
-  return <DynamicPrivacyPage />;
-}
+export default PrivacyPolicy;

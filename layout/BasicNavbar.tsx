@@ -17,7 +17,7 @@ import { ChevronDown, Logout } from "react-iconly";
 const BasicNavbar = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const isAuth = searchParams.get("isAuth");
+  const isAuth = searchParams.get("isAuth") === "true";
   const mockLogout = () => {
     router.push("?");
   };
@@ -41,15 +41,17 @@ const BasicNavbar = () => {
             <DropdownMenuTrigger asChild className="cursor-pointer">
               <div className="flex items-center justify-center gap-2">
                 <UserIcon />
-                <p className="font-montreal text-sm text-white">John Doe</p>
+                <p className="font-montreal text-sm text-white">
+                  Adebanjo Mary
+                </p>
                 <ChevronDown primaryColor="white" size={14} />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel className="font- font-aeonik text-sm font-normal">
-                <p className="font-aeonik text-sm font-medium">John Doe</p>
+                <p className="font-aeonik text-sm font-medium">Adebanjo Mary</p>
                 <small className="font-montreal text-xs text-slate-500">
-                  johndoe@example.com
+                  campa.banj@gmail.com
                 </small>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
