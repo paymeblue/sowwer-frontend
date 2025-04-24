@@ -31,7 +31,7 @@ shadow-[0rem_.25rem_1.25rem_0rem_#0000000F] lg:mx-auto"
           {email && (
             <>
               A receipt has been sent to your email:{" "}
-              <strong className="font-medium text-body-1">${email}</strong>
+              <strong className="font-medium text-body-1">{email}</strong>
             </>
           )}
         </p>
