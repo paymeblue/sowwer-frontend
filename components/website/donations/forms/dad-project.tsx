@@ -204,6 +204,30 @@ const DADProject = () => {
 
   const onSubmit = async (data: dadProjectType) => {
     try {
+      if (data.t_and_c) {
+        if (!data.password) {
+          setError("password", {
+            message: "Please enter a password",
+          });
+        }
+
+        if (!data.confirmPassword) {
+          setError("confirmPassword", {
+            message: "Required",
+          });
+        }
+
+        if (data.password !== data.confirmPassword) {
+          setError("password", {
+            message: "Passwords dont match",
+          });
+          setError("confirmPassword", {
+            message: "Passwords dont match",
+          });
+        }
+
+        return;
+      }
       const res = await initiateDadDonationUnauth({
         amount: Number(data.form_amount.amount.replace(/,/g, "")),
         confirm_password: data.confirmPassword || "",
@@ -316,7 +340,7 @@ const DADProject = () => {
               control={form.control}
               name="password"
               render={({ field, fieldState: { error } }) => (
-                <FormItem className="w-full flex-1 space-y-0">
+                <FormItem className="w-full flex-1">
                   <FormLabel required>Password</FormLabel>
                   <FormControl>
                     <InputV2
@@ -338,7 +362,7 @@ const DADProject = () => {
               control={form.control}
               name="confirmPassword"
               render={({ field, fieldState: { error } }) => (
-                <FormItem className="w-full flex-1 space-y-0">
+                <FormItem className="w-full flex-1 ">
                   <FormLabel required>Confirm Password</FormLabel>
                   <FormControl>
                     <InputV2
