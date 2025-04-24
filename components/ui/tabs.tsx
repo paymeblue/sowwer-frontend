@@ -19,7 +19,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-10 w-fit max-w-full items-center overflow-y-scroll rounded-full bg-white p-1 text-muted-foreground lg:justify-center",
+      "inline-flex h-10 w-fit max-w-full items-center overflow-y-scroll rounded-full bg-[#F7F8FA] p-1 text-muted-foreground lg:justify-center",
       orientation === "vertical" && "h-fit flex-col space-y-2 rounded-[7px]",
       variant === "line" && "bg-transparent px-0",
       className
@@ -36,7 +36,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-full px-3 py-1.5 font-body text-[.8rem] font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-[#EBEFFF] data-[state=active]:text-accent data-[state=active]:shadow-sm lg:px-5",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-full px-3 py-1.5 font-body text-[.8rem] font-normal text-black ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:text-black data-[state=active]:shadow-sm lg:px-5",
       orientation === "vertical" && "w-full rounded-[5px]",
       variant === "line" &&
         "bg transparent rounded-none bg-transparent data-[state=active]:border-b data-[state=active]:border-accent data-[state=active]:bg-transparent",

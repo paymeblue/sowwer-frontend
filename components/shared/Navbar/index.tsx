@@ -6,12 +6,10 @@ import {
 import Navitem, { INavitem } from "./Navitem";
 import { Button } from "@components/ui/button";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import useUserAuth from "@hooks/auth/useUserAuth";
 
-import { motion } from "framer-motion";
-import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import Logo from "../Logo";
 import { useRouter } from "next/navigation";
 import ProfileMenuCard from "@components/cards/ProfileMenuCard";
@@ -92,39 +90,11 @@ const Navbar = ({ variant = "landing" }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated } = useUserAuth();
-  const [isScrolling, setIsScrolling] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const handleScroll = () => {
-    setIsScrolling(window.scrollY > 50);
-  };
-
-  useEffect(() => {
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
-    <motion.nav
-      variants={defaultVariant({})}
-      initial="hidden"
-      whileInView="visible"
-      viewport={DEFAULT_VIEWPORT}
-      animate={{
-        background: isScrolling ? "white" : "transparent",
-        backdropFilter: isScrolling ? "blur(5px)" : "blur(0px)",
-        transition: {
-          duration: 0.2,
-          type: "tween",
-        },
-      }}
-      className={`fixed left-0 top-0  z-30 flex h-[10vh] w-full flex-row items-center justify-between px-8 transition-all duration-200 lg:px-16 ${
-        isScrolling && "shadow-navbar"
-      }`}
+    <nav
+      className={`fixed left-1/2 top-6 flex w-full max-w-[1350px] -translate-x-1/2 items-center justify-between rounded-full bg-white px-8 shadow-navbar`}
     >
       <div className="flex items-center gap-8">
         <Logo />
@@ -251,7 +221,7 @@ const Navbar = ({ variant = "landing" }: Props) => {
           </SheetContent>
         </Sheet>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 

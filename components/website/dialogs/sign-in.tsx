@@ -9,6 +9,7 @@ import FormButton from "@components/ui/formButton";
 import FormInput from "@components/ui/formInput";
 import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useDonorSignin from "@hooks/auth/useDonorSignin";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -51,6 +52,7 @@ const SignIn = ({
   setForgotPasswordModal,
 }: Props) => {
   const { toast } = useToast();
+  const { loginDonor, loading } = useDonorSignin();
 
   const form = useForm({
     mode: "onBlur",
@@ -69,15 +71,16 @@ const SignIn = ({
 
   const onSubmit = async (values: FormType) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(values);
-      toast({
-        title: "Thank you for signing up!",
-        description: "Your message has been sent successfully.",
-      });
+      await loginDonor(values);
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      // console.log(values);
+      // toast({
+      //   title: "Thank you for signing up!",
+      //   description: "Your message has been sent successfully.",
+      // });
       setOpen(false);
       reset();
-      router.push("/website?isAuth=true");
+      // router.push("/website?isAuth=true");
     } catch (error) {
       // More specific error handling
       const errorMessage =
@@ -144,7 +147,7 @@ const SignIn = ({
             <div className="pt-6">
               <FormButton
                 text="Log in"
-                loading={isSubmitting}
+                loading={isSubmitting || loading}
                 loadingText="Submitting..."
                 disabled={!isDirty || !isValid}
                 className="w-full"

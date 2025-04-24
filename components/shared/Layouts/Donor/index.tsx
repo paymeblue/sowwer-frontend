@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 
 const DonorLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex min-h-screen w-[100vw] flex-col">
+    <div className="max-w-screen flex min-h-screen w-[100vw] flex-col">
       <header className="w-full">
         <Navbar variant="donor" />
       </header>
