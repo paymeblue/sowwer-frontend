@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@lib/cn";
-import Donation from "app/(basicFooterLayout)/website/donations/[id]/page";
+import Donation from "app/donations/[id]/page";
 import DADProject from "./forms/dad-project";
 import GeneralDonation from "./forms/general-donation";
 

@@ -18,6 +18,7 @@ type Props = {
   desc?: string;
   name: { currency: string; amount: string };
   options: Option[];
+  disabled?: boolean;
 };
 
 const formatNumberWithCommas = (value: string) => {
@@ -25,7 +26,7 @@ const formatNumberWithCommas = (value: string) => {
   return parseFloat(value.replace(/,/g, "")).toLocaleString("en-US");
 };
 
-const FormAmount = ({ name, label, desc, options }: Props) => {
+const FormAmount = ({ name, label, desc, options, disabled }: Props) => {
   const { control, setValue, getFieldState } = useFormContext();
 
   const currencyError = getFieldState(name.currency)?.error;
@@ -53,6 +54,7 @@ const FormAmount = ({ name, label, desc, options }: Props) => {
           render={({ field: { onBlur, value } }) => (
             <FormItem>
               <Select
+                disabled={disabled}
                 onValueChange={(val) =>
                   setValue(name.currency, val, { shouldValidate: true })
                 }
@@ -86,9 +88,10 @@ const FormAmount = ({ name, label, desc, options }: Props) => {
             <FormItem className="w-full flex-1 rounded-xl rounded-l-none border-none">
               <FormControl>
                 <Input
+                  disabled={disabled}
                   placeholder="0.00"
                   inputMode="decimal"
-                  className="rounded-l-none rounded-r-xl bg-white focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="rounded-l-none rounded-r-xl bg-white focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 disabled:bg-[#F7F8FA]"
                   {...field}
                   value={formatNumberWithCommas(field.value)}
                   onChange={(event) => {

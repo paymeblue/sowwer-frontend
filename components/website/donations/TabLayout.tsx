@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@lib/cn";
-import { donationItems } from "app/(basicFooterLayout)/website/donations/[id]/page";
+import { donationItems } from "app/donations/[id]/page";
 import { useParams, useRouter } from "next/navigation";
 import { PropsWithChildren, useState } from "react";
 

@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-const termSchema = z
-  .boolean()
-  .refine((val) => val === true, "You must agree to the terms and conditions");
+const termSchema = z.boolean();
 
 const authDonationSchema = z.object({
   frequency: z.enum(["one-time", "monthly"], {
@@ -55,6 +53,8 @@ const dadProjectSchema = z.object({
       .max(15, "Phone number is too long")
       .regex(/^\d+$/, "Phone number must contain only numbers"),
   }),
+  password: z.string().optional(),
+  confirmPassword: z.string().optional(),
   t_and_c: termSchema,
 });
 
