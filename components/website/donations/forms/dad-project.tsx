@@ -113,6 +113,9 @@ const DADProject = () => {
   const [paystackConfig, setPaystackConfig] = useState<IPaystackConfig>(
     DEFAULT_PAYSTACK_CONFIG
   );
+  const [referencesHash, setReferencesHash] = useState<Record<string, boolean>>(
+    {}
+  );
   const initializePayment = usePaystackPayment(paystackConfig);
 
   const form = useForm<dadProjectType>({
@@ -155,9 +158,17 @@ const DADProject = () => {
   ]);
 
   useEffect(() => {
-    if (paystackConfig.publicKey === "" || paystackConfig.reference === "")
+    if (
+      paystackConfig.publicKey === "" ||
+      paystackConfig.reference === "" ||
+      referencesHash[paystackConfig.reference]
+    )
       return;
     setPaystackLoading(true);
+    setReferencesHash((prev) => ({
+      ...prev,
+      [paystackConfig.reference]: true,
+    }));
     initializePayment(
       () => {
         const verify = async () => {
@@ -172,6 +183,7 @@ const DADProject = () => {
               description: "Your submission was successful.",
             });
             setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+            reset();
             router.push(`?success=true&email=${email}`);
           } catch (error) {
             setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
@@ -229,14 +241,14 @@ const DADProject = () => {
       }
       const res = await initiateDadDonationUnauth({
         amount: Number(data.form_amount.amount.replace(/,/g, "")),
-        confirm_password: data.confirmPassword || "",
+        confirm_password: data.t_and_c ? data.confirmPassword || "" : "",
         createAccount: data.t_and_c,
         currency: data.form_amount.currency || "NGN",
         email: data.email,
         first_name: data.f_name,
         last_name: data.l_name,
         geo_location: data.geo_location,
-        password: data.password || "",
+        password: data.t_and_c ? data.password || "" : "",
         phone: `${data.phone.phone_code}${data.phone.phone_number}`,
         sponsorship_type:
           data.sponsorship_type === "full-sponsorship" ? "full" : "partial",
@@ -250,7 +262,7 @@ const DADProject = () => {
       });
       setPaystackConfig(config);
 
-      reset();
+      // reset();
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Error submitting form";
@@ -269,11 +281,13 @@ const DADProject = () => {
           label="Choose a sponsorship type"
           options={sponsorshipType}
         />
-        <FormSelect
-          label="Geolocation"
-          name="geo_location"
-          options={selectOptions}
-        />
+        {sponsorshipTypeFormValue === "full-sponsorship" && (
+          <FormSelect
+            label="Geolocation"
+            name="geo_location"
+            options={selectOptions}
+          />
+        )}
         <FormAmount
           disabled={form.watch("sponsorship_type") === "full-sponsorship"}
           name={{
@@ -282,17 +296,23 @@ const DADProject = () => {
           }}
           label="Amount"
           options={currency}
-          desc={`Per session = NGN ${
-            selectOptions.find(
-              (option) => option.value === geoLocationFormValue
-            )?.amountPerSession
-          }`}
+          desc={
+            sponsorshipTypeFormValue === "full-sponsorship"
+              ? `Per session = NGN ${
+                  selectOptions.find(
+                    (option) => option.value === geoLocationFormValue
+                  )?.amountPerSession
+                }`
+              : ""
+          }
         />
-        <FormRadio
-          name="payment_frequency"
-          label="Payment frequency"
-          options={paymentFrequency}
-        />
+        {sponsorshipTypeFormValue === "full-sponsorship" && (
+          <FormRadio
+            name="payment_frequency"
+            label="Payment frequency"
+            options={paymentFrequency}
+          />
+        )}
         <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
           <FormInput
             name="f_name"
