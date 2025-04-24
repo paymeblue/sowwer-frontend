@@ -35,10 +35,10 @@ shadow-[0rem_.25rem_1.25rem_0rem_#0000000F] lg:mx-auto"
             </>
           )}
         </p>
-        <p className="text-center font-montreal text-base leading-[1.3125rem]">
+        {/* <p className="text-center font-montreal text-base leading-[1.3125rem]">
           Since you chose to sign up, your account has been created and you can
           now keep track of your donations and impact.
-        </p>
+        </p> */}
       </div>
       <Button
         onClick={() => router.push("/")}
