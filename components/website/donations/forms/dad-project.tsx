@@ -197,7 +197,6 @@ const DADProject = () => {
   const {
     handleSubmit,
     reset,
-    watch,
     setError,
     formState: { isSubmitting },
   } = form;
@@ -387,7 +386,9 @@ const DADProject = () => {
           <FormButton
             text="Donate Now"
             loadingText="Submitting..."
-            loading={isSubmitting || isLoading || paystackLoading}
+            loading={
+              isSubmitting || isLoading || paystackLoading || isVerifying
+            }
             // disabled={!isDirty || !isValid}
           />
         </div>
