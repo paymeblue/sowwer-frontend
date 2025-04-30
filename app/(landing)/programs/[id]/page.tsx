@@ -47,12 +47,12 @@ const programs: Programs = {
       "Losing a spouse can leave a woman vulnerable, but no widow should have to struggle alone. Our WidowCare program provides financial relief, vocational training, and emotional support to help women regain stability and rebuild their lives with dignity.",
     hero_img: widowCareImg,
     yellowSection: (
-      <div>
-        <p className="text-center font-aeonik text-[32px] leading-[48px] text-black ">
+      <div className="px-4 md:px-6 lg:px-0">
+        <p className="text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[48px] lg:text-[32px]">
           The SOOWER Foundation widows list has grown to
           <b>&nbsp;127 widows and counting.</b>
         </p>
-        <p className="mx-auto w-full max-w-[1091px] text-center font-aeonik text-[32px] leading-[52px] text-black ">
+        <p className="mx-auto mt-4 w-full max-w-[1091px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:mt-0 md:text-3xl md:leading-[52px] lg:text-[32px]">
           By addressing both their immediate and long-term needs, our WidowCare
           program empowers women to heal, thrive, and build a future filled with
           renewed hope and purpose.
@@ -103,32 +103,32 @@ const programs: Programs = {
       "Every child deserves the opportunity to learn, grow, and dream. The Donate A Dream (DAD) Project is dedicated to providing full or partial educational sponsorships for orphans, ensuring they have access to quality education and the chance for a brighter future. Whether through full adoption or pooled donations, every contribution helps shape a child's destiny.",
     hero_img: dadImg,
     yellowSection: (
-      <div className="space-y-16">
+      <div className="space-y-8 px-4 md:space-y-16 md:px-6 lg:px-0">
         <div className="space-y-3">
-          <p className="mx-auto w-full max-w-[1200px] text-center font-aeonik text-[32px] leading-[42px] text-black ">
+          <p className="mx-auto w-full max-w-[1200px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[42px] lg:text-[32px]">
             Lorem ipsum dolor sit amet consectetur. Vehicula consequat aliquam
             sit ipsum tortor ac etiam at. Aenean a est sed neque volutpat tellus
             suscipit enim.
           </p>
-          <p className="mx-auto w-full max-w-[587px] text-center font-montreal text-[20px] leading-[28px] text-body-1">
+          <p className="mx-auto w-full max-w-[587px] text-center font-montreal text-base leading-normal text-body-1 md:text-[20px] md:leading-[28px]">
             Support orphans in a way that works best for you by choosing a
             sponsorship type that aligns with your giving goals.
           </p>
         </div>
-        <div className="flex items-center justify-center gap-4">
-          <div className="rounded-3xl bg-white p-8">
+        <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-4">
+          <div className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8">
             <div className="mb-3">
-              <h5 className="font-aeonik text-2xl font-medium leading-[27.6px] text-black">
+              <h5 className="font-aeonik text-xl font-medium leading-tight text-black md:text-2xl md:leading-[27.6px]">
                 Full Sponsorship
               </h5>
-              <p className="font-montreal text-base leading-[21px] text-body-2">
+              <p className="font-montreal text-sm leading-normal text-body-2 md:text-base md:leading-[21px]">
                 Commit to changing a child's future by covering their education
                 completely.
               </p>
             </div>
-            <ul className="my-8 space-y-2">
-              <li className="flex items-center gap-2 font-montreal text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+            <ul className="my-6 space-y-2 md:my-8">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -136,8 +136,8 @@ const programs: Programs = {
                   fees for a term or an entire school year.
                 </span>
               </li>
-              <li className="flex items-center gap-2 font-montreal  text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -145,8 +145,8 @@ const programs: Programs = {
                   the child&apos;s academic progress and well-being.
                 </span>
               </li>
-              <li className="flex items-center gap-2 font-montreal text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -156,7 +156,7 @@ const programs: Programs = {
             </ul>
             <Button
               variant="outline"
-              className="gap-2 border-input font-montreal text-black"
+              className="w-full gap-2 border-input font-montreal text-black md:w-auto"
             >
               <span>Donate now</span>
               <span>
@@ -164,18 +164,18 @@ const programs: Programs = {
               </span>
             </Button>
           </div>
-          <div className="rounded-3xl bg-white p-8">
+          <div className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8">
             <div className="mb-3">
-              <h5 className="font-aeonik text-2xl font-medium leading-[27.6px] text-black">
+              <h5 className="font-aeonik text-xl font-medium leading-tight text-black md:text-2xl md:leading-[27.6px]">
                 Partial Sponsorship
               </h5>
-              <p className="font-montreal text-base leading-[21px] text-body-2">
+              <p className="font-montreal text-sm leading-normal text-body-2 md:text-base md:leading-[21px]">
                 Contribute any amount to our general education fund for orphans.
               </p>
             </div>
-            <ul className="my-8 space-y-2">
-              <li className="flex items-center gap-2 font-montreal text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+            <ul className="my-6 space-y-2 md:my-8">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -184,8 +184,8 @@ const programs: Programs = {
                   with others to support multiple children in need.
                 </span>
               </li>
-              <li className="flex items-center gap-2 font-montreal  text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -193,8 +193,8 @@ const programs: Programs = {
                   essential costs.
                 </span>
               </li>
-              <li className="flex items-center gap-2 font-montreal text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -207,7 +207,7 @@ const programs: Programs = {
             </ul>
             <Button
               variant="outline"
-              className="gap-2 border-input font-montreal text-black"
+              className="w-full gap-2 border-input font-montreal text-black md:w-auto"
             >
               <span>Donate now</span>
               <span>
@@ -256,8 +256,8 @@ const programs: Programs = {
       "Through MissionCare, we equip and sustain missionaries who dedicate their lives to spreading the Gospel in underserved communities. We provide them with financial aid, essential supplies, and spiritual encouragement, ensuring they can continue their mission with strength and purpose.",
     hero_img: missionCareImg,
     yellowSection: (
-      <div>
-        <p className="mx-auto w-full max-w-[1150px] text-center font-aeonik text-[32px] leading-[52px] text-black ">
+      <div className="px-4 md:px-6 lg:px-0">
+        <p className="mx-auto w-full max-w-[1150px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[52px] lg:text-[32px]">
           Lorem ipsum dolor sit amet consectetur. Vehicula consequat aliquam sit
           ipsum tortor ac etiam at. Aenean a est sed neque volutpat tellus
           suscipit enim. Gravida duis urna porta mauris. Pulvinar ac placerat
@@ -304,26 +304,26 @@ const programs: Programs = {
       "At Soower, we believe in the power of collaboration to create lasting change. Through our Partnerships Program, we work alongside ministries that are making a difference—helping them secure the resources they need to continue their mission.",
     hero_img: partnershipsImg,
     yellowSection: (
-      <div>
-        <div className="flex items-start justify-between gap-20">
-          <div className="w-full max-w-[509px] space-y-2">
-            <h1 className=" font-aeonik text-[35px] font-medium leading-[40px] text-black">
+      <div className="px-4 md:px-6 lg:px-0">
+        <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:gap-20">
+          <div className="w-full max-w-full space-y-2 lg:max-w-[509px]">
+            <h1 className="font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-[35px] md:leading-[40px]">
               Are you a ministry with widow, orphan or mission programs? Join
               our registry today!
             </h1>
-            <p className="font-montreal text-lg text-body-2">
+            <p className="font-montreal text-base text-body-2 md:text-lg">
               With SOOWER, Churches and Christian Organizations have the
               opportunity to raise funds for various projects tailored to
               support widows, orphans and missionaries across Nigeria.
             </p>
           </div>
-          <div className="w-full max-w-[539px] rounded-3xl bg-white p-8">
-            <p className="font-aeonik text-[22px] font-medium leading-[25.3px] text-black">
+          <div className="w-full max-w-full rounded-3xl bg-white p-4 sm:p-6 md:p-8 lg:max-w-[539px]">
+            <p className="font-aeonik text-xl font-medium leading-tight text-black md:text-[22px] md:leading-[25.3px]">
               Here&apos;s how it works:
             </p>
-            <ul className="mb-8 mt-3 space-y-2">
-              <li className="flex items-center gap-2 font-montreal text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+            <ul className="mb-6 mt-3 space-y-2 md:mb-8">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -332,8 +332,8 @@ const programs: Programs = {
                   the SOOWER registry to partner with us.
                 </span>
               </li>
-              <li className="flex items-center gap-2 font-montreal  text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -343,8 +343,8 @@ const programs: Programs = {
                   missionaries.
                 </span>
               </li>
-              <li className="flex items-center gap-2 font-montreal text-[15px] leading-[20px] text-body-1">
-                <span className="flex-shrink-0">
+              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:text-[15px] md:leading-[20px]">
+                <span className="mt-0.5 flex-shrink-0 md:mt-0">
                   <TickIcon />
                 </span>
                 <span>
@@ -356,7 +356,7 @@ const programs: Programs = {
             </ul>
             <Button
               variant="outline"
-              className="gap-2 border-input font-montreal text-black"
+              className="w-full gap-2 border-input font-montreal text-black md:w-auto"
             >
               <span>Join the registry</span>
               <span>

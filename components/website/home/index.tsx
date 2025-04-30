@@ -74,25 +74,26 @@ const list = [
 const HomePage = () => {
   return (
     <main>
-      <section className="relative w-full lg:h-screen 2xl:h-[49.125rem]">
+      <section className="relative min-h-[500px] w-full md:min-h-[600px] lg:h-screen 2xl:h-[49.125rem]">
         <Image
           src={homeBg}
           alt="happy woman"
           fill
           placeholder="blur"
           className="mx-auto aspect-auto object-cover"
+          priority
         />
-        <div className="absolute left-[6.25rem] top-1/2 w-full max-w-[41.625rem] -translate-y-1/2 space-y-6 text-white">
-          <h2 className="w-full max-w-[36.0625rem] font-aeonik text-[4.0625rem] font-medium leading-[3.9375rem] ">
+        <div className="absolute top-1/2 w-full max-w-[41.625rem] -translate-y-1/2 space-y-4 px-4 text-white sm:px-8 md:left-[3rem] md:space-y-6 lg:left-[6.25rem]">
+          <h2 className="w-full max-w-[36.0625rem] font-aeonik text-3xl font-medium leading-tight sm:text-4xl md:text-5xl md:leading-[3.5rem] lg:text-[4.0625rem] lg:leading-[3.9375rem]">
             Transforming lives with love and faith-driven support
           </h2>
           <div className="w-full max-w-[34.3125rem]">
-            <p className="font-baskervville text-[1.25rem] italic leading-[1.875rem]">
+            <p className="font-baskervville text-base italic leading-normal sm:text-lg md:text-xl md:leading-[1.875rem] lg:text-[1.25rem]">
               "Religion that God our Father accepts as pure and faultless is
               this: to look after orphans and widows in their distress and to
               keep oneself from being polluted by the world."
             </p>
-            <span className="font-montreal text-sm leading-6">
+            <span className="font-montreal text-xs leading-6 sm:text-sm">
               — James 1:27 (NIV)
             </span>
           </div>
@@ -104,28 +105,28 @@ const HomePage = () => {
           </Button>
         </div>
       </section>
-      <section className="max-[94.5rem] flex w-full items-center justify-center gap-24 p-[6.25rem]">
-        <div className="relative">
+      <section className="flex w-full flex-col items-center justify-center gap-8 px-4 py-12 sm:gap-12 sm:p-8 md:p-12 lg:flex-row lg:gap-24 lg:p-[6.25rem]">
+        <div className="relative w-full max-w-[400px] lg:max-w-none">
           <Image
             src={img1}
             alt="happy helping group of people"
             width={511}
             height={483}
-            className="aspect-square"
+            className="aspect-square h-auto w-full"
           />
           <Image
             src={spiral}
             alt="spiral"
             height={98.09}
             width={98.09}
-            className="absolute -bottom-10 -right-10 z-[-1]"
+            className="absolute -bottom-5 -right-5 z-[-1] h-16 w-16 md:-bottom-10 md:-right-10 md:h-auto md:w-auto"
           />
         </div>
-        <div className="w-full max-w-[41.625rem] space-y-6">
-          <h2 className="header w-full max-w-[38.5625rem]">
+        <div className="w-full max-w-[41.625rem] space-y-4 md:space-y-6">
+          <h2 className="header w-full max-w-[38.5625rem] text-2xl font-medium sm:text-3xl md:text-4xl lg:text-[2.8125rem]">
             Perfectly positioned to lend a helping hand
           </h2>
-          <p className="font-montreal text-lg leading-8">
+          <p className="font-montreal text-base leading-7 md:text-lg md:leading-8">
             SOOWER is a nonprofit Christian organization dedicated to making a
             significant difference in the lives of orphans, widows and
             missionaries. We believe that we are all called to be a beacon of
@@ -148,22 +149,31 @@ const HomePage = () => {
         </div>
       </section>
       <section
-        className="max-[94.5rem] flex w-full flex-col items-center
-      justify-center gap-12 bg-[#FCF9F2] p-[6.25rem] pt-16"
+        className="flex w-full flex-col items-center
+      justify-center gap-8 bg-[#FCF9F2] px-4 py-12 sm:p-8 md:gap-12 md:p-12 lg:p-[6.25rem] lg:pt-16"
       >
-        <h3 className="font-aeonik text-[2.8125rem] font-medium leading-[3rem] text-black">
+        <h3 className="text-center font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl md:leading-[3rem] lg:text-[2.8125rem]">
           Making a lasting impact
         </h3>
-        <ul className="grid grid-cols-1 items-center justify-center gap-6 md:grid-cols-2 lg:grid-cols-4 ">
+        <ul className="grid w-full grid-cols-1 items-center justify-center gap-6 md:grid-cols-2 lg:grid-cols-4">
           {list.map((item) => (
-            <li key={item.key} className="space-y-4 rounded-3xl bg-white">
-              <Image src={item.img} alt={item.title} className="" />
-              <div className="space-y-16 p-6 pt-0">
+            <li
+              key={item.key}
+              className="space-y-4 overflow-hidden rounded-3xl bg-white"
+            >
+              <div className="w-full">
+                <Image
+                  src={item.img}
+                  alt={item.title}
+                  className="h-auto w-full"
+                />
+              </div>
+              <div className="space-y-6 p-6 pt-0 md:space-y-16">
                 <div className="space-y-1">
-                  <h4 className="font-aeonik text-2xl font-medium leading-[1.725rem] text-black">
+                  <h4 className="font-aeonik text-xl font-medium leading-[1.725rem] text-black md:text-2xl">
                     {item.title}
                   </h4>
-                  <p className="font-montreal text-base leading-[1.3125rem] text-body-2">
+                  <p className="font-montreal text-sm leading-[1.3125rem] text-body-2 md:text-base">
                     {item.desc}
                   </p>
                 </div>
@@ -187,7 +197,7 @@ const HomePage = () => {
         initial="hidden"
         whileInView="visible"
         viewport={DEFAULT_VIEWPORT}
-        className="relative my-12 flex items-center justify-center"
+        className="relative my-8 flex items-center justify-center px-4 md:my-12 md:px-0"
         aria-label="Ripple Effect of Giving"
       >
         <Image
@@ -195,14 +205,14 @@ const HomePage = () => {
           alt="Background spiral"
           width={927}
           height={927}
-          className="-z-10 object-cover lg:object-contain"
+          className="-z-10 hidden object-cover md:block lg:object-contain"
         />
-        <div className="absolute top-1/2 -translate-y-1/2 p-[100px]">
+        <div className="p-4 sm:p-6 md:absolute md:top-1/2 md:-translate-y-1/2 md:p-[100px]">
           <motion.div className="flex w-full max-w-[799px] flex-col space-y-3">
-            <h2 className="font-aeonik text-[1.8rem] leading-[2.2rem] text-black lg:text-[45px] lg:leading-[3rem]">
+            <h2 className="text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-left md:text-[1.8rem] md:leading-[2.2rem] lg:text-[45px] lg:leading-[3rem]">
               The Ripple Effect of Giving
             </h2>
-            <p className="font-montreal text-lg text-body-2">
+            <p className="text-center font-montreal text-base text-body-2 md:text-left md:text-lg">
               When you give with a generous heart, your act of kindness creates
               a ripple effect of love and positivity that extends far beyond the
               initial gift. You&apos;re not only transforming individual lives
@@ -215,7 +225,7 @@ const HomePage = () => {
             initial="hidden"
             whileInView="visible"
             viewport={DEFAULT_VIEWPORT}
-            className="grid grid-cols-1 gap-14 lg:grid-cols-3 lg:gap-20"
+            className="mt-8 grid grid-cols-1 gap-8 md:mt-0 md:gap-14 lg:grid-cols-3 lg:gap-20"
           >
             {effectOfGiving.map((item) => {
               return (
@@ -225,7 +235,7 @@ const HomePage = () => {
                   viewport={DEFAULT_VIEWPORT}
                   className="flex w-full flex-col items-center gap-2"
                 >
-                  <div className="relative aspect-square w-[95%]">
+                  <div className="relative aspect-square w-[80%] sm:w-[60%] md:w-[95%]">
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -234,8 +244,12 @@ const HomePage = () => {
                     />
                   </div>
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <h4 className="mid_header">{item.title}</h4>
-                    <p className="para text-center">{item.desc}</p>
+                    <h4 className="mid_header text-xl font-medium md:text-2xl">
+                      {item.title}
+                    </h4>
+                    <p className="para text-center text-sm md:text-base">
+                      {item.desc}
+                    </p>
                   </div>
                 </motion.div>
               );

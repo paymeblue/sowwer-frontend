@@ -29,30 +29,35 @@ const data = [
   },
   {
     header: "Can I get updates on the projects I've donated to?",
-    body: "Yes, ministries are encouraged to provide regular updates on project progress. Once a project you’ve donated to is completed you can request an audit report to receive updates on the project, allowing you to see the impact of your support.",
+    body: "Yes, ministries are encouraged to provide regular updates on project progress. Once a project you've donated to is completed you can request an audit report to receive updates on the project, allowing you to see the impact of your support.",
     id: "4",
   },
 ];
 const FAQs = () => {
   return (
-    <section aria-label="frequetly asked questions" className="px-6 py-12">
-      <SectionContainer className="rounded-3xl bg-[#F7F8FA] py-16">
+    <section
+      aria-label="frequetly asked questions"
+      className="px-4 py-8 sm:px-6 sm:py-12"
+    >
+      <SectionContainer className="rounded-xl bg-[#F7F8FA] px-4 py-8 sm:rounded-3xl sm:px-6 sm:py-16">
         <motion.div
           variants={defaultVariant({})}
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
         >
-          <h2 className="header">Frequently asked questions</h2>
-          <div className="mt-6 w-full">
+          <h2 className="header text-2xl sm:text-3xl md:text-4xl">
+            Frequently asked questions
+          </h2>
+          <div className="mt-4 w-full sm:mt-6">
             <Accordion type="single" collapsible>
               {data.map((item) => {
                 return (
                   <AccordionItem key={item.id} value={item.id}>
-                    <AccordionTrigger className="mid_header font-normal">
+                    <AccordionTrigger className="mid_header text-base font-normal sm:text-lg">
                       {item.header}
                     </AccordionTrigger>
-                    <AccordionContent className="font-montreal text-base font-normal text-body-1">
+                    <AccordionContent className="font-montreal text-sm font-normal text-body-1 sm:text-base">
                       {item.body}
                     </AccordionContent>
                   </AccordionItem>

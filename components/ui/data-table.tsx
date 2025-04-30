@@ -64,7 +64,7 @@ export default function DataTable<TData, TValue>({
     <div>
       <div>
         <Table>
-          <TableHeader className="">
+          <TableHeader className="bg-[#F7F8FA]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

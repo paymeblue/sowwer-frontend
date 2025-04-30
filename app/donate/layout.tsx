@@ -1,10 +1,17 @@
+import BasicFooter from "layout/BasicFooter";
+import BasicNavbar from "layout/BasicNavbar";
 import { ReactNode } from "react";
-import DonateLayout from "@components/shared/Layouts/Donate";
 
-export default function DonorDonationsPageLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return <DonateLayout>{children}</DonateLayout>;
-}
+type Props = { children: ReactNode };
+
+const Layout = ({ children }: Props) => {
+  return (
+    <main>
+      <BasicNavbar />
+      {children}
+      <BasicFooter />
+    </main>
+  );
+};
+
+export default Layout;

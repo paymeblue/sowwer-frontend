@@ -1,6 +1,7 @@
 import SectionContainer from "@components/sections/SectionContainer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 import DonorHome from "./tabs/DonorHome";
+import { DonorDadDonationsTable } from "./tabs/DonorDadDonationsTable";
 
 const DonorDashboardPage = () => {
   return (
@@ -12,11 +13,14 @@ const DonorDashboardPage = () => {
         >
           <TabsList className="flex items-center space-x-2">
             <TabsTrigger value="home">Home</TabsTrigger>
-            <TabsTrigger value="my-donations">My Donations</TabsTrigger>
+            {/* <TabsTrigger value="my-donations">My Donations</TabsTrigger> */}
             <TabsTrigger value="dad-project">DAD Project</TabsTrigger>
           </TabsList>
           <TabsContent value="home">
             <DonorHome />
+          </TabsContent>
+          <TabsContent value="dad-project">
+            <DonorDadDonationsTable />
           </TabsContent>
           {/* <TabsContent value="project-donations">
             <ProjectDonations />
