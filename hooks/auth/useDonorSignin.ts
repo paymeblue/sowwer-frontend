@@ -14,7 +14,10 @@ const useDonorSignin = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  const loginDonor = async (values: z.infer<typeof DonorSigninValidation>) => {
+  const loginDonor = async (
+    values: z.infer<typeof DonorSigninValidation>,
+    options?: { redirect?: boolean }
+  ) => {
     const { email, password } = values;
     try {
       const res = await login({
@@ -30,7 +33,9 @@ const useDonorSignin = () => {
           context: "donor",
         })
       );
-      router.push("/donor");
+      if (options?.redirect) {
+        router.push("/donor");
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",

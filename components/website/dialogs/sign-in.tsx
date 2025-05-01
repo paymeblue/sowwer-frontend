@@ -44,12 +44,14 @@ type Props = {
   setOpen: Dispatch<SetStateAction<boolean>>;
   setOpenSignUp: Dispatch<SetStateAction<boolean>>;
   setForgotPasswordModal: Dispatch<SetStateAction<boolean>>;
+  redirect?: boolean;
 };
 const SignIn = ({
   open,
   setOpen,
   setOpenSignUp,
   setForgotPasswordModal,
+  redirect = true,
 }: Props) => {
   const { toast } = useToast();
   const { loginDonor, loading } = useDonorSignin();
@@ -66,12 +68,12 @@ const SignIn = ({
   const {
     handleSubmit,
     reset,
-    formState: { isDirty, isValid, isSubmitting },
+    formState: { isSubmitting },
   } = form;
 
   const onSubmit = async (values: FormType) => {
     try {
-      await loginDonor(values);
+      await loginDonor(values, { redirect });
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       // console.log(values);
       // toast({
@@ -149,7 +151,7 @@ const SignIn = ({
                 text="Log in"
                 loading={isSubmitting || loading}
                 loadingText="Submitting..."
-                disabled={!isDirty || !isValid}
+                // disabled={!isDirty || !isValid}
                 className="w-full"
               />
             </div>
