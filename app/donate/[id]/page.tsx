@@ -101,12 +101,11 @@ const Donation = async ({ params, searchParams }: Props) => {
   return (
     <Fragment>
       <Image
-        width={1512}
-        height={655}
         src={selected.cover}
-        alt="WidowCare cover"
+        alt={`${selected.title} cover`}
         placeholder="blur"
-        className="w-full object-cover"
+        className="h-[300px] w-full object-cover md:h-[450px] lg:h-[655px]"
+        priority
       />
       {success ? (
         <SuccessCard />
