@@ -36,7 +36,7 @@ const FormRadio = ({ label, name, options }: Props) => {
             <RadioGroup
               value={value}
               onValueChange={onChange}
-              className="flex space-x-8"
+              className="flex flex-col max-lg:space-y-4 lg:flex-row lg:space-x-8"
               onBlur={onBlur}
             >
               {options.map((option) => (
