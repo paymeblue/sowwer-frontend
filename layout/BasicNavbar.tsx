@@ -25,16 +25,18 @@ const BasicNavbar = () => {
     router.push("?isAuth=true");
   };
   return (
-    <header className="fixed top-3 z-[1000] mx-auto w-full px-4 text-body-1 sm:px-6 md:px-8">
+    <header className="absolute top-3 z-[1000] mx-auto w-full px-4 text-body-1 sm:px-6 md:px-8">
       <nav className="flex items-center justify-between gap-2 sm:gap-6">
         <div>
-          <Image
-            src={logo}
-            width={225}
-            height={48}
-            alt="Soower Logo"
-            className="h-[36px] w-[170px] object-contain sm:h-[42px] sm:w-[200px] md:h-[48px] md:w-[225px]"
-          />
+          <Link href="/">
+            <Image
+              src={logo}
+              width={225}
+              height={48}
+              alt="Soower Logo"
+              className="h-[36px] w-[170px] object-contain sm:h-[42px] sm:w-[200px] md:h-[48px] md:w-[225px]"
+            />
+          </Link>
         </div>
         {isAuth ? (
           <DropdownMenu>
