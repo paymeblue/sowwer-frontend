@@ -142,46 +142,46 @@ const directors = [
 ];
 const AboutPage = () => {
   return (
-    <main>
+    <main className="max-lg:mt-10">
       <section className="relative">
         <div className="absolute left-14 top-[400.58px] h-[108px] w-[522.26px] rotate-[7.66deg] bg-[#B854FF] blur-[450px]" />
-        <div className="mx-auto w-full max-w-[920px] py-40 text-center">
+        <div className="mx-auto w-full max-w-[920px] px-4 py-16 text-center md:py-40">
           <p className="font-montreal text-sm font-medium leading-[22.99px] text-[#75808A]">
             ABOUT SOOWER
           </p>
-          <h1 className="font-aeonik text-[55px] font-medium leading-[61px] text-black">
+          <h1 className="font-aeonik text-3xl font-medium leading-tight text-black md:text-[42px] md:leading-[61px] lg:text-[55px]">
             Spreading God&apos;s Love Through Faith, Generosity, and Compassion
             for Those in Need
           </h1>
         </div>
-        <div className="mx-auto flex w-full max-w-[1560px] flex-wrap items-end justify-between gap-4 lg:flex-nowrap">
+        <div className="mx-auto flex w-full max-w-[1560px] flex-wrap items-center justify-center gap-4 px-4 lg:items-end lg:justify-between">
           {images.map((image) => (
-            <div key={image.key}>
+            <div key={image.key} className="w-full max-w-[300px] sm:w-auto">
               <Image
                 src={image.img}
                 alt={image.key}
                 width={305}
                 placeholder="blur"
-                className="aspect-auto w-auto"
+                className="aspect-auto h-auto w-full"
               />
             </div>
           ))}
         </div>
-        <div className="absolute left-[1154px] top-[580.57px] h-[180.11px] w-[310.39px] rotate-[26.72deg] bg-[#34E1FF] blur-[606.7px]" />
+        <div className="absolute right-0 top-[580.57px] h-[180.11px] w-[310.39px] rotate-[26.72deg] bg-[#34E1FF] blur-[606.7px] lg:left-[1154px]" />
       </section>
-      <section className="mx-auto flex w-full max-w-[1560px] justify-between gap-4 px-20 py-40">
-        <p className="header2 w-full max-w-[400px]">
+      <section className="mx-auto flex w-full max-w-[1560px] flex-col justify-between gap-8 px-4 py-16 sm:px-6 md:py-40 lg:flex-row lg:px-20">
+        <p className="header2 w-full max-w-full text-2xl font-medium md:text-3xl lg:max-w-[400px] lg:text-4xl">
           Rooted in faith. Driven by love. Committed to transforming lives
         </p>
-        <div className="flex w-full max-w-[739px] flex-col gap-6">
-          <p className="font-montreal text-lg font-normal leading-[30px] text-body-2">
+        <div className="flex w-full max-w-full flex-col gap-6 lg:max-w-[739px]">
+          <p className="font-montreal text-base font-normal leading-relaxed text-body-2 md:text-lg md:leading-[30px]">
             SOOWER is a nonprofit Christian organization (officially registered
             in 2024) dedicated to making a significant difference in the lives
             of orphans, widows and missionaries. We connect donors with churches
             and ministries that offer programs for orphans, widows and missions
             in need of support.
           </p>
-          <p className="font-montreal text-lg font-normal leading-[30px] text-body-2">
+          <p className="font-montreal text-base font-normal leading-relaxed text-body-2 md:text-lg md:leading-[30px]">
             We&apos;re on a mission to foster a network of compassion and
             generosity that empowers these vulnerable groups, providing them
             with the resources and support they often need to survive and,
@@ -197,35 +197,35 @@ const AboutPage = () => {
           </Link>
         </div>
       </section>
-      <section className="mx-6 mb-12 w-full max-w-[1560px] rounded-3xl bg-[#FCF9F2] px-0 py-16 lg:mx-auto">
-        <div className="mx-auto flex w-full items-center justify-around">
-          <div className="w-full max-w-[708px] space-y-12">
+      <section className="mx-4 mb-12 w-full max-w-[1560px] rounded-3xl bg-[#FCF9F2] px-4 py-10 sm:mx-6 md:py-16 lg:mx-auto">
+        <div className="mx-auto flex w-full flex-col items-center justify-around gap-8 lg:flex-row">
+          <div className="w-full max-w-full space-y-8 md:space-y-12 lg:max-w-[708px]">
             <div>
               <small className="font-montreal text-[13px] font-medium leading-[22.99px]">
                 OUR MISSION
               </small>
-              <p className="font-aeonik text-[1.75rem] leading-[35px] text-black">
-                “To provide holistic support to widows, orphans and missionaries
+              <p className="font-aeonik text-xl leading-tight text-black md:text-2xl md:leading-[35px] lg:text-[1.75rem]">
+                "To provide holistic support to widows, orphans and missionaries
                 through educational, economic, emotional and spiritual
                 assistance, to foster an environment of growth, hope and
-                empowerment.”
+                empowerment."
               </p>
             </div>
             <div>
               <small className="font-montreal text-[13px] font-medium leading-[22.99px] text-[#75808A]">
                 OUR VISION
               </small>
-              <p className="font-aeonik text-[1.75rem] leading-[35px] text-black">
-                “We see a world where widows, orphans and marginalized
-                communities thrive through compassionate, faith-driven support.”
+              <p className="font-aeonik text-xl leading-tight text-black md:text-2xl md:leading-[35px] lg:text-[1.75rem]">
+                "We see a world where widows, orphans and marginalized
+                communities thrive through compassionate, faith-driven support."
               </p>
             </div>
           </div>
-          <div>
+          <div className="w-full max-w-[300px] lg:max-w-none">
             <Image
               src={img6}
               alt="happy woman and child"
-              className="object-contain"
+              className="h-auto w-full object-contain"
               width={456.57}
               height={497.67}
               placeholder="blur"
@@ -233,12 +233,12 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
-      <section className="bg-[#253031] py-20">
-        <div className="mx-auto w-full max-w-[956px] space-y-5 pb-20 text-center">
-          <h2 className="mx-auto w-full max-w-[730px] text-center font-aeonik text-[52px] font-medium leading-[48px] text-white">
+      <section className="bg-[#253031] px-4 py-10 md:py-20">
+        <div className="mx-auto w-full max-w-[956px] space-y-5 pb-10 text-center md:pb-20">
+          <h2 className="mx-auto w-full max-w-[730px] text-center font-aeonik text-3xl font-medium leading-tight text-white md:text-4xl md:leading-[48px] lg:text-[52px]">
             Alone we can do so little; together we can do so much
           </h2>
-          <p className="font-montreal text-lg text-[#D7EDEA]">
+          <p className="font-montreal text-base text-[#D7EDEA] md:text-lg">
             Through our carefully designed programs, we provide targeted support
             to widows, orphans, and missionaries, ensuring they receive the care
             and resources they need to thrive. Each initiative is built on the
@@ -246,11 +246,11 @@ const AboutPage = () => {
             organizations an opportunity to make a lasting impact.
           </p>
         </div>
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex flex-col flex-wrap items-center justify-center gap-6 md:flex-row">
           {cards.map((card) => (
             <div
               key={card.key}
-              className="flex w-full max-w-[463px]  items-center justify-between gap-5 rounded-xl bg-white p-4"
+              className="flex w-full max-w-[463px] flex-col items-center justify-between gap-5 rounded-xl bg-white p-4 sm:flex-row"
             >
               <Image
                 src={card.img}
@@ -258,10 +258,11 @@ const AboutPage = () => {
                 height={150}
                 placeholder="blur"
                 alt="WidowCare"
+                className="h-auto w-full max-w-[176px] sm:w-auto"
               />
-              <div className="flex flex-col items-end justify-center gap-6">
-                <div className="flex flex-col">
-                  <span className="font-aeonik text-[22px] font-medium leading-[25.3px] text-black">
+              <div className="mt-4 flex flex-col items-center justify-center gap-4 sm:mt-0 sm:items-end sm:gap-6">
+                <div className="flex flex-col text-center sm:text-right">
+                  <span className="font-aeonik text-xl font-medium leading-tight text-black md:text-[22px] md:leading-[25.3px]">
                     {card.title}
                   </span>
                   <span className="font-montreal text-[15px] leading-[19px] text-body-2">
@@ -279,12 +280,12 @@ const AboutPage = () => {
           ))}
         </div>
       </section>
-      <section className="p-20">
+      <section className="px-4 py-10 sm:px-6 md:py-20 lg:px-20">
         <div className="mx-auto w-full max-w-7xl">
-          <h3 className="font-aeonik text-[40px] font-medium leading-[48px] text-black">
+          <h3 className="font-aeonik text-2xl font-medium leading-tight text-black md:text-3xl md:leading-[48px] lg:text-[40px]">
             Our Board of Directors
           </h3>
-          <p className="w-full max-w-[1037px] font-montreal text-lg text-body-2">
+          <p className="w-full max-w-[1037px] font-montreal text-base text-body-2 md:text-lg">
             At the heart of SOOWER&apos;s mission is a team of visionary leaders
             dedicated to driving impact and transformation. Our Board of
             Directors brings together individuals with deep faith, vast
@@ -292,12 +293,12 @@ const AboutPage = () => {
             generosity and service.
           </p>
         </div>
-        <div className="mx-auto w-full py-16">
-          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-4 gap-y-16">
+        <div className="mx-auto w-full py-8 md:py-16">
+          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-8 md:gap-y-16">
             {directors.map((director) => (
               <div
                 key={director.key}
-                className="flex flex-col gap-4 rounded-xl bg-white p-4"
+                className="flex w-full flex-col gap-4 rounded-xl bg-white p-4 sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]"
               >
                 <Image
                   src={director.img}
@@ -305,12 +306,13 @@ const AboutPage = () => {
                   height={295}
                   placeholder="blur"
                   alt={director.name}
+                  className="h-auto w-full"
                 />
                 <div className="flex flex-col items-start gap-1">
-                  <span className="font-aeonik text-[20px] font-medium leading-[23px] text-black">
+                  <span className="font-aeonik text-base font-medium leading-tight text-black sm:text-lg md:text-[20px] md:leading-[23px]">
                     {director.name}
                   </span>
-                  <span className="font-montreal text-[14px] leading-[16.7px] text-body-2">
+                  <span className="font-montreal text-xs leading-tight text-body-2 sm:text-sm md:text-[14px] md:leading-[16.7px]">
                     {director.position}
                   </span>
                 </div>
