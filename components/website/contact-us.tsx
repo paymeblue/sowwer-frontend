@@ -81,25 +81,25 @@ const ContactUs = () => {
     }
   };
   return (
-    <section className="space-y-16 p-40">
-      <div className=" w-full max-w-[739px]">
-        <div className="mb-8">
-          <p className="w-max rounded-full rounded-br-sm bg-[#FCF9F2] px-8 py-6 font-aeonik text-[45px] font-bold leading-[61px] tracking-[-0.12px] text-black">
+    <section className="space-y-8 p-6 max-lg:mt-20 sm:space-y-12 sm:p-10 md:space-y-16 md:p-20 lg:p-40">
+      <div className="mx-auto w-full max-w-[739px] md:mx-0">
+        <div className="mb-4 sm:mb-8">
+          <p className="w-max rounded-full rounded-br-sm bg-[#FCF9F2] px-4 py-3 font-aeonik text-2xl font-bold leading-tight tracking-[-0.12px] text-black sm:px-6 sm:py-4 sm:text-3xl md:px-8 md:py-6 md:text-4xl md:leading-[61px] lg:text-[45px]">
             Contact Us.
           </p>
-          <p className="mt-8 font-montreal text-lg leading-[26px] text-body-2">
+          <p className="mt-4 font-montreal text-base leading-normal text-body-2 sm:mt-8 sm:text-lg sm:leading-[26px]">
             Want to make an inquiry or give us some feedback? You can reach us
             through any of our channels below or fill out the form, and we'll be
             in touch within 24hours.
           </p>
         </div>
 
-        <div className=" flex w-full items-start justify-between">
+        <div className="flex w-full flex-col items-start justify-between gap-6 md:flex-row md:gap-4">
           <div className="space-y-2">
             <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
               SOCIAL MEDIA
             </h5>
-            <p className="font-montreal text-[15px] text-body-2 ">
+            <p className="font-montreal text-[15px] text-body-2">
               Follow our social profiles:
             </p>
             <div className="flex gap-4">
@@ -130,7 +130,7 @@ const ContactUs = () => {
             <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
               PHONE
             </h5>
-            <p className="font-montreal text-[15px] text-body-2 ">
+            <p className="font-montreal text-[15px] text-body-2">
               Dial our numbers:
             </p>
             <div className="flex flex-col gap-0">
@@ -154,7 +154,7 @@ const ContactUs = () => {
             <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
               EMAIL
             </h5>
-            <p className="font-montreal text-[15px] text-body-2 ">
+            <p className="font-montreal text-[15px] text-body-2">
               Leave us an email:
             </p>
             <div className="flex flex-col gap-0">
@@ -169,12 +169,15 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-      <div className="w-full rounded-[2rem] bg-[#F7F8FA] p-20">
-        <div className="mx-auto w-full max-w-3xl rounded-xl bg-white px-8 py-6 shadow-[0px_4px_20px_0px_#0000000F]">
+      <div className="w-full rounded-lg bg-[#F7F8FA] p-4 sm:rounded-xl sm:p-8 md:rounded-[2rem] md:p-12 lg:p-20">
+        <div className="mx-auto w-full max-w-3xl rounded-xl bg-white px-4 py-4 shadow-[0px_4px_20px_0px_#0000000F] sm:px-6 sm:py-6 md:px-8">
           <Form {...form}>
-            <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+            <form
+              className="space-y-4 sm:space-y-5"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <FormInput name="name" label="Name" />
-              <div className="flex w-full items-center justify-center gap-4">
+              <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
                 <FormInput
                   name="email"
                   label="Email Address"
@@ -190,7 +193,7 @@ const ContactUs = () => {
                 />
               </div>
               <FormTextArea label="Message" name="message" />
-              <div className="justify-self-end pt-6">
+              <div className="justify-self-end pt-4 sm:pt-6">
                 <FormButton
                   loading={isSubmitting}
                   loadingText="Submitting..."
