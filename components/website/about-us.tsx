@@ -18,7 +18,7 @@ import img1 from "public/images/img-10.png";
 import img2 from "public/images/img-11.png";
 import img3 from "public/images/img-12.png";
 import img4 from "public/images/img-13.png";
-import img5 from "public/images/img-14.png";
+// import img5 from "public/images/img-14.png";
 import img6 from "public/images/img-15.png";
 import img7 from "public/images/img-16.png";
 import img8 from "public/images/img-17.png";
@@ -41,10 +41,10 @@ const images = [
     key: "4",
     img: img4,
   },
-  {
-    key: "5",
-    img: img5,
-  },
+  // {
+  //   key: "5",
+  //   img: img5,
+  // },
 ];
 const cards = [
   {
