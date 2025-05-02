@@ -51,15 +51,15 @@ const RegistryTabLayout = ({ children }: PropsWithChildren) => {
   const [activeTab, setActiveTab] = useState(id as string);
   return (
     <div
-      className="mx-auto my-20 grid w-full
-max-w-[1058px] grid-cols-4 rounded-xl border-[0.3px] border-[#DADADA] bg-white
-shadow-[0px_4px_20px_0px_#0000000F]"
+      className="mx-auto my-8 flex w-full max-w-[1058px]
+flex-col rounded-xl border-[0.3px] border-[#DADADA] bg-white shadow-[0px_4px_20px_0px_#0000000F] sm:my-12 md:grid md:grid-cols-4
+lg:my-20"
     >
-      <div className="col-span-1 rounded-l-xl bg-[#F7F8FA] py-2 pl-6 pr-0">
-        <p className="my-6 text-[13px] font-bold leading-[23px] text-black ">
+      <div className="rounded-t-xl bg-[#F7F8FA] px-4 py-2 md:col-span-1 md:rounded-l-xl md:rounded-t-none md:pl-6 md:pr-0">
+        <p className="my-4 text-center text-[13px] font-bold leading-[23px] text-black md:my-6 md:text-left">
           JOIN AS:
         </p>
-        <ul>
+        <ul className="flex w-full flex-col">
           {donationItems.map((tab, i) => (
             <li
               key={tab.id}
@@ -68,11 +68,12 @@ shadow-[0px_4px_20px_0px_#0000000F]"
                 router.push(tab.value);
               }}
               className={cn(
-                "flex cursor-pointer items-center justify-between border-[0.5px] border-x-0 border-[#DADADA] p-4 pr-0",
-                i === donationItems.length - 1 && "border-b-0"
+                "flex min-w-[100px] cursor-pointer items-center justify-between border-[0.5px] border-x-0 border-[#DADADA] p-3 md:min-w-fit md:p-4 md:pr-0",
+                i === donationItems.length - 1 && "border-b-0",
+                "flex-1 md:flex-auto"
               )}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex w-full items-center justify-center gap-1 md:justify-start md:gap-2">
                 <span
                   className={cn(
                     "text-[#75808A]",
@@ -83,7 +84,7 @@ shadow-[0px_4px_20px_0px_#0000000F]"
                 </span>
                 <span
                   className={cn(
-                    "font-montreal text-[15px] text-[#75808A]",
+                    "font-montreal text-[13px] text-[#75808A] md:text-[15px]",
                     activeTab === tab.value && "font-medium text-black"
                   )}
                 >
@@ -91,13 +92,13 @@ shadow-[0px_4px_20px_0px_#0000000F]"
                 </span>
               </div>
               {activeTab === tab.value ? (
-                <div className="h-[10px] w-[6px] rounded-l-full bg-primary" />
+                <div className="hidden h-[10px] w-[6px] rounded-l-full bg-primary md:block" />
               ) : null}
             </li>
           ))}
         </ul>
       </div>
-      <div className="col-span-3 rounded-r-xl p-8 shadow-tab-layout-content">
+      <div className="rounded-b-xl p-4 shadow-tab-layout-content sm:p-6 md:col-span-3 md:rounded-b-none md:rounded-r-xl md:p-8">
         {children}
       </div>
     </div>

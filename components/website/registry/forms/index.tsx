@@ -15,11 +15,11 @@ const RegistryForms = () => {
   return (
     <RegistryTabLayout>
       <div className="flex flex-col items-center justify-center">
-        <h5 className="m-0 p-0 font-aeonik text-[24px] font-medium tracking-[-0.12px] text-black">
+        <h5 className="m-0 p-0 text-center font-aeonik text-xl font-medium tracking-[-0.12px] text-black sm:text-[22px] md:text-[24px]">
           Join the registry for {preffix}
         </h5>
-        <p className="text-[15px] text-body-2">
-          Register below to become part of our network and we’ll be in touch.
+        <p className="mt-1 text-center text-[14px] text-body-2 sm:mt-2 sm:text-[15px]">
+          Register below to become part of our network and we'll be in touch.
         </p>
       </div>
       {id === "widow" ? (
