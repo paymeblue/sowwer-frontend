@@ -3,6 +3,7 @@
 import { Button } from "@components/ui/button";
 import JoinUs from "@shared/JoinUs";
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 // import brand1 from "public/images/brand-1.png";
 // import brand2 from "public/images/brand-2.png";
 // import brand3 from "public/images/brand-3.png";
@@ -47,7 +48,7 @@ export type WidowCareProgram = {
   joinus_img: StaticImageData;
   joinus_alt: string;
 };
-type Props = { data: WidowCareProgram };
+type Props = { data: WidowCareProgram & { donateRoute: string } };
 // const brands = [
 //   {
 //     img: brand1,
@@ -115,12 +116,14 @@ const Program = ({ data }: Props) => {
                 {data.hero_subtitle}
               </p>
             </div>
-            <Button className="w-full gap-2 border-input font-montreal text-black sm:w-auto">
-              <span>
-                <Heart2 set="bold" size={19} />
-              </span>
-              <span>Donate now</span>
-            </Button>
+            <Link href={`/donate${data.donateRoute}`}>
+              <Button className="w-full gap-2 border-input font-montreal text-black sm:w-auto">
+                <span>
+                  <Heart2 set="bold" size={19} />
+                </span>
+                <span>Donate now</span>
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="flex w-full justify-center md:w-auto">

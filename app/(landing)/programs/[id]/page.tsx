@@ -36,11 +36,12 @@ export const generateMetadata = async (
 
   return { title: `${formatText(id)} - Program` };
 };
-type Programs = Record<Project, WidowCareProgram>;
+type Programs = Record<Project, WidowCareProgram & { donateRoute: string }>;
 const programs: Programs = {
   "widow-care": {
     pillColor: "#2F085A",
     pillShadow: "shadow-widow_care",
+    donateRoute: "/widows-care",
     pillText: "WidowCare",
     hero_title: "Helping widows rebuild their lives",
     hero_subtitle:
@@ -97,6 +98,7 @@ const programs: Programs = {
   "dad-project": {
     pillColor: "#FAB80F",
     pillShadow: "shadow-dad_project",
+    donateRoute: "/dad-project",
     pillText: "The DAD Project",
     hero_title: "Giving orphans a future through educational sponsorships",
     hero_subtitle:
@@ -250,6 +252,7 @@ const programs: Programs = {
   "mission-care": {
     pillColor: "#3466FF",
     pillShadow: "shadow-mission_care",
+    donateRoute: "/missions-care",
     pillText: "MissionCare",
     hero_title: "Supporting missionaries to spread the gospel",
     hero_subtitle:
@@ -298,6 +301,7 @@ const programs: Programs = {
     pillColor: "#1AA551",
     pillShadow: "shadow-partnerships",
     pillText: "Partnerships",
+    donateRoute: "/partnerships",
     hero_title:
       "Collaborating with other ministries to support their projects.",
     hero_subtitle:

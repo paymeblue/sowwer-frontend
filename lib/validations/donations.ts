@@ -58,9 +58,36 @@ const dadProjectSchema = z.object({
   t_and_c: termSchema,
 });
 
+const dadProjectAuthSchema = z.object({
+  sponsorship_type: z.enum(["full-sponsorship", "partial-sponsorship"], {
+    message: "Please select a sponship type",
+  }),
+  payment_frequency: z.enum(["per-term", "per-session"], {
+    message: "Please select a payment frequency",
+  }),
+  geo_location: z.enum(["south-south", "south-east"], {
+    message: "Please select a geo location",
+  }),
+  form_amount: z.object({
+    currency: z.string().min(1, "Please select a currency"),
+    amount: z.string().min(1, "Please enter an amount"),
+  }),
+});
+
 type dadProjectType = z.infer<typeof dadProjectSchema>;
+type dadProjectAuthType = z.infer<typeof dadProjectAuthSchema>;
 type unAuthDonationType = z.infer<typeof unAuthDonationSchema>;
 type authDonationType = z.infer<typeof authDonationSchema>;
 
-export { authDonationSchema, dadProjectSchema, unAuthDonationSchema };
-export type { authDonationType, dadProjectType, unAuthDonationType };
+export {
+  authDonationSchema,
+  dadProjectSchema,
+  dadProjectAuthSchema,
+  unAuthDonationSchema,
+};
+export type {
+  authDonationType,
+  dadProjectType,
+  unAuthDonationType,
+  dadProjectAuthType,
+};

@@ -21,17 +21,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import usePaystackConfig, {
   IPaystackConfig,
 } from "@hooks/payments/usePaystackConfig";
-import { dadProjectSchema, dadProjectType } from "lib/validations/donations";
+import {
+  dadProjectAuthSchema,
+  dadProjectAuthType,
+  dadProjectSchema,
+  dadProjectType,
+} from "lib/validations/donations";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { usePaystackPayment } from "react-paystack";
 import {
+  useInitiateDadDonationAuthMutation,
   useInitiateDadDonationUnauthMutation,
   useVerifyDadDonationMutation,
 } from "services/dad-project";
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import { cn } from "@lib/cn";
+import useUserAuth from "@hooks/auth/useUserAuth";
 
 const DEFAULT_PAYSTACK_CONFIG: IPaystackConfig = {
   email: "",
@@ -103,9 +110,12 @@ const selectOptions = [
 const DADProject = () => {
   const router = useRouter();
   const [paystackLoading, setPaystackLoading] = useState(false);
+  const { isAuthenticated, user } = useUserAuth();
   // const { isAuthenticated, user } = useUserAuth();
   const [initiateDadDonationUnauth, { isLoading }] =
     useInitiateDadDonationUnauthMutation();
+  const [initiateDadDonationAuth, { isLoading: isInitiatingAuth }] =
+    useInitiateDadDonationAuthMutation();
   const [verifyDadDonation, { isLoading: isVerifying }] =
     useVerifyDadDonationMutation();
   const { getConfig: getPaystackConfig } = usePaystackConfig();
@@ -134,9 +144,24 @@ const DADProject = () => {
     resolver: zodResolver(dadProjectSchema),
   });
 
+  const formAuth = useForm<dadProjectAuthType>({
+    mode: "onBlur",
+    defaultValues: {
+      sponsorship_type: "full-sponsorship",
+      payment_frequency: "per-term",
+      form_amount: { currency: "NGN", amount: "" },
+      geo_location: "south-south",
+    },
+    resolver: zodResolver(dadProjectAuthSchema),
+  });
+
   const sponsorshipTypeFormValue = form.watch("sponsorship_type");
   const geoLocationFormValue = form.watch("geo_location");
   const paymentFrequencyFormValue = form.watch("payment_frequency");
+
+  const sponsorshipTypeFormValueAuth = formAuth.watch("sponsorship_type");
+  const geoLocationFormValueAuth = formAuth.watch("geo_location");
+  const paymentFrequencyFormValueAuth = formAuth.watch("payment_frequency");
 
   useEffect(() => {
     if (sponsorshipTypeFormValue === "full-sponsorship") {
@@ -155,6 +180,25 @@ const DADProject = () => {
     geoLocationFormValue,
     paymentFrequencyFormValue,
     form,
+  ]);
+
+  useEffect(() => {
+    if (sponsorshipTypeFormValueAuth === "full-sponsorship") {
+      const geoZone = selectOptions.find(
+        (option) => option.value === geoLocationFormValueAuth
+      );
+      formAuth.setValue(
+        "form_amount.amount",
+        paymentFrequencyFormValueAuth === "per-session"
+          ? geoZone?.amountPerSession || ""
+          : geoZone?.amountPerTerm || ""
+      );
+    }
+  }, [
+    sponsorshipTypeFormValueAuth,
+    geoLocationFormValueAuth,
+    paymentFrequencyFormValueAuth,
+    formAuth,
   ]);
 
   useEffect(() => {
@@ -212,6 +256,35 @@ const DADProject = () => {
     setError,
     formState: { isSubmitting },
   } = form;
+
+  const onSubmitAuth = async (data: dadProjectAuthType) => {
+    try {
+      const res = await initiateDadDonationAuth({
+        amount: Number(data.form_amount.amount.replace(/,/g, "")),
+        currency: data.form_amount.currency || "NGN",
+        geo_location: data.geo_location,
+        sponsorship_type:
+          data.sponsorship_type === "full-sponsorship" ? "full" : "partial",
+      }).unwrap();
+      const { txn_reference: txnRef, amount: amn } = res.data;
+
+      const config = getPaystackConfig({
+        amount: amn * 100,
+        email: user?.email || "",
+        reference: txnRef,
+      });
+      setPaystackConfig(config);
+
+      // reset();
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Error submitting form";
+      toast({
+        title: "Submission Failed",
+        description: errorMessage,
+      });
+    }
+  };
 
   const onSubmit = async (data: dadProjectType) => {
     try {
@@ -272,6 +345,69 @@ const DADProject = () => {
       });
     }
   };
+
+  if (isAuthenticated) {
+    return (
+      <Form {...formAuth}>
+        <form
+          onSubmit={formAuth.handleSubmit(onSubmitAuth)}
+          className="w-full space-y-5"
+        >
+          <FormRadio
+            name="sponsorship_type"
+            label="Choose a sponsorship type"
+            options={sponsorshipType}
+          />
+          {sponsorshipTypeFormValue === "full-sponsorship" && (
+            <FormSelect
+              label="Geolocation"
+              name="geo_location"
+              options={selectOptions}
+            />
+          )}
+          <FormAmount
+            disabled={sponsorshipTypeFormValueAuth === "full-sponsorship"}
+            name={{
+              currency: "form_amount.currency",
+              amount: "form_amount.amount",
+            }}
+            label="Amount"
+            options={currency}
+            desc={
+              sponsorshipTypeFormValueAuth === "full-sponsorship"
+                ? `Per session = NGN ${
+                    selectOptions.find(
+                      (option) => option.value === geoLocationFormValueAuth
+                    )?.amountPerSession
+                  }`
+                : ""
+            }
+          />
+          {sponsorshipTypeFormValueAuth === "full-sponsorship" && (
+            <FormRadio
+              name="payment_frequency"
+              label="Payment frequency"
+              options={paymentFrequency}
+            />
+          )}
+          <div className="flex items-center justify-end pt-6">
+            <FormButton
+              text="Donate Now"
+              loadingText="Submitting..."
+              loading={
+                isSubmitting ||
+                isLoading ||
+                paystackLoading ||
+                isVerifying ||
+                isInitiatingAuth
+              }
+              // disabled={!isDirty || !isValid}
+            />
+          </div>
+        </form>
+      </Form>
+    );
+  }
 
   return (
     <Form {...form}>

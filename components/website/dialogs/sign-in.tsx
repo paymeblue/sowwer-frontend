@@ -106,7 +106,7 @@ const SignIn = ({
         router.replace("?");
       }
     },
-    [login]
+    [login, router, setOpen]
   );
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

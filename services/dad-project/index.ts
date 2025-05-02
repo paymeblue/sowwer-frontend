@@ -1,5 +1,7 @@
 import api from "services/api/apiSlice";
 import {
+  InitiateDadDonationAuthRequest,
+  InitateDadDonationAuthResponse,
   InitiateDadDonationUnauthRequest,
   InitateDadDonationUnathResponse,
   VerifyDadDonationRequest,
@@ -17,6 +19,16 @@ const dadProject = api.injectEndpoints({
         body,
       }),
     }),
+    initiateDadDonationAuth: build.mutation<
+      InitateDadDonationAuthResponse,
+      InitiateDadDonationAuthRequest
+    >({
+      query: (body) => ({
+        url: `dad-project/initiate-auth`,
+        method: "POST",
+        body,
+      }),
+    }),
     verifyDadDonation: build.mutation<void, VerifyDadDonationRequest>({
       query: (body) => ({
         url: `dad-project/verify`,
@@ -25,9 +37,11 @@ const dadProject = api.injectEndpoints({
       }),
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {
   useInitiateDadDonationUnauthMutation,
+  useInitiateDadDonationAuthMutation,
   useVerifyDadDonationMutation,
 } = dadProject;

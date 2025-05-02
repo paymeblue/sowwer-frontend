@@ -13,6 +13,12 @@ export type InitiateDadDonationUnauthRequest = {
   confirm_password: string;
   createAccount: boolean;
 };
+export type InitiateDadDonationAuthRequest = {
+  sponsorship_type: string;
+  geo_location: string;
+  amount: number;
+  currency: string;
+};
 
 export type InitateDadDonationUnathResponse = Response<{
   donation: {
@@ -25,6 +31,17 @@ export type InitateDadDonationUnathResponse = Response<{
     currency: string;
     createdAt: string;
   };
+}>;
+
+export type InitateDadDonationAuthResponse = Response<{
+  id: string;
+  donor_id: string;
+  amount: number;
+  txn_reference: string;
+  authorization_url: string;
+  status: "in-progress" | "pending" | "failed" | "success";
+  currency: string;
+  createdAt: string;
 }>;
 
 export type VerifyDadDonationRequest = {

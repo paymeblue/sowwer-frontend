@@ -12,20 +12,14 @@ import {
 import SignIn from "@components/website/dialogs/sign-in";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import logo from "public/images/logo-white.png";
 import { ChevronDown, Logout } from "react-iconly";
 import { Fragment, useState } from "react";
 import useUserAuth from "@hooks/auth/useUserAuth";
 
 const BasicNavbar = () => {
-  const router = useRouter();
-  const { isAuthenticated: isAuth, user } = useUserAuth();
+  const { isAuthenticated: isAuth, user, logout } = useUserAuth();
   const [openLoginModal, setOpenLoginModal] = useState(false);
-
-  const mockLogout = () => {
-    router.push("?");
-  };
 
   return (
     <Fragment>
@@ -74,7 +68,7 @@ const BasicNavbar = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="items-center gap-2"
-                  onClick={mockLogout}
+                  onClick={logout}
                 >
                   <Logout primaryColor="#D11E1E" />
                   <span>Logout</span>
