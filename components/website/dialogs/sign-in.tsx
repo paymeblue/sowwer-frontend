@@ -131,6 +131,7 @@ const SignIn = ({
             <div className="flex flex-col items-end justify-center">
               <FormInput
                 name="password"
+                type="password"
                 label="Password"
                 inputProps={{
                   placeholder: "Password",

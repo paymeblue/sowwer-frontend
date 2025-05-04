@@ -8,15 +8,16 @@ import {
   FormLabel,
   FormMessage,
 } from "./form";
-import { Input } from "./input";
+import { Input } from "./input-with-icon";
 
 type Props = {
   label: string;
   name: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  type?: string;
 };
 
-const FormInput = ({ label, name, inputProps }: Props) => {
+const FormInput = ({ label, name, inputProps, type }: Props) => {
   const { control } = useFormContext();
 
   return (
@@ -31,7 +32,7 @@ const FormInput = ({ label, name, inputProps }: Props) => {
           >
             {label}
           </FormLabel>
-          <FormControl>
+          <FormControl className="flex flex-col">
             <Input
               {...field} // Ensures proper field binding
               ref={field.ref} // Properly attaches the ref
@@ -42,6 +43,7 @@ const FormInput = ({ label, name, inputProps }: Props) => {
                 inputProps?.className
               )}
               {...inputProps}
+              type={type}
             />
           </FormControl>
           <FormMessage />

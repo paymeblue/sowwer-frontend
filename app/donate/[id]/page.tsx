@@ -13,7 +13,7 @@ import dadProject from "public/images/donation-dad-project.png";
 import missionCare from "public/images/donation-mission-care.png";
 import generalGiving from "public/images/donation-patnerships.png";
 import widowCare from "public/images/donation-widow-care.png";
-import { Fragment, ReactNode } from "react";
+import { ReactNode } from "react";
 
 type DonationType =
   | "widow-care"
@@ -99,7 +99,7 @@ const Donation = async ({ params, searchParams }: Props) => {
     return notFound();
   }
   return (
-    <Fragment>
+    <div className="flex flex-col items-center justify-center">
       <Image
         src={selected.cover}
         alt={`${selected.title} cover`}
@@ -114,7 +114,7 @@ const Donation = async ({ params, searchParams }: Props) => {
           <DonationDetails data={selected} />
         </TabLayout>
       )}
-    </Fragment>
+    </div>
   );
 };
 

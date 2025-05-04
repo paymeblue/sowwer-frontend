@@ -180,6 +180,7 @@ const SignUp = ({
             <div className="flex w-full items-center justify-center gap-4">
               <FormInput
                 name="password"
+                type="password"
                 label="Password"
                 inputProps={{
                   placeholder: "Create Password",
@@ -187,6 +188,7 @@ const SignUp = ({
               />
               <FormInput
                 name="c_password"
+                type="password"
                 label="Confirm Password"
                 inputProps={{
                   placeholder: "Confirm Password",
