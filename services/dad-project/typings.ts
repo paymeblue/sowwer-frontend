@@ -12,12 +12,14 @@ export type InitiateDadDonationUnauthRequest = {
   password: string;
   confirm_password: string;
   createAccount: boolean;
+  frequency?: string;
 };
 export type InitiateDadDonationAuthRequest = {
   sponsorship_type: string;
   geo_location: string;
   amount: number;
   currency: string;
+  frequency?: string;
 };
 
 export type InitateDadDonationUnathResponse = Response<{

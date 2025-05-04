@@ -218,6 +218,7 @@ const DADProject = () => {
         const verify = async () => {
           try {
             const email = form.getValues().email;
+
             // Verify payment
             await verifyDadDonation({
               txn_ref: paystackConfig.reference,
@@ -228,7 +229,7 @@ const DADProject = () => {
             });
             setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
             reset();
-            router.push(`?success=true&email=${email}`);
+            router.push(`?success=true&email=${email || user?.email}`);
           } catch (error) {
             setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
             toast({
@@ -262,6 +263,7 @@ const DADProject = () => {
       const res = await initiateDadDonationAuth({
         amount: Number(data.form_amount.amount.replace(/,/g, "")),
         currency: data.form_amount.currency || "NGN",
+        frequency: data.payment_frequency,
         geo_location: data.geo_location,
         sponsorship_type:
           data.sponsorship_type === "full-sponsorship" ? "full" : "partial",
@@ -293,12 +295,14 @@ const DADProject = () => {
           setError("password", {
             message: "Please enter a password",
           });
+          return;
         }
 
         if (!data.confirmPassword) {
           setError("confirmPassword", {
             message: "Required",
           });
+          return;
         }
 
         if (data.password !== data.confirmPassword) {
@@ -308,15 +312,15 @@ const DADProject = () => {
           setError("confirmPassword", {
             message: "Passwords dont match",
           });
+          return;
         }
-
-        return;
       }
       const res = await initiateDadDonationUnauth({
         amount: Number(data.form_amount.amount.replace(/,/g, "")),
         confirm_password: data.t_and_c ? data.confirmPassword || "" : "",
         createAccount: data.t_and_c,
         currency: data.form_amount.currency || "NGN",
+        frequency: data.payment_frequency,
         email: data.email,
         first_name: data.f_name,
         last_name: data.l_name,

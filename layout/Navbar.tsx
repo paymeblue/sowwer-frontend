@@ -21,6 +21,7 @@ import ForgotPassword from "@components/website/dialogs/forgot-password";
 import SignIn from "@components/website/dialogs/sign-in";
 import SignUp from "@components/website/dialogs/sign-up";
 import Success from "@components/website/dialogs/success";
+import useUserAuth from "@hooks/auth/useUserAuth";
 import { cn } from "@lib/cn";
 import { Menu } from "lucide-react";
 import Image from "next/image";
@@ -54,6 +55,7 @@ const subMenu = [
   },
 ];
 const Navbar = () => {
+  const router = useRouter();
   const segment = useSelectedLayoutSegment();
   const pathname = usePathname();
   const [title, setTitle] = useState("");
@@ -65,18 +67,15 @@ const Navbar = () => {
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
-  const router = useRouter();
   const query = useSearchParams();
   const login = query.get("login") === "true";
-  const isAuth = query.get("isAuth") === "true";
+  const { isAuthenticated: isAuth, user, logout } = useUserAuth();
+
   useEffect(() => {
     if (login) {
       setOpenLoginModal(true);
     }
   }, [login]);
-  const mockLogout = () => {
-    router.push("?");
-  };
 
   return (
     <Fragment>
@@ -202,8 +201,8 @@ const Navbar = () => {
                 <DropdownMenuTrigger asChild className="cursor-pointer">
                   <div className="flex items-center justify-center gap-2">
                     <UserIcon />
-                    <p className="font-montreal text-sm font-medium">
-                      Adebanjo Mary
+                    <p className="font-montreal text-sm font-medium capitalize">
+                      {user?.firstName} {user?.lastName}
                     </p>
                     {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                   </div>
@@ -214,21 +213,21 @@ const Navbar = () => {
                 >
                   <DropdownMenuItem
                     className="items-center gap-2"
-                    onClick={mockLogout}
+                    onClick={() => router.push("/donor")}
                   >
                     <DashboardIcon />
                     <span>My dashboard</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="items-center gap-2"
-                    onClick={mockLogout}
+                    onClick={() => router.push("/donor/settings")}
                   >
                     <Setting stroke="light" />
                     <span>Account settings</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="items-center gap-2 text-[#D11E1E]"
-                    onClick={mockLogout}
+                    onClick={logout}
                   >
                     <Logout primaryColor="#D11E1E" stroke="light" />
                     <span>Log out</span>
@@ -370,7 +369,7 @@ const Navbar = () => {
                           className="flex items-center gap-2 py-2 font-montreal text-base font-medium"
                           onClick={() => {
                             setMobileMenuOpen(false);
-                            mockLogout();
+                            router.push("/donor");
                           }}
                         >
                           <DashboardIcon />
@@ -381,7 +380,7 @@ const Navbar = () => {
                           className="flex items-center gap-2 py-2 font-montreal text-base font-medium"
                           onClick={() => {
                             setMobileMenuOpen(false);
-                            mockLogout();
+                            router.push("/donor/settings");
                           }}
                         >
                           <Setting stroke="light" />
@@ -391,7 +390,7 @@ const Navbar = () => {
                           className="flex w-full items-center gap-2 py-2 font-montreal text-base font-medium text-[#D11E1E]"
                           onClick={() => {
                             setMobileMenuOpen(false);
-                            mockLogout();
+                            logout();
                           }}
                         >
                           <Logout primaryColor="#D11E1E" stroke="light" />
