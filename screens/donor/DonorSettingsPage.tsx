@@ -5,7 +5,7 @@ import PasswordSettings from "@components/sections/donor/PasswordSettings";
 import { Button } from "@components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import DonationHistory from "@components/sections/donor/DontationHistory";
+// import DonationHistory from "@components/sections/donor/DontationHistory";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
 
 const DonorDashboardPage = () => {
@@ -28,7 +28,7 @@ const DonorDashboardPage = () => {
             <TabsTrigger value="password-settings">
               Password Settings
             </TabsTrigger>
-            <TabsTrigger value="donation-history">Donation History</TabsTrigger>
+            {/* <TabsTrigger value="donation-history">Donation History</TabsTrigger> */}
           </TabsList>
           <TabsContent value="personal-details">
             <NoSSRWrapper>
@@ -40,9 +40,9 @@ const DonorDashboardPage = () => {
               <PasswordSettings />
             </NoSSRWrapper>
           </TabsContent>
-          <TabsContent value="donation-history">
+          {/* <TabsContent value="donation-history">
             <DonationHistory />
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </section>
     </SectionContainer>

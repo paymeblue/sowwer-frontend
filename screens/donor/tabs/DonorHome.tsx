@@ -16,7 +16,7 @@ const list = [
     img: img2,
     title: "WidowCare",
     desc: "Providing financial aid and support to help widows rebuild their lives.",
-    route: "/donate/widowcare",
+    route: "/donate/widow-care",
   },
 
   {
@@ -31,14 +31,14 @@ const list = [
     img: img4,
     title: "MissionCare",
     desc: "Supporting missionaries with resources to spread the gospel.",
-    route: "/donate/missioncare",
+    route: "/donate/mission-care",
   },
   {
     key: "4",
     img: img5,
     title: "Partnerships",
     desc: "Collaborating with other ministries to support their projects.",
-    route: "/donate/partnerships",
+    route: "/programs/partnerships",
   },
 ];
 

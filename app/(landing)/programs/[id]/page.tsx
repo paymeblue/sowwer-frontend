@@ -306,7 +306,7 @@ const programs: Programs = {
     pillColor: "#1AA551",
     pillShadow: "shadow-partnerships",
     pillText: "Partnerships",
-    donateRoute: "/partnerships",
+    donateRoute: "/general-giving",
     hero_title:
       "Collaborating with other ministries to support their projects.",
     hero_subtitle:
