@@ -106,6 +106,19 @@ const payouts = api.injectEndpoints({
       transformErrorResponse: (response: ErrorResponse, meta, arg) =>
         response.data.message,
     }),
+    toggleDonationRecurringPayment: build.mutation<
+      PlainResponse,
+      { id: string }
+    >({
+      query: ({ id }) => `recurring-donation/${id}/toggle`,
+      // invalidatesTags: cacher.providesProperty("General"),
+      invalidatesTags: ["General", "Projects", "Donations"],
+      transformResponse: (response: PlainResponse, meta, arg): any => {
+        return response;
+      },
+      transformErrorResponse: (response: ErrorResponse, meta, arg) =>
+        response.data.message,
+    }),
     // pauseRecurringPayment: build.mutation<PlainResponse, string>({
     //   query: (id) => `plans/${id}/cancel`,
     //   // invalidatesTags: cacher.providesProperty("General"),
@@ -190,4 +203,5 @@ export const {
   usePayoutHistoryQuery,
   useVerifyPaymemtProjectMutation,
   useVerifyPaymemtMinistryMutation,
+  useToggleDonationRecurringPaymentMutation,
 } = payouts;

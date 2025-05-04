@@ -19,7 +19,7 @@ export type Donation = {
     next_payment_date: string | null;
     amount: string;
     total_amount: string;
-    status: "active" | "inactive";
+    status: "active" | "cancelled";
     createdAt: string;
     updatedAt: string;
   };
