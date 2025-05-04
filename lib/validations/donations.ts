@@ -24,6 +24,8 @@ const unAuthDonationSchema = authDonationSchema.merge(
         .max(15, "Phone number is too long")
         .regex(/^\d+$/, "Phone number must contain only numbers"),
     }),
+    password: z.string().optional(),
+    confirmPassword: z.string().optional(),
     t_and_c: termSchema,
   })
 );

@@ -9,14 +9,25 @@ import FormPhone from "@components/ui/formPhone";
 import FormRadio from "@components/ui/formRadio";
 import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useUserAuth from "@hooks/auth/useUserAuth";
+import usePaystackConfig, {
+  IPaystackConfig,
+} from "@hooks/payments/usePaystackConfig";
 import {
   authDonationSchema,
   authDonationType,
   unAuthDonationSchema,
   unAuthDonationType,
 } from "lib/validations/donations";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { usePaystackPayment } from "react-paystack";
+import {
+  useInitiateDonationAuthMutation,
+  useInitiateDonationUnauthMutation,
+  useVerifyDonationMutation,
+} from "services/donate";
 
 const frequency = [
   {
@@ -36,16 +47,50 @@ const country_codes = [
   { label: "+1", value: "+1" },
   { label: "+234", value: "+234" },
 ];
-type generalDonationType = authDonationType | unAuthDonationType;
+
+const DEFAULT_PAYSTACK_CONFIG: IPaystackConfig = {
+  email: "",
+  reference: "",
+  publicKey: "",
+  amount: 0,
+};
+
 const GeneralDonation = () => {
-  const searchParams = useSearchParams();
-  const isAuth = searchParams.get("isAuth") === "true";
+  const { id } = useParams();
+  const { isAuthenticated: isAuth, user } = useUserAuth();
+  const [paystackLoading, setPaystackLoading] = useState(false);
   const router = useRouter();
+  const { getConfig: getPaystackConfig } = usePaystackConfig();
   const { toast } = useToast();
+  const [paystackConfig, setPaystackConfig] = useState<IPaystackConfig>(
+    DEFAULT_PAYSTACK_CONFIG
+  );
+  const [referencesHash, setReferencesHash] = useState<Record<string, boolean>>(
+    {}
+  );
+  const initializePayment = usePaystackPayment(paystackConfig);
+
+  const [initiateDonationAuth, { isLoading: isInitiatingAuth }] =
+    useInitiateDonationAuthMutation();
+  const [initiateDonationUnauth, { isLoading: isInitiatingUnauth }] =
+    useInitiateDonationUnauthMutation();
+  const [verifyDonation, { isLoading: isVerifying }] =
+    useVerifyDonationMutation();
 
   const defaultValues: authDonationType = {
     frequency: "one-time",
     form_amount: { currency: "NGN", amount: "" },
+  };
+
+  const getDonationType = () => {
+    switch (id) {
+      case "widow-care":
+        return "widows-care";
+      case "mission-care":
+        return "mission-care";
+      default:
+        return "general";
+    }
   };
 
   const initialValues: unAuthDonationType = {
@@ -58,13 +103,13 @@ const GeneralDonation = () => {
     t_and_c: false,
   };
 
-  const authform = useForm<generalDonationType>({
+  const authform = useForm<authDonationType>({
     mode: "onBlur",
     defaultValues,
     resolver: zodResolver(authDonationSchema),
   });
 
-  const unauthform = useForm<generalDonationType>({
+  const unauthform = useForm<unAuthDonationType>({
     mode: "onBlur",
     defaultValues: initialValues,
     resolver: zodResolver(unAuthDonationSchema),
@@ -72,7 +117,6 @@ const GeneralDonation = () => {
 
   const {
     handleSubmit: unauthHandleSubmit,
-    watch,
     setError,
     reset: unauthReset,
     formState: {
@@ -80,36 +124,100 @@ const GeneralDonation = () => {
       isValid: unauthIsValid,
       isSubmitting: unauthIsSubmitting,
     },
+    getValues: getUnauthValues,
   } = unauthform;
 
   const {
     handleSubmit,
     reset,
-    formState: { isDirty, isValid, isSubmitting },
+    formState: { isSubmitting },
   } = authform;
-  const terms = watch("t_and_c");
+  // const terms = watch("t_and_c");
 
-  const onSubmit = async (data: generalDonationType) => {
-    if (!isAuth && !terms) {
-      setError("t_and_c", {
-        type: "manual",
-        message: "You must accept the terms and conditions",
-      });
+  // Effect to handle payment initialization and verification
+  useEffect(() => {
+    if (
+      paystackConfig.publicKey === "" ||
+      paystackConfig.reference === "" ||
+      referencesHash[paystackConfig.reference]
+    )
       return;
-    }
-    // submit the form data to the server
+
+    setPaystackLoading(true);
+    setReferencesHash((prev) => ({
+      ...prev,
+      [paystackConfig.reference]: true,
+    }));
+
+    initializePayment(
+      () => {
+        const verify = async () => {
+          try {
+            const email = getUnauthValues().email || user?.email || "";
+
+            // Verify payment
+            await verifyDonation({
+              txn_ref: paystackConfig.reference,
+            }).unwrap();
+
+            toast({
+              title: "Thank you!",
+              description: "Your donation was successful.",
+            });
+
+            setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+            reset();
+            unauthReset();
+            router.push(`?success=true&email=${email}`);
+          } catch (error) {
+            setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+            toast({
+              variant: "destructive",
+              title: "Payment failed",
+              description:
+                "Unfortunately, we couldn't process your payment. Please try again later.",
+            });
+          } finally {
+            setPaystackLoading(false);
+          }
+        };
+        verify();
+      },
+      () => {
+        setPaystackConfig(DEFAULT_PAYSTACK_CONFIG);
+        setPaystackLoading(false);
+      }
+    );
+  }, [
+    paystackConfig,
+    initializePayment,
+    toast,
+    router,
+    getUnauthValues,
+    user,
+    reset,
+    unauthReset,
+  ]);
+
+  const onAuthSubmit = async (data: authDonationType) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log(data);
-      router.push("?success=true");
-      toast({
-        title: "Thank you!",
-        description: "Your submission was successful.",
+      const res = await initiateDonationAuth({
+        amount: Number(data.form_amount.amount.replace(/,/g, "")),
+        currency: data.form_amount.currency,
+        frequency: data.frequency,
+        type: getDonationType(), // Adding required type field
+      }).unwrap();
+
+      const { txn_reference: txnRef, amount: amn } = res.data;
+
+      const config = getPaystackConfig({
+        amount: amn * 100,
+        email: user?.email || "",
+        reference: txnRef,
       });
-      reset();
-      unauthReset();
+
+      setPaystackConfig(config);
     } catch (error) {
-      // More specific error handling
       const errorMessage =
         error instanceof Error ? error.message : "Error submitting form";
       toast({
@@ -118,10 +226,74 @@ const GeneralDonation = () => {
       });
     }
   };
+
+  const onUnauthSubmit = async (data: unAuthDonationType) => {
+    if (data.t_and_c) {
+      if (!data.password) {
+        setError("password", {
+          message: "Please enter a password",
+        });
+        return;
+      }
+
+      if (!data.confirmPassword) {
+        setError("confirmPassword", {
+          message: "Required",
+        });
+        return;
+      }
+
+      if (data.password !== data.confirmPassword) {
+        setError("password", {
+          message: "Passwords dont match",
+        });
+        setError("confirmPassword", {
+          message: "Passwords dont match",
+        });
+        return;
+      }
+    }
+
+    try {
+      const res = await initiateDonationUnauth({
+        amount: Number(data.form_amount.amount.replace(/,/g, "")),
+        currency: data.form_amount.currency,
+        frequency: data.frequency,
+        email: data.email,
+        first_name: data.f_name,
+        last_name: data.l_name,
+        phone: `${data.phone.phone_code}${data.phone.phone_number}`,
+        createAccount: data.t_and_c,
+        password: "", // Add required fields even if empty
+        confirm_password: "",
+        type: getDonationType(), // Adding required type field
+      }).unwrap();
+
+      // Extract data from the response structure
+      const txnRef = res.data.donation.txn_reference;
+      const amn = res.data.donation.amount;
+
+      const config = getPaystackConfig({
+        amount: amn * 100,
+        email: data.email,
+        reference: txnRef,
+      });
+
+      setPaystackConfig(config);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Error submitting form";
+      toast({
+        title: "Submission Failed",
+        description: errorMessage,
+      });
+    }
+  };
+
   const unAuthForm = (
     <Form {...unauthform}>
       <form
-        onSubmit={unauthHandleSubmit(onSubmit)}
+        onSubmit={unauthHandleSubmit(onUnauthSubmit)}
         className="w-full space-y-5"
       >
         <FormRadio
@@ -180,17 +352,23 @@ const GeneralDonation = () => {
         <div className="flex items-center justify-end pt-6">
           <FormButton
             text="Donate now"
-            loadingText="Submitting..."
-            loading={unauthIsSubmitting}
+            loadingText="Processing..."
+            loading={
+              unauthIsSubmitting ||
+              isInitiatingUnauth ||
+              paystackLoading ||
+              isVerifying
+            }
             disabled={!unauthIsDirty || !unauthIsValid}
           />
         </div>
       </form>
     </Form>
   );
+
   const authForm = (
     <Form {...authform}>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5">
+      <form onSubmit={handleSubmit(onAuthSubmit)} className="w-full space-y-5">
         <FormRadio
           name="frequency"
           label="Donation frequency"
@@ -207,14 +385,17 @@ const GeneralDonation = () => {
         <div className="flex items-center justify-end pt-6">
           <FormButton
             text="Donate now"
-            loadingText="Submitting..."
-            loading={isSubmitting}
-            disabled={!isDirty || !isValid}
+            loadingText="Processing..."
+            loading={
+              isSubmitting || isInitiatingAuth || paystackLoading || isVerifying
+            }
+            // disabled={!isDirty || !isValid}
           />
         </div>
       </form>
     </Form>
   );
+
   return isAuth ? authForm : unAuthForm;
 };
 
