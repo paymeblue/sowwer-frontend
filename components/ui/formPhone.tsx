@@ -27,7 +27,7 @@ const FormPhone = ({ name, label, options }: Props) => {
   const errorMessage = phoneCodeError?.message || phoneNumberError?.message;
 
   return (
-    <div className="flex-1">
+    <div className="w-full flex-1">
       <FormLabel
         htmlFor={name.phone_number}
         className="mb-0.5 ms-2 font-montreal text-sm font-medium"
