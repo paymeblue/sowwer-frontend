@@ -35,6 +35,7 @@ const dadProject = api.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["Donations"],
     }),
   }),
   overrideExisting: true,

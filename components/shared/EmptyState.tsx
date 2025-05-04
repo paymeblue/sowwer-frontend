@@ -2,7 +2,7 @@ import { cn } from "@lib/cn";
 import { HTMLAttributes, ReactNode } from "react";
 
 interface Props {
-  image: ReactNode;
+  image?: ReactNode;
   title: string;
   desc?: string;
   className?: HTMLAttributes<HTMLDivElement>["className"];

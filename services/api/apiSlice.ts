@@ -111,6 +111,7 @@ const api = createApi({
     "Admin_Projects_Testimonies",
     "Testimonies",
     "Testimony",
+    "Donations",
   ],
   endpoints: (builder) => ({}),
 });
