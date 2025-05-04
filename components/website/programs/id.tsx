@@ -107,8 +107,8 @@ const Program = ({ data }: Props) => {
               {data.pillText}
             </h2>
           </div>
-          <div className="w-full max-w-[650px] space-y-4 md:space-y-8">
-            <div className="space-y-2">
+          <div className="w-full max-w-[650px] md:space-y-8">
+            <div className="mb-4 space-y-2">
               <h1 className="w-full max-w-[500px] font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl md:leading-tight lg:text-[45px] lg:leading-[48px]">
                 {data.hero_title}
               </h1>

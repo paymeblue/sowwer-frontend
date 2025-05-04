@@ -1,6 +1,6 @@
 "use client";
 
-import { DownloadIcon } from "@components/assets/icons";
+// import { DownloadIcon } from "@components/assets/icons";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -189,12 +189,12 @@ const AboutPage = () => {
             gap between those in need and those who are called to help, ensuring
             that every contribution makes a meaningful impact.
           </p>
-          <Link
+          {/* <Link
             href="/#"
             className="flex gap-2 font-montreal text-base leading-[19.2px] text-[#3466FF] underline underline-offset-2"
           >
             <DownloadIcon /> Download organization profile
-          </Link>
+          </Link> */}
         </div>
       </section>
       <section className="mx-4 mb-12 w-full max-w-[1560px] rounded-3xl bg-[#FCF9F2] px-4 py-10 sm:mx-6 md:py-16 lg:mx-auto">

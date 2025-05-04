@@ -2,6 +2,7 @@
 
 import { Button } from "@components/ui/button";
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { memo } from "react";
 import { Heart2 } from "react-iconly";
@@ -29,12 +30,14 @@ const JoinUs = ({ img, alt }: Props) => {
         <p className="text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl lg:text-[40px] lg:leading-[42px]">
           Join Us to Be the Light in Someone&apos;s Story
         </p>
-        <Button className="mt-4 w-max gap-2 border-input font-montreal text-black">
-          <span>
-            <Heart2 set="bold" size={19} />
-          </span>
-          <span>Donate now</span>
-        </Button>
+        <Link href="/donate/widow-care">
+          <Button className="mt-4 w-max gap-2 border-input font-montreal text-black">
+            <span>
+              <Heart2 set="bold" size={19} />
+            </span>
+            <span>Donate now</span>
+          </Button>
+        </Link>
       </div>
     </div>
   );

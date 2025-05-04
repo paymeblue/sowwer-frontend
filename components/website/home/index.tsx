@@ -25,6 +25,7 @@ import img9 from "public/images/img-9.png";
 import spiral from "public/images/spiral.png";
 import { Heart2 } from "react-iconly";
 import FAQs from "./FAQs";
+import Link from "next/link";
 
 const effectOfGiving = [
   {
@@ -49,6 +50,7 @@ const list = [
     img: img2,
     title: "WidowCare",
     desc: "Providing financial aid and support to help widows rebuild their lives.",
+    route: "/programs/widow-care",
   },
 
   {
@@ -56,18 +58,21 @@ const list = [
     img: img3,
     title: "The DAD Project",
     desc: "Giving orphans a future through educational sponsorships.",
+    route: "/programs/dad-project",
   },
   {
     key: "3",
     img: img4,
     title: "MissionCare",
     desc: "Supporting missionaries with resources to spread the gospel.",
+    route: "/programs/mission-care",
   },
   {
     key: "4",
     img: img5,
     title: "Partnerships",
     desc: "Collaborating with other ministries to support their projects.",
+    route: "/programs/partnerships",
   },
 ];
 
@@ -83,11 +88,11 @@ const HomePage = () => {
           className="mx-auto aspect-auto object-cover"
           priority
         />
-        <div className="absolute top-1/2 w-full max-w-[41.625rem] -translate-y-1/2 space-y-4 px-4 text-white sm:px-8 md:left-[3rem] md:space-y-6 lg:left-[6.25rem]">
+        <div className="absolute top-1/2 w-full max-w-[41.625rem] -translate-y-1/2 px-4 text-white sm:px-8 md:left-[3rem] md:space-y-6 lg:left-[6.25rem]">
           <h2 className="w-full max-w-[36.0625rem] font-aeonik text-3xl font-medium leading-tight sm:text-4xl md:text-5xl md:leading-[3.5rem] lg:text-[4.0625rem] lg:leading-[3.9375rem]">
             Transforming lives with love and faith-driven support
           </h2>
-          <div className="w-full max-w-[34.3125rem]">
+          <div className="mb-4 w-full max-w-[34.3125rem]">
             <p className="font-baskervville text-base italic leading-normal sm:text-lg md:text-xl md:leading-[1.875rem] lg:text-[1.25rem]">
               "Religion that God our Father accepts as pure and faultless is
               this: to look after orphans and widows in their distress and to
@@ -97,12 +102,16 @@ const HomePage = () => {
               — James 1:27 (NIV)
             </span>
           </div>
-          <Button className="gap-2 border-input font-montreal text-black">
-            <span>
-              <Heart2 set="bold" size={19} />
-            </span>
-            <span>Donate now</span>
-          </Button>
+          <Link href="/donate/widow-care">
+            <div className="mt-4">
+              <Button className="gap-2 border-input font-montreal text-black">
+                <span>
+                  <Heart2 set="bold" size={19} />
+                </span>
+                <span>Donate now</span>
+              </Button>
+            </div>
+          </Link>
         </div>
       </section>
       <section className="flex w-full flex-col items-center justify-center gap-8 px-4 py-12 sm:gap-12 sm:p-8 md:p-12 lg:flex-row lg:gap-24 lg:p-[6.25rem]">
@@ -122,11 +131,11 @@ const HomePage = () => {
             className="absolute -bottom-5 -right-5 z-[-1] h-16 w-16 md:-bottom-10 md:-right-10 md:h-auto md:w-auto"
           />
         </div>
-        <div className="w-full max-w-[41.625rem] space-y-4 md:space-y-6">
+        <div className="w-full max-w-[41.625rem] ">
           <h2 className="header w-full max-w-[38.5625rem] text-2xl font-medium sm:text-3xl md:text-4xl lg:text-[2.8125rem]">
             Perfectly positioned to lend a helping hand
           </h2>
-          <p className="font-montreal text-base leading-7 md:text-lg md:leading-8">
+          <p className="my-6 font-montreal text-base leading-7 md:text-lg md:leading-8">
             SOOWER is a nonprofit Christian organization dedicated to making a
             significant difference in the lives of orphans, widows and
             missionaries. We believe that we are all called to be a beacon of
@@ -137,15 +146,17 @@ const HomePage = () => {
             feet of Christ, spreading love, kindness, and assistance to those
             who require it most.
           </p>
-          <Button
-            variant="outline"
-            className="group gap-2 border-input font-montreal text-black"
-          >
-            <span>Learn more</span>
-            <span className="transition-transform duration-300 group-hover:right-4">
-              <ArrowRight size={14} />
-            </span>
-          </Button>
+          <Link href="/about-us">
+            <Button
+              variant="outline"
+              className="group gap-2 border-input font-montreal text-black"
+            >
+              <span>Learn more</span>
+              <span className="transition-transform duration-300 group-hover:right-4">
+                <ArrowRight size={14} />
+              </span>
+            </Button>
+          </Link>
         </div>
       </section>
       <section
@@ -168,8 +179,8 @@ const HomePage = () => {
                   className="h-auto w-full"
                 />
               </div>
-              <div className="space-y-6 p-6 pt-0 md:space-y-16">
-                <div className="space-y-1">
+              <div className=" p-6 pt-0 md:space-y-16">
+                <div className="mb-8 space-y-1">
                   <h4 className="font-aeonik text-xl font-medium leading-[1.725rem] text-black md:text-2xl">
                     {item.title}
                   </h4>
@@ -177,16 +188,18 @@ const HomePage = () => {
                     {item.desc}
                   </p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="md"
-                  className="group gap-2 border-input font-montreal text-black"
-                >
-                  <span>Learn more</span>
-                  <span className="transition-transform duration-300 group-hover:right-4">
-                    <ArrowRight size={14} />
-                  </span>
-                </Button>
+                <Link href={item.route} className="relative">
+                  <Button
+                    variant="outline"
+                    size="md"
+                    className="group gap-2 border-input font-montreal text-black"
+                  >
+                    <span>Learn more</span>
+                    <span className="transition-transform duration-300 group-hover:right-4">
+                      <ArrowRight size={14} />
+                    </span>
+                  </Button>
+                </Link>
               </div>
             </li>
           ))}

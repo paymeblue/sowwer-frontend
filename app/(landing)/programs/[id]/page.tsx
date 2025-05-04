@@ -5,6 +5,7 @@ import { formatText } from "@lib/functions";
 import { ArrowRight } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import frame1 from "public/images/frame-1.png";
 import frame2 from "public/images/frame-2.png";
 import frame3 from "public/images/frame-3.png";
@@ -41,7 +42,7 @@ const programs: Programs = {
   "widow-care": {
     pillColor: "#2F085A",
     pillShadow: "shadow-widow_care",
-    donateRoute: "/widows-care",
+    donateRoute: "/widow-care",
     pillText: "WidowCare",
     hero_title: "Helping widows rebuild their lives",
     hero_subtitle:
@@ -156,15 +157,17 @@ const programs: Programs = {
                 </span>
               </li>
             </ul>
-            <Button
-              variant="outline"
-              className="w-full gap-2 border-input font-montreal text-black md:w-auto"
-            >
-              <span>Donate now</span>
-              <span>
-                <ArrowRight size={16} />
-              </span>
-            </Button>
+            <Link href="/donate/dad-project">
+              <Button
+                variant="outline"
+                className="w-full gap-2 border-input font-montreal text-black md:w-auto"
+              >
+                <span>Donate now</span>
+                <span>
+                  <ArrowRight size={16} />
+                </span>
+              </Button>
+            </Link>
           </div>
           <div className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8">
             <div className="mb-3">
@@ -207,15 +210,17 @@ const programs: Programs = {
                 </span>
               </li>
             </ul>
-            <Button
-              variant="outline"
-              className="w-full gap-2 border-input font-montreal text-black md:w-auto"
-            >
-              <span>Donate now</span>
-              <span>
-                <ArrowRight size={16} />
-              </span>
-            </Button>
+            <Link href="/donate/dad-project">
+              <Button
+                variant="outline"
+                className="w-full gap-2 border-input font-montreal text-black md:w-auto"
+              >
+                <span>Donate now</span>
+                <span>
+                  <ArrowRight size={16} />
+                </span>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -252,7 +257,7 @@ const programs: Programs = {
   "mission-care": {
     pillColor: "#3466FF",
     pillShadow: "shadow-mission_care",
-    donateRoute: "/missions-care",
+    donateRoute: "/mission-care",
     pillText: "MissionCare",
     hero_title: "Supporting missionaries to spread the gospel",
     hero_subtitle:
