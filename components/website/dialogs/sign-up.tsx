@@ -10,9 +10,11 @@ import FormInput from "@components/ui/formInput";
 import FormPhone from "@components/ui/formPhone";
 import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useDonorSignin from "@hooks/auth/useDonorSignin";
 import Link from "next/link";
-import { Dispatch, Fragment, ReactNode, SetStateAction } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
+import { useDonorRegisterMutation } from "services/auth";
 import { z } from "zod";
 
 const options = [
@@ -78,7 +80,10 @@ const SignUp = ({
   setOpenLogin,
   setSuccessModal,
 }: Props) => {
+  const [signupDonor, { isLoading }] = useDonorRegisterMutation();
+  const { loginDonor, loading: loginLoading } = useDonorSignin();
   const { toast } = useToast();
+  // const router = useRouter();
 
   const form = useForm({
     mode: "onBlur",
@@ -96,39 +101,49 @@ const SignUp = ({
     resolver: zodResolver(schema),
   });
 
-  const {
-    handleSubmit,
-    reset,
-    formState: { isDirty, isValid, isSubmitting },
-  } = form;
+  const { handleSubmit, reset } = form;
 
   const onSubmit = async (values: FormType) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(values);
-      setTitle("Sign Up Successful!");
-      setDesc(
-        <Fragment>
-          Your account has been successfully created. A verification link has
-          been sent to&nbsp;
-          <strong className="font-medium text-body-1">
-            favourrrm@gmail.com.&nbsp;
-          </strong>
-          Please check your inbox to activate your account.
-        </Fragment>
+      await signupDonor({
+        email: values.email,
+        firstName: values.first_name,
+        lastName: values.last_name,
+        phone: values.phone.phone_number,
+        password: values.password,
+        confirm_password: values.c_password,
+      }).unwrap();
+      await loginDonor(
+        {
+          email: values.email,
+          password: values.password,
+        },
+        { redirect: true }
       );
+      setTitle("Sign Up Successful!");
+      // setDesc(
+      //   <Fragment>
+      //     Your account has been successfully created. A verification link has
+      //     been sent to&nbsp;
+      //     <strong className="font-medium text-body-1">
+      //       {values.email}&nbsp;
+      //     </strong>
+      //     Please check your inbox to activate your account.
+      //   </Fragment>
+      // );
       setSuccessModal(true);
       setOpen(false);
       reset();
     } catch (error) {
       // More specific error handling
-      const errorMessage =
-        error instanceof Error ? error.message : "Error submitting form";
-      console.log(errorMessage);
+      const errorMessage = error
+        ? (error as Error)?.message
+        : "An error occured while signing up.";
+      // console.log(errorMessage);
       toast({
         variant: "destructive",
         title: "Error!",
-        description: "An error occured while signing up.",
+        description: errorMessage,
       });
     }
   };
@@ -217,9 +232,9 @@ const SignUp = ({
             </div>
             <FormButton
               text="Sign up"
-              loading={isSubmitting}
+              loading={isLoading || loginLoading}
               loadingText="Submitting..."
-              disabled={!isDirty || !isValid}
+              // disabled={!isValid}
               className="w-full"
             />
             <div className="mx-auto my-1 w-full text-center">
