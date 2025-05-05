@@ -112,7 +112,7 @@ const Navbar = () => {
           setSuccessModal={setSuccessModal}
         />
       ) : null}
-      <header className="fixed left-1/2 top-6 z-[1000] mx-auto w-[95%] max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-4 pr-2 text-body-1 shadow-navbar md:w-4/5 md:pl-6">
+      <header className="fixed left-1/2 top-6 z-[20] mx-auto w-[95%] max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-4 pr-2 text-body-1 shadow-navbar md:w-4/5 md:pl-6">
         <nav className="flex items-center justify-between md:grid md:grid-cols-6 md:gap-4">
           <div className="flex-shrink-0 md:col-span-1">
             <Link href="/">
