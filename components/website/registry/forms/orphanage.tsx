@@ -9,30 +9,28 @@ import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { orphanFormSchema, OrphanFormValues } from "lib/validations/registry";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useOrphanageMutation } from "services/join-soower-registry";
+import { OrphanageRegistrationRequest } from "services/join-soower-registry/typings";
+import statesInNigeria from "@lib/NigeriaStates";
 
-const stateOptions = [
-  {
-    label: "Abia",
-    value: "abia",
-  },
-  {
-    label: "Adamawa",
-    value: "adamawa",
-  },
-];
 const countryCodes = [
   {
     label: "+234",
     value: "+234",
   },
-  {
-    label: "+1",
-    value: "+1",
-  },
 ];
 
-const OrphanageForm = () => {
+const OrphanageForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { toast } = useToast();
+  const [joinOrphanageRequest, { isLoading, isSuccess }] =
+    useOrphanageMutation();
+
+  useEffect(() => {
+    if (isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [isSuccess, onSuccess]);
 
   const form = useForm<OrphanFormValues>({
     mode: "onBlur",
@@ -52,28 +50,70 @@ const OrphanageForm = () => {
     },
     resolver: zodResolver(orphanFormSchema),
   });
-  const {
-    handleSubmit,
-    reset,
-    formState: { isDirty, isValid, isSubmitting },
-  } = form;
+
+  const { handleSubmit, reset } = form;
 
   const onSubmit = async (values: OrphanFormValues) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(values);
+    const {
+      name,
+      admin_name,
+      state,
+      email,
+      phone,
+      address,
+      no_of_orphans,
+      cac_doc,
+      t_and_c,
+    } = values;
+
+    if (!t_and_c) {
       toast({
-        title: "Thank you for joining our registry!",
-        description: "Your submission was successful.",
+        variant: "destructive",
+        title: "You must accept the declaration.",
+        duration: 2000,
+      });
+      return;
+    }
+
+    if (!cac_doc) {
+      toast({
+        variant: "destructive",
+        title: "CAC document is required.",
+        duration: 2000,
+      });
+      return;
+    }
+
+    try {
+      const data: OrphanageRegistrationRequest = {
+        address,
+        cac_document: cac_doc,
+        declaration: t_and_c,
+        email,
+        name,
+        number_of_orphans: no_of_orphans,
+        phone: phone.phone_code + phone.phone_number,
+        location: state,
+        administrator_name: admin_name,
+      };
+
+      await joinOrphanageRequest(data).unwrap();
+
+      toast({
+        title: "Orphanage registration successful, we will be in touch.",
+        duration: 2500,
       });
       reset();
-    } catch (error) {
-      // More specific error handling
-      const errorMessage =
-        error instanceof Error ? error.message : "Error submitting form";
+    } catch (err: any) {
       toast({
-        title: "Submission Failed",
-        description: errorMessage,
+        variant: "destructive",
+        title: "Unable to complete registration.",
+        description:
+          typeof err === "string"
+            ? err
+            : err?.data?.message ||
+              "There seems to be a problem with your registration, please try again later.",
+        duration: 2500,
       });
     }
   };
@@ -99,7 +139,14 @@ const OrphanageForm = () => {
               placeholder: "Administrator's name",
             }}
           />
-          <FormSelect name="state" label="State" options={stateOptions} />
+          <FormSelect
+            name="state"
+            label="State"
+            options={statesInNigeria.map((state) => ({
+              label: state,
+              value: state,
+            }))}
+          />
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
           <FormInput
@@ -140,14 +187,13 @@ const OrphanageForm = () => {
         />
         <FormCheckbox
           name="t_and_c"
-          label="I declare that all information by me is true, and I can be held liable legally if it is found that I declared false information, and also that registration doesn’t guarantee that I would benefit from Soower."
+          label="I declare that all information by me is true, and I can be held liable legally if it is found that I declared false information, and also that registration doesn't guarantee that I would benefit from Soower."
         />
         <div className="flex items-center justify-end pt-6">
           <FormButton
             text="Submit"
             loadingText="Submitting..."
-            loading={isSubmitting}
-            disabled={!isDirty || !isValid}
+            loading={isLoading}
           />
         </div>
       </form>
