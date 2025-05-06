@@ -11,6 +11,13 @@ import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { missionFormSchema, MissionFormValues } from "lib/validations/registry";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useMissionaryMutation } from "services/join-soower-registry";
+import {
+  MissionaryJoinSoowerRequest1,
+  MissionaryJoinSoowerRequest2,
+} from "services/typings";
+import statesInNigeria from "@lib/NigeriaStates";
 
 const missionaryType = [
   {
@@ -22,24 +29,10 @@ const missionaryType = [
     value: "aspiring-missionary",
   },
 ];
-const stateOptions = [
-  {
-    label: "Abia",
-    value: "abia",
-  },
-  {
-    label: "Adamawa",
-    value: "adamawa",
-  },
-];
 const countryCodes = [
   {
     label: "+234",
     value: "+234",
-  },
-  {
-    label: "+1",
-    value: "+1",
   },
 ];
 const intervalOptions = [
@@ -52,8 +45,16 @@ const intervalOptions = [
     value: "months",
   },
 ];
-const MissionForm = () => {
+const MissionForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { toast } = useToast();
+  const [joinMissionaryRegistry, { isLoading, isSuccess }] =
+    useMissionaryMutation();
+
+  useEffect(() => {
+    if (isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [isSuccess, onSuccess]);
 
   const form = useForm<MissionFormValues>({
     mode: "onBlur",
@@ -83,28 +84,99 @@ const MissionForm = () => {
     },
     resolver: zodResolver(missionFormSchema),
   });
-  const {
-    handleSubmit,
-    reset,
-    formState: { isDirty, isValid, isSubmitting },
-  } = form;
+  const { handleSubmit, reset } = form;
 
   const onSubmit = async (values: MissionFormValues) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(values);
+    const {
+      missionary_type,
+      name,
+      state,
+      dur,
+      service_area,
+      email,
+      phone,
+      nok_name,
+      nok,
+      address,
+      previous_exp,
+      church_affliate,
+      t_and_c,
+    } = values;
+
+    if (!t_and_c) {
       toast({
-        title: "Thank you for joining our registry!",
-        description: "Your submission was successful.",
+        variant: "destructive",
+        title: "You must accept the declaration.",
+        duration: 2000,
+      });
+      return;
+    }
+
+    try {
+      // Convert interval values to expected API format
+      const timestampMap: Record<string, "year" | "month"> = {
+        years: "year",
+        months: "month",
+      };
+
+      if (missionary_type === "aspiring-missionary") {
+        // For new/aspiring missionaries (similar to NewMissionaryForm.tsx)
+        const data = {
+          address,
+          born_again: true, // Assuming born again since it's not in the form
+          christianity: true, // Assuming Christian since it's not in the form
+          church: church_affliate,
+          declaration: t_and_c,
+          email,
+          name,
+          occupation: "", // Not in the form but required by API
+          phone: phone.phone_code + phone.phone_number,
+          reason_about: previous_exp,
+          status: "new",
+          next_of_kin_name: nok_name,
+          next_of_kin_phone: nok.phone_code + nok.phone_number,
+          state_of_origin: state,
+        } as MissionaryJoinSoowerRequest1;
+
+        await joinMissionaryRegistry(data).unwrap();
+      } else {
+        // For existing/serving missionaries (similar to ExistingMissionaryForm.tsx)
+        const data = {
+          address,
+          affiliated_to_church: church_affliate ? true : false,
+          email,
+          phone: phone.phone_code + phone.phone_number,
+          service_area,
+          declaration: t_and_c,
+          status: "existing",
+          name,
+          duration: Number(dur.period),
+          timestamp: timestampMap[dur.interval],
+          reason_about: previous_exp,
+          affiliated_church_name: church_affliate,
+          next_of_kin_name: nok_name,
+          next_of_kin_phone: nok.phone_code + nok.phone_number,
+          state_of_origin: state,
+        } as MissionaryJoinSoowerRequest2;
+
+        await joinMissionaryRegistry(data).unwrap();
+      }
+
+      toast({
+        title: "Missionary registration successful",
+        description: "We will be in touch soon.",
+        duration: 2500,
       });
       reset();
-    } catch (error) {
-      // More specific error handling
-      const errorMessage =
-        error instanceof Error ? error.message : "Error submitting form";
+    } catch (err) {
       toast({
-        title: "Submission Failed",
-        description: errorMessage,
+        variant: "destructive",
+        title: "Unable to complete registration.",
+        description: `${
+          err ||
+          "There seems to be a problem with your registration, please try again later."
+        }`,
+        duration: 2500,
       });
     }
   };
@@ -131,7 +203,10 @@ const MissionForm = () => {
           <FormSelect
             name="state"
             label="State of origin"
-            options={stateOptions}
+            options={statesInNigeria.map((state) => ({
+              label: state,
+              value: state,
+            }))}
           />
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
@@ -210,14 +285,14 @@ const MissionForm = () => {
         />
         <FormCheckbox
           name="t_and_c"
-          label="I declare that all information by me is true, and I can be held liable legally if it is found that I declared false information, and also that registration doesn’t guarantee that I would benefit from Soower."
+          label="I declare that all information by me is true, and I can be held liable legally if it is found that I declared false information, and also that registration doesn't guarantee that I would benefit from Soower."
         />
         <div className="flex items-center justify-end pt-6">
           <FormButton
             text="Submit"
             loadingText="Submitting..."
-            loading={isSubmitting}
-            disabled={!isDirty || !isValid}
+            loading={isLoading}
+            // disabled={!isDirty || !isValid}
           />
         </div>
       </form>
