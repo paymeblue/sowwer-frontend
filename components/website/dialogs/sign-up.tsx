@@ -86,7 +86,7 @@ const SignUp = ({
   // const router = useRouter();
 
   const form = useForm({
-    mode: "onBlur",
+    // mode: "onBlur",
     defaultValues: {
       first_name: "",
       last_name: "",
@@ -150,7 +150,7 @@ const SignUp = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="rounded-3xl">
+      <DialogContent className="max-h-[100dvh] overflow-y-auto rounded-3xl">
         <div className="my-4">
           <DialogTitle className="m-0 p-0 text-center font-aeonik text-[22px] font-medium leading-[-0.12px] text-black">
             Sign Up
@@ -161,7 +161,7 @@ const SignUp = ({
         </div>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="flex w-full items-center justify-center gap-4">
+            <div className="flex w-full flex-col gap-4 md:flex-row lg:items-center lg:justify-center">
               <FormInput
                 name="first_name"
                 label="First name"
@@ -192,7 +192,7 @@ const SignUp = ({
               label="Phone Number"
               options={options}
             />
-            <div className="flex w-full items-center justify-center gap-4">
+            <div className="flex w-full flex-col gap-4 md:flex-row lg:items-center lg:justify-center">
               <FormInput
                 name="password"
                 type="password"

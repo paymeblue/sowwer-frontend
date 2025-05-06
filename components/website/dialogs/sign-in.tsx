@@ -57,7 +57,7 @@ const SignIn = ({
   const { loginDonor, loading } = useDonorSignin();
 
   const form = useForm({
-    mode: "onBlur",
+    // mode: "onBlur",
     defaultValues: {
       email: "",
       password: "",
@@ -110,7 +110,7 @@ const SignIn = ({
   );
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="rounded-3xl">
+      <DialogContent className="max-h-[100dvh] overflow-y-auto rounded-3xl">
         <div className="my-4">
           <DialogTitle className="m-0 p-0 text-center font-aeonik text-[22px] font-medium leading-[-0.12px] text-black">
             Log In

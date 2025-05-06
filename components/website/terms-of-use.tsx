@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Terms = () => {
   return (
-    <section className="mx-auto max-w-[1560px] space-y-6 px-36 py-40">
+    <section className="mx-auto max-w-[1560px] space-y-6 px-4 py-40 lg:px-36">
       <div>
         <h1 className="mb-6 font-aeonik text-[42px] font-medium leading-[48px] text-black">
           Terms of Use
