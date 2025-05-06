@@ -54,7 +54,7 @@ const FormSelect = ({ name, label, options, className }: Props) => {
                 <SelectValue placeholder="--Select--" />
               </SelectTrigger>
             </FormControl>
-            <SelectContent>
+            <SelectContent className="max-h-[30vh] overflow-y-auto">
               {options.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}

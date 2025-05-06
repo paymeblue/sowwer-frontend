@@ -10,25 +10,15 @@ import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { widowFormSchema, WidowFormValues } from "lib/validations/registry";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useWidowMutation } from "services/join-soower-registry";
+import { WidowJoinSoowerRequest2 } from "services/typings";
+import statesInNigeria from "@lib/NigeriaStates";
 
-const stateOptions = [
-  {
-    label: "Abia",
-    value: "abia",
-  },
-  {
-    label: "Adamawa",
-    value: "adamawa",
-  },
-];
 const countryCodes = [
   {
     label: "+234",
     value: "+234",
-  },
-  {
-    label: "+1",
-    value: "+1",
   },
 ];
 const intervalOptions = [
@@ -41,8 +31,15 @@ const intervalOptions = [
     value: "months",
   },
 ];
-const WidowForm = () => {
+const WidowForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { toast } = useToast();
+  const [joinWidowRegistry, { isLoading, isSuccess }] = useWidowMutation();
+
+  useEffect(() => {
+    if (isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [isSuccess, onSuccess]);
 
   const form = useForm<WidowFormValues>({
     mode: "onBlur",
@@ -50,7 +47,7 @@ const WidowForm = () => {
       name: "",
       state: "",
       dur: {
-        interval: "years",
+        interval: "months",
         period: "",
       },
       dob: new Date(),
@@ -73,25 +70,83 @@ const WidowForm = () => {
   const {
     handleSubmit,
     reset,
-    formState: { isDirty, isValid, isSubmitting },
+    // formState: { isDirty, isValid },
   } = form;
 
   const onSubmit = async (values: WidowFormValues) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(values);
+    const {
+      name,
+      state,
+      dur,
+      dob,
+      email,
+      phone,
+      address,
+      no_of_children,
+      nok_name,
+      nok,
+      t_and_c,
+    } = values;
+
+    if (!t_and_c) {
       toast({
-        title: "Thank you for joining our registry!",
-        description: "Your submission was successful.",
+        variant: "destructive",
+        title: "You must accept the declaration.",
+        duration: 2000,
+      });
+      return;
+    }
+
+    try {
+      // Calculate age from date of birth
+      const today = new Date();
+      const birthDate = new Date(dob);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      // Map interval values to expected API format
+      const timestampMap: Record<string, "year" | "month"> = {
+        years: "year",
+        months: "month",
+      };
+
+      const data = {
+        address: address,
+        age: age,
+        christianity: true, // Assuming all are Christians or set default
+        declaration: t_and_c,
+        duration: Number(dur.period),
+        timestamp: timestampMap[dur.interval],
+        email: email,
+        kids: no_of_children && Number(no_of_children) > 0,
+        name: name,
+        phone: phone.phone_code + phone.phone_number,
+        registrar_name: name,
+        registrar_email: email,
+        registrar_phone: phone.phone_code + phone.phone_number,
+        next_of_kin_name: nok_name,
+        next_of_kin_phone: nok.phone_code + nok.phone_number,
+        state_of_origin: state,
+      } as WidowJoinSoowerRequest2;
+
+      await joinWidowRegistry(data).unwrap();
+      toast({
+        title: "Widow registration successful",
+        duration: 2500,
       });
       reset();
-    } catch (error) {
-      // More specific error handling
-      const errorMessage =
-        error instanceof Error ? error.message : "Error submitting form";
+    } catch (err) {
       toast({
-        title: "Submission Failed",
-        description: errorMessage,
+        variant: "destructive",
+        title: "Unable to complete registration.",
+        description: `${
+          err ||
+          "There seems to be a problem with your registration, please try again later."
+        }`,
+        duration: 2500,
       });
     }
   };
@@ -113,7 +168,10 @@ const WidowForm = () => {
           <FormSelect
             name="state"
             label="State of origin"
-            options={stateOptions}
+            options={statesInNigeria.map((state) => ({
+              label: state,
+              value: state,
+            }))}
           />
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
@@ -122,7 +180,7 @@ const WidowForm = () => {
               interval: "dur.interval",
               period: "dur.period",
             }}
-            label="How long have you a missionary?"
+            label="How long have you been a widow?"
             options={intervalOptions}
           />
           <FormDate
@@ -183,14 +241,14 @@ const WidowForm = () => {
         </div>
         <FormCheckbox
           name="t_and_c"
-          label="I declare that all information by me is true, and I can be held liable legally if it is found that I declared false information, and also that registration doesn’t guarantee that I would benefit from Soower."
+          label="I declare that all information by me is true, and I can be held liable legally if it is found that I declared false information, and also that registration doesn't guarantee that I would benefit from Soower."
         />
         <div className="flex items-center justify-end pt-6">
           <FormButton
             text="Submit"
             loadingText="Submitting..."
-            loading={isSubmitting}
-            disabled={!isDirty || !isValid}
+            loading={isLoading}
+            // disabled={!isDirty || !isValid}
           />
         </div>
       </form>

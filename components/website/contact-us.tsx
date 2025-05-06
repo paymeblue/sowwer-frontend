@@ -13,6 +13,8 @@ import FormTextArea from "@components/ui/formTextArea";
 import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import Script from "next/script";
+import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -41,6 +43,7 @@ type FormType = z.infer<typeof schema>;
 
 const ContactUs = () => {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormType>({
     defaultValues: {
@@ -57,17 +60,37 @@ const ContactUs = () => {
   const {
     handleSubmit,
     reset,
-    formState: { isDirty, isValid, isSubmitting },
+    formState: { isDirty, isValid },
   } = form;
-  const onSubmit = async (values: FormType) => {
+
+  const onSubmit = async (values: FormType, e?: any) => {
+    const formData = new FormData(e?.target);
+    const { name, email, phone, message } = values;
+
+    formData.append("fullName", name);
+    formData.append("email", email);
+    formData.append("countryCode", phone.phone_code);
+    formData.append("phoneNumber", phone.phone_number);
+    formData.append("message", message);
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(values);
-      toast({
-        title: "Thank you for reaching out!",
-        description: "Your message has been sent successfully.",
+      setIsLoading(true);
+      const res = await fetch("/api/contact-us", {
+        method: "POST",
+        body: formData,
       });
-      reset();
+
+      const result = await res.json();
+
+      if (res.ok) {
+        toast({
+          title: "Thank you for reaching out!",
+          description: "Your message has been sent successfully.",
+        });
+        reset();
+      } else {
+        throw new Error(result);
+      }
     } catch (error) {
       // More specific error handling
       const errorMessage =
@@ -75,137 +98,159 @@ const ContactUs = () => {
       console.log(errorMessage);
       toast({
         variant: "destructive",
-        title: "Thank you for reaching out!",
-        description: "Your message has been sent successfully.",
+        title: "Failed to send message",
+        description:
+          "There was an error sending your message. Please try again later.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
-  return (
-    <section className="space-y-8 p-6 max-lg:mt-20 sm:space-y-12 sm:p-10 md:space-y-16 md:p-20 lg:p-40">
-      <div className="mx-auto w-full max-w-[739px] md:mx-0">
-        <div className="mb-4 sm:mb-8">
-          <p className="w-max rounded-full rounded-br-sm bg-[#FCF9F2] px-4 py-3 font-aeonik text-2xl font-bold leading-tight tracking-[-0.12px] text-black sm:px-6 sm:py-4 sm:text-3xl md:px-8 md:py-6 md:text-4xl md:leading-[61px] lg:text-[45px]">
-            Contact Us.
-          </p>
-          <p className="mt-4 font-montreal text-base leading-normal text-body-2 sm:mt-8 sm:text-lg sm:leading-[26px]">
-            Want to make an inquiry or give us some feedback? You can reach us
-            through any of our channels below or fill out the form, and we'll be
-            in touch within 24hours.
-          </p>
-        </div>
 
-        <div className="flex w-full flex-col items-start justify-between gap-6 md:flex-row md:gap-4">
-          <div className="space-y-2">
-            <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
-              SOCIAL MEDIA
-            </h5>
-            <p className="font-montreal text-[15px] text-body-2">
-              Follow our social profiles:
+  return (
+    <Fragment>
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async={true}
+        defer={true}
+      />
+      <section className="space-y-8 p-6 max-lg:mt-20 sm:space-y-12 sm:p-10 md:space-y-16 md:p-20 lg:p-40">
+        <div className="mx-auto w-full max-w-[739px] md:mx-0">
+          <div className="mb-4 sm:mb-8">
+            <p className="w-max rounded-full rounded-br-sm bg-[#FCF9F2] px-4 py-3 font-aeonik text-2xl font-bold leading-tight tracking-[-0.12px] text-black sm:px-6 sm:py-4 sm:text-3xl md:px-8 md:py-6 md:text-4xl md:leading-[61px] lg:text-[45px]">
+              Contact Us.
             </p>
-            <div className="flex gap-4">
-              <Link
-                target="_blank"
-                className="rounded-full bg-[#75808A] p-4"
-                href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
-              >
-                <InstagramIcon />
-              </Link>
-              <Link
-                target="_blank"
-                className="rounded-full bg-[#75808A] p-4"
-                href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
-              >
-                <FacebookIcon />
-              </Link>
-              <Link
-                target="_blank"
-                className="rounded-full bg-[#75808A] p-4"
-                href="https://www.linkedin.com/company/soower"
-              >
-                <LinkedinIcon />
-              </Link>
-            </div>
+            <p className="mt-4 font-montreal text-base leading-normal text-body-2 sm:mt-8 sm:text-lg sm:leading-[26px]">
+              Want to make an inquiry or give us some feedback? You can reach us
+              through any of our channels below or fill out the form, and we'll
+              be in touch within 24hours.
+            </p>
           </div>
-          <div className="space-y-2">
-            <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
-              PHONE
-            </h5>
-            <p className="font-montreal text-[15px] text-body-2">
-              Dial our numbers:
-            </p>
-            <div className="flex flex-col gap-0">
-              <Link
-                target="_blank"
-                className="font-montreal text-[15px] font-medium text-accent"
-                href="tel:(+234)9055553431"
-              >
-                (+234) 905 555 3431
-              </Link>
-              <Link
-                target="_blank"
-                className="font-montreal text-[15px] font-medium text-accent"
-                href="tel:(+234)7076016055"
-              >
-                (+234) 707 601 6055
-              </Link>
+
+          <div className="flex w-full flex-col items-start justify-between gap-6 md:flex-row md:gap-4">
+            <div className="space-y-2">
+              <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
+                SOCIAL MEDIA
+              </h5>
+              <p className="font-montreal text-[15px] text-body-2">
+                Follow our social profiles:
+              </p>
+              <div className="flex gap-4">
+                <Link
+                  target="_blank"
+                  className="rounded-full bg-[#75808A] p-4"
+                  href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
+                >
+                  <InstagramIcon />
+                </Link>
+                <Link
+                  target="_blank"
+                  className="rounded-full bg-[#75808A] p-4"
+                  href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
+                >
+                  <FacebookIcon />
+                </Link>
+                <Link
+                  target="_blank"
+                  className="rounded-full bg-[#75808A] p-4"
+                  href="https://www.linkedin.com/company/soower"
+                >
+                  <LinkedinIcon />
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="space-y-2">
-            <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
-              EMAIL
-            </h5>
-            <p className="font-montreal text-[15px] text-body-2">
-              Leave us an email:
-            </p>
-            <div className="flex flex-col gap-0">
-              <Link
-                target="_blank"
-                className="font-montreal text-[15px] font-medium text-accent"
-                href="mailto:info@soower.org"
-              >
-                info@soower.org
-              </Link>
+            <div className="space-y-2">
+              <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
+                PHONE
+              </h5>
+              <p className="font-montreal text-[15px] text-body-2">
+                Dial our numbers:
+              </p>
+              <div className="flex flex-col gap-0">
+                <Link
+                  target="_blank"
+                  className="font-montreal text-[15px] font-medium text-accent"
+                  href="tel:(+234)9055553431"
+                >
+                  (+234) 905 555 3431
+                </Link>
+                <Link
+                  target="_blank"
+                  className="font-montreal text-[15px] font-medium text-accent"
+                  href="tel:(+234)7076016055"
+                >
+                  (+234) 707 601 6055
+                </Link>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
+                EMAIL
+              </h5>
+              <p className="font-montreal text-[15px] text-body-2">
+                Leave us an email:
+              </p>
+              <div className="flex flex-col gap-0">
+                <Link
+                  target="_blank"
+                  className="font-montreal text-[15px] font-medium text-accent"
+                  href="mailto:info@soower.org"
+                >
+                  info@soower.org
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="w-full rounded-lg bg-[#F7F8FA] p-4 sm:rounded-xl sm:p-8 md:rounded-[2rem] md:p-12 lg:p-20">
-        <div className="mx-auto w-full max-w-3xl rounded-xl bg-white px-4 py-4 shadow-[0px_4px_20px_0px_#0000000F] sm:px-6 sm:py-6 md:px-8">
-          <Form {...form}>
-            <form
-              className="space-y-4 sm:space-y-5"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <FormInput name="name" label="Name" />
-              <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
-                <FormInput
-                  name="email"
-                  label="Email Address"
-                  inputProps={{ type: "email" }}
+        <div className="w-full rounded-lg bg-[#F7F8FA] p-4 sm:rounded-xl sm:p-8 md:rounded-[2rem] md:p-12 lg:p-20">
+          <div className="mx-auto w-full max-w-3xl rounded-xl bg-white px-4 py-4 shadow-[0px_4px_20px_0px_#0000000F] sm:px-6 sm:py-6 md:px-8">
+            <Form {...form}>
+              <form
+                className="space-y-4 sm:space-y-5"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <FormInput name="name" label="Name" />
+                <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
+                  <FormInput
+                    name="email"
+                    label="Email Address"
+                    inputProps={{ type: "email" }}
+                  />
+                  <FormPhone
+                    name={{
+                      phone_code: "phone.phone_code",
+                      phone_number: "phone.phone_number",
+                    }}
+                    label="Phone Number"
+                    options={options}
+                  />
+                </div>
+                <FormTextArea label="Message" name="message" />
+
+                <div
+                  className="cf-turnstile mt-4"
+                  data-theme="light"
+                  data-retry-interval={3000}
+                  data-refresh-expired="manual"
+                  data-sitekey={
+                    process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
+                  }
                 />
-                <FormPhone
-                  name={{
-                    phone_code: "phone.phone_code",
-                    phone_number: "phone.phone_number",
-                  }}
-                  label="Phone Number"
-                  options={options}
-                />
-              </div>
-              <FormTextArea label="Message" name="message" />
-              <div className="justify-self-end pt-4 sm:pt-6">
-                <FormButton
-                  loading={isSubmitting}
-                  loadingText="Submitting..."
-                  text="Submit"
-                  disabled={!isDirty || !isValid}
-                />
-              </div>
-            </form>
-          </Form>
+
+                <div className="justify-self-end pt-4 sm:pt-6">
+                  <FormButton
+                    loading={isLoading}
+                    loadingText="Submitting..."
+                    text="Submit"
+                    disabled={!isDirty || !isValid}
+                  />
+                </div>
+              </form>
+            </Form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Fragment>
   );
 };
 
