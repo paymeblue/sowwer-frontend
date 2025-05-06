@@ -12,6 +12,7 @@ import Link from "next/link";
 // import brand6 from "public/images/brand-6.png";
 import { ReactNode } from "react";
 import { Heart2 } from "react-iconly";
+import Slider from "./slider";
 // import Slider from "./slider";
 
 export type Project =
@@ -40,11 +41,11 @@ export type WidowCareProgram = {
   hero_title: string;
   hero_subtitle: string;
   hero_img: StaticImageData;
-  yellowSection: ReactNode;
-  impact_title: string;
-  impact_subtitle: string;
-  impact_items: ImpactItem[];
-  testimonials: Testimonial[];
+  yellowSection?: ReactNode;
+  impact_title?: string;
+  impact_subtitle?: string;
+  impact_items?: ImpactItem[];
+  testimonials?: Testimonial[];
   joinus_img: StaticImageData;
   joinus_alt: string;
 };
@@ -137,37 +138,42 @@ const Program = ({ data }: Props) => {
           />
         </div>
       </section>
-      <section className="flex items-center justify-center gap-4 bg-[#FCF9F2] p-6 sm:p-10 md:p-16 lg:p-20 xl:p-40">
-        {data.yellowSection}
-      </section>
-      <section className="p-4 sm:p-8 md:p-12 lg:p-20">
-        <div className="w-full max-w-[1037px]">
-          <h3 className="font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl md:leading-tight lg:text-[40px] lg:leading-[48px]">
-            {data.impact_title}
-          </h3>
-          <p className="mt-2 font-montreal text-base text-body-2 md:text-lg">
-            {data.impact_subtitle}
-          </p>
-        </div>
-        <div className="my-8 flex flex-col items-center gap-6 md:my-16 md:flex-row md:gap-4">
-          {data.impact_items.map((item) => (
-            <div key={item.key} className="relative w-full md:w-auto">
-              <Image
-                src={item.img}
-                alt={item.alt}
-                className="h-auto w-full object-contain"
-                width={585}
-                height={515}
-                placeholder="blur"
-              />
-              <p className="absolute bottom-4 left-4 w-full max-w-[300px] font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl md:bottom-8 md:left-8 md:max-w-[380px] md:text-3xl md:leading-7 lg:text-[30px]">
-                {item.text}
-              </p>
+      {data.yellowSection && (
+        <section className="flex items-center justify-center gap-4 bg-[#FCF9F2] p-6 sm:p-10 md:p-16 lg:p-20 xl:p-40">
+          {data.yellowSection}
+        </section>
+      )}
+      {(data?.testimonials || data?.impact_items) && (
+        <section className="p-4 sm:p-8 md:p-12 lg:p-20">
+          <div className="w-full max-w-[1037px]">
+            <h3 className="font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl md:leading-tight lg:text-[40px] lg:leading-[48px]">
+              {data.impact_title}
+            </h3>
+            <p className="mt-2 font-montreal text-base text-body-2 md:text-lg">
+              {data.impact_subtitle}
+            </p>
+          </div>
+          {data?.impact_items && (
+            <div className="my-8 flex flex-col items-center gap-6 md:my-16 md:flex-row md:gap-4">
+              {data.impact_items.map((item) => (
+                <div key={item.key} className="relative w-full md:w-auto">
+                  <Image
+                    src={item.img}
+                    alt={item.alt}
+                    className="h-auto w-full object-contain"
+                    width={585}
+                    height={515}
+                    placeholder="blur"
+                  />
+                  <p className="absolute bottom-4 left-4 w-full max-w-[300px] font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl md:bottom-8 md:left-8 md:max-w-[450px] md:text-3xl md:leading-7 lg:text-[30px]">
+                    {item.text}
+                  </p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        {/* <Slider data={data.testimonials} /> */}
-        {/* <div className="mx-auto w-full max-w-[1151.06px] pb-8 pt-10 md:pb-12 md:pt-20">
+          )}
+          <Slider data={data.testimonials} />
+          {/* <div className="mx-auto w-full max-w-[1151.06px] pb-8 pt-10 md:pb-12 md:pt-20">
           <p className="text-center font-aeonik text-xl font-medium leading-tight text-black sm:text-2xl md:text-3xl md:leading-[36.8px] lg:text-[32px]">
             Churches and faith-based nonprofits partnering with us:
           </p>
@@ -185,7 +191,8 @@ const Program = ({ data }: Props) => {
             ))}
           </div>
         </div> */}
-      </section>
+        </section>
+      )}
       <JoinUs img={data.joinus_img} alt={data.joinus_alt} />
     </main>
   );

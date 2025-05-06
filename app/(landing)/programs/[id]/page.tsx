@@ -15,8 +15,8 @@ import img1 from "public/images/img-23.png";
 import img2 from "public/images/img-24.png";
 import img3 from "public/images/img-25.png";
 import img4 from "public/images/img-26.png";
-import img5 from "public/images/img-27.png";
-import img6 from "public/images/img-28.png";
+// import img5 from "public/images/img-27.png";
+// import img6 from "public/images/img-28.png";
 import missionCareImg from "public/images/img-29.png";
 import dadImg from "public/images/img-30.png";
 import partnershipsImg from "public/images/img-31.png";
@@ -69,13 +69,13 @@ const programs: Programs = {
         key: "1",
         img: img1,
         alt: "images",
-        text: "This will be a header talking about the monthly stipends",
+        text: "Monthly stipends for 100+ widows across Nigeria",
       },
       {
         key: "2",
         img: img2,
         alt: "images",
-        text: "This will be a header talking about FWC mission week",
+        text: "Supporting widows at the Family Worship Centre Mission Week",
       },
     ],
     testimonials: [
@@ -109,14 +109,13 @@ const programs: Programs = {
       <div className="space-y-8 px-4 md:space-y-16 md:px-6 lg:px-0">
         <div className="space-y-3">
           <p className="mx-auto w-full max-w-[1200px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[42px] lg:text-[32px]">
-            Lorem ipsum dolor sit amet consectetur. Vehicula consequat aliquam
-            sit ipsum tortor ac etiam at. Aenean a est sed neque volutpat tellus
-            suscipit enim.
-          </p>
-          <p className="mx-auto w-full max-w-[587px] text-center font-montreal text-base leading-normal text-body-1 md:text-[20px] md:leading-[28px]">
             Support orphans in a way that works best for you by choosing a
             sponsorship type that aligns with your giving goals.
           </p>
+          {/* <p className="mx-auto w-full max-w-[587px] text-center font-montreal text-base leading-normal text-body-1 md:text-[20px] md:leading-[28px]">
+            Support orphans in a way that works best for you by choosing a
+            sponsorship type that aligns with your giving goals.
+          </p> */}
         </div>
         <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-4">
           <div className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8">
@@ -135,8 +134,8 @@ const programs: Programs = {
                   <TickIcon />
                 </span>
                 <span>
-                  <b className="font-medium">Fully fund</b>a child&apos;s school
-                  fees for a term or an entire school year.
+                  <b className="font-medium">Fully fund</b> a child&apos;s
+                  school fees for a term or an entire school year.
                 </span>
               </li>
               <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
@@ -233,24 +232,24 @@ const programs: Programs = {
         key: "1",
         img: img3,
         alt: "images",
-        text: "This will be a header talking about Regy&Henry partnership",
+        text: "Partnering with the Regy&Henry Foundation to help orphans",
       },
     ],
-    testimonials: [
-      {
-        key: "1",
-        testimonial:
-          "Lorem ipsum dolor sit amet consectetur. Quis tortor tempus sit volutpat egestas duis malesuada vulputate. Egestas diam at ut scelerisque nullam convallis. Dui porttitor sed ac habitasse tincidunt.",
-        author: "Mr. John Doe",
-      },
-      {
-        key: "2",
-        img: testifier,
-        testimonial:
-          "I am one of the beneficiaries of SOOWER's support and I am thankful for the foundation for supporting my family.",
-        author: "Mrs. Mary Fatima Egbe",
-      },
-    ],
+    // testimonials: [
+    //   {
+    //     key: "1",
+    //     testimonial:
+    //       "Lorem ipsum dolor sit amet consectetur. Quis tortor tempus sit volutpat egestas duis malesuada vulputate. Egestas diam at ut scelerisque nullam convallis. Dui porttitor sed ac habitasse tincidunt.",
+    //     author: "Mr. John Doe",
+    //   },
+    //   {
+    //     key: "2",
+    //     img: testifier,
+    //     testimonial:
+    //       "I am one of the beneficiaries of SOOWER's support and I am thankful for the foundation for supporting my family.",
+    //     author: "Mrs. Mary Fatima Egbe",
+    //   },
+    // ],
     joinus_img: frame2,
     joinus_alt: "happy children",
   },
@@ -266,11 +265,11 @@ const programs: Programs = {
     yellowSection: (
       <div className="px-4 md:px-6 lg:px-0">
         <p className="mx-auto w-full max-w-[1150px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[52px] lg:text-[32px]">
-          Lorem ipsum dolor sit amet consectetur. Vehicula consequat aliquam sit
-          ipsum tortor ac etiam at. Aenean a est sed neque volutpat tellus
-          suscipit enim. Gravida duis urna porta mauris. Pulvinar ac placerat
-          viverra sed. Vitae interdum ac condimentum suscipit. Sed a tortor
-          faucibus cursus viverra gravida elementum.
+          We recognize the selfless sacrifices of missionaries who carry the
+          message of hope and faith into underserved and often forgotten
+          communities. Through MissionCare, we partner with churches and
+          individuals to provide practical support to those serving on the
+          frontlines of ministry.
         </p>
       </div>
     ),
@@ -282,23 +281,23 @@ const programs: Programs = {
         key: "1",
         img: img4,
         alt: "images",
-        text: "This will be a header talking about FWC mission week",
+        text: "Supporting missionaries at the Family Worship Centre Mission Week",
       },
-      {
-        key: "2",
-        img: img4,
-        alt: "images",
-        text: "This will be a header talking about the Tearfund training",
-      },
+      // {
+      //   key: "2",
+      //   img: img4,
+      //   alt: "images",
+      //   text: "This will be a header talking about the Tearfund training",
+      // },
     ],
-    testimonials: [
-      {
-        key: "1",
-        testimonial:
-          "Lorem ipsum dolor sit amet consectetur. Quis tortor tempus sit volutpat egestas duis malesuada vulputate. Egestas diam at ut scelerisque nullam convallis. Dui porttitor sed ac habitasse tincidunt.",
-        author: "Mr. John Doe",
-      },
-    ],
+    // testimonials: [
+    //   {
+    //     key: "1",
+    //     testimonial:
+    //       "Lorem ipsum dolor sit amet consectetur. Quis tortor tempus sit volutpat egestas duis malesuada vulputate. Egestas diam at ut scelerisque nullam convallis. Dui porttitor sed ac habitasse tincidunt.",
+    //     author: "Mr. John Doe",
+    //   },
+    // ],
     joinus_img: frame3,
     joinus_alt: "happy community",
   },
@@ -363,44 +362,46 @@ const programs: Programs = {
                 </span>
               </li>
             </ul>
-            <Button
-              variant="outline"
-              className="w-full gap-2 border-input font-montreal text-black md:w-auto"
-            >
-              <span>Join the registry</span>
-              <span>
-                <ArrowRight size={16} />
-              </span>
-            </Button>
+            <Link href="/registry/widow">
+              <Button
+                variant="outline"
+                className="w-full gap-2 border-input font-montreal text-black md:w-auto"
+              >
+                <span>Join the registry</span>
+                <span>
+                  <ArrowRight size={16} />
+                </span>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
     ),
-    impact_title: "Discover our impact through partnerships",
-    impact_subtitle:
-      "Through strategic partnerships, we join hands with other ministries, i.e, churches and christian organizations dedicated to supporting widows, orphans and missionaries. Discover how our collaborations have made a difference and see the incredible work we've accomplished together.",
-    impact_items: [
-      {
-        key: "1",
-        img: img5,
-        alt: "images",
-        text: "This will be a header text about a partnership",
-      },
-      {
-        key: "2",
-        img: img6,
-        alt: "images",
-        text: "This will be a header text about a partnership",
-      },
-    ],
-    testimonials: [
-      {
-        key: "1",
-        testimonial:
-          "Lorem ipsum dolor sit amet consectetur. Quis tortor tempus sit volutpat egestas duis malesuada vulputate. Egestas diam at ut scelerisque nullam convallis. Dui porttitor sed ac habitasse tincidunt.",
-        author: "Light Walk and Work Mission International",
-      },
-    ],
+    // impact_title: "Discover our impact through partnerships",
+    // impact_subtitle:
+    //   "Through strategic partnerships, we join hands with other ministries, i.e, churches and christian organizations dedicated to supporting widows, orphans and missionaries. Discover how our collaborations have made a difference and see the incredible work we've accomplished together.",
+    // impact_items: [
+    //   {
+    //     key: "1",
+    //     img: img5,
+    //     alt: "images",
+    //     text: "This will be a header text about a partnership",
+    //   },
+    //   {
+    //     key: "2",
+    //     img: img6,
+    //     alt: "images",
+    //     text: "This will be a header text about a partnership",
+    //   },
+    // ],
+    // testimonials: [
+    //   {
+    //     key: "1",
+    //     testimonial:
+    //       "Lorem ipsum dolor sit amet consectetur. Quis tortor tempus sit volutpat egestas duis malesuada vulputate. Egestas diam at ut scelerisque nullam convallis. Dui porttitor sed ac habitasse tincidunt.",
+    //     author: "Light Walk and Work Mission International",
+    //   },
+    // ],
     joinus_img: frame4,
     joinus_alt: "nurturing hands",
   },

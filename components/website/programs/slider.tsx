@@ -6,23 +6,25 @@ import {
 } from "@components/ui/carousel";
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 
-type Props = { data: { key: string; testimonial: string; author: string }[] };
+type Props = { data?: { key: string; testimonial: string; author: string }[] };
 
 const Slider = ({ data }: Props) => {
   return (
     <Carousel className="w-full">
       <CarouselContent>
-        {data.map((item) => (
+        {data?.map((item) => (
           <CarouselItem key={item.key}>
             {/* @ts-expect-error */}
             {({ scrollNext, scrollPrev, canScrollNext, canScrollPrev }) => (
-              <div className="mx-auto flex w-full max-w-[1250px] items-start gap-7 rounded-3xl bg-[#F7F8FA] p-12">
-                <QuoteIcon />
-                <div className="mt-12 w-full max-w-[57.75rem] space-y-6">
-                  <p className="font-aeonik text-[32px] leading-[45px] text-black">
+              <div className="mx-auto flex w-full max-w-[1250px] items-start gap-7 rounded-3xl bg-[#F7F8FA] p-6 lg:p-12">
+                <div className="max-lg:hidden">
+                  <QuoteIcon />
+                </div>
+                <div className="w-full max-w-[57.75rem] space-y-6 lg:mt-12">
+                  <p className="font-aeonik text-[18px] leading-[28px] text-black lg:text-[32px] lg:leading-[45px]">
                     {item.testimonial}
                   </p>
-                  <p className="font-montreal text-[20px] leading-6 text-body-1">
+                  <p className="font-montreal text-[16px] leading-6 text-body-1 lg:text-[20px]">
                     {item.author}
                   </p>
                   <div className="flex items-center gap-1 py-8">
