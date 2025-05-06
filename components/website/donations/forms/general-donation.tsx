@@ -1,6 +1,13 @@
 "use client";
 
-import { Form } from "@components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@components/ui/form";
 import FormAmount from "@components/ui/formAmount";
 import FormButton from "@components/ui/formButton";
 import FormCheckbox from "@components/ui/formCheckbox";
@@ -13,6 +20,7 @@ import useUserAuth from "@hooks/auth/useUserAuth";
 import usePaystackConfig, {
   IPaystackConfig,
 } from "@hooks/payments/usePaystackConfig";
+import { cn } from "@lib/cn";
 import {
   authDonationSchema,
   authDonationType,
@@ -28,6 +36,8 @@ import {
   useInitiateDonationUnauthMutation,
   useVerifyDonationMutation,
 } from "services/donate";
+import { Input as InputV2 } from "@components/ui/input-with-icon";
+import { ErrorResponse } from "services/typings";
 
 const frequency = [
   {
@@ -218,8 +228,8 @@ const GeneralDonation = () => {
 
       setPaystackConfig(config);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Error submitting form";
+      const acutalError = error as ErrorResponse;
+      const errorMessage = acutalError?.data.message || "Error submitting form";
       toast({
         title: "Submission Failed",
         description: errorMessage,
@@ -264,8 +274,8 @@ const GeneralDonation = () => {
         last_name: data.l_name,
         phone: `${data.phone.phone_code}${data.phone.phone_number}`,
         createAccount: data.t_and_c,
-        password: "", // Add required fields even if empty
-        confirm_password: "",
+        password: data.t_and_c ? data.password || "" : "",
+        confirm_password: data.t_and_c ? data.confirmPassword || "" : "",
         type: getDonationType(), // Adding required type field
       }).unwrap();
 
@@ -281,8 +291,8 @@ const GeneralDonation = () => {
 
       setPaystackConfig(config);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Error submitting form";
+      const acutalError = error as ErrorResponse;
+      const errorMessage = acutalError?.data.message || "Error submitting form";
       toast({
         title: "Submission Failed",
         description: errorMessage,
@@ -349,6 +359,55 @@ const GeneralDonation = () => {
           name="t_and_c"
           label="I would like to sign up as a donor on SOOWER"
         />
+        {unauthform.watch("t_and_c") && (
+          <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
+            <FormField
+              control={unauthform.control}
+              name="password"
+              render={({ field, fieldState: { error } }) => (
+                <FormItem className="w-full flex-1">
+                  <FormLabel required>Password</FormLabel>
+                  <FormControl>
+                    <InputV2
+                      className={cn(
+                        "m-0 rounded-xl border border-input bg-white focus-within:border-primary focus-within:shadow-input focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-0 hover:border-primary hover:shadow-input focus-visible:ring-0 focus-visible:ring-offset-0",
+                        error &&
+                          "focus-within:border-error focus-within:shadow-input-error"
+                      )}
+                      placeholder="Password"
+                      type="password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={unauthform.control}
+              name="confirmPassword"
+              render={({ field, fieldState: { error } }) => (
+                <FormItem className="w-full flex-1 ">
+                  <FormLabel required>Confirm Password</FormLabel>
+                  <FormControl>
+                    <InputV2
+                      placeholder="Confirm password"
+                      type="password"
+                      className={cn(
+                        "m-0 rounded-xl border border-input bg-white focus-within:border-primary focus-within:shadow-input focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-0 hover:border-primary hover:shadow-input focus-visible:ring-0 focus-visible:ring-offset-0",
+                        error &&
+                          "focus-within:border-error focus-within:shadow-input-error"
+                      )}
+                      {...field}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )}
         <div className="flex items-center justify-end pt-6">
           <FormButton
             text="Donate now"

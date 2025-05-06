@@ -39,6 +39,7 @@ import {
 import { Input as InputV2 } from "@components/ui/input-with-icon";
 import { cn } from "@lib/cn";
 import useUserAuth from "@hooks/auth/useUserAuth";
+import { ErrorResponse } from "services/typings";
 
 const DEFAULT_PAYSTACK_CONFIG: IPaystackConfig = {
   email: "",
@@ -279,8 +280,8 @@ const DADProject = () => {
 
       // reset();
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Error submitting form";
+      const acutalError = error as ErrorResponse;
+      const errorMessage = acutalError?.data.message || "Error submitting form";
       toast({
         title: "Submission Failed",
         description: errorMessage,
@@ -341,8 +342,8 @@ const DADProject = () => {
 
       // reset();
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Error submitting form";
+      const acutalError = error as ErrorResponse;
+      const errorMessage = acutalError?.data.message || "Error submitting form";
       toast({
         title: "Submission Failed",
         description: errorMessage,
@@ -494,7 +495,7 @@ const DADProject = () => {
           label="I would like to sign up as a donor on SOOWER"
         />
         {form.watch("t_and_c") && (
-          <div className="w-fullflex-col flex items-center justify-center gap-4 md:flex-row">
+          <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
             <FormField
               control={form.control}
               name="password"
