@@ -13,17 +13,8 @@ import {
   MinistryFormValues,
 } from "lib/validations/registry";
 import { useForm } from "react-hook-form";
+import statesInNigeria from "@lib/NigeriaStates";
 
-const stateOptions = [
-  {
-    label: "Abia",
-    value: "abia",
-  },
-  {
-    label: "Adamawa",
-    value: "adamawa",
-  },
-];
 const projectTypeOptions = [
   {
     label: "Widows",
@@ -133,7 +124,14 @@ const MinistryForm = () => {
               placeholder: "Administrator's name",
             }}
           />
-          <FormSelect name="state" label="State" options={stateOptions} />
+          <FormSelect
+            name="state"
+            label="State"
+            options={statesInNigeria.map((state) => ({
+              label: state,
+              value: state,
+            }))}
+          />
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
           <FormInput
