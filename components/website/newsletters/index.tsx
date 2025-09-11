@@ -6,7 +6,7 @@ const NewsLetterPage = () => {
   const newsletters = [
     {
       title: "Volume 1, Issue 1",
-      date: "June 2025",
+      date: "September 2025",
       link: "/assets/newsletters/volume-1-issue-1.pdf",
     },
   ];
