@@ -183,6 +183,17 @@ const Navbar = () => {
             </li>
             <li>
               <Link
+                href="/newsletters"
+                className={cn(
+                  "font-montreal text-sm font-normal leading-4 hover:text-primary",
+                  segment === "newsletters" && "font-medium text-black"
+                )}
+              >
+                Newsletters
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/contact-us"
                 className={cn(
                   "font-montreal text-sm font-normal leading-4 hover:text-primary",
@@ -344,6 +355,19 @@ const Navbar = () => {
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           Registry
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/newsletters"
+                          className={cn(
+                            "block py-2 font-montreal text-base font-normal hover:text-primary",
+                            segment === "newsletters" &&
+                              "font-medium text-black"
+                          )}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Newsletters
                         </Link>
                       </li>
                       <li>
