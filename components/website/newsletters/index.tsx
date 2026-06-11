@@ -14,6 +14,11 @@ const NewsLetterPage = () => {
       date: "September 2025",
       link: "/assets/newsletters/volume-1-issue-2.pdf",
     },
+    {
+      title: "Volume 2, Issue 1",
+      date: "March 2026",
+      link: "/assets/newsletters/SOOWER Newsletter Vol 2 Issue 1 (March 2026).pdf",
+    },
   ];
 
   const handleDownload = (link: string, filename: string) => {
