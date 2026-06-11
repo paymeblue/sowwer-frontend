@@ -6,7 +6,7 @@ echo '🏗️👷 Styling, testing and building your project before committing'
 # Check Prettier standards
 npm run check-format ||
 (
-    echo '🤢🤮🤢🤮 Its F**KING RAW - Your styling looks disgusting. 🤢🤮🤢🤮
+    echo '
             Prettier Check Failed. Run npm run format, add changes and try commit again.';
     false;
 )
