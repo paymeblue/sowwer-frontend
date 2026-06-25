@@ -52,7 +52,7 @@ const programs: Programs = {
       <div className="px-4 md:px-6 lg:px-0">
         <p className="text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[48px] lg:text-[32px]">
           The SOOWER Foundation widows list has grown to
-          <b>&nbsp;127 widows and counting.</b>
+          <b>&nbsp;169 widows and counting.</b>
         </p>
         <p className="mx-auto mt-4 w-full max-w-[1091px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:mt-0 md:text-3xl md:leading-[52px] lg:text-[32px]">
           By addressing both their immediate and long-term needs, our WidowCare
