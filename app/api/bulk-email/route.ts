@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { EmailVerificationResult, verifyEmails } from "@lib/emailVerification";
 import { isSendgridConfigured, sendBulkViaSendgrid } from "@lib/sendgrid";
 import {
   DEFAULT_EMAIL_MESSAGE,
@@ -11,10 +10,7 @@ import {
 
 export const runtime = "nodejs";
 
-type Mode = "verify" | "send";
-
 interface ParsedBody {
-  mode: Mode;
   emails: string[];
   pdf: File | null;
   subject: string;
@@ -57,8 +53,6 @@ const buildHtml = (message: string) => {
 const readBody = async (req: NextRequest): Promise<ParsedBody> => {
   const data = await req.formData();
 
-  const mode = (data.get("mode") as Mode) || "verify";
-
   // `emails` may arrive as a JSON array, a delimited string, or repeated fields.
   let emails: string[] = [];
   const rawEmails = data.getAll("emails");
@@ -78,20 +72,12 @@ const readBody = async (req: NextRequest): Promise<ParsedBody> => {
 
   const pdf = data.get("pdf");
   return {
-    mode,
     emails: Array.from(new Set(emails)),
     pdf: pdf instanceof File ? pdf : null,
     subject: (data.get("subject") as string)?.trim() || DEFAULT_EMAIL_SUBJECT,
     message: (data.get("message") as string)?.trim() || DEFAULT_EMAIL_MESSAGE,
   };
 };
-
-const summarize = (results: EmailVerificationResult[]) => ({
-  total: results.length,
-  valid: results.filter((r) => r.status === "valid").length,
-  disposable: results.filter((r) => r.status === "disposable").length,
-  invalid: results.filter((r) => r.status === "invalid").length,
-});
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   let body: ParsedBody;
@@ -104,34 +90,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const { mode, emails, pdf, subject, message } = body;
+  const { emails: recipients, pdf, subject, message } = body;
 
-  if (emails.length === 0) {
+  if (recipients.length === 0) {
     return NextResponse.json(
       { message: "Add at least one recipient" },
       { status: 400 }
     );
   }
-  if (emails.length > MAX_RECIPIENTS) {
+  if (recipients.length > MAX_RECIPIENTS) {
     return NextResponse.json(
       { message: `A maximum of ${MAX_RECIPIENTS} recipients is allowed` },
       { status: 400 }
     );
   }
-
-  // Verify every recipient. Only addresses that are deliverable AND not a
-  // disposable/toy provider are eligible to receive the PDF.
-  const results = await verifyEmails(emails);
-  const summary = summarize(results);
-  const validRecipients = results
-    .filter((r) => r.status === "valid")
-    .map((r) => r.email);
-
-  if (mode === "verify") {
-    return NextResponse.json({ mode, results, summary });
-  }
-
-  // mode === "send"
   if (!pdf) {
     return NextResponse.json(
       { message: "A PDF file is required to send" },
@@ -150,23 +122,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { status: 400 }
     );
   }
-  if (validRecipients.length === 0) {
-    return NextResponse.json(
-      {
-        message: "No valid recipients to send to after verification",
-        results,
-        summary,
-      },
-      { status: 422 }
-    );
-  }
 
   // Preferred path: deliver for real via SendGrid when it's configured.
   if (isSendgridConfigured()) {
     const base64 = Buffer.from(await pdf.arrayBuffer()).toString("base64");
     try {
       await sendBulkViaSendgrid({
-        recipients: validRecipients,
+        recipients,
         subject,
         html: buildHtml(message),
         attachment: { filename: pdf.name || "document.pdf", base64 },
@@ -176,20 +138,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         {
           message:
             err instanceof Error ? err.message : "SendGrid delivery failed",
-          results,
-          summary,
         },
         { status: 502 }
       );
     }
 
     return NextResponse.json({
-      mode,
       provider: "sendgrid",
-      message: `Sent to ${validRecipients.length} recipient(s)`,
-      sent: validRecipients,
-      results,
-      summary,
+      message: `Sent to ${recipients.length} recipient(s)`,
+      sent: recipients,
     });
   }
 
@@ -199,20 +156,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // tested. Configure SendGrid (above) to actually deliver.
   if (process.env.BULK_EMAIL_TEST_MODE === "true") {
     return NextResponse.json({
-      mode,
       testMode: true,
-      message: `Sent to ${validRecipients.length} recipient(s) (test mode — no email actually delivered)`,
-      sent: validRecipients,
-      results,
-      summary,
+      message: `Sent to ${recipients.length} recipient(s) (test mode — no email actually delivered)`,
+      sent: recipients,
     });
   }
 
-  // Forward the PDF and the verified recipient list to the backend, passing the
-  // caller's auth token through. Mirrors the contact-us proxy pattern.
+  // Forward the PDF and recipient list to the backend, passing the caller's auth
+  // token through. Mirrors the contact-us proxy pattern.
   const forward = new FormData();
   forward.append("pdf", pdf, pdf.name || "document.pdf");
-  validRecipients.forEach((email) => forward.append("recipients", email));
+  recipients.forEach((email) => forward.append("recipients", email));
 
   const authHeader = req.headers.get("authorization");
 
@@ -234,28 +188,19 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           message:
             (payload && payload.message) ||
             "The mail service rejected the request",
-          results,
-          summary,
         },
         { status: backendRes.status }
       );
     }
 
     return NextResponse.json({
-      mode,
-      message: `Sent to ${validRecipients.length} recipient(s)`,
-      sent: validRecipients,
-      results,
-      summary,
+      message: `Sent to ${recipients.length} recipient(s)`,
+      sent: recipients,
       backend: payload,
     });
   } catch {
     return NextResponse.json(
-      {
-        message: "Could not reach the mail service",
-        results,
-        summary,
-      },
+      { message: "Could not reach the mail service" },
       { status: 502 }
     );
   }
