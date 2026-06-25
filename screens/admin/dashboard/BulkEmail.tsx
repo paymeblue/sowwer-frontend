@@ -13,63 +13,30 @@ import {
   MAX_PDF_SIZE,
   parseEmailList,
 } from "lib/validations/bulkEmail";
-import type {
-  EmailStatus,
-  EmailVerificationResult,
-} from "lib/utils/emailVerification";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  FileText,
-  Trash2,
-  XCircle,
-} from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { FileText, Trash2 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import Select, {
-  components,
-  MultiValue,
-  MultiValueGenericProps,
-  MultiValueProps,
-  StylesConfig,
-} from "react-select";
-
-type RecipientStatus = EmailStatus | "pending";
-
-interface Recipient {
-  email: string;
-  status: RecipientStatus;
-  reason?: string;
-}
+import Select, { MultiValue, StylesConfig } from "react-select";
 
 interface EmailOption {
   value: string;
   label: string;
-  status: RecipientStatus;
-  reason?: string;
 }
 
-const statusColors: Record<
-  RecipientStatus,
-  { bg: string; text: string; dot: string; label: string }
-> = {
-  pending: {
-    bg: "#F3F4F6",
-    text: "#6B7280",
-    dot: "#D1D5DB",
-    label: "Not verified",
-  },
-  valid: { bg: "#ECFDF5", text: "#047857", dot: "#22C55E", label: "Valid" },
-  disposable: {
-    bg: "#FFFBEB",
-    text: "#B45309",
-    dot: "#F59E0B",
-    label: "Toy / disposable",
-  },
-  invalid: { bg: "#FEF2F2", text: "#DC2626", dot: "#EF4444", label: "Invalid" },
+// Recipients are saved here so they persist across visits.
+const STORAGE_KEY = "soower.bulkEmail.recipients";
+
+const readSavedRecipients = (): string[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : null;
+    return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+  } catch {
+    return [];
+  }
 };
 
-// react-select pieces: status-coloured tags + data attributes for testability.
 const selectStyles: StylesConfig<EmailOption, true> = {
   control: (base) => ({
     ...base,
@@ -80,60 +47,24 @@ const selectStyles: StylesConfig<EmailOption, true> = {
     boxShadow: "none",
     ":hover": { borderColor: "#9CA3AF" },
   }),
-  multiValue: (base, state) => ({
+  multiValue: (base) => ({
     ...base,
     borderRadius: 9999,
-    paddingLeft: 4,
-    backgroundColor: statusColors[state.data.status].bg,
+    backgroundColor: "#EEF2FF",
   }),
-  multiValueLabel: (base, state) => ({
+  multiValueLabel: (base) => ({
     ...base,
     fontSize: ".75rem",
-    color: statusColors[state.data.status].text,
+    color: "#3730A3",
   }),
-  multiValueRemove: (base, state) => ({
+  multiValueRemove: (base) => ({
     ...base,
     borderRadius: 9999,
-    color: statusColors[state.data.status].text,
+    color: "#3730A3",
     ":hover": { backgroundColor: "transparent", opacity: 0.7 },
   }),
   placeholder: (base) => ({ ...base, fontSize: ".8rem", color: "#9CA3AF" }),
   input: (base) => ({ ...base, fontSize: ".85rem" }),
-};
-
-const StatusMultiValue = (props: MultiValueProps<EmailOption, true>) => {
-  const { status, value, reason } = props.data;
-  return (
-    <components.MultiValue
-      {...props}
-      innerProps={
-        {
-          ...props.innerProps,
-          "data-status": status,
-          "data-email": value,
-          title: reason || statusColors[status].label,
-        } as MultiValueProps<EmailOption, true>["innerProps"]
-      }
-    />
-  );
-};
-
-const StatusMultiValueLabel = (
-  props: MultiValueGenericProps<EmailOption, true>
-) => {
-  const data = props.data as EmailOption;
-  const color = statusColors[data.status];
-  return (
-    <components.MultiValueLabel {...props}>
-      <span className="inline-flex items-center gap-1.5">
-        <span
-          className="h-1.5 w-1.5 rounded-full"
-          style={{ backgroundColor: color.dot }}
-        />
-        {data.label}
-      </span>
-    </components.MultiValueLabel>
-  );
 };
 
 const BulkEmailComp = () => {
@@ -141,12 +72,22 @@ const BulkEmailComp = () => {
   const { token } = useUserAuth();
 
   const [pdf, setPdf] = useState<File | null>(null);
-  const [recipients, setRecipients] = useState<Recipient[]>([]);
+  // Lazy init from storage (component is client-only) so the load never races
+  // with the save effect below.
+  const [recipients, setRecipients] = useState<string[]>(readSavedRecipients);
   const [inputValue, setInputValue] = useState("");
   const [subject, setSubject] = useState(DEFAULT_EMAIL_SUBJECT);
   const [message, setMessage] = useState(DEFAULT_EMAIL_MESSAGE);
-  const [verifying, setVerifying] = useState(false);
   const [sending, setSending] = useState(false);
+
+  // Persist recipients whenever they change.
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(recipients));
+    } catch {
+      // ignore quota / serialization errors
+    }
+  }, [recipients]);
 
   const onDrop = useCallback(
     (accepted: File[]) => {
@@ -179,11 +120,9 @@ const BulkEmailComp = () => {
     const parsed = parseEmailList(raw);
     if (parsed.length === 0) return;
     setRecipients((prev) => {
-      const existing = new Set(prev.map((r) => r.email));
-      const additions = parsed
-        .filter((email) => !existing.has(email))
-        .map<Recipient>((email) => ({ email, status: "pending" }));
-      return [...prev, ...additions];
+      const set = new Set(prev);
+      parsed.forEach((email) => set.add(email));
+      return Array.from(set);
     });
   }, []);
 
@@ -207,98 +146,13 @@ const BulkEmailComp = () => {
   };
 
   const handleChange = (next: MultiValue<EmailOption>) => {
-    setRecipients(
-      next.map((o) => ({ email: o.value, status: o.status, reason: o.reason }))
-    );
-  };
-
-  const applyResults = (results: EmailVerificationResult[]) => {
-    const byEmail = new Map(results.map((r) => [r.email, r]));
-    setRecipients((prev) =>
-      prev.map((r) => {
-        const match = byEmail.get(r.email);
-        return match
-          ? { email: r.email, status: match.status, reason: match.reason }
-          : r;
-      })
-    );
+    setRecipients(next.map((o) => o.value));
   };
 
   const value = useMemo<EmailOption[]>(
-    () =>
-      recipients.map((r) => ({
-        value: r.email,
-        label: r.email,
-        status: r.status,
-        reason: r.reason,
-      })),
+    () => recipients.map((email) => ({ value: email, label: email })),
     [recipients]
   );
-
-  const validCount = useMemo(
-    () => recipients.filter((r) => r.status === "valid").length,
-    [recipients]
-  );
-  const disposableCount = useMemo(
-    () => recipients.filter((r) => r.status === "disposable").length,
-    [recipients]
-  );
-  const invalidCount = useMemo(
-    () => recipients.filter((r) => r.status === "invalid").length,
-    [recipients]
-  );
-  const flaggedCount = disposableCount + invalidCount;
-
-  const buildFormData = (mode: "verify" | "send") => {
-    const fd = new FormData();
-    fd.append("mode", mode);
-    fd.append("emails", JSON.stringify(recipients.map((r) => r.email)));
-    if (mode === "send" && pdf) {
-      fd.append("pdf", pdf, pdf.name);
-      fd.append("subject", subject);
-      fd.append("message", message);
-    }
-    return fd;
-  };
-
-  const postBulkEmail = async (mode: "verify" | "send") => {
-    const res = await fetch("/api/bulk-email", {
-      method: "POST",
-      headers: token ? { authorization: `Bearer ${token}` } : undefined,
-      body: buildFormData(mode),
-    });
-    const payload = await res.json().catch(() => ({}));
-    return { ok: res.ok, status: res.status, payload };
-  };
-
-  const handleVerify = async () => {
-    if (recipients.length === 0) {
-      toast({ variant: "destructive", title: "Add at least one recipient" });
-      return;
-    }
-    setVerifying(true);
-    try {
-      const { ok, payload } = await postBulkEmail("verify");
-      if (!ok) {
-        toast({
-          variant: "destructive",
-          title: "Verification failed",
-          description: payload?.message,
-        });
-        return;
-      }
-      applyResults(payload.results ?? []);
-      const s = payload.summary;
-      toast({
-        title: "Recipients verified",
-        description: `${s.valid} valid · ${s.disposable} toy · ${s.invalid} invalid`,
-      });
-    } catch {
-      toast({ variant: "destructive", title: "Could not verify recipients" });
-    } finally {
-      setVerifying(false);
-    }
-  };
 
   const handleSend = async () => {
     if (!pdf) {
@@ -311,9 +165,19 @@ const BulkEmailComp = () => {
     }
     setSending(true);
     try {
-      const { ok, payload } = await postBulkEmail("send");
-      if (payload?.results) applyResults(payload.results);
-      if (!ok) {
+      const fd = new FormData();
+      fd.append("emails", JSON.stringify(recipients));
+      fd.append("pdf", pdf, pdf.name);
+      fd.append("subject", subject);
+      fd.append("message", message);
+
+      const res = await fetch("/api/bulk-email", {
+        method: "POST",
+        headers: token ? { authorization: `Bearer ${token}` } : undefined,
+        body: fd,
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
         toast({
           variant: "destructive",
           title: "Send failed",
@@ -333,8 +197,8 @@ const BulkEmailComp = () => {
     <ContentWrapper title="Upload">
       <div className="mt-6 flex w-full max-w-[760px] flex-col gap-6">
         <p className="text-[.85rem] text-body-2">
-          Send a PDF to many recipients at once. We verify every address before
-          sending — toy / disposable mailboxes are flagged and skipped.
+          Send a PDF to many recipients at once. Your recipient list is saved,
+          so you don&apos;t have to re-enter it next time.
         </p>
 
         {/* Step 1 — PDF */}
@@ -416,30 +280,12 @@ const BulkEmailComp = () => {
               isClearable={false}
               placeholder="Type or paste emails, then press Enter"
               styles={selectStyles}
-              components={{
-                DropdownIndicator: null,
-                MultiValue: StatusMultiValue,
-                MultiValueLabel: StatusMultiValueLabel,
-              }}
+              components={{ DropdownIndicator: null }}
             />
           </div>
-
-          {recipients.some((r) => r.status !== "pending") && (
-            <div className="mt-3 flex items-center gap-4 text-[.72rem] text-body-2">
-              <span className="flex items-center gap-1">
-                <CheckCircle2 size={14} className="text-green-500" />
-                {validCount} valid
-              </span>
-              <span className="flex items-center gap-1">
-                <AlertTriangle size={14} className="text-amber-500" />
-                {disposableCount} toy
-              </span>
-              <span className="flex items-center gap-1">
-                <XCircle size={14} className="text-red-500" />
-                {invalidCount} invalid
-              </span>
-            </div>
-          )}
+          <p className="mt-2 text-[.7rem] text-body-2">
+            Saved automatically on this device.
+          </p>
         </section>
 
         {/* Step 3 — Message */}
@@ -470,34 +316,18 @@ const BulkEmailComp = () => {
         {/* Actions */}
         <div className="flex flex-wrap items-center gap-3">
           <Button
-            variant="outline"
-            size="md"
-            onClick={handleVerify}
-            loading={verifying}
-            disabled={verifying || recipients.length === 0}
-            data-testid="verify-btn"
-          >
-            Verify recipients
-          </Button>
-          <Button
             size="md"
             onClick={handleSend}
             loading={sending}
             disabled={sending || !pdf || recipients.length === 0}
             data-testid="send-btn"
           >
-            {validCount > 0
-              ? `Send to ${validCount} valid recipient${
-                  validCount === 1 ? "" : "s"
+            {recipients.length > 0
+              ? `Send to ${recipients.length} recipient${
+                  recipients.length === 1 ? "" : "s"
                 }`
               : "Send"}
           </Button>
-          {flaggedCount > 0 && (
-            <span className="text-[.72rem] text-amber-600">
-              {flaggedCount} flagged address{flaggedCount === 1 ? "" : "es"}{" "}
-              will be skipped.
-            </span>
-          )}
         </div>
       </div>
     </ContentWrapper>
