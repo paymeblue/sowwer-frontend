@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { EMAIL_LOGO_CID } from "@lib/emailAssets";
 import {
-  emailjsConfigHint,
-  isEmailjsConfigured,
-  sendBulkViaEmailjs,
-} from "@lib/emailjs";
+  isResendConfigured,
+  resendConfigHint,
+  sendBulkViaResend,
+} from "@lib/resend";
 import {
   DEFAULT_EMAIL_MESSAGE,
   DEFAULT_EMAIL_SUBJECT,
@@ -28,30 +29,44 @@ const escapeHtml = (s: string) =>
 // Branded, donor-facing HTML email. `message` is plain text; blank lines split
 // paragraphs and single newlines become line breaks.
 const buildHtml = (message: string) => {
-  const paragraphs = message
-    .split(/\n{2,}/)
-    .map(
-      (p) =>
-        `<p style="margin:0 0 16px">${escapeHtml(p).replace(
-          /\n/g,
-          "<br/>"
-        )}</p>`
-    )
+  const blocks = message.split(/\n{2,}/);
+  const paragraphs = blocks
+    .map((p, i) => {
+      // No trailing margin on the last block, or it stacks with the cell
+      // padding and leaves a dead gap above the footer rule.
+      const margin = i === blocks.length - 1 ? "0" : "0 0 16px";
+      return `<p style="margin:${margin}">${escapeHtml(p).replace(
+        /\n/g,
+        "<br/>"
+      )}</p>`;
+    })
     .join("");
 
+  // Tables and inline styles throughout: Outlook ignores most modern CSS, and
+  // the logo is an inline (cid:) part so it renders without the recipient
+  // having to unblock remote images.
   return `<div style="margin:0;padding:24px;background:#f4f6fb;font-family:Arial,Helvetica,sans-serif">
-    <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e8eaf0">
-      <div style="background:#FFC629;padding:22px 28px">
-        <span style="font-size:20px;font-weight:800;color:#1a1a1a;letter-spacing:.5px">SOOWER</span>
-      </div>
-      <div style="padding:28px;color:#1a1a1a;font-size:15px;line-height:1.7">
-        ${paragraphs}
-      </div>
-      <div style="padding:18px 28px;border-top:1px solid #eef0f5;color:#8a93a6;font-size:12px;line-height:1.5">
-        You're receiving this email because you supported Soower. Thank you for
-        standing with the widows, orphans, and missionaries we serve.
-      </div>
-    </div>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e8eaf0">
+      <tr>
+        <td align="center" style="padding:28px 28px 22px">
+          <img src="cid:${EMAIL_LOGO_CID}" alt="Soower" width="180" style="display:block;width:180px;max-width:180px;height:auto;border:0;outline:none;text-decoration:none" />
+        </td>
+      </tr>
+      <tr>
+        <td style="height:4px;background:#FFC629;font-size:0;line-height:0">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="padding:28px;color:#1a1a1a;font-size:15px;line-height:1.7">
+          ${paragraphs}
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:18px 28px;border-top:1px solid #eef0f5;color:#8a93a6;font-size:12px;line-height:1.5">
+          You're receiving this email because you supported Soower. Thank you for
+          standing with the widows, orphans, and missionaries we serve.
+        </td>
+      </tr>
+    </table>
   </div>`;
 };
 
@@ -128,8 +143,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  // TEST MODE: explicit opt-in that reports success without contacting EmailJS,
-  // so the UI flow can be exercised without burning the monthly quota.
+  // TEST MODE: explicit opt-in that reports success without contacting Resend,
+  // so the UI flow can be exercised without sending real mail.
   if (process.env.BULK_EMAIL_TEST_MODE === "true") {
     return NextResponse.json({
       testMode: true,
@@ -138,14 +153,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     });
   }
 
-  if (!isEmailjsConfigured()) {
-    return NextResponse.json({ message: emailjsConfigHint }, { status: 500 });
+  if (!isResendConfigured()) {
+    return NextResponse.json({ message: resendConfigHint() }, { status: 500 });
   }
 
-  // EmailJS sends one email per request at 1 request/second, so a large list
-  // takes a while and individual recipients can fail independently.
+  // One request per recipient (Resend's batch endpoint can't carry attachments),
+  // so recipients can fail independently.
   const base64 = Buffer.from(await pdf.arrayBuffer()).toString("base64");
-  const { sent, failed } = await sendBulkViaEmailjs({
+  const { sent, failed } = await sendBulkViaResend({
     recipients,
     subject,
     html: buildHtml(message),
@@ -156,8 +171,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (sent.length === 0) {
     return NextResponse.json(
       {
-        provider: "emailjs",
-        message: failed[0]?.error || "EmailJS delivery failed",
+        provider: "resend",
+        message: failed[0]?.error || "Resend delivery failed",
         failed,
       },
       { status: 502 }
@@ -165,7 +180,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   return NextResponse.json({
-    provider: "emailjs",
+    provider: "resend",
     message: failed.length
       ? `Sent to ${sent.length} of ${recipients.length} recipient(s) — ${failed.length} failed`
       : `Sent to ${sent.length} recipient(s)`,

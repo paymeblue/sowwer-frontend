@@ -1,11 +1,9 @@
 import * as z from "zod";
 
-// Capped by the EmailJS plan's attachment limit (Professional = 2MB). Note the
-// PDF is base64-encoded before sending, which inflates it by ~33%, so files
-// right at the cap may still be rejected upstream — EmailJS's own error is
-// surfaced verbatim when that happens.
-export const MAX_PDF_SIZE = 2 * 1024 * 1024;
-export const MAX_PDF_SIZE_LABEL = "2MB";
+// Resend caps a whole email at 40MB after base64 encoding, which inflates the
+// PDF by ~33%. 10MB raw lands around 13MB encoded — comfortably inside.
+export const MAX_PDF_SIZE = 10 * 1024 * 1024;
+export const MAX_PDF_SIZE_LABEL = "10MB";
 export const MAX_RECIPIENTS = 500;
 
 // Default donor-facing email copy. Pre-filled in the UI and used as the
