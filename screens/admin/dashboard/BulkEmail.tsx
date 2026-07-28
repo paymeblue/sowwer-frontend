@@ -11,6 +11,7 @@ import {
   DEFAULT_EMAIL_MESSAGE,
   DEFAULT_EMAIL_SUBJECT,
   MAX_PDF_SIZE,
+  MAX_PDF_SIZE_LABEL,
   parseEmailList,
 } from "lib/validations/bulkEmail";
 import { FileText, Trash2 } from "lucide-react";
@@ -35,6 +36,15 @@ const readSavedRecipients = (): string[] => {
   } catch {
     return [];
   }
+};
+
+// EmailJS is rate-limited to one send per second, so the wait scales with the
+// recipient count. Give the admin an honest estimate before they click.
+const formatDuration = (count: number): string => {
+  const seconds = Math.ceil(count * 1.1);
+  if (seconds < 60) return `${seconds} seconds`;
+  const minutes = Math.ceil(seconds / 60);
+  return `${minutes} minute${minutes === 1 ? "" : "s"}`;
 };
 
 const selectStyles: StylesConfig<EmailOption, true> = {
@@ -101,7 +111,7 @@ const BulkEmailComp = () => {
         toast({
           variant: "destructive",
           title: "File too large",
-          description: "The PDF must be 10MB or smaller.",
+          description: `The PDF must be ${MAX_PDF_SIZE_LABEL} or smaller.`,
         });
         return;
       }
@@ -185,7 +195,13 @@ const BulkEmailComp = () => {
         });
         return;
       }
-      toast({ title: "Notifications sent", description: payload.message });
+      // EmailJS sends per-recipient, so some can fail while others succeed.
+      const failed: { email: string }[] = payload?.failed ?? [];
+      toast({
+        variant: failed.length ? "destructive" : undefined,
+        title: failed.length ? "Sent with errors" : "Notifications sent",
+        description: payload.message,
+      });
     } catch {
       toast({ variant: "destructive", title: "Could not send notifications" });
     } finally {
@@ -221,7 +237,7 @@ const BulkEmailComp = () => {
                 Drag & drop a PDF, or click to browse
               </p>
               <p className="font-body text-[.7rem] text-body-2">
-                PDF only · up to 10MB
+                PDF only · up to {MAX_PDF_SIZE_LABEL}
               </p>
             </div>
           ) : (
@@ -328,6 +344,12 @@ const BulkEmailComp = () => {
                 }`
               : "Send"}
           </Button>
+          {recipients.length > 0 && (
+            <p className="text-[.72rem] text-body-2">
+              Emails go out one per second — roughly{" "}
+              {formatDuration(recipients.length)}. Keep this tab open.
+            </p>
+          )}
         </div>
       </div>
     </ContentWrapper>

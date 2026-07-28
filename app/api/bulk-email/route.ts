@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isSendgridConfigured, sendBulkViaSendgrid } from "@lib/sendgrid";
+import {
+  emailjsConfigHint,
+  isEmailjsConfigured,
+  sendBulkViaEmailjs,
+} from "@lib/emailjs";
 import {
   DEFAULT_EMAIL_MESSAGE,
   DEFAULT_EMAIL_SUBJECT,
   MAX_PDF_SIZE,
+  MAX_PDF_SIZE_LABEL,
   MAX_RECIPIENTS,
   parseEmailList,
 } from "lib/validations/bulkEmail";
@@ -118,42 +123,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
   if (pdf.size > MAX_PDF_SIZE) {
     return NextResponse.json(
-      { message: "PDF exceeds the 10MB size limit" },
+      { message: `PDF exceeds the ${MAX_PDF_SIZE_LABEL} size limit` },
       { status: 400 }
     );
   }
 
-  // Preferred path: deliver for real via SendGrid when it's configured.
-  if (isSendgridConfigured()) {
-    const base64 = Buffer.from(await pdf.arrayBuffer()).toString("base64");
-    try {
-      await sendBulkViaSendgrid({
-        recipients,
-        subject,
-        html: buildHtml(message),
-        attachment: { filename: pdf.name || "document.pdf", base64 },
-      });
-    } catch (err) {
-      return NextResponse.json(
-        {
-          message:
-            err instanceof Error ? err.message : "SendGrid delivery failed",
-        },
-        { status: 502 }
-      );
-    }
-
-    return NextResponse.json({
-      provider: "sendgrid",
-      message: `Sent to ${recipients.length} recipient(s)`,
-      sent: recipients,
-    });
-  }
-
-  // TEST MODE: no real provider configured and the backend bulk-email endpoint
-  // isn't live yet (it gates every admins/* route behind a real admin token).
-  // When BULK_EMAIL_TEST_MODE is on we report success so the full flow can be
-  // tested. Configure SendGrid (above) to actually deliver.
+  // TEST MODE: explicit opt-in that reports success without contacting EmailJS,
+  // so the UI flow can be exercised without burning the monthly quota.
   if (process.env.BULK_EMAIL_TEST_MODE === "true") {
     return NextResponse.json({
       testMode: true,
@@ -162,46 +138,38 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     });
   }
 
-  // Forward the PDF and recipient list to the backend, passing the caller's auth
-  // token through. Mirrors the contact-us proxy pattern.
-  const forward = new FormData();
-  forward.append("pdf", pdf, pdf.name || "document.pdf");
-  recipients.forEach((email) => forward.append("recipients", email));
+  if (!isEmailjsConfigured()) {
+    return NextResponse.json({ message: emailjsConfigHint }, { status: 500 });
+  }
 
-  const authHeader = req.headers.get("authorization");
+  // EmailJS sends one email per request at 1 request/second, so a large list
+  // takes a while and individual recipients can fail independently.
+  const base64 = Buffer.from(await pdf.arrayBuffer()).toString("base64");
+  const { sent, failed } = await sendBulkViaEmailjs({
+    recipients,
+    subject,
+    html: buildHtml(message),
+    text: message,
+    attachment: { filename: pdf.name || "document.pdf", base64 },
+  });
 
-  try {
-    const backendRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}admins/bulk-email`,
-      {
-        method: "POST",
-        headers: authHeader ? { authorization: authHeader } : undefined,
-        body: forward,
-      }
-    );
-
-    const payload = await backendRes.json().catch(() => ({}));
-
-    if (!backendRes.ok) {
-      return NextResponse.json(
-        {
-          message:
-            (payload && payload.message) ||
-            "The mail service rejected the request",
-        },
-        { status: backendRes.status }
-      );
-    }
-
-    return NextResponse.json({
-      message: `Sent to ${recipients.length} recipient(s)`,
-      sent: recipients,
-      backend: payload,
-    });
-  } catch {
+  if (sent.length === 0) {
     return NextResponse.json(
-      { message: "Could not reach the mail service" },
+      {
+        provider: "emailjs",
+        message: failed[0]?.error || "EmailJS delivery failed",
+        failed,
+      },
       { status: 502 }
     );
   }
+
+  return NextResponse.json({
+    provider: "emailjs",
+    message: failed.length
+      ? `Sent to ${sent.length} of ${recipients.length} recipient(s) — ${failed.length} failed`
+      : `Sent to ${sent.length} recipient(s)`,
+    sent,
+    failed,
+  });
 }
