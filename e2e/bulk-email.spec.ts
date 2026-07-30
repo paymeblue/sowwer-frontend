@@ -32,6 +32,34 @@ test.describe("Upload (bulk email)", () => {
   test.beforeEach(async ({ page }) => {
     await seedAuth(page);
 
+    // The PDF now uploads straight to Cloudinary, so both the signing call and
+    // the upload itself are stubbed to keep the flow deterministic and offline.
+    await page.route("**/api/cloudinary-sign", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          cloudName: "test-cloud",
+          apiKey: "test-key",
+          timestamp: 1700000000,
+          signature: "test-signature",
+          folder: "soower/newsletters",
+        }),
+      });
+    });
+
+    await page.route("https://api.cloudinary.com/**", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          secure_url:
+            "https://res.cloudinary.com/test-cloud/image/upload/v1/soower/newsletters/notice.pdf",
+          bytes: 1024,
+        }),
+      });
+    });
+
     // Stand in for the /api/bulk-email handler so the UI flow is deterministic.
     await page.route("**/api/bulk-email", async (route) => {
       await route.fulfill({
@@ -59,6 +87,8 @@ test.describe("Upload (bulk email)", () => {
       buffer: SAMPLE_PDF,
     });
     await expect(page.getByTestId("pdf-preview")).toContainText("notice.pdf");
+    // Sending is blocked until the upload finishes and yields a URL.
+    await expect(page.getByTestId("pdf-preview")).toContainText("uploaded");
 
     await addRecipient(page, EMAIL_A);
     await addRecipient(page, EMAIL_B);

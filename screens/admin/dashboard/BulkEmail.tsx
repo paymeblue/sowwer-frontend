@@ -10,11 +10,11 @@ import useUserAuth from "@hooks/auth/useUserAuth";
 import {
   DEFAULT_EMAIL_MESSAGE,
   DEFAULT_EMAIL_SUBJECT,
-  MAX_PDF_SIZE,
-  MAX_PDF_SIZE_LABEL,
+  isSafePdfUrl,
   parseEmailList,
 } from "lib/validations/bulkEmail";
-import { FileText, Trash2 } from "lucide-react";
+import { uploadPdfToCloudinary } from "@lib/uploadToCloudinary";
+import { FileText, Link as LinkIcon, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Select, { MultiValue, StylesConfig } from "react-select";
@@ -73,6 +73,9 @@ const BulkEmailComp = () => {
   const { token } = useUserAuth();
 
   const [pdf, setPdf] = useState<File | null>(null);
+  const [pdfUrl, setPdfUrl] = useState("");
+  // Upload progress, or null when no upload is in flight.
+  const [uploadPct, setUploadPct] = useState<number | null>(null);
   // Lazy init from storage (component is client-only) so the load never races
   // with the save effect below.
   const [recipients, setRecipients] = useState<string[]>(readSavedRecipients);
@@ -90,23 +93,38 @@ const BulkEmailComp = () => {
     }
   }, [recipients]);
 
+  // The PDF goes straight from the browser to Cloudinary — never through our
+  // API route, which Netlify caps at ~4.4MB. What comes back is a public URL,
+  // and that is what the email links to.
   const onDrop = useCallback(
-    (accepted: File[]) => {
+    async (accepted: File[]) => {
       const file = accepted[0];
       if (!file) return;
       if (file.type !== "application/pdf") {
         toast({ variant: "destructive", title: "Only PDF files are accepted" });
         return;
       }
-      if (file.size > MAX_PDF_SIZE) {
+
+      setPdf(file);
+      setUploadPct(0);
+      try {
+        const { url } = await uploadPdfToCloudinary(file, setUploadPct);
+        setPdfUrl(url);
+        toast({
+          title: "Newsletter uploaded",
+          description: "Donors will get a link to it.",
+        });
+      } catch (err) {
+        setPdf(null);
         toast({
           variant: "destructive",
-          title: "File too large",
-          description: `The PDF must be ${MAX_PDF_SIZE_LABEL} or smaller.`,
+          title: "Upload failed",
+          description:
+            err instanceof Error ? err.message : "Could not upload the PDF",
         });
-        return;
+      } finally {
+        setUploadPct(null);
       }
-      setPdf(file);
     },
     [toast]
   );
@@ -155,9 +173,29 @@ const BulkEmailComp = () => {
     [recipients]
   );
 
+  const trimmedUrl = pdfUrl.trim();
+  const urlValid = trimmedUrl === "" || isSafePdfUrl(trimmedUrl);
+  const canSend =
+    (!!pdf || !!trimmedUrl) &&
+    urlValid &&
+    recipients.length > 0 &&
+    uploadPct === null;
+
   const handleSend = async () => {
-    if (!pdf) {
-      toast({ variant: "destructive", title: "Upload a PDF first" });
+    if (!pdf && !trimmedUrl) {
+      toast({
+        variant: "destructive",
+        title: "Add the newsletter",
+        description: "Attach a PDF or paste a link to one.",
+      });
+      return;
+    }
+    if (!urlValid) {
+      toast({
+        variant: "destructive",
+        title: "That link doesn't look right",
+        description: "Use a full http:// or https:// URL.",
+      });
       return;
     }
     if (recipients.length === 0) {
@@ -168,7 +206,10 @@ const BulkEmailComp = () => {
     try {
       const fd = new FormData();
       fd.append("emails", JSON.stringify(recipients));
-      fd.append("pdf", pdf, pdf.name);
+      // A link keeps the request tiny; attaching sends the bytes through
+      // Netlify, which rejects anything over ~4.4MB.
+      if (trimmedUrl) fd.append("pdfUrl", trimmedUrl);
+      else if (pdf) fd.append("pdf", pdf, pdf.name);
       fd.append("subject", subject);
       fd.append("message", message);
 
@@ -186,7 +227,7 @@ const BulkEmailComp = () => {
         });
         return;
       }
-      // EmailJS sends per-recipient, so some can fail while others succeed.
+      // Recipients are batched, so some can fail while others succeed.
       const failed: { email: string }[] = payload?.failed ?? [];
       toast({
         variant: failed.length ? "destructive" : undefined,
@@ -208,11 +249,16 @@ const BulkEmailComp = () => {
           so you don&apos;t have to re-enter it next time.
         </p>
 
-        {/* Step 1 — PDF */}
+        {/* Step 1 — PDF, either attached or linked */}
         <section className="rounded-xl border border-gray-200 p-5">
-          <h3 className="mb-3 font-body text-[1rem] font-[600]">
-            1. Upload PDF
+          <h3 className="mb-1 font-body text-[1rem] font-[600]">
+            1. The newsletter
           </h3>
+          <p className="mb-3 text-[.75rem] text-body-2">
+            Drop the PDF here and it uploads to Cloudinary. Donors get a “View
+            newsletter” button linking to it, so there&apos;s no size limit and
+            the email stays light.
+          </p>
           {!pdf ? (
             <div
               {...getRootProps()}
@@ -228,7 +274,7 @@ const BulkEmailComp = () => {
                 Drag & drop a PDF, or click to browse
               </p>
               <p className="font-body text-[.7rem] text-body-2">
-                PDF only · up to {MAX_PDF_SIZE_LABEL}
+                PDF only · any size
               </p>
             </div>
           ) : (
@@ -236,24 +282,71 @@ const BulkEmailComp = () => {
               data-testid="pdf-preview"
               className="flex items-center justify-between rounded-lg border border-gray-200 p-4"
             >
-              <div className="flex items-center gap-3">
-                <FileText className="text-primary" size={20} />
-                <div>
-                  <p className="text-[.8rem] font-[500]">{pdf.name}</p>
+              <div className="flex min-w-0 items-center gap-3">
+                <FileText className="shrink-0 text-primary" size={20} />
+                <div className="min-w-0">
+                  <p className="truncate text-[.8rem] font-[500]">{pdf.name}</p>
                   <p className="text-[.7rem] text-body-2">
-                    {(pdf.size / 1024).toFixed(0)} KB
+                    {(pdf.size / 1024 / 1024).toFixed(1)} MB
+                    {uploadPct !== null
+                      ? ` · uploading ${uploadPct}%`
+                      : pdfUrl
+                      ? " · uploaded"
+                      : ""}
                   </p>
+                  {uploadPct !== null && (
+                    <div className="mt-1.5 h-1 w-40 overflow-hidden rounded-full bg-gray-200">
+                      <div
+                        className="h-full rounded-full bg-primary transition-all"
+                        style={{ width: `${uploadPct}%` }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <button
                 aria-label="Remove PDF"
-                onClick={() => setPdf(null)}
-                className="flex h-7 w-7 items-center justify-center rounded-full transition-colors hover:bg-grey"
+                disabled={uploadPct !== null}
+                onClick={() => {
+                  setPdf(null);
+                  setPdfUrl("");
+                }}
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-grey disabled:opacity-40"
               >
                 <Trash2 size={15} />
               </button>
             </div>
           )}
+
+          <div className="mt-4">
+            <div className="mb-2 flex items-center gap-3">
+              <div className="h-px flex-1 bg-gray-200" />
+              <span className="text-[.7rem] uppercase tracking-wide text-body-2">
+                or paste a link
+              </span>
+              <div className="h-px flex-1 bg-gray-200" />
+            </div>
+            <div className="flex items-center gap-2">
+              <LinkIcon className="shrink-0 text-body-2" size={16} />
+              <Input
+                value={pdfUrl}
+                onChange={(e) => setPdfUrl(e.target.value)}
+                placeholder="https://soower.org/newsletters/volume-1-issue-2.pdf"
+                data-testid="pdf-url-input"
+                aria-invalid={!urlValid}
+              />
+            </div>
+            {!urlValid && (
+              <p className="mt-1 text-[.7rem] text-red-600">
+                Enter a full http:// or https:// URL.
+              </p>
+            )}
+            {!!trimmedUrl && urlValid && (
+              <p className="mt-1 break-all text-[.7rem] text-body-2">
+                Donors get a “View newsletter” button pointing here.
+              </p>
+            )}
+          </div>
         </section>
 
         {/* Step 2 — Recipients */}
@@ -326,7 +419,7 @@ const BulkEmailComp = () => {
             size="md"
             onClick={handleSend}
             loading={sending}
-            disabled={sending || !pdf || recipients.length === 0}
+            disabled={sending || !canSend}
             data-testid="send-btn"
           >
             {recipients.length > 0

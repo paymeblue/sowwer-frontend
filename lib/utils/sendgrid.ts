@@ -22,7 +22,8 @@ export interface SendBulkArgs {
   subject: string;
   html: string;
   text: string;
-  attachment: SendgridAttachment;
+  // Omitted in link mode, where the PDF is referenced by URL in the body.
+  attachment?: SendgridAttachment;
 }
 
 export interface BulkSendResult {
@@ -78,12 +79,16 @@ const sendChunk = async (
         { type: "text/html", value: html },
       ],
       attachments: [
-        {
-          content: attachment.base64,
-          filename: attachment.filename,
-          type: "application/pdf",
-          disposition: "attachment",
-        },
+        ...(attachment
+          ? [
+              {
+                content: attachment.base64,
+                filename: attachment.filename,
+                type: "application/pdf",
+                disposition: "attachment",
+              },
+            ]
+          : []),
         // Inline disposition + content_id is what makes cid: resolve in the
         // HTML, so the logo renders without the recipient unblocking images.
         {

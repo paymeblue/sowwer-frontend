@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { EMAIL_LOGO_CID } from "@lib/emailAssets";
+import { buildHtml } from "@lib/emailTemplate";
 import {
   isSendgridConfigured,
   sendBulkViaSendgrid,
@@ -8,6 +8,8 @@ import {
 import {
   DEFAULT_EMAIL_MESSAGE,
   DEFAULT_EMAIL_SUBJECT,
+  fileNameFromUrl,
+  isSafePdfUrl,
   MAX_PDF_SIZE,
   MAX_PDF_SIZE_LABEL,
   MAX_RECIPIENTS,
@@ -19,56 +21,12 @@ export const runtime = "nodejs";
 interface ParsedBody {
   emails: string[];
   pdf: File | null;
+  // Link mode: the PDF is hosted elsewhere and only referenced, which keeps the
+  // request tiny and sidesteps Netlify's payload limit entirely.
+  pdfUrl: string;
   subject: string;
   message: string;
 }
-
-const escapeHtml = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-// Branded, donor-facing HTML email. `message` is plain text; blank lines split
-// paragraphs and single newlines become line breaks.
-const buildHtml = (message: string) => {
-  const blocks = message.split(/\n{2,}/);
-  const paragraphs = blocks
-    .map((p, i) => {
-      // No trailing margin on the last block, or it stacks with the cell
-      // padding and leaves a dead gap above the footer rule.
-      const margin = i === blocks.length - 1 ? "0" : "0 0 16px";
-      return `<p style="margin:${margin}">${escapeHtml(p).replace(
-        /\n/g,
-        "<br/>"
-      )}</p>`;
-    })
-    .join("");
-
-  // Tables and inline styles throughout: Outlook ignores most modern CSS, and
-  // the logo is an inline (cid:) part so it renders without the recipient
-  // having to unblock remote images.
-  return `<div style="margin:0;padding:24px;background:#f4f6fb;font-family:Arial,Helvetica,sans-serif">
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e8eaf0">
-      <tr>
-        <td align="center" style="padding:28px 28px 22px">
-          <img src="cid:${EMAIL_LOGO_CID}" alt="Soower" width="180" style="display:block;width:180px;max-width:180px;height:auto;border:0;outline:none;text-decoration:none" />
-        </td>
-      </tr>
-      <tr>
-        <td style="height:4px;background:#FFC629;font-size:0;line-height:0">&nbsp;</td>
-      </tr>
-      <tr>
-        <td style="padding:28px;color:#1a1a1a;font-size:15px;line-height:1.7">
-          ${paragraphs}
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:18px 28px;border-top:1px solid #eef0f5;color:#8a93a6;font-size:12px;line-height:1.5">
-          You're receiving this email because you supported Soower. Thank you for
-          standing with the widows, orphans, and missionaries we serve.
-        </td>
-      </tr>
-    </table>
-  </div>`;
-};
 
 const readBody = async (req: NextRequest): Promise<ParsedBody> => {
   const data = await req.formData();
@@ -93,7 +51,8 @@ const readBody = async (req: NextRequest): Promise<ParsedBody> => {
   const pdf = data.get("pdf");
   return {
     emails: Array.from(new Set(emails)),
-    pdf: pdf instanceof File ? pdf : null,
+    pdf: pdf instanceof File && pdf.size > 0 ? pdf : null,
+    pdfUrl: ((data.get("pdfUrl") as string) || "").trim(),
     subject: (data.get("subject") as string)?.trim() || DEFAULT_EMAIL_SUBJECT,
     message: (data.get("message") as string)?.trim() || DEFAULT_EMAIL_MESSAGE,
   };
@@ -110,7 +69,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const { emails: recipients, pdf, subject, message } = body;
+  const { emails: recipients, pdf, pdfUrl, subject, message } = body;
 
   if (recipients.length === 0) {
     return NextResponse.json(
@@ -124,23 +83,33 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { status: 400 }
     );
   }
-  if (!pdf) {
+  if (!pdf && !pdfUrl) {
     return NextResponse.json(
-      { message: "A PDF file is required to send" },
+      { message: "Attach a PDF or provide a link to one" },
       { status: 400 }
     );
   }
-  if (pdf.type !== "application/pdf") {
+  if (pdfUrl && !isSafePdfUrl(pdfUrl)) {
     return NextResponse.json(
-      { message: "Only PDF files are accepted" },
+      { message: "The PDF link must be a valid http(s) URL" },
       { status: 400 }
     );
   }
-  if (pdf.size > MAX_PDF_SIZE) {
-    return NextResponse.json(
-      { message: `PDF exceeds the ${MAX_PDF_SIZE_LABEL} size limit` },
-      { status: 400 }
-    );
+  if (pdf) {
+    if (pdf.type !== "application/pdf") {
+      return NextResponse.json(
+        { message: "Only PDF files are accepted" },
+        { status: 400 }
+      );
+    }
+    if (pdf.size > MAX_PDF_SIZE) {
+      return NextResponse.json(
+        {
+          message: `PDF exceeds the ${MAX_PDF_SIZE_LABEL} attachment limit. Host it and send a link instead.`,
+        },
+        { status: 400 }
+      );
+    }
   }
 
   // TEST MODE: explicit opt-in that reports success without contacting SendGrid,
@@ -162,13 +131,22 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   // SendGrid fans out one personalization per recipient, so the whole list goes
   // out in a request or two rather than one call per donor.
-  const base64 = Buffer.from(await pdf.arrayBuffer()).toString("base64");
+  const attachment = pdf
+    ? {
+        filename: pdf.name || "document.pdf",
+        base64: Buffer.from(await pdf.arrayBuffer()).toString("base64"),
+      }
+    : undefined;
+  const linkName = pdfUrl ? fileNameFromUrl(pdfUrl) : undefined;
+
   const { sent, failed } = await sendBulkViaSendgrid({
     recipients,
     subject,
-    html: buildHtml(message),
-    text: message,
-    attachment: { filename: pdf.name || "document.pdf", base64 },
+    html: buildHtml(message, pdfUrl || undefined, linkName),
+    // Link mode needs the URL in the plain-text part too, or text-only clients
+    // get a thank-you note with no way to reach the newsletter.
+    text: pdfUrl ? `${message}\n\n${linkName}: ${pdfUrl}` : message,
+    attachment,
   });
 
   if (sent.length === 0) {

@@ -1,10 +1,34 @@
 import * as z from "zod";
 
-// Resend caps a whole email at 40MB after base64 encoding, which inflates the
-// PDF by ~33%. 10MB raw lands around 13MB encoded — comfortably inside.
-export const MAX_PDF_SIZE = 10 * 1024 * 1024;
-export const MAX_PDF_SIZE_LABEL = "10MB";
+// The binding constraint is Netlify, not the mail provider: it caps a function's
+// request body at 6MB *after* base64 encoding, so the real ceiling for an
+// uploaded file is ~4.4MB. Measured against production — 4MB gets through, 5MB
+// returns 413 before our code ever runs. Anything larger must be sent as a link
+// (see PDF_URL below) rather than an attachment.
+export const MAX_PDF_SIZE = 4 * 1024 * 1024;
+export const MAX_PDF_SIZE_LABEL = "4MB";
 export const MAX_RECIPIENTS = 500;
+
+// Only http(s) is allowed — a javascript: or data: URL would otherwise end up
+// in an href we render into every donor's inbox.
+export const isSafePdfUrl = (raw: string): boolean => {
+  try {
+    const { protocol } = new URL(raw.trim());
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
+// Falls back to a sensible label when the URL has no filename segment.
+export const fileNameFromUrl = (raw: string): string => {
+  try {
+    const last = new URL(raw.trim()).pathname.split("/").filter(Boolean).pop();
+    return last ? decodeURIComponent(last) : "Newsletter.pdf";
+  } catch {
+    return "Newsletter.pdf";
+  }
+};
 
 // Default donor-facing email copy. Pre-filled in the UI and used as the
 // fallback server-side when the admin leaves the fields blank. Written in the
