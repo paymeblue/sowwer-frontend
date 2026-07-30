@@ -38,16 +38,6 @@ const readSavedRecipients = (): string[] => {
   }
 };
 
-// Each recipient is a separate Resend request, paced to stay under the rate
-// limit, so the wait scales with the list. Mirrors SEND_INTERVAL_MS in
-// lib/utils/resend.ts. Give the admin an honest estimate before they click.
-const formatDuration = (count: number): string => {
-  const seconds = Math.ceil(count * 0.15);
-  if (seconds < 60) return `${seconds} seconds`;
-  const minutes = Math.ceil(seconds / 60);
-  return `${minutes} minute${minutes === 1 ? "" : "s"}`;
-};
-
 const selectStyles: StylesConfig<EmailOption, true> = {
   control: (base) => ({
     ...base,
@@ -347,8 +337,7 @@ const BulkEmailComp = () => {
           </Button>
           {recipients.length > 0 && (
             <p className="text-[.72rem] text-body-2">
-              Emails go out one at a time — roughly{" "}
-              {formatDuration(recipients.length)}. Keep this tab open.
+              Each donor gets their own copy — nobody sees the other addresses.
             </p>
           )}
         </div>

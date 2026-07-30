@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { EMAIL_LOGO_CID } from "@lib/emailAssets";
 import {
-  isResendConfigured,
-  resendConfigHint,
-  sendBulkViaResend,
-} from "@lib/resend";
+  isSendgridConfigured,
+  sendBulkViaSendgrid,
+  sendgridConfigHint,
+} from "@lib/sendgrid";
 import {
   DEFAULT_EMAIL_MESSAGE,
   DEFAULT_EMAIL_SUBJECT,
@@ -143,7 +143,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  // TEST MODE: explicit opt-in that reports success without contacting Resend,
+  // TEST MODE: explicit opt-in that reports success without contacting SendGrid,
   // so the UI flow can be exercised without sending real mail.
   if (process.env.BULK_EMAIL_TEST_MODE === "true") {
     return NextResponse.json({
@@ -153,14 +153,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     });
   }
 
-  if (!isResendConfigured()) {
-    return NextResponse.json({ message: resendConfigHint() }, { status: 500 });
+  if (!isSendgridConfigured()) {
+    return NextResponse.json(
+      { message: sendgridConfigHint() },
+      { status: 500 }
+    );
   }
 
-  // One request per recipient (Resend's batch endpoint can't carry attachments),
-  // so recipients can fail independently.
+  // SendGrid fans out one personalization per recipient, so the whole list goes
+  // out in a request or two rather than one call per donor.
   const base64 = Buffer.from(await pdf.arrayBuffer()).toString("base64");
-  const { sent, failed } = await sendBulkViaResend({
+  const { sent, failed } = await sendBulkViaSendgrid({
     recipients,
     subject,
     html: buildHtml(message),
@@ -171,8 +174,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (sent.length === 0) {
     return NextResponse.json(
       {
-        provider: "resend",
-        message: failed[0]?.error || "Resend delivery failed",
+        provider: "sendgrid",
+        message: failed[0]?.error || "SendGrid delivery failed",
         failed,
       },
       { status: 502 }
@@ -180,7 +183,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   return NextResponse.json({
-    provider: "resend",
+    provider: "sendgrid",
     message: failed.length
       ? `Sent to ${sent.length} of ${recipients.length} recipient(s) — ${failed.length} failed`
       : `Sent to ${sent.length} recipient(s)`,
