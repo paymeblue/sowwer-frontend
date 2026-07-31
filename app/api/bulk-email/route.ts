@@ -89,6 +89,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { status: 400 }
     );
   }
+  // Exactly one PDF per newsletter. Accepting both would leave it to chance
+  // which one donors actually receive.
+  if (pdf && pdfUrl) {
+    return NextResponse.json(
+      { message: "Send either a PDF or a link to one, not both" },
+      { status: 400 }
+    );
+  }
   if (pdfUrl && !isSafePdfUrl(pdfUrl)) {
     return NextResponse.json(
       { message: "The PDF link must be a valid http(s) URL" },

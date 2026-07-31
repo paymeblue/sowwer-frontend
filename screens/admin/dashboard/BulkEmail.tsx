@@ -98,6 +98,18 @@ const BulkEmailComp = () => {
   // and that is what the email links to.
   const onDrop = useCallback(
     async (accepted: File[]) => {
+      // A newsletter carries exactly one PDF, so a second drop is ignored
+      // rather than silently replacing the first (which would also orphan the
+      // already-uploaded file in Cloudinary). Remove the current one first.
+      if (uploadPct !== null || pdf || pdfUrl) {
+        toast({
+          variant: "destructive",
+          title: "One PDF per newsletter",
+          description: "Remove the current one before adding another.",
+        });
+        return;
+      }
+
       const file = accepted[0];
       if (!file) return;
       if (file.type !== "application/pdf") {
@@ -126,14 +138,22 @@ const BulkEmailComp = () => {
         setUploadPct(null);
       }
     },
-    [toast]
+    [toast, uploadPct, pdf, pdfUrl]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { "application/pdf": [".pdf"] },
     multiple: false,
+    // Belt and braces: also stops the file picker offering a multi-select.
+    maxFiles: 1,
+    disabled: uploadPct !== null || !!pdf || !!pdfUrl,
   });
+
+  const clearPdf = () => {
+    setPdf(null);
+    setPdfUrl("");
+  };
 
   const addEmails = useCallback((raw: string) => {
     const parsed = parseEmailList(raw);
@@ -259,7 +279,10 @@ const BulkEmailComp = () => {
             newsletter” button linking to it, so there&apos;s no size limit and
             the email stays light.
           </p>
-          {!pdf ? (
+          {/* The dropzone is unmounted once a link is pasted — react-dropzone's
+              `disabled` leaves the underlying file input usable, so hiding it is
+              the only way to truly rule out a second PDF. */}
+          {!pdf && !trimmedUrl ? (
             <div
               {...getRootProps()}
               className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed py-10 transition-colors ${
@@ -277,7 +300,7 @@ const BulkEmailComp = () => {
                 PDF only · any size
               </p>
             </div>
-          ) : (
+          ) : !pdf ? null : (
             <div
               data-testid="pdf-preview"
               className="flex items-center justify-between rounded-lg border border-gray-200 p-4"
@@ -302,15 +325,18 @@ const BulkEmailComp = () => {
                       />
                     </div>
                   )}
+                  {uploadPct === null && !!pdfUrl && (
+                    <p className="mt-1 break-all text-[.68rem] text-body-2">
+                      {pdfUrl}
+                    </p>
+                  )}
                 </div>
               </div>
               <button
                 aria-label="Remove PDF"
                 disabled={uploadPct !== null}
-                onClick={() => {
-                  setPdf(null);
-                  setPdfUrl("");
-                }}
+                onClick={clearPdf}
+                data-testid="pdf-remove"
                 className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-grey disabled:opacity-40"
               >
                 <Trash2 size={15} />
@@ -318,35 +344,49 @@ const BulkEmailComp = () => {
             </div>
           )}
 
-          <div className="mt-4">
-            <div className="mb-2 flex items-center gap-3">
-              <div className="h-px flex-1 bg-gray-200" />
-              <span className="text-[.7rem] uppercase tracking-wide text-body-2">
-                or paste a link
-              </span>
-              <div className="h-px flex-1 bg-gray-200" />
+          {/* The link field is an alternative to uploading, never an addition —
+              it disappears once a file is in play so only one PDF can win. */}
+          {!pdf && (
+            <div className="mt-4">
+              <div className="mb-2 flex items-center gap-3">
+                <div className="h-px flex-1 bg-gray-200" />
+                <span className="text-[.7rem] uppercase tracking-wide text-body-2">
+                  or paste a link
+                </span>
+                <div className="h-px flex-1 bg-gray-200" />
+              </div>
+              <div className="flex items-center gap-2">
+                <LinkIcon className="shrink-0 text-body-2" size={16} />
+                <Input
+                  value={pdfUrl}
+                  onChange={(e) => setPdfUrl(e.target.value)}
+                  placeholder="https://res.cloudinary.com/…/newsletter.pdf"
+                  data-testid="pdf-url-input"
+                  aria-invalid={!urlValid}
+                />
+                {!!trimmedUrl && (
+                  <button
+                    aria-label="Clear link"
+                    onClick={clearPdf}
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-grey"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                )}
+              </div>
+              {!urlValid && (
+                <p className="mt-1 text-[.7rem] text-red-600">
+                  Enter a full http:// or https:// URL.
+                </p>
+              )}
+              {!!trimmedUrl && urlValid && (
+                <p className="mt-1 break-all text-[.7rem] text-body-2">
+                  Donors get a “View newsletter” button pointing here. Clear it
+                  to upload a file instead.
+                </p>
+              )}
             </div>
-            <div className="flex items-center gap-2">
-              <LinkIcon className="shrink-0 text-body-2" size={16} />
-              <Input
-                value={pdfUrl}
-                onChange={(e) => setPdfUrl(e.target.value)}
-                placeholder="https://soower.org/newsletters/volume-1-issue-2.pdf"
-                data-testid="pdf-url-input"
-                aria-invalid={!urlValid}
-              />
-            </div>
-            {!urlValid && (
-              <p className="mt-1 text-[.7rem] text-red-600">
-                Enter a full http:// or https:// URL.
-              </p>
-            )}
-            {!!trimmedUrl && urlValid && (
-              <p className="mt-1 break-all text-[.7rem] text-body-2">
-                Donors get a “View newsletter” button pointing here.
-              </p>
-            )}
-          </div>
+          )}
         </section>
 
         {/* Step 2 — Recipients */}
