@@ -22,7 +22,7 @@ export type Project =
   | "partnerships";
 type ImpactItem = {
   key: string;
-  img: StaticImageData;
+  img: StaticImageData | string;
   alt: string;
   text: string;
 };
@@ -153,23 +153,58 @@ const Program = ({ data }: Props) => {
               {data.impact_subtitle}
             </p>
           </div>
-          {data?.impact_items && (
+          {data?.impact_items && data.impact_items.length === 1 && (
             <div className="my-8 flex flex-col items-center gap-6 md:my-16 md:flex-row md:gap-4">
-              {data.impact_items.map((item) => (
-                <div key={item.key} className="relative w-full md:w-auto">
-                  <Image
-                    src={item.img}
-                    alt={item.alt}
-                    className="h-auto w-full object-contain"
-                    width={585}
-                    height={515}
-                    placeholder="blur"
-                  />
-                  <p className="absolute bottom-4 left-4 w-full max-w-[300px] font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl md:bottom-8 md:left-8 md:max-w-[450px] md:text-3xl md:leading-7 lg:text-[30px]">
-                    {item.text}
-                  </p>
-                </div>
-              ))}
+              {data.impact_items.map((item) => {
+                const isRemote = typeof item.img === "string";
+                return (
+                  <div key={item.key} className="relative w-full md:w-auto">
+                    <Image
+                      src={item.img}
+                      alt={item.alt}
+                      className={
+                        isRemote
+                          ? "photo-real h-auto w-full object-cover"
+                          : "h-auto w-full object-contain"
+                      }
+                      width={585}
+                      height={515}
+                      placeholder={isRemote ? "empty" : "blur"}
+                    />
+                    <p className="absolute bottom-4 left-4 w-full max-w-[300px] font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl md:bottom-8 md:left-8 md:max-w-[450px] md:text-3xl md:leading-7 lg:text-[30px]">
+                      {item.text}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {data?.impact_items && data.impact_items.length > 1 && (
+            <div className="scrollbar-none my-8 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4 md:my-16">
+              {data.impact_items.map((item) => {
+                const isRemote = typeof item.img === "string";
+                return (
+                  <div
+                    key={item.key}
+                    className="relative h-72 w-64 shrink-0 snap-start overflow-hidden rounded-3xl sm:h-80 sm:w-80"
+                  >
+                    <Image
+                      src={item.img}
+                      alt={item.alt}
+                      fill
+                      sizes="(max-width: 640px) 256px, 320px"
+                      className={
+                        isRemote ? "photo-real object-cover" : "object-cover"
+                      }
+                      placeholder={isRemote ? "empty" : "blur"}
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                    <p className="absolute bottom-5 left-5 right-5 font-aeonik text-lg font-medium leading-tight text-white sm:text-xl">
+                      {item.text}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           )}
           <Slider data={data.testimonials} />

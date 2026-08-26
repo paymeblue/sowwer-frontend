@@ -43,28 +43,28 @@ const Footer = ({ variant = "default" }: Props) => {
     );
   }
   return (
-    <footer className="mt-auto min-h-[40vh] w-full flex-col bg-[#121422] pt-8">
+    <footer className="mt-auto w-full overflow-hidden bg-[#0A0C18] pt-16">
       <SectionContainer className="max-w-[1440px] px-4 sm:px-6 md:px-8">
-        <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
-          <div className="flex flex-col items-center lg:items-start">
+        <div className="grid w-full grid-cols-1 gap-12 border-b border-white/10 pb-12 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="col-span-1 sm:col-span-2 lg:col-span-2">
             <Logo logoVariant="white" />
-            <p className="mb-0 mt-0 max-w-sm text-center font-baskervville text-sm italic text-white sm:text-base lg:text-start">
+            <p className="mb-0 mt-3 max-w-sm font-baskervville text-sm italic text-white/80 sm:text-base">
               Pray. Give. Go.
             </p>
-            <ul className="my-4 flex flex-col items-center gap-2 sm:my-6 lg:items-start">
+            <ul className="my-5 flex flex-col gap-2">
               <li className="flex items-start gap-2 text-white">
-                <Calling set="bold" size={17} />
+                <Calling set="bold" size={16} />
                 <div className="flex flex-col">
                   <Link
                     href="tel:+2349055553431"
                     target="_blank"
-                    className="text-xs leading-tight hover:text-white/80 sm:text-sm sm:leading-[22px]"
+                    className="text-xs leading-tight text-white/80 hover:text-white sm:text-sm"
                   >
                     (+234) 905 555 3431
                   </Link>
                   <Link
                     href="tel:+2347076016055"
-                    className="text-xs leading-tight hover:text-white/80 sm:text-sm sm:leading-[22px]"
+                    className="text-xs leading-tight text-white/80 hover:text-white sm:text-sm"
                   >
                     (+234) 707 601 6055
                   </Link>
@@ -74,121 +74,124 @@ const Footer = ({ variant = "default" }: Props) => {
                 <Link
                   href="mailto:info@soower.org"
                   target="_blank"
-                  className="flex items-center gap-2 text-xs leading-tight text-white hover:text-white/80 sm:text-sm sm:leading-[22px]"
+                  className="flex items-center gap-2 text-xs leading-tight text-white/80 hover:text-white sm:text-sm"
                 >
-                  <Message set="bold" size={17} />
+                  <Message set="bold" size={16} />
                   <span>info@soower.org</span>
                 </Link>
               </li>
             </ul>
-            <div className="mb-8 flex items-center justify-center gap-2 lg:mb-0">
+            <div className="flex items-center gap-2">
               <Link
                 href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
                 target="_blank"
-                className="bg-white/15 flex items-center justify-center rounded-full bg-white/10 p-2 sm:p-3"
+                className="flex items-center justify-center rounded-full bg-white/10 p-2.5 transition-colors hover:bg-white/20"
               >
                 <InstagramIcon />
               </Link>
               <Link
                 href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
                 target="_blank"
-                className="bg-white/15 flex items-center justify-center rounded-full bg-white/10 p-2 sm:p-3"
+                className="flex items-center justify-center rounded-full bg-white/10 p-2.5 transition-colors hover:bg-white/20"
               >
                 <FacebookIcon />
               </Link>
               <Link
                 href="https://www.linkedin.com/company/soower"
                 target="_blank"
-                className="bg-white/15 flex items-center justify-center rounded-full bg-white/10 p-2 sm:p-3"
+                className="flex items-center justify-center rounded-full bg-white/10 p-2.5 transition-colors hover:bg-white/20"
               >
                 <LinkedinIcon />
               </Link>
             </div>
           </div>
 
-          {/* right */}
-          <div className="w-full lg:w-auto">
-            <div className="flex flex-col space-y-8 sm:space-y-12 md:flex-row md:space-x-10 md:space-y-0 lg:space-x-20">
-              {/* Quick Links */}
-              <div className="flex flex-col items-center space-y-4 sm:space-y-6 md:items-start">
-                <h5 className="font-montreal text-xs font-medium leading-tight text-white sm:text-[13px] sm:leading-[15.6px]">
-                  Company
-                </h5>
-                <ul className="flex flex-col items-center gap-2 md:items-start">
-                  <li>
-                    <Link
-                      href="/about-us"
-                      className="text-[10px] text-white hover:text-white/80 sm:text-xs"
-                    >
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/registry/widow"
-                      className="text-[10px] text-white hover:text-white/80 sm:text-xs"
-                    >
-                      Registry
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/contact-us"
-                      className="text-[10px] text-white hover:text-white/80 sm:text-xs"
-                    >
-                      Contact Us
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div className="flex flex-col items-center space-y-4 sm:space-y-6 md:items-start">
-                <h5 className="font-montreal text-xs font-medium leading-tight text-white sm:text-[13px] sm:leading-[15.6px]">
-                  Our Programs
-                </h5>
-                <ul className="flex flex-col items-center gap-2 md:items-start">
-                  <li>
-                    <Link
-                      href="/programs/widow-care"
-                      className="text-[10px] text-white hover:text-white/80 sm:text-xs"
-                    >
-                      WidowCare
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/programs/dad-project"
-                      className="text-[10px] text-white hover:text-white/80 sm:text-xs"
-                    >
-                      The DAD Project
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/programs/mission-care"
-                      className="text-[10px] text-white hover:text-white/80 sm:text-xs"
-                    >
-                      MissionCare
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/programs/partnerships"
-                      className="text-[10px] text-white hover:text-white/80 sm:text-xs"
-                    >
-                      Partnerships
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-8 flex flex-col items-center space-y-2 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0 md:justify-start lg:flex-row lg:space-x-4 lg:space-y-0">
+          <div className="col-span-1">
+            <h5 className="eyebrow mb-4 block text-white/50">Company</h5>
+            <ul className="flex flex-col gap-3">
+              <li>
+                <Link
+                  href="/about-us"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/registry/widow"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  Registry
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact-us"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/newsletters"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  Newsletters
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="col-span-1">
+            <h5 className="eyebrow mb-4 block text-white/50">Our Programs</h5>
+            <ul className="flex flex-col gap-3">
+              <li>
+                <Link
+                  href="/programs/widow-care"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  WidowCare
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/programs/dad-project"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  The DAD Project
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/programs/mission-care"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  MissionCare
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/programs/partnerships"
+                  className="text-sm text-white/80 hover:text-white"
+                >
+                  Partnerships
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="col-span-1">
+            <h5 className="eyebrow mb-4 block text-white/50">Get the app</h5>
+            <div className="flex flex-col items-start gap-3">
               <Link href="#" target="_blank">
                 <Image
                   src={appleStore}
                   width={148.53}
                   height={49.51}
                   placeholder="blur"
-                  className="h-auto w-[120px] object-contain sm:w-auto"
+                  className="h-auto w-[130px] object-contain"
                   alt="Download app on iOS devices from Apple Store"
                 />
               </Link>
@@ -198,38 +201,46 @@ const Footer = ({ variant = "default" }: Props) => {
                   width={148.53}
                   height={49.51}
                   placeholder="blur"
-                  className="h-auto w-[120px] object-contain sm:w-auto"
+                  className="h-auto w-[130px] object-contain"
                   alt="Download app on android devices from Google Play Store"
                 />
               </Link>
             </div>
           </div>
         </div>
-        <div className="mt-8 border-x-0 border-b-0 border-t-[0.3px] border-[#DADADA] py-6 sm:mt-10 sm:py-8">
-          <div className="flex flex-col items-center justify-between space-y-4 sm:space-y-6 md:flex-row md:space-x-6 md:space-y-0">
-            <span className="text-center font-montreal text-[10px] leading-tight text-[rgba(255,_255,_255,_0.8)] sm:text-xs sm:leading-[14.4px] lg:text-start">
-              © 2023 - {year} SOOWER. All rights reserved.
-            </span>
-            <div className="flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4">
-              <Link href="/terms-of-use">
-                <span className="font-body text-[10px] leading-tight text-[rgba(255,_255,_255,_0.8)] hover:text-white sm:text-xs sm:leading-[14.4px]">
-                  Terms of use
-                </span>
-              </Link>
-              <Link href="/privacy-policy">
-                <span className="font-body text-[10px] leading-tight text-[rgba(255,_255,_255,_0.8)] hover:text-white sm:text-xs sm:leading-[14.4px]">
-                  Privacy policy
-                </span>
-              </Link>
-              <Link href="/acceptable-use-policy">
-                <span className="font-body text-[10px] leading-tight text-[rgba(255,_255,_255,_0.8)] hover:text-white sm:text-xs sm:leading-[14.4px]">
-                  Acceptable use policy
-                </span>
-              </Link>
-            </div>
+
+        <div className="flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
+          <span className="text-center font-montreal text-xs text-white/50 sm:text-left">
+            © 2023 - {year} SOOWER. All rights reserved.
+          </span>
+          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-6">
+            <Link
+              href="/terms-of-use"
+              className="font-body text-xs text-white/50 hover:text-white"
+            >
+              Terms of use
+            </Link>
+            <Link
+              href="/privacy-policy"
+              className="font-body text-xs text-white/50 hover:text-white"
+            >
+              Privacy policy
+            </Link>
+            <Link
+              href="/acceptable-use-policy"
+              className="font-body text-xs text-white/50 hover:text-white"
+            >
+              Acceptable use policy
+            </Link>
           </div>
         </div>
       </SectionContainer>
+
+      <div className="pointer-events-none select-none pb-2 pt-6 text-center">
+        <span className="font-aeonik text-[18vw] font-bold leading-none tracking-tighter text-white/[0.04] sm:text-[15vw] lg:text-[12vw]">
+          SOOWER
+        </span>
+      </div>
     </footer>
   );
 };

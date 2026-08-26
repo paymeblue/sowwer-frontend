@@ -2,6 +2,7 @@ import { TickIcon } from "@components/assets/icons";
 import { Button } from "@components/ui/button";
 import { Project, WidowCareProgram } from "@components/website/programs/id";
 import { formatText } from "@lib/functions";
+import { dadProjectPhotos } from "@lib/soowerContent";
 import { ArrowRight } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
 import dynamic from "next/dynamic";
@@ -13,7 +14,6 @@ import frame4 from "public/images/frame-4.png";
 import widowCareImg from "public/images/img-19.png";
 import img1 from "public/images/img-23.png";
 import img2 from "public/images/img-24.png";
-import img3 from "public/images/img-25.png";
 import img4 from "public/images/img-26.png";
 // import img5 from "public/images/img-27.png";
 // import img6 from "public/images/img-28.png";
@@ -226,15 +226,13 @@ const programs: Programs = {
     ),
     impact_title: "Discover our impact through the DAD Project",
     impact_subtitle:
-      "Through the DAD Project (Donate a Dream), we have transformed the lives of orphaned children by providing access to education, mentorship, and opportunities for a brighter future. Here are some of the initiatives that have made a lasting impact:",
-    impact_items: [
-      {
-        key: "1",
-        img: img3,
-        alt: "images",
-        text: "Partnering with the Regy&Henry Foundation to help orphans",
-      },
-    ],
+      "Through the DAD Project (Donate a Dream), we have transformed the lives of orphaned children by providing access to education, mentorship, and opportunities for a brighter future. Real moments from the Slum-to-School 5th Year Celebration with Regy & Henry Amazing Grace Foundation:",
+    impact_items: dadProjectPhotos.map((photo) => ({
+      key: photo.key,
+      img: photo.src,
+      alt: photo.title,
+      text: photo.title,
+    })),
     // testimonials: [
     //   {
     //     key: "1",

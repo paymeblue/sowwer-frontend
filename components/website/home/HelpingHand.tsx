@@ -20,11 +20,13 @@ const HelpingHand = () => {
         scrollTrigger: { trigger: scope.current, start: "top 75%" },
         defaults: { ease: "power2.out", duration: 0.6 },
       });
-      tl.from(".helping-hand-img", { x: -40, opacity: 0 }).from(
-        ".helping-hand-copy",
-        { x: 40, opacity: 0 },
-        "-=0.4"
-      );
+      tl.from(".helping-hand-img", { x: -40, opacity: 0 })
+        .from(
+          ".helping-hand-badge",
+          { y: 16, opacity: 0, duration: 0.4 },
+          "-=0.2"
+        )
+        .from(".helping-hand-copy", { x: 40, opacity: 0 }, "-=0.5");
     },
     { scope }
   );
@@ -32,26 +34,36 @@ const HelpingHand = () => {
   return (
     <section
       ref={scope}
-      className="flex w-full flex-col items-center justify-center gap-8 px-4 py-12 sm:gap-12 sm:p-8 md:p-12 lg:flex-row lg:gap-24 lg:p-[6.25rem]"
+      className="flex w-full flex-col items-center justify-center gap-10 px-4 py-12 sm:gap-12 sm:p-8 md:p-12 lg:flex-row lg:gap-24 lg:p-[6.25rem]"
     >
-      <div className="helping-hand-img relative w-full max-w-[400px] lg:max-w-none">
+      <div className="helping-hand-img relative w-full max-w-[420px] lg:max-w-none">
         <Image
           src={josMedia.volunteerHandingParcel3}
           alt="A SOOWER volunteer handing a welfare parcel to a widow in Jos"
           width={511}
           height={483}
-          className="aspect-square h-auto w-full rounded-3xl object-cover"
+          sizes="(max-width: 1024px) 90vw, 45vw"
+          className="photo-real aspect-[4/5] h-auto w-full rounded-3xl object-cover lg:aspect-square"
         />
         <Image
           src={spiral}
-          alt="spiral"
+          alt=""
           height={98.09}
           width={98.09}
           className="absolute -bottom-5 -right-5 z-[-1] h-16 w-16 md:-bottom-10 md:-right-10 md:h-auto md:w-auto"
         />
+        <div className="helping-hand-badge absolute -bottom-6 left-4 flex items-center gap-3 rounded-2xl bg-white px-5 py-4 shadow-featured-project-card sm:left-6">
+          <span className="font-aeonik text-2xl font-medium text-primary sm:text-3xl">
+            8
+          </span>
+          <span className="max-w-[6.5rem] font-montreal text-xs leading-snug text-body-2">
+            years of uninterrupted monthly support
+          </span>
+        </div>
       </div>
       <div className="helping-hand-copy w-full max-w-[41.625rem]">
-        <h2 className="header w-full max-w-[38.5625rem] text-2xl font-medium sm:text-3xl md:text-4xl lg:text-[2.8125rem]">
+        <span className="eyebrow">Who we are</span>
+        <h2 className="header mt-3 w-full max-w-[38.5625rem] text-2xl font-medium sm:text-3xl md:text-4xl lg:text-[2.8125rem]">
           Perfectly positioned to lend a helping hand
         </h2>
         <p className="my-6 font-montreal text-base leading-7 md:text-lg md:leading-8">

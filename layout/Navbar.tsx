@@ -23,6 +23,7 @@ import SignUp from "@components/website/dialogs/sign-up";
 import Success from "@components/website/dialogs/success";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import { cn } from "@lib/cn";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,8 +34,10 @@ import {
   useSelectedLayoutSegment,
 } from "next/navigation";
 import logo from "public/images/logo.png";
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, Logout, Setting } from "react-iconly";
+
+const COLLAPSE_SCROLL_THRESHOLD = 80;
 
 const subMenu = [
   {
@@ -70,6 +73,27 @@ const Navbar = () => {
   const query = useSearchParams();
   const login = query.get("login") === "true";
   const { isAuthenticated: isAuth, user, logout } = useUserAuth();
+
+  const [expanded, setExpanded] = useState(true);
+  const { scrollY } = useScroll();
+  const lastScrollY = useRef(0);
+  const collapsedAtY = useRef(0);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) return;
+    const previous = lastScrollY.current;
+    if (expanded && latest > previous && latest > 160) {
+      setExpanded(false);
+      collapsedAtY.current = latest;
+    } else if (
+      !expanded &&
+      latest < previous &&
+      collapsedAtY.current - latest > COLLAPSE_SCROLL_THRESHOLD
+    ) {
+      setExpanded(true);
+    }
+    lastScrollY.current = latest;
+  });
 
   useEffect(() => {
     if (login) {
@@ -112,7 +136,20 @@ const Navbar = () => {
           setSuccessModal={setSuccessModal}
         />
       ) : null}
-      <header className="fixed left-1/2 top-6 z-[20] mx-auto w-[95%] max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-4 pr-2 text-body-1 shadow-navbar md:w-4/5 md:pl-6">
+      <motion.header
+        onClick={() => {
+          if (!expanded) setExpanded(true);
+        }}
+        initial={false}
+        animate={{
+          width: expanded ? "95%" : "3.75rem",
+        }}
+        transition={{ type: "spring", damping: 22, stiffness: 260 }}
+        className={cn(
+          "fixed left-1/2 top-6 z-[20] mx-auto max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-4 pr-2 text-body-1 shadow-navbar md:max-w-[1300px] md:pl-6",
+          !expanded && "cursor-pointer overflow-hidden"
+        )}
+      >
         <nav className="flex items-center justify-between md:grid md:grid-cols-6 md:gap-4">
           <div className="flex-shrink-0 md:col-span-1">
             <Link href="/">
@@ -127,7 +164,12 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <ul className="hidden items-center justify-center gap-6 md:col-span-4 md:flex">
+          <ul
+            className={cn(
+              "hidden items-center justify-center gap-6 md:col-span-4 md:flex",
+              !expanded && "md:pointer-events-none md:opacity-0"
+            )}
+          >
             <li>
               <Link
                 href="/about-us"
@@ -207,7 +249,12 @@ const Navbar = () => {
 
           {/* Desktop Auth Buttons */}
           {isAuth ? (
-            <div className="hidden md:col-span-1 md:block">
+            <div
+              className={cn(
+                "hidden md:col-span-1 md:block",
+                !expanded && "md:pointer-events-none md:opacity-0"
+              )}
+            >
               <DropdownMenu open={open} onOpenChange={setOpen}>
                 <DropdownMenuTrigger asChild className="cursor-pointer">
                   <div className="flex items-center justify-center gap-2">
@@ -247,7 +294,12 @@ const Navbar = () => {
               </DropdownMenu>
             </div>
           ) : (
-            <ul className="hidden shrink-0 items-center justify-center gap-2 justify-self-end md:col-span-1 md:flex">
+            <ul
+              className={cn(
+                "hidden shrink-0 items-center justify-center gap-2 justify-self-end md:col-span-1 md:flex",
+                !expanded && "md:pointer-events-none md:opacity-0"
+              )}
+            >
               <Button
                 variant="outline"
                 size="md"
@@ -452,7 +504,7 @@ const Navbar = () => {
             </Sheet>
           </div>
         </nav>
-      </header>
+      </motion.header>
     </Fragment>
   );
 };

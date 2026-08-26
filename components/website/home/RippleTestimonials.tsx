@@ -41,6 +41,9 @@ const RippleTestimonials = () => {
       />
       <div className="p-4 sm:p-6 md:absolute md:top-1/2 md:-translate-y-1/2 md:p-[100px]">
         <div className="flex w-full max-w-[799px] flex-col space-y-3">
+          <span className="eyebrow text-center md:text-left">
+            In their words
+          </span>
           <h2 className="text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-left md:text-[1.8rem] md:leading-[2.2rem] lg:text-[45px] lg:leading-[3rem]">
             The Ripple Effect of Giving
           </h2>
@@ -55,7 +58,7 @@ const RippleTestimonials = () => {
           {testimonials.map((item) => (
             <div
               key={item.key}
-              className="testimonial-card flex w-full flex-col gap-4 rounded-2xl bg-white p-6 shadow-featured-project-card"
+              className="testimonial-card flex w-full flex-col gap-4 rounded-2xl border border-black/5 bg-white p-6 transition-shadow duration-300 hover:shadow-featured-project-card"
             >
               <Quote className="text-primary" size={28} />
               <p className="font-baskervville text-base italic leading-relaxed text-black">

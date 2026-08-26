@@ -3,7 +3,6 @@
 import { Button } from "@components/ui/button";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { memo } from "react";
 import { Heart2 } from "react-iconly";
 
@@ -12,18 +11,19 @@ type Props = {
   alt: string;
 };
 const JoinUs = ({ img, alt }: Props) => {
-  const pathname = usePathname();
   const isRemote = typeof img === "string";
   return (
     <div className="relative flex flex-col md:block">
-      <Image
-        src={img}
-        alt={alt}
-        placeholder={isRemote ? "empty" : "blur"}
-        width={1512}
-        height={pathname === "/website" ? 674 : 540}
-        className="w-full object-contain"
-      />
+      <div className="relative h-[320px] w-full sm:h-[400px] md:h-[480px] lg:h-[34.5rem]">
+        <Image
+          src={img}
+          alt={alt}
+          fill
+          placeholder={isRemote ? "empty" : "blur"}
+          sizes="100vw"
+          className={isRemote ? "photo-real object-cover" : "object-cover"}
+        />
+      </div>
       <div className="mx-auto flex w-full max-w-[500px] flex-col gap-4 bg-white p-6 shadow-double sm:gap-6 sm:p-8 md:absolute md:right-10 md:mx-0 lg:right-40 lg:top-40 lg:rounded-2xl">
         <h5 className="text-xs font-medium leading-6 text-primary">
           GET INVOLVED

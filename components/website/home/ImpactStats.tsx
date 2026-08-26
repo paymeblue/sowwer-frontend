@@ -62,30 +62,37 @@ const ImpactStats = () => {
   return (
     <section
       aria-label="Our impact in 2025"
-      className="bg-secondary-black px-4 py-12 sm:px-6 sm:py-16 md:py-20"
+      className="relative overflow-hidden bg-[#FCF9F2] px-4 py-14 sm:px-6 sm:py-20 md:py-24"
     >
-      <SectionContainer>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-70"
+        style={{
+          background:
+            "radial-gradient(60% 60% at 15% 0%, rgba(255,198,41,0.10) 0%, transparent 60%), radial-gradient(50% 50% at 100% 100%, rgba(52,102,255,0.08) 0%, transparent 60%)",
+        }}
+      />
+      <SectionContainer className="relative">
+        <span className="eyebrow mb-8 block text-center sm:mb-10">
+          2025 impact
+        </span>
         <div
           ref={scope}
-          className="mx-auto grid w-full max-w-[1200px] grid-cols-2 gap-6 sm:gap-8 lg:grid-cols-4"
+          className="mx-auto grid w-full max-w-[900px] grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-y-0 sm:divide-x sm:divide-black/10"
         >
           {impactStats.map((stat) => (
-            <div key={stat.key} className="stat-card text-center text-white">
-              <p className="font-aeonik text-3xl font-medium leading-tight text-primary sm:text-4xl lg:text-[2.75rem]">
+            <div key={stat.key} className="stat-card px-2 text-center lg:px-6">
+              <p className="font-aeonik text-4xl font-medium leading-none text-accent sm:text-5xl lg:text-[3.25rem]">
                 {stat.prefix}
                 <span
                   className="stat-value"
                   data-value={stat.value}
-                  data-decimals={"decimals" in stat ? stat.decimals : 0}
+                  data-decimals={0}
                 >
-                  {formatValue(
-                    stat.value,
-                    "decimals" in stat ? stat.decimals : 0
-                  )}
+                  {formatValue(stat.value, 0)}
                 </span>
                 {stat.suffix}
               </p>
-              <p className="mt-2 font-montreal text-xs leading-snug text-white/70 sm:text-sm">
+              <p className="mx-auto mt-3 max-w-[10rem] font-montreal text-xs leading-snug text-body-2 sm:text-sm">
                 {stat.label}
               </p>
             </div>

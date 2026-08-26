@@ -90,6 +90,24 @@ input[type="number"] {
   @apply w-screen lg:h-screen lg:overflow-hidden;
 }
 
+/* Unifying grade applied to every real (non-AI) photograph on the site so a
+   mix of phone/WhatsApp/DSLR source shots reads as one art-directed look. */
+.photo-real {
+  filter: contrast(1.06) saturate(1.1) brightness(1.02);
+}
+
+.eyebrow {
+  @apply font-montreal text-xs font-semibold uppercase tracking-[0.2em] text-primary;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 .activate-cursor {
   pointer-events: all !important;
 }
