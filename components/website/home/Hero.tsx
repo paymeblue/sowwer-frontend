@@ -42,7 +42,7 @@ const Hero = () => {
   return (
     <section
       ref={scope}
-      className="relative min-h-[560px] w-full overflow-hidden md:min-h-[640px] lg:h-screen 2xl:h-[49.125rem]"
+      className="relative min-h-[560px] w-full overflow-hidden bg-secondary-black md:min-h-[640px] lg:h-screen 2xl:h-[49.125rem]"
     >
       {heroImages.map((img, i) => (
         <div

@@ -150,7 +150,17 @@ const Navbar = () => {
           !expanded && "cursor-pointer overflow-hidden"
         )}
       >
-        <nav className="flex items-center justify-between md:grid md:grid-cols-6 md:gap-4">
+        {!expanded && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <Menu className="h-5 w-5 text-black" />
+          </div>
+        )}
+        <nav
+          className={cn(
+            "flex items-center justify-between md:grid md:grid-cols-6 md:gap-4",
+            !expanded && "opacity-0"
+          )}
+        >
           <div className="flex-shrink-0 md:col-span-1">
             <Link href="/">
               <Image
