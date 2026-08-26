@@ -8,17 +8,18 @@ import { memo } from "react";
 import { Heart2 } from "react-iconly";
 
 type Props = {
-  img: StaticImageData;
+  img: StaticImageData | string;
   alt: string;
 };
 const JoinUs = ({ img, alt }: Props) => {
   const pathname = usePathname();
+  const isRemote = typeof img === "string";
   return (
     <div className="relative flex flex-col md:block">
       <Image
         src={img}
         alt={alt}
-        placeholder="blur"
+        placeholder={isRemote ? "empty" : "blur"}
         width={1512}
         height={pathname === "/website" ? 674 : 540}
         className="w-full object-contain"

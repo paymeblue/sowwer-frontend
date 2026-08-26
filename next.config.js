@@ -10,6 +10,12 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "soower-landing-media.s3.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
     // loader: "custom",
     // loaderFile: "./imageLoader.ts",
