@@ -2,6 +2,7 @@
 
 import { Button } from "@components/ui/button";
 import JoinUs from "@shared/JoinUs";
+import PhotoDeck, { DeckPhoto } from "./PhotoDeck";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 // import brand1 from "public/images/brand-1.png";
@@ -31,7 +32,7 @@ type Testimonial = {
   key: string;
   testimonial: string;
   author: string;
-  img?: StaticImageData;
+  img?: StaticImageData | string;
 };
 
 export type WidowCareProgram = {
@@ -40,13 +41,13 @@ export type WidowCareProgram = {
   pillText: string;
   hero_title: string;
   hero_subtitle: string;
-  hero_img: StaticImageData;
+  hero_deck: readonly DeckPhoto[];
   yellowSection?: ReactNode;
   impact_title?: string;
   impact_subtitle?: string;
   impact_items?: ImpactItem[];
   testimonials?: Testimonial[];
-  joinus_img: StaticImageData;
+  joinus_img: StaticImageData | string;
   joinus_alt: string;
 };
 type Props = { data: WidowCareProgram & { donateRoute: string } };
@@ -128,14 +129,7 @@ const Program = ({ data }: Props) => {
           </div>
         </div>
         <div className="flex w-full justify-center md:w-auto">
-          <Image
-            src={data.hero_img}
-            width={495}
-            height={321}
-            alt="hero image"
-            placeholder="blur"
-            className="aspect-auto h-auto max-w-full object-contain md:max-w-[400px] lg:max-w-[495px]"
-          />
+          <PhotoDeck photos={data.hero_deck} />
         </div>
       </section>
       {data.yellowSection && (
@@ -186,20 +180,20 @@ const Program = ({ data }: Props) => {
                 return (
                   <div
                     key={item.key}
-                    className="relative h-72 w-64 shrink-0 snap-start overflow-hidden rounded-3xl sm:h-80 sm:w-80"
+                    className="impact-tile relative h-[24rem] w-[17rem] shrink-0 snap-start overflow-hidden rounded-3xl bg-grey sm:h-[30rem] sm:w-[22rem] lg:h-[34rem] lg:w-[25rem]"
                   >
                     <Image
                       src={item.img}
                       alt={item.alt}
                       fill
-                      sizes="(max-width: 640px) 256px, 320px"
+                      sizes="(max-width: 640px) 272px, (max-width: 1024px) 352px, 400px"
                       className={
                         isRemote ? "photo-real object-cover" : "object-cover"
                       }
                       placeholder={isRemote ? "empty" : "blur"}
                     />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                    <p className="absolute bottom-5 left-5 right-5 font-aeonik text-lg font-medium leading-tight text-white sm:text-xl">
+                    <p className="absolute bottom-6 left-6 right-6 font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl">
                       {item.text}
                     </p>
                   </div>

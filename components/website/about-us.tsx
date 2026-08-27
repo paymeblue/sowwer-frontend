@@ -1,6 +1,14 @@
 "use client";
 
 // import { DownloadIcon } from "@components/assets/icons";
+import { BentoGrid, BentoGridItem } from "@components/ui/bento-grid";
+import { cn } from "@lib/cn";
+import BrandPhoto from "@components/shared/BrandPhoto";
+import {
+  aboutPhotos,
+  missionVisionPhotos,
+  sitePhotos,
+} from "@lib/soowerContent";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,69 +22,85 @@ import dir6 from "public/images/dir-6.png";
 import dir7 from "public/images/dir-7.png";
 import dir8 from "public/images/dir-8.png";
 import dir9 from "public/images/dir-9.png";
-import img1 from "public/images/img-10.png";
-import img2 from "public/images/img-11.png";
-import img3 from "public/images/img-12.png";
-import img4 from "public/images/img-13.png";
-// import img5 from "public/images/img-14.png";
-import img6 from "public/images/img-15.png";
-import img7 from "public/images/img-16.png";
-import img8 from "public/images/img-17.png";
-import img9 from "public/images/img-18.png";
 
 const images = [
   {
     key: "1",
-    img: img1,
+    img: sitePhotos.widowPortraitParcel,
+    alt: "A widow in Jos holding the food parcel she received from SOOWER",
+    kicker: "WidowCare",
+    caption: "Food support, delivered hand to hand",
+    span: "col-span-2 row-span-3",
   },
   {
     key: "2",
-    img: img2,
+    img: sitePhotos.childrenReceivingShoes,
+    alt: "Pupils with the school shoes and materials they received at the Slum-to-School celebration",
+    kicker: "The DAD Project",
+    caption: "500 children sponsored since 2021",
+    span: "col-span-2 row-span-2",
   },
   {
     key: "3",
-    img: img3,
+    img: sitePhotos.missionaryScreening,
+    alt: "A missionary being measured at the SOOWER-sponsored medical outreach",
+    kicker: "MissionCare",
+    caption: "Free screening for 120+ missionaries",
+    span: "col-span-1 row-span-2 md:col-span-1",
   },
   {
     key: "4",
-    img: img4,
+    img: sitePhotos.campPortrait,
+    alt: "A resident of Durumi IDP Camp during the Christmas Without Tears outreach",
+    kicker: "Partnerships",
+    caption: "153 displaced households at Durumi",
+    span: "col-span-1 row-span-2 md:col-span-1",
   },
-  // {
-  //   key: "5",
-  //   img: img5,
-  // },
 ];
 const cards = [
   {
     key: "1",
-    img: img7,
+    img: sitePhotos.widowsWithSupport,
+    alt: "Widows with the food support SOOWER provided in Jos",
     title: "WidowCare",
     description:
-      "Providing financial aid and support to help widows rebuild their lives.",
+      "Financial relief, vocational training and welfare support to help widows rebuild.",
+    stat: "156 on monthly support",
     link: "/programs/widow-care",
+    span: "md:col-span-2",
   },
   {
     key: "2",
-    img: img8,
+    img: sitePhotos.pupilsGathered,
+    alt: "Pupils gathered at the Slum-to-School fifth-year celebration",
     title: "The DAD Project",
-    description: "Giving orphans a future through educational sponsorships.",
+    description: "Educational sponsorships giving orphans a future.",
+    stat: "205 children in school",
     link: "/programs/dad-project",
+    span: "md:col-span-1",
   },
   {
     key: "3",
-    img: img9,
+    img: sitePhotos.screeningUnderBanner,
+    alt: "A missionary screened beneath the SOOWER banner at the Mid-Year Missions Conference",
     title: "MissionCare",
-    description: "Supporting missionaries with resources to spread the gospel.",
+    description:
+      "Welfare, healthcare and training for missionaries in the field.",
+    stat: "120+ screened",
     link: "/programs/mission-care",
+    span: "md:col-span-1",
   },
-  // {
-  //   key: "4",
-  //   img: img7,
-  //   title: "Partnerships",
-  //   description:
-  //     "Collaborating with other organizations to support those in need of assistance.",
-  //   link: "/programs/partnerships",
-  // },
+  {
+    key: "4",
+    img: sitePhotos.partnersTeam,
+    alt: "The SOOWER team with partner organisations at the Christmas Without Tears outreach",
+    title: "Partnerships",
+    description:
+      "Joint projects with churches and NGOs that extend the reach of both.",
+    stat: "13 partner organisations",
+    link: "/programs/partnerships",
+    span: "md:col-span-2",
+  },
 ];
 const directors = [
   {
@@ -154,17 +178,35 @@ const AboutPage = () => {
             for Those in Need
           </h1>
         </div>
-        <div className="mx-auto flex w-full max-w-[1560px] flex-wrap items-center justify-center gap-4 px-4 lg:items-end lg:justify-between">
+        {/* Bento: an asymmetric grid of real outreach photography, each cell
+            labelled with the programme it belongs to. */}
+        <div className="mx-auto grid w-full max-w-[1400px] auto-rows-[7rem] grid-cols-2 gap-3 px-4 sm:auto-rows-[9rem] md:grid-cols-4 md:px-6 lg:auto-rows-[10rem] lg:gap-4 lg:px-20">
           {images.map((image) => (
-            <div key={image.key} className="w-full max-w-[300px] sm:w-auto">
+            <figure
+              key={image.key}
+              className={cn(
+                "group relative overflow-hidden rounded-[1.5rem] bg-grey",
+                image.span
+              )}
+            >
               <Image
                 src={image.img}
-                alt={image.key}
-                width={305}
-                placeholder="blur"
-                className="aspect-auto h-auto w-full"
+                alt={image.alt}
+                fill
+                sizes="(max-width: 768px) 50vw, 30vw"
+                className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
-            </div>
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-4 pt-12 md:p-5 md:pt-16">
+                <figcaption>
+                  <span className="font-montreal text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-primary md:text-[0.68rem] md:tracking-[0.16em]">
+                    {image.kicker}
+                  </span>
+                  <span className="mt-1 block font-aeonik text-sm font-medium leading-tight text-white md:text-base">
+                    {image.caption}
+                  </span>
+                </figcaption>
+              </div>
+            </figure>
           ))}
         </div>
         <div className="absolute right-0 top-[580.57px] h-[180.11px] w-[310.39px] rotate-[26.72deg] bg-[#34E1FF] blur-[606.7px] lg:left-[1154px]" />
@@ -197,6 +239,57 @@ const AboutPage = () => {
           </Link> */}
         </div>
       </section>
+      {/* The team, and the man who chaired the launch — both pulled from the
+          newsletter PDFs' embedded photos rather than a standalone shoot. */}
+      <section className="mx-auto w-full max-w-[1560px] px-4 pb-16 sm:px-6 md:pb-24 lg:px-20">
+        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+          <figure className="group relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-grey sm:aspect-[16/9]">
+            <Image
+              src={aboutPhotos.teamHq}
+              alt="The SOOWER team at the foundation's Abuja office"
+              fill
+              sizes="(max-width: 1024px) 100vw, 60vw"
+              className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-5 sm:p-6">
+              <span className="font-montreal text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                The team
+              </span>
+              <span className="mt-1 block font-aeonik text-lg font-medium text-white sm:text-xl">
+                SOOWER, on the ground and behind the scenes
+              </span>
+            </figcaption>
+          </figure>
+
+          <div className="relative flex flex-col justify-center gap-5 rounded-3xl bg-[#FCF9F2] p-6 sm:p-8">
+            <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-2xl bg-grey sm:h-44 sm:w-44">
+              <Image
+                src={aboutPhotos.cosmasMaduka}
+                alt="Dr. Cosmas Maduka, CON, Chairman of Coscharis Group, addressing the SOOWER Foundation launch"
+                fill
+                sizes="176px"
+                className="photo-real object-cover object-[75%_30%]"
+              />
+            </div>
+            <div>
+              <p className="font-script text-3xl leading-none text-black sm:text-4xl">
+                Chaired by
+              </p>
+              <p className="mt-2 font-aeonik text-xl font-medium leading-tight text-black sm:text-2xl">
+                Dr. Cosmas Maduka, CON
+              </p>
+              <p className="mt-1 font-montreal text-sm text-body-2">
+                Chairman &amp; Founder, Coscharis Group
+              </p>
+              <p className="mt-3 font-montreal text-sm leading-relaxed text-body-1">
+                Dr. Maduka chaired SOOWER&apos;s official launch on May 7, 2025,
+                at the NAF Conference Centre, Abuja — the day now marked on the
+                foundation&apos;s calendar as &ldquo;SOOWER Day.&rdquo;
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="mx-4 mb-12 w-full max-w-[1560px] rounded-3xl bg-[#FCF9F2] px-4 py-10 sm:mx-6 md:py-16 lg:mx-auto">
         <div className="mx-auto flex w-full flex-col items-center justify-around gap-8 lg:flex-row">
           <div className="w-full max-w-full space-y-8 md:space-y-12 lg:max-w-[708px]">
@@ -221,16 +314,12 @@ const AboutPage = () => {
               </p>
             </div>
           </div>
-          <div className="w-full max-w-[300px] lg:max-w-none">
-            <Image
-              src={img6}
-              alt="happy woman and child"
-              className="h-auto w-full object-contain"
-              width={456.57}
-              height={497.67}
-              placeholder="blur"
-            />
-          </div>
+          <BrandPhoto
+            photos={missionVisionPhotos}
+            variant="soft"
+            className="aspect-[4/3] w-full max-w-[26rem] shrink-0 lg:aspect-[4/5] lg:h-[26rem] lg:w-[22rem]"
+            sizes="(max-width: 1024px) 100vw, 352px"
+          />
         </div>
       </section>
       <section className="bg-[#253031] px-4 py-10 md:py-20">
@@ -246,39 +335,60 @@ const AboutPage = () => {
             organizations an opportunity to make a lasting impact.
           </p>
         </div>
-        <div className="flex flex-col flex-wrap items-center justify-center gap-6 md:flex-row">
+        <BentoGrid className="max-w-[1400px] gap-4 md:auto-rows-[20rem]">
           {cards.map((card) => (
-            <div
+            <BentoGridItem
               key={card.key}
-              className="flex w-full max-w-[463px] flex-col items-center justify-between gap-5 rounded-xl bg-white p-4 sm:flex-row"
-            >
-              <Image
-                src={card.img}
-                width={176}
-                height={150}
-                placeholder="blur"
-                alt="WidowCare"
-                className="h-auto w-full max-w-[176px] sm:w-auto"
-              />
-              <div className="mt-4 flex flex-col items-center justify-center gap-4 sm:mt-0 sm:items-end sm:gap-6">
-                <div className="flex flex-col text-center sm:text-right">
-                  <span className="font-aeonik text-xl font-medium leading-tight text-black md:text-[22px] md:leading-[25.3px]">
-                    {card.title}
-                  </span>
-                  <span className="font-montreal text-[15px] leading-[19px] text-body-2">
-                    {card.description}
-                  </span>
-                </div>
-                <Link
-                  href={card.link}
-                  className="rounded-full border border-[#DADADA] p-2"
-                >
-                  <ArrowUpRight strokeWidth={1.25} color="#333333" />
-                </Link>
-              </div>
-            </div>
+              className={cn(
+                "group relative overflow-hidden rounded-[1.5rem] border-white/10 bg-white/5 p-0 hover:shadow-2xl",
+                card.span
+              )}
+              // Everything lives in `header` on purpose: Aceternity's
+              // BentoGridItem wraps `title`/`description`/`icon` in an inner
+              // div that gets `translate-x-2` on hover. A CSS transform opens
+              // a new containing block for descendants, so an absolutely
+              // positioned `fill` Image nested inside `title` was re-basing
+              // itself against that (near-height-0, since its own children
+              // are all position:absolute) wrapper instead of the card —
+              // the image collapsed to a sliver on hover. `header` renders
+              // directly under the untransformed card root, so `fill` stays
+              // anchored to the full card at all times.
+              header={
+                <>
+                  <Image
+                    src={card.img}
+                    alt={card.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="via-black/35 absolute inset-0 bg-gradient-to-t from-black/90 to-transparent transition-opacity duration-500 group-hover:from-black/95" />
+                  <div className="absolute inset-x-0 bottom-0 z-10 p-6">
+                    <span className="font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary">
+                      {card.stat}
+                    </span>
+                    <h4 className="mt-2 font-aeonik text-xl font-medium leading-tight text-white md:text-2xl">
+                      {card.title}
+                    </h4>
+                    <p className="mt-1.5 max-w-[32ch] font-montreal text-sm leading-snug text-white/70">
+                      {card.description}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 font-montreal text-sm font-medium text-white">
+                      Learn more
+                      <ArrowUpRight
+                        size={15}
+                        className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      />
+                    </span>
+                  </div>
+                  <Link href={card.link} className="absolute inset-0 z-20">
+                    <span className="sr-only">{card.title}</span>
+                  </Link>
+                </>
+              }
+            />
           ))}
-        </div>
+        </BentoGrid>
       </section>
       <section className="px-4 py-10 sm:px-6 md:py-20 lg:px-20">
         <div className="mx-auto w-full max-w-7xl">

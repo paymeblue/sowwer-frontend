@@ -1,8 +1,20 @@
 import {
+  Alex_Brush as AlexBrush,
   Libre_Baskerville as LibreBaskerville,
   Plus_Jakarta_Sans as PlusJarkataSans,
 } from "next/font/google";
 import localFont from "next/font/local";
+
+// A brush-script face pulled in for personality on a handful of headers — the
+// newsletter's "From the Chairman's Desk" masthead is hand-lettered in
+// something close to this. Used sparingly (see .font-script in
+// tailwind.config.js) rather than on every heading.
+const scriptFont = AlexBrush({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-script",
+  display: "swap",
+});
 
 const plusJakarta = PlusJarkataSans({
   subsets: ["latin"],
@@ -158,4 +170,5 @@ export {
   libreBaskerville,
   montreal,
   plusJakarta,
+  scriptFont,
 };

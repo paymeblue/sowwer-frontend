@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
-import img2 from "public/images/img-2.png";
-import img3 from "public/images/img-3.png";
-import img4 from "public/images/img-4.png";
-import img5 from "public/images/img-5.png";
+import { sitePhotos } from "@lib/soowerContent";
 // import Image from "next/image";
 import { Button } from "@components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -13,7 +10,7 @@ import Link from "next/link";
 const list = [
   {
     key: "1",
-    img: img2,
+    img: sitePhotos.widowsWithSupport,
     title: "WidowCare",
     desc: "Providing financial aid and support to help widows rebuild their lives.",
     route: "/donate/widow-care",
@@ -21,21 +18,21 @@ const list = [
 
   {
     key: "2",
-    img: img3,
+    img: sitePhotos.childWithBackpack,
     title: "The DAD Project",
     desc: "Giving orphans a future through educational sponsorships.",
     route: "/donate/dad-project",
   },
   {
     key: "3",
-    img: img4,
+    img: sitePhotos.screeningUnderBanner,
     title: "MissionCare",
     desc: "Supporting missionaries with resources to spread the gospel.",
     route: "/donate/mission-care",
   },
   {
     key: "4",
-    img: img5,
+    img: sitePhotos.partnersTeam,
     title: "Partnerships",
     desc: "Collaborating with other ministries to support their projects.",
     route: "/programs/partnerships",

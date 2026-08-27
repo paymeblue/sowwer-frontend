@@ -16,10 +16,12 @@ const HomePage = () => {
     <main>
       <Hero />
       <ImpactStats />
+      {/* Real footage lands third — it is the strongest proof on the page, so
+          it runs before the explanatory sections rather than after them. */}
+      <VideoGallery />
       <HelpingHand />
       <ProgramsGrid />
       <Moments />
-      <VideoGallery />
       <RippleTestimonials />
       <FAQs />
       <JoinUs

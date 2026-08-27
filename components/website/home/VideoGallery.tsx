@@ -159,9 +159,11 @@ const VideoGallery = () => {
           </div>
         </div>
       </SectionContainer>
+      {/* Same geometry as SectionContainer so the rail's first card lines up
+          with the heading above it on every viewport. */}
       <div
         ref={railRef}
-        className="scrollbar-none mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-4 sm:px-6 lg:px-20"
+        className="scrollbar-none mx-auto mt-10 flex w-full max-w-[2000px] snap-x snap-mandatory scroll-pl-6 gap-5 overflow-x-auto scroll-smooth px-6 pb-4 lg:scroll-pl-20 lg:px-20"
       >
         {josVideos.map((video, i) => (
           <LoopingClip

@@ -3,7 +3,8 @@
 import { Button } from "@components/ui/button";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
-import { josMedia } from "@lib/soowerContent";
+import BrandPhoto from "@components/shared/BrandPhoto";
+import { whoWeArePhotos } from "@lib/soowerContent";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,16 +35,13 @@ const HelpingHand = () => {
   return (
     <section
       ref={scope}
-      className="flex w-full flex-col items-center justify-center gap-10 px-4 py-12 sm:gap-12 sm:p-8 md:p-12 lg:flex-row lg:gap-24 lg:p-[6.25rem]"
+      className="flex w-full flex-col items-center justify-center gap-16 px-4 py-12 pb-20 sm:gap-16 sm:p-8 sm:pb-20 md:p-12 md:pb-24 lg:flex-row lg:gap-24 lg:p-[6.25rem]"
     >
-      <div className="helping-hand-img relative w-full max-w-[420px] lg:max-w-none">
-        <Image
-          src={josMedia.volunteerHandingParcel3}
-          alt="A SOOWER volunteer handing a welfare parcel to a widow in Jos"
-          width={511}
-          height={483}
+      <div className="helping-hand-img relative w-full max-w-[420px] lg:max-w-[31rem]">
+        <BrandPhoto
+          photos={whoWeArePhotos}
+          className="aspect-[4/5] w-full lg:aspect-square"
           sizes="(max-width: 1024px) 90vw, 45vw"
-          className="photo-real aspect-[4/5] h-auto w-full rounded-3xl object-cover lg:aspect-square"
         />
         <Image
           src={spiral}
@@ -52,7 +50,7 @@ const HelpingHand = () => {
           width={98.09}
           className="absolute -bottom-5 -right-5 z-[-1] h-16 w-16 md:-bottom-10 md:-right-10 md:h-auto md:w-auto"
         />
-        <div className="helping-hand-badge absolute -bottom-6 left-4 flex items-center gap-3 rounded-2xl bg-white px-5 py-4 shadow-featured-project-card sm:left-6">
+        <div className="helping-hand-badge absolute -bottom-10 left-0 z-10 flex items-center gap-3 rounded-2xl bg-white px-5 py-4 shadow-featured-project-card">
           <span className="font-aeonik text-2xl font-medium text-primary sm:text-3xl">
             8
           </span>

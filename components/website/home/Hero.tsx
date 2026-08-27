@@ -3,7 +3,7 @@
 import { Button } from "@components/ui/button";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
-import { heroImages } from "@lib/soowerContent";
+import { heroImages, heroLoop } from "@lib/soowerContent";
 import { Heart2 } from "react-iconly";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +13,7 @@ const ROTATE_MS = 4500;
 
 const Hero = () => {
   const scope = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -21,6 +22,14 @@ const Hero = () => {
       setActive((i) => (i + 1) % heroImages.length);
     }, ROTATE_MS);
     return () => clearInterval(id);
+  }, []);
+
+  // Autoplay only once the loop has actually scrolled into view — the hero
+  // is always in view on load, so this really just guards against browsers
+  // that decline autoplay() before the tab has focus.
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    videoRef.current?.play().catch(() => {});
   }, []);
 
   useGSAP(
@@ -34,7 +43,12 @@ const Hero = () => {
           "-=0.25"
         )
         .from(".hero-quote", { y: 16, opacity: 0, duration: 0.5 }, "-=0.4")
-        .from(".hero-cta", { y: 12, opacity: 0, duration: 0.4 }, "-=0.25");
+        .from(".hero-cta", { y: 12, opacity: 0, duration: 0.4 }, "-=0.25")
+        .from(
+          ".hero-loop",
+          { scale: 0.85, opacity: 0, duration: 0.7, ease: "back.out(1.6)" },
+          "-=0.5"
+        );
     },
     { scope }
   );
@@ -55,14 +69,17 @@ const Hero = () => {
             alt={img.alt}
             fill
             sizes="100vw"
-            quality={90}
+            quality={78}
             className="photo-real object-cover"
             priority={i === 0}
           />
         </div>
       ))}
-      <div className="from-black/85 absolute inset-0 bg-gradient-to-t via-black/25 to-black/10" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/25 to-transparent md:from-black/80 md:via-black/20" />
+      {/* Darker throughout — the previous gradient let a lot of the crowd
+          photo compete with the headline; this reads more like a masthead. */}
+      <div className="from-black/92 via-black/55 absolute inset-0 bg-gradient-to-t to-black/30" />
+      <div className="from-black/85 via-black/35 absolute inset-0 bg-gradient-to-r to-transparent md:from-black/90 md:via-black/30" />
+
       <div className="absolute top-1/2 w-full max-w-[42rem] -translate-y-1/2 px-4 text-white sm:px-8 md:left-[3rem] md:space-y-6 lg:left-[6.25rem]">
         <span className="hero-eyebrow eyebrow mb-3 block text-primary [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
           Sower Widows &amp; Missions Foundation
@@ -92,7 +109,24 @@ const Hero = () => {
           </div>
         </Link>
       </div>
-      <div className="absolute bottom-6 right-6 hidden gap-1.5 sm:flex">
+
+      {/* Real, silent footage cropped into the SOOWER mark — a living element
+          alongside the photo backdrop rather than a heavy full-bleed video. */}
+      <div className="hero-loop mask-soower absolute bottom-6 right-6 hidden h-40 w-40 overflow-hidden shadow-[0_20px_60px_-16px_rgba(0,0,0,0.7)] lg:block xl:h-48 xl:w-48">
+        <video
+          ref={videoRef}
+          src={heroLoop.src}
+          poster={heroLoop.poster}
+          aria-label={heroLoop.alt}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover"
+        />
+      </div>
+
+      <div className="absolute bottom-6 right-6 hidden gap-1.5 sm:flex lg:right-[13.5rem] xl:right-[15rem]">
         {heroImages.map((img, i) => (
           <button
             key={img.src}

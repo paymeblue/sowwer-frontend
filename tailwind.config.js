@@ -35,6 +35,7 @@ module.exports = {
         "libre-baskerville": ["var(--font-libre-baskerville)"],
         montreal: ["var(--font-montreal)"],
         "plus-jakarta": ["var(--font-plus-jakarta)"],
+        script: ["var(--font-script)", "cursive"],
       },
       colors: {
         border: "hsl(var(--border))",

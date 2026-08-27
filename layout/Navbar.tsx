@@ -224,6 +224,17 @@ const Navbar = () => {
             </NavigationMenu>
             <li>
               <Link
+                href="/#moments"
+                className={cn(
+                  "font-montreal text-sm font-normal leading-4 hover:text-primary",
+                  segment === "moments" && "font-medium text-black"
+                )}
+              >
+                Our Impact
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/registry/widow"
                 className={cn(
                   "font-montreal text-sm font-normal leading-4 hover:text-primary",
@@ -406,6 +417,18 @@ const Navbar = () => {
                             ))}
                           </ul>
                         )}
+                      </li>
+                      <li>
+                        <Link
+                          href="/#moments"
+                          className={cn(
+                            "block py-2 font-montreal text-base font-normal hover:text-primary",
+                            segment === "moments" && "font-medium text-black"
+                          )}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Our Impact
+                        </Link>
                       </li>
                       <li>
                         <Link
