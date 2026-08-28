@@ -1,13 +1,11 @@
 "use client";
+
 import SectionContainer from "@components/sections/SectionContainer";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@components/ui/accordion";
-import { motion } from "framer-motion";
-import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
+import { useGSAP } from "@gsap/react";
+import { gsap, prefersReducedMotion } from "@lib/gsap";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { Minus, Plus } from "lucide-react";
+import { useRef } from "react";
 
 const data = [
   {
@@ -43,39 +41,85 @@ const data = [
     id: "6",
   },
 ];
+
 const FAQs = () => {
+  const scope = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+      gsap.from(".faq-heading > *", {
+        y: 26,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.08,
+        ease: "power3.out",
+        scrollTrigger: { trigger: scope.current, start: "top 78%" },
+      });
+      gsap.from(".faq-item", {
+        y: 20,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.06,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ".faq-list", start: "top 82%" },
+      });
+    },
+    { scope }
+  );
+
   return (
     <section
-      aria-label="frequetly asked questions"
-      className="px-4 py-8 sm:px-6 sm:py-12"
+      ref={scope}
+      aria-label="Frequently asked questions"
+      className="bg-white py-16 md:py-24"
     >
-      <SectionContainer className="rounded-xl bg-[#F7F8FA] px-4 py-8 sm:rounded-3xl sm:px-6 sm:py-16">
-        <motion.div
-          variants={defaultVariant({})}
-          initial="hidden"
-          whileInView="visible"
-          viewport={DEFAULT_VIEWPORT}
-        >
-          <h2 className="header text-2xl sm:text-3xl md:text-4xl">
-            Frequently asked questions
-          </h2>
-          <div className="mt-4 w-full sm:mt-6">
-            <Accordion type="single" collapsible>
-              {data.map((item) => {
-                return (
-                  <AccordionItem key={item.id} value={item.id}>
-                    <AccordionTrigger className="mid_header text-base font-normal sm:text-lg">
-                      {item.header}
-                    </AccordionTrigger>
-                    <AccordionContent className="font-montreal text-sm font-normal text-body-1 sm:text-base">
-                      {item.body}
-                    </AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
+      <SectionContainer>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+          <div className="faq-heading lg:sticky lg:top-32 lg:self-start">
+            <span className="eyebrow">Questions</span>
+            <h2 className="mt-3 font-aeonik text-[2rem] font-medium leading-[1.05] tracking-[-0.02em] text-black sm:text-4xl md:text-5xl">
+              Frequently asked questions
+            </h2>
+            <p className="mt-4 max-w-[26rem] font-montreal text-base leading-relaxed text-body-2 md:text-lg">
+              Everything donors, widows and missionaries ask us most. Can&apos;t
+              find what you need?{" "}
+              <a href="/contact-us" className="text-primary underline">
+                Get in touch
+              </a>
+              .
+            </p>
           </div>
-        </motion.div>
+
+          <AccordionPrimitive.Root
+            type="single"
+            collapsible
+            className="faq-list"
+          >
+            {data.map((item) => (
+              <AccordionPrimitive.Item
+                key={item.id}
+                value={item.id}
+                className="faq-item group border-b border-black/10 first:border-t"
+              >
+                <AccordionPrimitive.Header>
+                  <AccordionPrimitive.Trigger className="flex w-full items-center justify-between gap-6 py-6 text-left font-aeonik text-lg font-medium text-black transition-colors hover:text-primary md:text-xl">
+                    <span>{item.header}</span>
+                    <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Plus className="h-4 w-4 group-data-[state=open]:hidden" />
+                      <Minus className="hidden h-4 w-4 group-data-[state=open]:block" />
+                    </span>
+                  </AccordionPrimitive.Trigger>
+                </AccordionPrimitive.Header>
+                <AccordionPrimitive.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                  <p className="max-w-[38rem] pb-6 font-montreal text-sm leading-relaxed text-body-2 md:text-base">
+                    {item.body}
+                  </p>
+                </AccordionPrimitive.Content>
+              </AccordionPrimitive.Item>
+            ))}
+          </AccordionPrimitive.Root>
+        </div>
       </SectionContainer>
     </section>
   );

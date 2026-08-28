@@ -91,9 +91,15 @@ input[type="number"] {
 }
 
 /* Unifying grade applied to every real (non-AI) photograph on the site so a
-   mix of phone/WhatsApp/DSLR source shots reads as one art-directed look. */
-.photo-real {
+   mix of phone/WhatsApp/DSLR source shots reads as one art-directed look.
+   The inset shadow is a very light SOOWER-gold wash — it has to survive on
+   img/video, which don't support ::before/::after, so a huge inset
+   box-shadow stands in for an overlay. Kept faint enough that the photo
+   itself is always what reads first. */
+.photo-real,
+.video-real {
   filter: contrast(1.06) saturate(1.1) brightness(1.02);
+  box-shadow: inset 0 0 0 999px rgba(255, 198, 41, 0.1);
 }
 
 .eyebrow {

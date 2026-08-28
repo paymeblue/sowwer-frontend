@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@components/ui/button";
+import { MovingBorderButton } from "@components/ui/moving-border";
 import JoinUs from "@shared/JoinUs";
 import PhotoDeck, { DeckPhoto } from "./PhotoDeck";
 import Image, { StaticImageData } from "next/image";
@@ -119,12 +119,12 @@ const Program = ({ data }: Props) => {
               </p>
             </div>
             <Link href={`/donate${data.donateRoute}`}>
-              <Button className="w-full gap-2 border-input font-montreal text-black sm:w-auto">
+              <MovingBorderButton className="w-full sm:w-auto">
                 <span>
                   <Heart2 set="bold" size={19} />
                 </span>
                 <span>Donate now</span>
-              </Button>
+              </MovingBorderButton>
             </Link>
           </div>
         </div>

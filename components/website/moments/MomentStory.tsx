@@ -249,7 +249,11 @@ const MomentStory = ({ moment, prev, next }: Props) => {
             <div className="fx-hero-media relative mx-auto w-full max-w-[30rem] lg:mx-0">
               {moment.hero ? (
                 <BrandPhoto
-                  photos={[{ src: moment.hero, alt: moment.heroAlt }]}
+                  photos={[
+                    { src: moment.hero, alt: moment.heroAlt },
+                    ...moment.gallery.slice(0, 4),
+                  ]}
+                  variant="soft"
                   className="aspect-[4/5] w-full"
                   sizes="(max-width: 1024px) 90vw, 480px"
                   priority

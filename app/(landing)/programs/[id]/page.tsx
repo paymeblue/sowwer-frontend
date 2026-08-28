@@ -2,6 +2,7 @@ import { TickIcon } from "@components/assets/icons";
 import JsonLd from "@components/shared/JsonLd";
 import { BackgroundGradient } from "@components/ui/background-gradient";
 import { Button } from "@components/ui/button";
+import { MovingBorderButton } from "@components/ui/moving-border";
 import { Project, WidowCareProgram } from "@components/website/programs/id";
 import { formatText } from "@lib/functions";
 import {
@@ -11,7 +12,7 @@ import {
   widowGallery,
 } from "@lib/soowerContent";
 import { SITE_URL, breadcrumbJsonLd } from "@lib/siteMeta";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Quote } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -169,15 +170,12 @@ const programs: Programs = {
               </li>
             </ul>
             <Link href="/donate/dad-project">
-              <Button
-                variant="outline"
-                className="w-full gap-2 border-input font-montreal text-black md:w-auto"
-              >
+              <MovingBorderButton className="w-full md:w-auto">
                 <span>Donate now</span>
                 <span>
                   <ArrowRight size={16} />
                 </span>
-              </Button>
+              </MovingBorderButton>
             </Link>
           </BackgroundGradient>
           <BackgroundGradient
@@ -225,15 +223,12 @@ const programs: Programs = {
               </li>
             </ul>
             <Link href="/donate/dad-project">
-              <Button
-                variant="outline"
-                className="w-full gap-2 border-input font-montreal text-black md:w-auto"
-              >
+              <MovingBorderButton className="w-full md:w-auto">
                 <span>Donate now</span>
                 <span>
                   <ArrowRight size={16} />
                 </span>
-              </Button>
+              </MovingBorderButton>
             </Link>
           </BackgroundGradient>
         </div>
@@ -278,27 +273,32 @@ const programs: Programs = {
     hero_deck: programDecks["mission-care"],
     yellowSection: (
       <div className="w-full px-4 md:px-6 lg:px-0">
-        <p className="mx-auto w-full max-w-[1150px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[52px] lg:text-[32px]">
-          We recognize the selfless sacrifices of missionaries who carry the
-          message of hope and faith into underserved and often forgotten
-          communities. Through MissionCare, we partner with churches and
-          individuals to provide practical support to those serving on the
-          frontlines of ministry.
-        </p>
+        <div className="mx-auto w-full max-w-[1150px] space-y-3">
+          <span className="eyebrow block text-center">MissionCare</span>
+          <p className="mx-auto text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[1.3] lg:text-[2rem]">
+            We recognize the selfless sacrifices of missionaries who carry the
+            message of hope and faith into underserved and often forgotten
+            communities. Through MissionCare, we partner with churches and
+            individuals to provide practical support to those serving on the
+            frontlines of ministry.
+          </p>
+        </div>
 
-        <div className="mx-auto mt-10 grid w-full max-w-[1150px] gap-6 md:mt-14 md:grid-cols-[1.2fr_1fr] md:gap-10">
-          <blockquote className="relative rounded-3xl bg-white p-6 sm:p-8">
-            <span className="font-script text-4xl leading-none text-primary sm:text-5xl">
-              &ldquo;
+        <div className="mx-auto mt-10 grid w-full max-w-[1150px] gap-6 md:mt-14 md:grid-cols-[1.2fr_1fr] md:gap-8">
+          <blockquote className="relative flex flex-col justify-between gap-6 rounded-[1.75rem] border border-black/10 bg-white p-6 shadow-[0_2px_18px_-6px_rgba(3,6,33,0.1)] sm:p-8">
+            <span className="bg-primary/15 relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+              <Quote className="text-primary" size={18} />
             </span>
-            <p className="mt-1 font-baskervville text-lg italic leading-relaxed text-body-1 sm:text-xl">
+            <p className="font-baskervville text-lg italic leading-relaxed text-body-1 sm:text-xl">
               Compassion is the engine of commission. They challenged the
               paradox of full churches and few labourers, urging missionaries to
               truly see individuals as Jesus does.
             </p>
-            <footer className="mt-4 font-montreal text-sm text-body-2">
-              Rev. Sam Tukura &amp; Pst. Daniel Daku Wumani, Army of God Gospel
-              Outreach
+            <footer className="border-t border-black/[0.08] pt-4 font-montreal text-sm text-body-2">
+              <span className="block font-aeonik text-base font-medium text-black">
+                Rev. Sam Tukura &amp; Pst. Daniel Daku Wumani
+              </span>
+              Army of God Gospel Outreach
               <span className="mt-0.5 block text-xs uppercase tracking-[0.1em] text-primary">
                 Mission Congress, March 2026
               </span>
@@ -317,9 +317,9 @@ const programs: Programs = {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-2xl bg-white p-5 text-center sm:text-left"
+                className="rounded-2xl border border-black/10 bg-white p-5 text-center shadow-[0_2px_18px_-6px_rgba(3,6,33,0.1)] sm:text-left"
               >
-                <p className="font-aeonik text-2xl font-medium text-accent sm:text-3xl">
+                <p className="font-aeonik text-2xl font-medium text-primary sm:text-3xl">
                   {stat.value}
                 </p>
                 <p className="mt-1 font-montreal text-xs leading-snug text-body-2">

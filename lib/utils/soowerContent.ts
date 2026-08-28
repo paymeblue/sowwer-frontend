@@ -33,28 +33,6 @@ export const josMedia = {
   widowPortraitBlue: `${IMAGE_BASE}/widow-portrait-blue.jpg`,
 } as const;
 
-// Wide, high-resolution landscape shots (3200px+ native) exported specifically
-// for full-bleed hero use — see components/website/home/Hero.tsx, which
-// rotates through these on a timer.
-export const heroImages = [
-  {
-    src: `${EVENTS_BASE}/hero-jos-widows-crowd.jpg`,
-    alt: "Widows at the SOOWER Widows & Youth Conference in Jos holding branded welfare parcels",
-  },
-  {
-    src: `${EVENTS_BASE}/gallery/foundation-launch/hero.jpg`,
-    alt: "Dr. Cosmas Maduka, CON, Chairman of Coscharis Group, addressing the SOOWER Foundation launch",
-  },
-  {
-    src: `${EVENTS_BASE}/hero-jos-men-crowd.jpg`,
-    alt: "Widows and missionaries in Jos with SOOWER welfare parcels",
-  },
-  {
-    src: `${EVENTS_BASE}/hero-fwc-medical-branded.jpg`,
-    alt: "A SOOWER volunteer at the FWC Mid-Year Missions Conference medical outreach",
-  },
-] as const;
-
 // A short, silent loop cut from real event footage, cropped into the SOOWER
 // mark on the home hero — see components/website/home/Hero.tsx. Re-encoded
 // from a 2.9MB source clip to ~1.2MB at 480px wide; it loads once and loops,
@@ -68,7 +46,7 @@ export const heroLoops = [
   {
     src: `${EVENTS_BASE}/hero-mask-loop-2.mp4`,
     poster: `${EVENTS_BASE}/hero-mask-poster-2.jpg`,
-    alt: "Widows with the food parcels they received from SOOWER in Jos",
+    alt: "Beneficiaries at the Literacy & Vocational Support intervention",
   },
 ] as const;
 
@@ -352,6 +330,95 @@ export const programDecks = {
     },
   ],
 } as const;
+
+// Fifteen frames pulled from the four programme decks above, for the
+// scroll-driven photo wall on the home hero — see
+// components/website/home/Hero.tsx.
+//
+// Deliberately NOT sourced from programDecks/ctaMosaic/whoWeArePhotos, and
+// deliberately not using any moment's hero.jpg — those are all already on
+// screen elsewhere on this same page (ProgramsGrid, JoinUs, HelpingHand,
+// Moments), so reusing them here is exactly the "images repeat" problem.
+// Every frame below is a gallery photo no other homepage section claims,
+// spread across eight different outreach events so the wall actually reads
+// as "we've covered a lot of ground" rather than four events on repeat.
+export const heroParallaxPhotos = [
+  {
+    title: "Addressing guests at the launch",
+    link: "/moments/foundation-launch",
+    thumbnail: `${GALLERY_BASE}/foundation-launch/g-02.jpg`,
+  },
+  {
+    title: "Guests at the SOOWER launch",
+    link: "/moments/foundation-launch",
+    thumbnail: `${GALLERY_BASE}/foundation-launch/g-03.jpg`,
+  },
+  {
+    title: "Screened at the medical outreach",
+    link: "/programs/mission-care",
+    thumbnail: `${GALLERY_BASE}/fwc-medical-outreach/g-04.jpg`,
+  },
+  {
+    title: "A sample drawn for testing",
+    link: "/programs/mission-care",
+    thumbnail: `${GALLERY_BASE}/fwc-medical-outreach/g-06.jpg`,
+  },
+  {
+    title: "Pupils at the ceremony",
+    link: "/programs/dad-project",
+    thumbnail: `${GALLERY_BASE}/slum-to-school/g-04.jpg`,
+  },
+  {
+    title: "Secondary pupils sponsored",
+    link: "/programs/dad-project",
+    thumbnail: `${GALLERY_BASE}/slum-to-school/g-08.jpg`,
+  },
+  {
+    title: "Distributing parcels to widows",
+    link: "/programs/widow-care",
+    thumbnail: `${GALLERY_BASE}/jos-widows-conference/g-03.jpg`,
+  },
+  {
+    title: "Beneficiaries with their parcels",
+    link: "/programs/widow-care",
+    thumbnail: `${GALLERY_BASE}/jos-widows-conference/g-08.jpg`,
+  },
+  {
+    title: "Trauma-informed care training",
+    link: "/moments/trauma-care-training",
+    thumbnail: `${GALLERY_BASE}/trauma-care-training/g-01.jpg`,
+  },
+  {
+    title: "Families at the outreach point",
+    link: "/programs/partnerships",
+    thumbnail: `${GALLERY_BASE}/christmas-without-tears/g-03.jpg`,
+  },
+  {
+    title: "Reaching families in the camp",
+    link: "/programs/partnerships",
+    thumbnail: `${GALLERY_BASE}/christmas-without-tears/g-11.jpg`,
+  },
+  {
+    title: "Inside the Mission Congress",
+    link: "/moments/mission-congress",
+    thumbnail: `${GALLERY_BASE}/mission-congress/g-06.jpg`,
+  },
+  {
+    title: "Leading the room in prayer",
+    link: "/moments/mission-congress",
+    thumbnail: `${GALLERY_BASE}/mission-congress/g-10.jpg`,
+  },
+  {
+    title: "Bag-making on display",
+    link: "/moments/literacy-vocational",
+    thumbnail: `${GALLERY_BASE}/literacy-vocational/g-04.jpg`,
+  },
+  {
+    title: "Gathering for the day's sessions",
+    link: "/moments/literacy-vocational",
+    thumbnail: `${GALLERY_BASE}/literacy-vocational/g-06.jpg`,
+  },
+] as const;
 
 // Supporting tiles for the get-involved mosaic — see shared/JoinUs.tsx. The
 // lead frame is passed in per page; these four sit around it and cover each of

@@ -3,6 +3,7 @@
 import BrandPhoto from "@components/shared/BrandPhoto";
 import LogoMaskedPhoto from "@components/shared/LogoMaskedPhoto";
 import { Button } from "@components/ui/button";
+import { MovingBorderButton } from "@components/ui/moving-border";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
 import { ctaMosaic, impactStats } from "@lib/soowerContent";
@@ -32,12 +33,11 @@ const JoinUs = ({ img, alt }: Props) => {
   useGSAP(
     () => {
       if (prefersReducedMotion()) {
-        gsap.set([".cta-cell", ".cta-copy > *", ".cta-stat", ".cta-scrim"], {
+        gsap.set([".cta-cell", ".cta-copy > *", ".cta-stat"], {
           opacity: 1,
           y: 0,
           scale: 1,
         });
-        gsap.set(".cta-scrim", { opacity: 0 });
         return;
       }
 
@@ -78,24 +78,43 @@ const JoinUs = ({ img, alt }: Props) => {
         scrollTrigger: { trigger: ".cta-stats", start: "top 92%" },
       });
 
-      // "The light increases as you scroll": a black scrim sits over the
-      // whole section at near-full opacity when it first arrives, then burns
-      // off as the section reaches the centre of the viewport — the section
-      // doesn't just fade in, it visibly brightens.
-      gsap.fromTo(
-        ".cta-scrim",
-        { opacity: 0.82 },
-        {
-          opacity: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: scope.current,
-            start: "top bottom",
-            end: "center center",
-            scrub: 0.4,
+      // "The light increases as you scroll": a sunrise — a bright core low
+      // in the section that grows and climbs as you scroll through, with a
+      // wider ambient wash glowing in behind it. Background and text stay
+      // put; this is a rising light source, not a theme change.
+      const sunrise = gsap.timeline({
+        scrollTrigger: {
+          trigger: scope.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.6,
+        },
+      });
+      sunrise
+        .fromTo(
+          ".cta-ray-ambient",
+          { opacity: 0, scale: 0.6, yPercent: 12 },
+          {
+            opacity: 1,
+            scale: 1.6,
+            yPercent: -10,
+            ease: "none",
+            transformOrigin: "22% 100%",
           },
-        }
-      );
+          0
+        )
+        .fromTo(
+          ".cta-ray-core",
+          { opacity: 0, scale: 0.4, yPercent: 18 },
+          {
+            opacity: 1,
+            scale: 1.9,
+            yPercent: -14,
+            ease: "none",
+            transformOrigin: "22% 100%",
+          },
+          0
+        );
 
       // Each cell drifts at its own rate, so the grid separates into layers
       // as the section scrolls rather than moving as one flat block.
@@ -169,12 +188,27 @@ const JoinUs = ({ img, alt }: Props) => {
             "radial-gradient(58% 70% at 8% 0%, rgba(255,198,41,0.13) 0%, transparent 62%), radial-gradient(52% 66% at 96% 100%, rgba(52,102,255,0.16) 0%, transparent 62%)",
         }}
       />
-      {/* Scroll-scrubbed "light increasing" scrim — see the GSAP block above. */}
+      {/* Scroll-scrubbed "sunrise" — see the GSAP block above. A bright core
+          rising from the bottom edge plus a wider ambient wash beneath it,
+          both below the z-20 content so text and photos stay unaffected. */}
       <div
         aria-hidden
-        className="cta-scrim pointer-events-none absolute inset-0 z-10 bg-black opacity-0"
+        className="cta-ray-ambient pointer-events-none absolute inset-0 z-[4] opacity-0"
+        style={{
+          background:
+            "radial-gradient(60% 75% at 22% 105%, rgba(255,198,41,0.85) 0%, rgba(255,150,41,0.35) 40%, transparent 72%)",
+          filter: "blur(50px)",
+        }}
       />
-
+      <div
+        aria-hidden
+        className="cta-ray-core pointer-events-none absolute inset-0 z-[5] opacity-0"
+        style={{
+          background:
+            "radial-gradient(28% 40% at 22% 102%, rgba(255,241,199,0.98) 0%, rgba(255,198,41,0.9) 38%, transparent 75%)",
+          filter: "blur(6px)",
+        }}
+      />
       <div className="relative z-20 mx-auto w-full max-w-[1440px] px-6 lg:px-20">
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
           <div className="cta-copy order-2 max-w-[34rem] lg:order-1">
@@ -190,12 +224,12 @@ const JoinUs = ({ img, alt }: Props) => {
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link href="/donate/widow-care">
-                <Button className="gap-2 border-input font-montreal text-black">
+                <MovingBorderButton>
                   <span>
                     <Heart2 set="bold" size={19} />
                   </span>
                   <span>Donate now</span>
-                </Button>
+                </MovingBorderButton>
               </Link>
               <Link href="/registry/join">
                 <Button
@@ -261,8 +295,9 @@ const JoinUs = ({ img, alt }: Props) => {
               className="cta-cell relative col-span-3 row-span-3 flex items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-3"
             >
               <BrandPhoto
-                photos={[ctaMosaic[0]]}
+                photos={[ctaMosaic[0], ctaMosaic[1]]}
                 variant="soft"
+                outline={false}
                 className="h-full w-full max-w-[13rem]"
                 sizes="220px"
               />

@@ -97,7 +97,7 @@ const Footer = ({ variant = "default" }: Props) => {
                 <FacebookIcon />
               </Link>
               <Link
-                href="https://www.linkedin.com/company/soower"
+                href="https://www.linkedin.com/company/soower-foundation/"
                 target="_blank"
                 className="flex items-center justify-center rounded-full bg-white/10 p-2.5 transition-colors hover:bg-white/20"
               >

@@ -1,32 +1,29 @@
 "use client";
 
-import { Button } from "@components/ui/button";
+import { HeroParallax } from "@components/ui/hero-parallax";
+import { MovingBorderButton } from "@components/ui/moving-border";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
-import { heroImages, heroLoops } from "@lib/soowerContent";
+import { heroLoops, heroParallaxPhotos } from "@lib/soowerContent";
+import { BookOpen } from "lucide-react";
 import { Heart2 } from "react-iconly";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-const ROTATE_MS = 4500;
+const SCRIPTURE = {
+  lead: "R",
+  rest: "eligion that God our Father accepts as pure and faultless is this: to look after orphans and widows in their distress and to keep oneself from being polluted by the world.",
+  reference: "James 1:27",
+  version: "NIV",
+};
 
 const Hero = () => {
-  const scope = useRef<HTMLElement>(null);
+  const scope = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [active, setActive] = useState(0);
   const [loopIndex, setLoopIndex] = useState(0);
 
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-    const id = setInterval(() => {
-      setActive((i) => (i + 1) % heroImages.length);
-    }, ROTATE_MS);
-    return () => clearInterval(id);
-  }, []);
-
-  // Autoplay whenever the source changes — covers first mount and every
-  // clip swap, since changing `src` doesn't resume playback on its own.
+  // Autoplay whenever the source changes — covers first mount and every clip
+  // swap, since changing `src` doesn't resume playback on its own.
   useEffect(() => {
     if (prefersReducedMotion()) return;
     videoRef.current?.play().catch(() => {});
@@ -57,93 +54,86 @@ const Hero = () => {
   );
 
   return (
-    <section
-      ref={scope}
-      className="relative min-h-[560px] w-full overflow-hidden bg-secondary-black md:min-h-[640px] lg:h-screen 2xl:h-[49.125rem]"
-    >
-      {heroImages.map((img, i) => (
-        <div
-          key={img.src}
-          className="hero-slide absolute inset-0 transition-opacity ease-in-out [transition-duration:1400ms]"
-          style={{ opacity: i === active ? 1 : 0 }}
-        >
-          <Image
-            src={img.src}
-            alt={img.alt}
-            fill
-            sizes="100vw"
-            quality={78}
-            className="photo-real object-cover"
-            priority={i === 0}
-          />
-        </div>
-      ))}
-      {/* Darker throughout — the previous gradient let a lot of the crowd
-          photo compete with the headline; this reads more like a masthead. */}
-      <div className="from-black/92 via-black/55 absolute inset-0 bg-gradient-to-t to-black/30" />
-      <div className="from-black/85 via-black/35 absolute inset-0 bg-gradient-to-r to-transparent md:from-black/90 md:via-black/30" />
+    <div ref={scope}>
+      <HeroParallax
+        photos={heroParallaxPhotos}
+        header={
+          <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:px-20">
+            {/* Opaque card behind the copy — legibility can't depend on how
+                the photo wall happens to be tilted/positioned underneath it
+                at a given scroll offset. */}
+            <div className="flex flex-col items-start gap-10 rounded-[2rem] bg-[#FCF9F2]/95 p-6 shadow-[0_24px_60px_-24px_rgba(3,6,33,0.18)] backdrop-blur-sm sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:p-12">
+              <div className="w-full max-w-[38rem]">
+                <span className="hero-eyebrow eyebrow mb-3 block text-primary">
+                  Sower Widows &amp; Missions Foundation
+                </span>
+                <h1 className="font-aeonik text-4xl font-medium leading-[1.05] text-black sm:text-5xl md:text-6xl lg:text-[4.5rem] lg:leading-[1.02]">
+                  <span className="hero-line block">Transforming lives</span>
+                  <span className="hero-line block">with love and faith</span>
+                </h1>
+                {/* Set like a page from the Book itself: an illuminated
+                    drop-cap opening the verse, and a citation styled as a
+                    printed reference rather than a plain caption. */}
+                <div className="hero-quote relative mb-4 mt-5 w-full max-w-[34.3125rem] rounded-2xl border border-primary/25 bg-white/40 py-5 pl-6 pr-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">
+                  <BookOpen
+                    aria-hidden
+                    className="absolute -left-3 -top-3 rounded-full bg-primary p-1.5 text-black shadow-[0_4px_14px_-4px_rgba(255,198,41,0.6)]"
+                    size={26}
+                  />
+                  <p className="font-baskervville text-base italic leading-normal text-body-1 sm:text-lg md:text-xl md:leading-[1.875rem] lg:text-[1.25rem]">
+                    <span className="float-left mr-1.5 font-aeonik text-[2.75rem] not-italic leading-[0.8] text-primary sm:text-[3.25rem]">
+                      {SCRIPTURE.lead}
+                    </span>
+                    {SCRIPTURE.rest}
+                  </p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <span aria-hidden className="h-px w-6 bg-primary/50" />
+                    <span className="font-aeonik text-xs font-medium uppercase tracking-[0.14em] text-primary sm:text-sm">
+                      {SCRIPTURE.reference}
+                    </span>
+                    <span className="font-montreal text-xs text-body-2 sm:text-sm">
+                      {SCRIPTURE.version}
+                    </span>
+                  </div>
+                </div>
+                <Link
+                  href="/donate/widow-care"
+                  className="hero-cta inline-block"
+                >
+                  <div className="mt-4">
+                    <MovingBorderButton>
+                      <span>
+                        <Heart2 set="bold" size={19} />
+                      </span>
+                      <span>Donate now</span>
+                    </MovingBorderButton>
+                  </div>
+                </Link>
+              </div>
+            </div>
 
-      <div className="absolute top-1/2 w-full max-w-[42rem] -translate-y-1/2 px-4 text-white sm:px-8 md:left-[3rem] md:space-y-6 lg:left-[6.25rem]">
-        <span className="hero-eyebrow eyebrow mb-3 block text-primary [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
-          Sower Widows &amp; Missions Foundation
-        </span>
-        <h2 className="w-full max-w-[38rem] overflow-hidden font-aeonik text-4xl font-medium leading-[1.05] [text-shadow:0_2px_20px_rgba(0,0,0,0.5)] sm:text-5xl md:text-6xl lg:text-[4.5rem] lg:leading-[1.02]">
-          <span className="hero-line block">Transforming lives</span>
-          <span className="hero-line block">with love and faith</span>
-        </h2>
-        <div className="hero-quote mb-4 mt-5 w-full max-w-[34.3125rem] border-l-2 border-primary/70 pl-4">
-          <p className="font-baskervville text-base italic leading-normal text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.5)] sm:text-lg md:text-xl md:leading-[1.875rem] lg:text-[1.25rem]">
-            &quot;Religion that God our Father accepts as pure and faultless is
-            this: to look after orphans and widows in their distress and to keep
-            oneself from being polluted by the world.&quot;
-          </p>
-          <span className="font-montreal text-xs leading-6 text-white/70 sm:text-sm">
-            — James 1:27 (NIV)
-          </span>
-        </div>
-        <Link href="/donate/widow-care" className="hero-cta inline-block">
-          <div className="mt-4">
-            <Button className="gap-2 border-input font-montreal text-black">
-              <span>
-                <Heart2 set="bold" size={19} />
-              </span>
-              <span>Donate now</span>
-            </Button>
+            {/* Real, silent footage cropped into the SOOWER mark — sized up
+                and pulled outside the card so it physically breaks over the
+                boundary onto the photo wall below, rather than sitting as a
+                small icon fully contained inside the card. z-20 keeps it
+                painting above both the card and the grid rows beneath it. */}
+            <div className="hero-loop mask-soower absolute -bottom-24 right-6 z-20 hidden h-64 w-64 overflow-hidden shadow-[0_30px_70px_-16px_rgba(0,0,0,0.45)] lg:right-10 lg:block xl:-bottom-28 xl:h-80 xl:w-80">
+              <video
+                ref={videoRef}
+                src={currentLoop.src}
+                poster={currentLoop.poster}
+                aria-label={currentLoop.alt}
+                muted
+                playsInline
+                preload="metadata"
+                onEnded={advanceLoop}
+                className="video-real h-full w-full object-cover"
+              />
+            </div>
           </div>
-        </Link>
-      </div>
-
-      {/* Real, silent footage cropped into the SOOWER mark — a living element
-          alongside the photo backdrop rather than a heavy full-bleed video.
-          Cycles between clips on end rather than looping one forever. */}
-      <div className="hero-loop mask-soower absolute bottom-6 right-6 hidden h-48 w-48 overflow-hidden shadow-[0_20px_60px_-16px_rgba(0,0,0,0.7)] lg:block xl:h-56 xl:w-56">
-        <video
-          ref={videoRef}
-          src={currentLoop.src}
-          poster={currentLoop.poster}
-          aria-label={currentLoop.alt}
-          muted
-          playsInline
-          preload="metadata"
-          onEnded={advanceLoop}
-          className="h-full w-full object-cover"
-        />
-      </div>
-
-      <div className="absolute bottom-6 right-6 hidden gap-1.5 sm:flex lg:right-[13.5rem] xl:right-[15rem]">
-        {heroImages.map((img, i) => (
-          <button
-            key={img.src}
-            type="button"
-            aria-label={`Show slide ${i + 1}`}
-            onClick={() => setActive(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === active ? "w-6 bg-primary" : "w-1.5 bg-white/50"
-            }`}
-          />
-        ))}
-      </div>
-    </section>
+        }
+      />
+    </div>
   );
 };
 

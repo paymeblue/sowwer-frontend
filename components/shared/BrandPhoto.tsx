@@ -18,6 +18,9 @@ type Props = {
   /** "soft" crops less — use it for portrait or very wide frames. */
   variant?: "default" | "soft";
   priority?: boolean;
+  /** Offset echo of the mask behind the photo. Off for cells already sitting
+   * inside their own bordered card, where the echo just reads as a smudge. */
+  outline?: boolean;
 };
 
 /**
@@ -34,6 +37,7 @@ const BrandPhoto = ({
   interval = 5,
   variant = "default",
   priority = false,
+  outline = true,
 }: Props) => {
   const scope = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -50,7 +54,7 @@ const BrandPhoto = ({
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (prefersReducedMotion() || !outline) return;
       // The outline drifts a touch slower than the photo, so the two shapes
       // separate as the section scrolls.
       gsap.to(".brand-photo-outline", {
@@ -70,13 +74,15 @@ const BrandPhoto = ({
 
   return (
     <div ref={scope} className={cn("relative", className)}>
-      <div
-        aria-hidden
-        className={cn(
-          "brand-photo-outline absolute inset-0 translate-x-[3.5%] translate-y-[4%] bg-primary/25",
-          mask
-        )}
-      />
+      {outline ? (
+        <div
+          aria-hidden
+          className={cn(
+            "brand-photo-outline absolute inset-0 translate-x-[3.5%] translate-y-[4%] bg-primary/25",
+            mask
+          )}
+        />
+      ) : null}
       <div className={cn("relative h-full w-full overflow-hidden", mask)}>
         {photos.map((photo, i) => (
           <Image

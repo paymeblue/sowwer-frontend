@@ -146,11 +146,24 @@ const ProgramsGrid = () => {
       className="flex w-full flex-col items-center
       justify-center gap-8 bg-[#FCF9F2] px-4 py-12 sm:p-8 md:gap-12 md:p-12 lg:p-[6.25rem] lg:pt-16"
     >
-      <div className="max-w-[36rem] space-y-3 text-center">
-        <span className="eyebrow">Our programs</span>
-        <h3 className="font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl md:leading-[3rem] lg:text-[2.8125rem]">
-          Making a lasting impact
-        </h3>
+      <div className="flex w-full flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-[36rem] space-y-3">
+          <span className="eyebrow">Our programs</span>
+          <h3 className="font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl md:leading-[3rem] lg:text-[2.8125rem]">
+            Making a lasting impact
+          </h3>
+          <p className="font-montreal text-base leading-relaxed text-body-2 md:text-lg">
+            Four ways to give, each already reaching a widow, an orphan or a
+            missionary by name.
+          </p>
+        </div>
+        <p className="font-montreal text-sm text-body-2 md:text-right">
+          <span className="font-aeonik text-3xl font-medium text-black">
+            {programs.length}
+          </span>
+          <br />
+          programs running
+        </p>
       </div>
       <ul
         ref={railRef}
