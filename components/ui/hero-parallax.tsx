@@ -127,7 +127,7 @@ const ParallaxCard = ({
     >
       <Link
         href={photo.link}
-        className="block h-full w-full"
+        className="relative block h-full w-full"
         aria-label={photo.title}
       >
         <Image

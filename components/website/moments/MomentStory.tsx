@@ -3,6 +3,7 @@
 import BrandPhoto from "@components/shared/BrandPhoto";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Button } from "@components/ui/button";
+import { ParallaxScroll } from "@components/ui/parallax-scroll";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
 import type { Moment } from "@lib/momentsContent";
@@ -13,7 +14,6 @@ import {
   Calendar,
   MapPin,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 
@@ -26,14 +26,13 @@ type Props = {
 const MomentStory = ({ moment, prev, next }: Props) => {
   const scope = useRef<HTMLElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const reduced = prefersReducedMotion();
 
       if (reduced) {
-        gsap.set([".fx-hero", ".fx-up", ".fx-fact", ".fx-para", ".fx-tile"], {
+        gsap.set([".fx-hero", ".fx-up", ".fx-fact", ".fx-para"], {
           opacity: 1,
           y: 0,
           clearProps: "transform",
@@ -131,32 +130,6 @@ const MomentStory = ({ moment, prev, next }: Props) => {
           },
         });
       });
-
-      // ---- Pinned horizontal gallery ----------------------------------
-      // Only on viewports wide enough for the pin to feel deliberate; the
-      // same markup falls back to a normal scroll-snap strip below that.
-      const track = trackRef.current;
-      if (track) {
-        const mm = gsap.matchMedia();
-        mm.add("(min-width: 1024px)", () => {
-          const distance = track.scrollWidth - track.clientWidth;
-          if (distance <= 0) return;
-          const tween = gsap.to(track, {
-            x: -distance,
-            ease: "none",
-            scrollTrigger: {
-              trigger: track.parentElement,
-              start: "top top",
-              end: () => `+=${distance + window.innerHeight * 0.5}`,
-              pin: true,
-              scrub: 0.6,
-              invalidateOnRefresh: true,
-              anticipatePin: 1,
-            },
-          });
-          return () => tween.scrollTrigger?.kill();
-        });
-      }
     },
     { scope, dependencies: [moment.slug] }
   );
@@ -381,65 +354,26 @@ const MomentStory = ({ moment, prev, next }: Props) => {
       {hasGallery ? (
         <section
           id="gallery"
-          className="overflow-hidden bg-white py-16 md:py-24 lg:py-0"
+          className="overflow-hidden bg-white py-16 md:py-24"
         >
-          <SectionContainer className="lg:hidden">
-            <div className="fx-up mb-8 flex items-end justify-between gap-6">
+          <SectionContainer>
+            <div className="fx-up mb-8 flex items-end justify-between gap-6 md:mb-10">
               <h2 className="font-aeonik text-2xl font-medium tracking-[-0.02em] text-black md:text-4xl">
                 From the day
               </h2>
-              <span className="shrink-0 font-montreal text-xs text-body-2">
-                Swipe →
+              <span className="shrink-0 font-montreal text-xs uppercase tracking-[0.14em] text-body-2">
+                {moment.gallery.length} photographs
               </span>
             </div>
           </SectionContainer>
 
-          {/* On lg+ this whole block is pinned and the strip is scrubbed
-              sideways; below lg it is a plain scroll-snap carousel. */}
-          <div className="relative lg:flex lg:h-screen lg:flex-col lg:justify-center">
-            <div className="hidden lg:block">
-              <SectionContainer>
-                <div className="mb-10 flex items-end justify-between gap-6">
-                  <h2 className="font-aeonik text-4xl font-medium tracking-[-0.02em] text-black xl:text-5xl">
-                    From the day
-                  </h2>
-                  <span className="shrink-0 font-montreal text-xs uppercase tracking-[0.14em] text-body-2">
-                    {moment.gallery.length} photographs — keep scrolling
-                  </span>
-                </div>
-              </SectionContainer>
-            </div>
-
-            <div
-              ref={trackRef}
-              className="scrollbar-none flex snap-x snap-mandatory scroll-pl-6 gap-4 overflow-x-auto px-6 pb-4 lg:gap-6 lg:overflow-visible lg:px-20"
-            >
-              {moment.gallery.map((photo, i) => (
-                <figure
-                  key={photo.src}
-                  // On lg+ the tile is sized off viewport height so the pinned
-                  // section always fits, however short the window is.
-                  className="fx-tile group relative aspect-[4/5] w-[78vw] shrink-0 snap-center overflow-hidden rounded-2xl bg-grey sm:w-[52vw] md:w-[38vw] lg:aspect-[3/4] lg:h-[min(60vh,34rem)] lg:w-auto lg:snap-align-none"
-                >
-                  <Image
-                    src={photo.src}
-                    alt={photo.alt}
-                    fill
-                    sizes="(max-width: 640px) 78vw, (max-width: 1024px) 38vw, 384px"
-                    className="photo-real object-cover transition-transform ease-out [transition-duration:900ms] group-hover:scale-[1.04]"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-5 pt-14">
-                    <figcaption className="font-montreal text-xs leading-snug text-white/90">
-                      <span className="mr-2 text-primary">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      {photo.alt}
-                    </figcaption>
-                  </div>
-                </figure>
-              ))}
-            </div>
-          </div>
+          {/* A self-contained scrollable masonry — every column drifts at
+              its own rate, so several photos are always visible at once
+              rather than one card at a time behind a "keep scrolling" hint. */}
+          <ParallaxScroll
+            photos={moment.gallery}
+            className="h-[70vh] sm:h-[75vh] lg:h-[80vh]"
+          />
         </section>
       ) : null}
 

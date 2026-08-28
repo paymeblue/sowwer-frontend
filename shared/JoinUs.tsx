@@ -292,14 +292,14 @@ const JoinUs = ({ img, alt }: Props) => {
             {/* A face, cut into the SOOWER mark's own silhouette. */}
             <figure
               data-depth="2.4"
-              className="cta-cell relative col-span-3 row-span-3 flex items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-3"
+              className="cta-cell relative col-span-3 row-span-3 flex items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04]"
             >
               <BrandPhoto
                 photos={[ctaMosaic[0], ctaMosaic[1]]}
                 variant="soft"
                 outline={false}
-                className="h-full w-full max-w-[13rem]"
-                sizes="220px"
+                className="h-full w-full"
+                sizes="(max-width: 1024px) 60vw, 26vw"
               />
             </figure>
 
