@@ -247,10 +247,10 @@ const JoinUs = ({ img, alt }: Props) => {
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-14">
                 <p className="font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary">
-                  On the ground
+                  The team
                 </p>
                 <p className="mt-1 font-aeonik text-base font-medium leading-tight text-white">
-                  Delivered hand to hand
+                  On the ground and behind the scenes
                 </p>
               </div>
             </figure>

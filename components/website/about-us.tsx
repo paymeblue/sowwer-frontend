@@ -7,11 +7,15 @@ import BrandPhoto from "@components/shared/BrandPhoto";
 import {
   aboutPhotos,
   missionVisionPhotos,
+  programDecks,
   sitePhotos,
 } from "@lib/soowerContent";
+import { useGSAP } from "@gsap/react";
+import { gsap, prefersReducedMotion } from "@lib/gsap";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRef, useState } from "react";
 import dir1 from "public/images/dir-1.png";
 import dir10 from "public/images/dir-10.png";
 import dir2 from "public/images/dir-2.png";
@@ -23,35 +27,33 @@ import dir7 from "public/images/dir-7.png";
 import dir8 from "public/images/dir-8.png";
 import dir9 from "public/images/dir-9.png";
 
+// Each cell cycles through its programme's full photo deck (the same pool
+// used on the program pages) rather than showing one static frame.
 const images = [
   {
     key: "1",
-    img: sitePhotos.widowPortraitParcel,
-    alt: "A widow in Jos holding the food parcel she received from SOOWER",
+    deck: programDecks["widow-care"],
     kicker: "WidowCare",
     caption: "Food support, delivered hand to hand",
     span: "col-span-2 row-span-3",
   },
   {
     key: "2",
-    img: sitePhotos.childrenReceivingShoes,
-    alt: "Pupils with the school shoes and materials they received at the Slum-to-School celebration",
+    deck: programDecks["dad-project"],
     kicker: "The DAD Project",
     caption: "500 children sponsored since 2021",
     span: "col-span-2 row-span-2",
   },
   {
     key: "3",
-    img: sitePhotos.missionaryScreening,
-    alt: "A missionary being measured at the SOOWER-sponsored medical outreach",
+    deck: programDecks["mission-care"],
     kicker: "MissionCare",
     caption: "Free screening for 120+ missionaries",
     span: "col-span-1 row-span-2 md:col-span-1",
   },
   {
     key: "4",
-    img: sitePhotos.campPortrait,
-    alt: "A resident of Durumi IDP Camp during the Christmas Without Tears outreach",
+    deck: programDecks.partnerships,
     kicker: "Partnerships",
     caption: "153 displaced households at Durumi",
     span: "col-span-1 row-span-2 md:col-span-1",
@@ -164,7 +166,55 @@ const directors = [
     position: "Legal Adviser",
   },
 ];
+// One bento cell's photo stack — crossfades through its programme's deck as
+// `step` advances, driven by the page's scroll position (see AboutPage).
+const IntroBentoPhoto = ({
+  deck,
+  step,
+}: {
+  deck: (typeof images)[number]["deck"];
+  step: number;
+}) => {
+  const active = step % deck.length;
+  return (
+    <>
+      {deck.map((photo, i) => (
+        <Image
+          key={photo.src}
+          src={photo.src}
+          alt={i === active ? photo.alt : ""}
+          fill
+          sizes="(max-width: 768px) 50vw, 30vw"
+          quality={i === 0 ? 82 : 60}
+          loading={i === 0 ? undefined : "lazy"}
+          className="photo-real object-cover transition-opacity ease-in-out [transition-duration:1200ms]"
+          style={{ opacity: i === active ? 1 : 0 }}
+        />
+      ))}
+    </>
+  );
+};
+
 const AboutPage = () => {
+  const bentoRef = useRef<HTMLDivElement>(null);
+  const [step, setStep] = useState(0);
+
+  useGSAP(() => {
+    if (prefersReducedMotion() || !bentoRef.current) return;
+    gsap.to(
+      {},
+      {
+        scrollTrigger: {
+          trigger: bentoRef.current,
+          start: "top 75%",
+          end: "bottom 30%",
+          scrub: 0.4,
+          onUpdate: (self) => setStep(Math.floor(self.progress * 5)),
+        },
+      }
+    );
+  }, []);
+
   return (
     <main className="max-lg:mt-10">
       <section className="relative">
@@ -179,8 +229,12 @@ const AboutPage = () => {
           </h1>
         </div>
         {/* Bento: an asymmetric grid of real outreach photography, each cell
-            labelled with the programme it belongs to. */}
-        <div className="mx-auto grid w-full max-w-[1400px] auto-rows-[7rem] grid-cols-2 gap-3 px-4 sm:auto-rows-[9rem] md:grid-cols-4 md:px-6 lg:auto-rows-[10rem] lg:gap-4 lg:px-20">
+            labelled with the programme it belongs to and cycling through
+            that programme's full photo deck as the page scrolls. */}
+        <div
+          ref={bentoRef}
+          className="mx-auto grid w-full max-w-[1400px] auto-rows-[7rem] grid-cols-2 gap-3 px-4 sm:auto-rows-[9rem] md:grid-cols-4 md:px-6 lg:auto-rows-[10rem] lg:gap-4 lg:px-20"
+        >
           {images.map((image) => (
             <figure
               key={image.key}
@@ -189,13 +243,7 @@ const AboutPage = () => {
                 image.span
               )}
             >
-              <Image
-                src={image.img}
-                alt={image.alt}
-                fill
-                sizes="(max-width: 768px) 50vw, 30vw"
-                className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              />
+              <IntroBentoPhoto deck={image.deck} step={step} />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-4 pt-12 md:p-5 md:pt-16">
                 <figcaption>
                   <span className="font-montreal text-[0.6rem] font-semibold uppercase tracking-[0.1em] text-primary md:text-[0.68rem] md:tracking-[0.16em]">

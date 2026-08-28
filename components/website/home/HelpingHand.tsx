@@ -60,7 +60,16 @@ const HelpingHand = () => {
         </div>
       </div>
       <div className="helping-hand-copy w-full max-w-[41.625rem]">
+        {/* The newsletter pairs a small caps label with a big brush-script
+            line above every masthead ("From the Chairman's Desk") — borrowing
+            that pairing here for the same handwritten warmth. */}
         <span className="eyebrow">Who we are</span>
+        <p
+          aria-hidden
+          className="mt-1 font-script text-4xl leading-none text-primary sm:text-5xl"
+        >
+          Straight from the heart
+        </p>
         <h2 className="header mt-3 w-full max-w-[38.5625rem] text-2xl font-medium sm:text-3xl md:text-4xl lg:text-[2.8125rem]">
           Perfectly positioned to lend a helping hand
         </h2>

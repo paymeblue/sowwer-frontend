@@ -1,7 +1,7 @@
 "use client";
 
 import JoinUs from "@shared/JoinUs";
-import { josMedia } from "@lib/soowerContent";
+import { aboutPhotos } from "@lib/soowerContent";
 import FAQs from "./FAQs";
 import Hero from "./Hero";
 import ImpactStats from "./ImpactStats";
@@ -25,8 +25,8 @@ const HomePage = () => {
       <RippleTestimonials />
       <FAQs />
       <JoinUs
-        img={josMedia.widowPortraitBlue}
-        alt="A widow supported through SOOWER's welfare programme in Jos"
+        img={aboutPhotos.teamHq}
+        alt="The SOOWER team at the foundation's Abuja office"
       />
     </main>
   );

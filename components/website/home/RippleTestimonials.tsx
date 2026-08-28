@@ -49,7 +49,15 @@ const RippleTestimonials = () => {
           x: () => -distance(),
           ease: "none",
           scrollTrigger: {
-            trigger: scope.current,
+            // Trigger must be the pinned element itself, not the outer
+            // section — the section also contains the heading and featured
+            // quote sitting well above the rail. With those as the trigger,
+            // "top top" fired the moment the section's top (not the rail's
+            // top) hit the viewport, so the rail pinned near the top of the
+            // screen while its old document-flow position — well below the
+            // heading — still reserved a full scroll-distance's worth of
+            // blank space. Pinning what you trigger on fixes both at once.
+            trigger: pin,
             start: "top top",
             end: () =>
               `+=${Math.max(distance(), 1) + window.innerHeight * 0.3}`,

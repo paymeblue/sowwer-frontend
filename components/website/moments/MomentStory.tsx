@@ -365,7 +365,7 @@ const MomentStory = ({ moment, prev, next }: Props) => {
               <blockquote className="font-baskervville text-[1.6rem] italic leading-[1.3] text-white md:text-[2.75rem]">
                 &ldquo;{moment.quote.text}&rdquo;
               </blockquote>
-              <figcaption className="text-white/55 mt-7 font-montreal text-sm">
+              <figcaption className="mt-7 font-montreal text-sm text-white/75">
                 {moment.quote.source}
               </figcaption>
             </figure>

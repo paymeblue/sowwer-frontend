@@ -59,11 +59,18 @@ export const heroImages = [
 // mark on the home hero — see components/website/home/Hero.tsx. Re-encoded
 // from a 2.9MB source clip to ~1.2MB at 480px wide; it loads once and loops,
 // so it never re-fetches the way an autoplaying full-bleed background would.
-export const heroLoop = {
-  src: `${EVENTS_BASE}/hero-mask-loop.mp4`,
-  poster: `${EVENTS_BASE}/hero-mask-poster.jpg`,
-  alt: "Volunteers distributing SOOWER welfare parcels in Jos",
-} as const;
+export const heroLoops = [
+  {
+    src: `${EVENTS_BASE}/hero-mask-loop.mp4`,
+    poster: `${EVENTS_BASE}/hero-mask-poster.jpg`,
+    alt: "Volunteers distributing SOOWER welfare parcels in Jos",
+  },
+  {
+    src: `${EVENTS_BASE}/hero-mask-loop-2.mp4`,
+    poster: `${EVENTS_BASE}/hero-mask-poster-2.jpg`,
+    alt: "Widows with the food parcels they received from SOOWER in Jos",
+  },
+] as const;
 
 export const eventPhotos = {
   armyTraumaTraining: `${EVENTS_BASE}/event-army-trauma-training.jpg`,
@@ -179,7 +186,7 @@ export const impactStats = [
     value: 2943,
     prefix: "",
     suffix: "",
-    label: "Lives directly touched in 2025",
+    label: "Lives directly touched",
   },
   {
     key: "widows",

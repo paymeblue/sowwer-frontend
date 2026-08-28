@@ -72,16 +72,14 @@ const ImpactStats = () => {
         }}
       />
       <SectionContainer className="relative">
-        <span className="eyebrow mb-8 block text-center sm:mb-10">
-          2025 impact
-        </span>
+        <span className="eyebrow mb-8 block text-center sm:mb-10">Impact</span>
         <div
           ref={scope}
           className="mx-auto grid w-full max-w-[900px] grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-y-0 sm:divide-x sm:divide-black/10"
         >
           {impactStats.map((stat) => (
             <div key={stat.key} className="stat-card px-2 text-center lg:px-6">
-              <p className="font-aeonik text-4xl font-medium leading-none text-accent sm:text-5xl lg:text-[3.25rem]">
+              <p className="font-aeonik text-4xl font-medium leading-none text-black sm:text-5xl lg:text-[3.25rem]">
                 {stat.prefix}
                 <span
                   className="stat-value"

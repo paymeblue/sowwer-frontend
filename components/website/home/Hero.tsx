@@ -3,7 +3,7 @@
 import { Button } from "@components/ui/button";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
-import { heroImages, heroLoop } from "@lib/soowerContent";
+import { heroImages, heroLoops } from "@lib/soowerContent";
 import { Heart2 } from "react-iconly";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +15,7 @@ const Hero = () => {
   const scope = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [active, setActive] = useState(0);
+  const [loopIndex, setLoopIndex] = useState(0);
 
   useEffect(() => {
     if (prefersReducedMotion()) return;
@@ -24,13 +25,15 @@ const Hero = () => {
     return () => clearInterval(id);
   }, []);
 
-  // Autoplay only once the loop has actually scrolled into view — the hero
-  // is always in view on load, so this really just guards against browsers
-  // that decline autoplay() before the tab has focus.
+  // Autoplay whenever the source changes — covers first mount and every
+  // clip swap, since changing `src` doesn't resume playback on its own.
   useEffect(() => {
     if (prefersReducedMotion()) return;
     videoRef.current?.play().catch(() => {});
-  }, []);
+  }, [loopIndex]);
+
+  const currentLoop = heroLoops[loopIndex];
+  const advanceLoop = () => setLoopIndex((i) => (i + 1) % heroLoops.length);
 
   useGSAP(
     () => {
@@ -111,17 +114,18 @@ const Hero = () => {
       </div>
 
       {/* Real, silent footage cropped into the SOOWER mark — a living element
-          alongside the photo backdrop rather than a heavy full-bleed video. */}
-      <div className="hero-loop mask-soower absolute bottom-6 right-6 hidden h-40 w-40 overflow-hidden shadow-[0_20px_60px_-16px_rgba(0,0,0,0.7)] lg:block xl:h-48 xl:w-48">
+          alongside the photo backdrop rather than a heavy full-bleed video.
+          Cycles between clips on end rather than looping one forever. */}
+      <div className="hero-loop mask-soower absolute bottom-6 right-6 hidden h-48 w-48 overflow-hidden shadow-[0_20px_60px_-16px_rgba(0,0,0,0.7)] lg:block xl:h-56 xl:w-56">
         <video
           ref={videoRef}
-          src={heroLoop.src}
-          poster={heroLoop.poster}
-          aria-label={heroLoop.alt}
+          src={currentLoop.src}
+          poster={currentLoop.poster}
+          aria-label={currentLoop.alt}
           muted
-          loop
           playsInline
           preload="metadata"
+          onEnded={advanceLoop}
           className="h-full w-full object-cover"
         />
       </div>
