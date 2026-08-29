@@ -1,6 +1,5 @@
 "use client";
 
-import BrandPhoto from "@components/shared/BrandPhoto";
 import LogoMaskedPhoto from "@components/shared/LogoMaskedPhoto";
 import { Button } from "@components/ui/button";
 import { MovingBorderButton } from "@components/ui/moving-border";
@@ -264,7 +263,7 @@ const JoinUs = ({ img, alt }: Props) => {
           <div
             ref={gridRef}
             style={{ transformStyle: "preserve-3d", perspective: "1400px" }}
-            className="order-1 grid auto-rows-[5rem] grid-cols-6 gap-3 sm:auto-rows-[6.5rem] lg:order-2 lg:auto-rows-[6.5rem] lg:gap-4"
+            className="isolate order-1 grid auto-rows-[5rem] grid-cols-6 gap-3 sm:auto-rows-[6.5rem] lg:order-2 lg:auto-rows-[6.5rem] lg:gap-4"
           >
             <figure
               data-depth="1"
@@ -289,17 +288,17 @@ const JoinUs = ({ img, alt }: Props) => {
               </div>
             </figure>
 
-            {/* A face, cut into the SOOWER mark's own silhouette. */}
             <figure
               data-depth="2.4"
-              className="cta-cell relative col-span-3 row-span-3 flex items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04]"
+              className="cta-cell group relative col-span-3 row-span-3 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
             >
-              <BrandPhoto
-                photos={[ctaMosaic[0], ctaMosaic[1]]}
-                variant="soft"
-                outline={false}
-                className="h-full w-full"
+              <Image
+                src={ctaMosaic[0].src}
+                alt={ctaMosaic[0].alt}
+                fill
                 sizes="(max-width: 1024px) 60vw, 26vw"
+                loading="lazy"
+                className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
             </figure>
 

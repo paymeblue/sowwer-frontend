@@ -238,20 +238,22 @@ const Footer = ({ variant = "default" }: Props) => {
         </div>
       </SectionContainer>
 
-      <div className="relative select-none pb-2 pt-6 text-center">
-        <span
-          aria-hidden
-          className="pointer-events-none font-aeonik text-[18vw] font-bold leading-none tracking-tighter text-white/[0.04] sm:text-[15vw] lg:text-[12vw]"
-        >
-          SOOWER
-        </span>
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <LogoMaskedPhoto
-            photos={footerWatermarkPhotos}
-            interval={3}
-            className="h-24 w-24 opacity-95 sm:h-32 sm:w-32 lg:h-40 lg:w-40"
-          />
-        </div>
+      <div
+        aria-hidden
+        className="pointer-events-none flex select-none items-center justify-center pb-2 pt-6 font-aeonik text-[18vw] font-bold leading-none tracking-tighter text-white/[0.04] sm:text-[15vw] lg:text-[12vw]"
+      >
+        <span>S</span>
+        <LogoMaskedPhoto
+          photos={footerWatermarkPhotos}
+          interval={3}
+          className="mx-[0.01em] inline-block h-[0.74em] w-[0.74em] translate-y-[0.05em] opacity-95"
+        />
+        <LogoMaskedPhoto
+          photos={footerWatermarkPhotos}
+          interval={4}
+          className="mx-[0.01em] inline-block h-[0.74em] w-[0.74em] translate-y-[0.05em] opacity-95"
+        />
+        <span>WER</span>
       </div>
     </footer>
   );

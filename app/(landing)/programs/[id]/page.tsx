@@ -347,12 +347,12 @@ const programs: Programs = {
         alt: "Missionaries gathered for a group photograph at the Mission Congress",
         text: "Accommodation and materials for missionaries in training",
       },
-      // {
-      //   key: "2",
-      //   img: img4,
-      //   alt: "images",
-      //   text: "This will be a header talking about the Tearfund training",
-      // },
+      {
+        key: "3",
+        img: sitePhotos.congressMaterials,
+        alt: "Missionaries filling out training materials at a Mission Congress breakout session",
+        text: "Breakout sessions equipping missionaries for the field",
+      },
     ],
     // testimonials: [
     //   {

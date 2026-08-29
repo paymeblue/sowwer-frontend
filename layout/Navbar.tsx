@@ -153,7 +153,7 @@ const Navbar = () => {
         }}
         transition={{ type: "spring", damping: 22, stiffness: 260 }}
         className={cn(
-          "fixed left-1/2 top-6 z-[20] mx-auto max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-4 pr-2 text-body-1 shadow-navbar md:max-w-[1300px] md:pl-6",
+          "fixed left-1/2 top-6 z-[100] mx-auto max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-4 pr-2 text-body-1 shadow-navbar md:max-w-[1300px] md:pl-6",
           !expanded && "cursor-pointer overflow-hidden"
         )}
       >

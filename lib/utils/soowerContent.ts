@@ -214,6 +214,7 @@ export const sitePhotos = {
   // Missions training — Mission Congress, March 2026
   congressGroup: `${GALLERY_BASE}/mission-congress/g-01.jpg`,
   congressSession: `${GALLERY_BASE}/mission-congress/g-06.jpg`,
+  congressMaterials: `${GALLERY_BASE}/mission-congress/g-04.jpg`,
   congressWide: `${GALLERY_BASE}/mission-congress/hero.jpg`,
 
   // Relief — Christmas Without Tears, Durumi IDP Camp, Dec 2025
@@ -287,8 +288,8 @@ export const programDecks = {
   ],
   "mission-care": [
     {
-      src: `${GALLERY_BASE}/fwc-medical-outreach/g-05.jpg`,
-      alt: "A missionary being screened beneath the SOOWER banner at the Mid-Year Missions Conference",
+      src: `${GALLERY_BASE}/fwc-medical-outreach/g-06.jpg`,
+      alt: "A missionary's blood pressure taken at the SOOWER-sponsored medical outreach",
     },
     {
       src: `${GALLERY_BASE}/fwc-medical-outreach/g-02.jpg`,
@@ -305,6 +306,10 @@ export const programDecks = {
     {
       src: `${GALLERY_BASE}/fwc-medical-outreach/g-08.jpg`,
       alt: "Vitals recorded at the SOOWER-sponsored medical station",
+    },
+    {
+      src: `${GALLERY_BASE}/fwc-medical-outreach/g-05.jpg`,
+      alt: "A missionary being screened beneath the SOOWER banner at the Mid-Year Missions Conference",
     },
   ],
   partnerships: [
@@ -423,9 +428,8 @@ export const heroParallaxPhotos = [
 // Supporting tiles for the get-involved mosaic — see shared/JoinUs.tsx. The
 // lead frame is passed in per page; these four sit around it and cover each of
 // the four programmes.
-// Faces-forward set for the get-involved mosaic — see shared/JoinUs.tsx. The
-// first two are masked into the SOOWER mark (chosen because the faces read
-// clearly even cropped to a hexagon); the rest fill plain photo cells.
+// Faces-forward set for the get-involved mosaic — see shared/JoinUs.tsx. Each
+// entry fills a plain photo cell in the bento grid.
 export const ctaMosaic = [
   {
     src: `${GALLERY_BASE}/emog-zaria/hero.jpg`,

@@ -72,7 +72,7 @@ export const HeroParallax = ({
       // Tall enough for the header (which grew once the scripture card and
       // the larger overlapping video were added) plus all three photo rows —
       // short of that, overflow-hidden below clips the last row's cards.
-      className="relative flex h-[210vh] flex-col self-auto overflow-hidden pb-16 pt-32 antialiased [perspective:1000px] [transform-style:preserve-3d] md:pb-24 md:pt-40"
+      className="relative isolate flex h-[210vh] flex-col self-auto overflow-hidden pb-16 pt-32 antialiased [perspective:1000px] [transform-style:preserve-3d] md:pb-24 md:pt-40"
     >
       {header}
       <motion.div
