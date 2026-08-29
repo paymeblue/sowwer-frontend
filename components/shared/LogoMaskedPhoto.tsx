@@ -1,7 +1,8 @@
 "use client";
 
+import { prefersReducedMotion } from "@lib/gsap";
 import Image from "next/image";
-import { useId } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 
 // The SOOWER mark, lifted from public/assets/icons/favicon.svg, reused here as
 // a clipping path so a photograph can be poured into the shape of the logo.
@@ -11,17 +12,36 @@ const MARK_PATHS = [
   "M20.5697 17.2746C20.7704 17.1553 20.9928 17.077 21.224 17.0443C21.4551 17.0116 21.6905 17.025 21.9164 17.0839C22.1424 17.1427 22.3544 17.2458 22.5402 17.3872C22.726 17.5285 22.882 17.7053 22.999 17.9074C23.116 18.1094 23.1918 18.3326 23.2219 18.5642C23.252 18.7957 23.2359 19.0309 23.1746 19.2562C23.1132 19.4814 23.0077 19.6923 22.8642 19.8765C22.7208 20.0607 22.5422 20.2146 22.3389 20.3294L12.7778 25.8494C12.5059 26.007 12.1968 26.0892 11.8824 26.0874C11.5681 26.0855 11.26 25.9998 10.9899 25.839L1.55852 20.3934C1.25986 20.2483 1.00806 20.0221 0.831917 19.7406C0.655777 19.4592 0.562412 19.1338 0.5625 18.8018V15.3117C0.562451 14.9797 0.655831 14.6544 0.831966 14.3729C1.0081 14.0915 1.25988 13.8653 1.55852 13.7202L4.78621 11.8565C5.07148 11.6913 5.39731 11.6092 5.72681 11.6197C6.0563 11.6301 6.3763 11.7325 6.65057 11.9155L15.4783 17.0122L11.9551 19.0465L5.67532 15.42L4.10019 16.3285V17.7853L11.8924 22.2839L20.5697 17.2746Z",
 ];
 
+export type LogoMaskedPhotoItem = { src: string; alt: string };
+
 type Props = {
-  src: string;
-  alt: string;
+  /** One or more photographs. Several will crossfade on a timer. */
+  photos: readonly LogoMaskedPhotoItem[];
   className?: string;
   /** Draws the mark's outline slightly offset behind the photo. */
   outline?: boolean;
+  /** Seconds between crossfades when more than one photo is supplied. */
+  interval?: number;
 };
 
-const LogoMaskedPhoto = ({ src, alt, className, outline = true }: Props) => {
+const LogoMaskedPhoto = ({
+  photos,
+  className,
+  outline = true,
+  interval = 5,
+}: Props) => {
   // useId keeps the clipPath unique when several of these share a page.
   const clipId = `soower-mark-${useId().replace(/:/g, "")}`;
+  const [active, setActive] = useState(0);
+  const count = photos.length;
+
+  const advance = useCallback(() => setActive((i) => (i + 1) % count), [count]);
+
+  useEffect(() => {
+    if (count < 2 || prefersReducedMotion()) return;
+    const id = setInterval(advance, interval * 1000);
+    return () => clearInterval(id);
+  }, [advance, count, interval]);
 
   return (
     <div className={className}>
@@ -50,7 +70,7 @@ const LogoMaskedPhoto = ({ src, alt, className, outline = true }: Props) => {
           viewBox={MARK_VIEWBOX}
           preserveAspectRatio="xMidYMid meet"
           role="img"
-          aria-label={alt}
+          aria-label={photos[active]?.alt}
           className="relative h-full w-full"
         >
           <defs>
@@ -70,15 +90,20 @@ const LogoMaskedPhoto = ({ src, alt, className, outline = true }: Props) => {
             {/* foreignObject lets next/image handle the loading and sizing
                 while the SVG handles the shape. */}
             <div className="relative h-full w-full">
-              <Image
-                src={src}
-                alt=""
-                fill
-                sizes="(max-width: 1024px) 40vw, 22vw"
-                loading="lazy"
-                fetchPriority="low"
-                className="photo-real object-cover"
-              />
+              {photos.map((photo, i) => (
+                <Image
+                  key={photo.src}
+                  src={photo.src}
+                  alt=""
+                  fill
+                  sizes="(max-width: 1024px) 40vw, 22vw"
+                  quality={i === 0 ? 82 : 70}
+                  loading="lazy"
+                  fetchPriority="low"
+                  className="photo-real object-cover transition-opacity ease-in-out [transition-duration:1200ms] motion-reduce:transition-none"
+                  style={{ opacity: i === active ? 1 : 0 }}
+                />
+              ))}
             </div>
           </foreignObject>
         </svg>

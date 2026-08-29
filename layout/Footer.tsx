@@ -5,7 +5,7 @@ import {
   LinkedinIcon,
 } from "@components/assets/icons";
 import SectionContainer from "@components/sections/SectionContainer";
-import BrandPhoto from "@components/shared/BrandPhoto";
+import LogoMaskedPhoto from "@components/shared/LogoMaskedPhoto";
 import Logo from "@components/shared/Logo";
 import { footerWatermarkPhotos } from "@lib/soowerContent";
 import Image from "next/image";
@@ -246,14 +246,10 @@ const Footer = ({ variant = "default" }: Props) => {
           SOOWER
         </span>
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <BrandPhoto
+          <LogoMaskedPhoto
             photos={footerWatermarkPhotos}
             interval={3}
-            variant="soft"
-            outline={false}
-            showDots={false}
-            className="h-20 w-20 opacity-90 sm:h-28 sm:w-28 lg:h-36 lg:w-36"
-            sizes="144px"
+            className="h-24 w-24 opacity-95 sm:h-32 sm:w-32 lg:h-40 lg:w-40"
           />
         </div>
       </div>

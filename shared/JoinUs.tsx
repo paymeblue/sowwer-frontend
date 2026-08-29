@@ -384,8 +384,7 @@ const JoinUs = ({ img, alt }: Props) => {
                 }}
               />
               <LogoMaskedPhoto
-                src={ctaMosaic[5].src}
-                alt={ctaMosaic[5].alt}
+                photos={[ctaMosaic[5]]}
                 className="relative h-full w-[46%] shrink-0"
               />
               <p className="relative font-script text-xl leading-none text-white/80">
