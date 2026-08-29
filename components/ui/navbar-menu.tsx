@@ -38,7 +38,11 @@ export const MenuItem = ({
           transition={transition}
         >
           {active === item ? (
-            <div className="absolute left-1/2 top-[calc(100%_+_1.2rem)] -translate-x-1/2 pt-2">
+            // top-full + pt-4 (not a top offset) — the padding is still part
+            // of this element's own hoverable box, so the cursor travelling
+            // from the trigger down to the card never crosses a dead zone
+            // that belongs to whatever is rendered behind the header.
+            <div className="absolute left-1/2 top-full -translate-x-1/2 pt-4">
               <motion.div
                 transition={transition}
                 layoutId="active-nav-menu"

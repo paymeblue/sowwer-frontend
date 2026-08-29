@@ -5,7 +5,9 @@ import {
   LinkedinIcon,
 } from "@components/assets/icons";
 import SectionContainer from "@components/sections/SectionContainer";
+import BrandPhoto from "@components/shared/BrandPhoto";
 import Logo from "@components/shared/Logo";
+import { footerWatermarkPhotos } from "@lib/soowerContent";
 import Image from "next/image";
 import Link from "next/link";
 import appleStore from "public/images/appstore.png";
@@ -236,10 +238,24 @@ const Footer = ({ variant = "default" }: Props) => {
         </div>
       </SectionContainer>
 
-      <div className="pointer-events-none select-none pb-2 pt-6 text-center">
-        <span className="font-aeonik text-[18vw] font-bold leading-none tracking-tighter text-white/[0.04] sm:text-[15vw] lg:text-[12vw]">
+      <div className="relative select-none pb-2 pt-6 text-center">
+        <span
+          aria-hidden
+          className="pointer-events-none font-aeonik text-[18vw] font-bold leading-none tracking-tighter text-white/[0.04] sm:text-[15vw] lg:text-[12vw]"
+        >
           SOOWER
         </span>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <BrandPhoto
+            photos={footerWatermarkPhotos}
+            interval={3}
+            variant="soft"
+            outline={false}
+            showDots={false}
+            className="h-20 w-20 opacity-90 sm:h-28 sm:w-28 lg:h-36 lg:w-36"
+            sizes="144px"
+          />
+        </div>
       </div>
     </footer>
   );

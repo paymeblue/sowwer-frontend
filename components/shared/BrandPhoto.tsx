@@ -21,6 +21,10 @@ type Props = {
   /** Offset echo of the mask behind the photo. Off for cells already sitting
    * inside their own bordered card, where the echo just reads as a smudge. */
   outline?: boolean;
+  /** Pagination dots below the photo. Off for purely decorative placements
+   * (e.g. inside a pointer-events-none watermark) where clickable-looking
+   * dots that don't respond would read as broken. */
+  showDots?: boolean;
 };
 
 /**
@@ -38,6 +42,7 @@ const BrandPhoto = ({
   variant = "default",
   priority = false,
   outline = true,
+  showDots = true,
 }: Props) => {
   const scope = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -101,7 +106,7 @@ const BrandPhoto = ({
         ))}
       </div>
 
-      {count > 1 ? (
+      {count > 1 && showDots ? (
         <div className="absolute inset-x-0 -bottom-6 flex justify-center gap-1.5">
           {photos.map((photo, i) => (
             <button

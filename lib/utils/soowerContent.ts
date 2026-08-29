@@ -494,6 +494,21 @@ export const missionVisionPhotos = [
   },
 ] as const;
 
+// Two frames not otherwise used anywhere else on the site — see
+// layout/Footer.tsx, where they crossfade behind the giant SOOWER wordmark
+// as a quiet closing beat, not another spot competing for the same photos
+// as the rest of the page.
+export const footerWatermarkPhotos = [
+  {
+    src: `${GALLERY_BASE}/mission-congress/g-04.jpg`,
+    alt: "Facilitators leading a plenary session at the Mission Congress",
+  },
+  {
+    src: `${GALLERY_BASE}/jos-widows-conference/g-04.jpg`,
+    alt: "Parcels handed out one by one along the distribution line in Jos",
+  },
+] as const;
+
 // Every widow photograph on hand, for the WidowCare impact strip.
 //
 // The first version of this list had four near-identical frames from the
