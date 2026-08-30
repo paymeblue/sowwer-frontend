@@ -21,8 +21,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const dataRes = ContactUsValidation.safeParse(formDataValues);
 
   if (!dataRes.success) {
-    // Handle validation errors
-    return new NextResponse(dataRes.error as any, { status: 400 });
+    // A raw ZodError isn't valid response body content — the client's
+    // res.json() would fail to parse it, masking the real validation
+    // message behind a generic "something went wrong" error.
+    return NextResponse.json(dataRes.error.flatten().fieldErrors, {
+      status: 400,
+    });
   }
 
   const { email, fullName, message, phoneNumber } = dataRes.data;
