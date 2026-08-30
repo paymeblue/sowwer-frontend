@@ -14,9 +14,19 @@ import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import Script from "next/script";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+declare global {
+  // eslint-disable-next-line no-unused-vars
+  interface Window {
+    turnstile?: { reset: (widgetId?: string) => void };
+    onTurnstileSuccess?: (token: string) => void;
+    onTurnstileExpired?: () => void;
+    onTurnstileError?: () => void;
+  }
+}
 
 const options = [
   {
@@ -29,14 +39,22 @@ const options = [
   },
 ];
 
+// Kept in step with lib/validations/contactUs.ts, which the /api/contact-us
+// route actually enforces — a looser check here just means the form looks
+// valid to the visitor and then 400s at the server for no visible reason.
 const schema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(2, "Minimum 2 characters"),
   phone: z.object({
     phone_code: z.string().min(1, "Phone code is required"),
-    phone_number: z.string().min(1, "Phone number is required"),
+    phone_number: z.string().min(7, "Minimum 7 characters"),
   }),
-  email: z.string().email("Invalid email address"),
-  message: z.string().min(1, "Message is required"),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .email("Invalid email address")
+    .max(254),
+  message: z.string().min(3, "Minimum 3 characters").max(1000),
 });
 
 type FormType = z.infer<typeof schema>;
@@ -44,6 +62,16 @@ type FormType = z.infer<typeof schema>;
 const ContactUs = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+
+  // Cloudflare's implicit widget looks these up on window by name — set them
+  // before the api.js script runs its DOM scan, so the widget actually has
+  // somewhere to report a solved token to.
+  useEffect(() => {
+    window.onTurnstileSuccess = (token: string) => setTurnstileToken(token);
+    window.onTurnstileExpired = () => setTurnstileToken("");
+    window.onTurnstileError = () => setTurnstileToken("");
+  }, []);
 
   const form = useForm<FormType>({
     defaultValues: {
@@ -104,6 +132,10 @@ const ContactUs = () => {
       });
     } finally {
       setIsLoading(false);
+      // Tokens are single-use either way (accepted or rejected) — reset so
+      // a retry gets a fresh one instead of resubmitting a dead token.
+      window.turnstile?.reset();
+      setTurnstileToken("");
     }
   };
 
@@ -232,6 +264,9 @@ const ContactUs = () => {
                   data-theme="light"
                   data-retry-interval={3000}
                   data-refresh-expired="manual"
+                  data-callback="onTurnstileSuccess"
+                  data-expired-callback="onTurnstileExpired"
+                  data-error-callback="onTurnstileError"
                   data-sitekey={
                     process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
                   }
@@ -242,7 +277,7 @@ const ContactUs = () => {
                     loading={isLoading}
                     loadingText="Submitting..."
                     text="Submit"
-                    disabled={!isDirty || !isValid}
+                    disabled={!isDirty || !isValid || !turnstileToken}
                   />
                 </div>
               </form>
