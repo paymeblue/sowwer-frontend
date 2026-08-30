@@ -24,6 +24,9 @@ export interface SendBulkArgs {
   text: string;
   // Omitted in link mode, where the PDF is referenced by URL in the body.
   attachment?: SendgridAttachment;
+  // Set on transactional sends (e.g. contact form notifications) so staff
+  // can hit reply and land in the visitor's inbox, not the no-reply sender.
+  replyTo?: string;
 }
 
 export interface BulkSendResult {
@@ -61,7 +64,7 @@ const chunk = <T>(items: T[], size: number): T[][] => {
 
 const sendChunk = async (
   recipients: string[],
-  { subject, html, text, attachment }: Omit<SendBulkArgs, "recipients">
+  { subject, html, text, attachment, replyTo }: Omit<SendBulkArgs, "recipients">
 ): Promise<void> => {
   const res = await fetch(SENDGRID_URL, {
     method: "POST",
@@ -72,6 +75,7 @@ const sendChunk = async (
     body: JSON.stringify({
       personalizations: recipients.map((email) => ({ to: [{ email }] })),
       from: { email: fromEmail(), name: fromName() },
+      ...(replyTo ? { reply_to: { email: replyTo } } : {}),
       subject,
       // SendGrid requires text/plain to precede text/html in this array.
       content: [

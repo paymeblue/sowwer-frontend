@@ -1,6 +1,19 @@
+import { ORG_CONTACT } from "@lib/siteMeta";
+import {
+  isSendgridConfigured,
+  sendBulkViaSendgrid,
+  sendgridConfigHint,
+} from "@lib/sendgrid";
 import { ContactUsValidation } from "lib/validations/contactUs";
 import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const data = await req.formData();
@@ -31,14 +44,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const { email, fullName, message, phoneNumber } = dataRes.data;
 
-  const body = JSON.stringify({
-    message,
-    email,
-    fullname: fullName,
-    type: "soower",
-    phone: phoneNumber,
-  });
-
   const formData = new FormData();
   formData.append("secret", process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY!);
   formData.append("response", token as string);
@@ -53,28 +58,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const outcome = await result.json();
 
-  if (outcome.success) {
-    // Now call the send the original body to the external API
-    const externalApiResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}contact-us`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body,
-      }
-    );
-
-    const response = await externalApiResponse.json();
-
-    if (externalApiResponse.ok) {
-      const result = response;
-      return NextResponse.json(result);
-    } else {
-      const status = externalApiResponse.status;
-      const errorResponse = response;
-      return NextResponse.json(errorResponse.message, { status });
-    }
-  } else {
+  if (!outcome.success) {
     return NextResponse.json(
       `Captcha token invalid!. Please refresh Captcha ${
         !outcome.success ? outcome["error-codes"][0] : null
@@ -84,4 +68,44 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       }
     );
   }
+
+  if (!isSendgridConfigured()) {
+    return NextResponse.json(sendgridConfigHint(), { status: 500 });
+  }
+
+  const subject = `New contact form message from ${fullName}`;
+  const text = [
+    `Name: ${fullName}`,
+    `Email: ${email}`,
+    phoneNumber ? `Phone: ${phoneNumber}` : null,
+    "",
+    message,
+  ]
+    .filter(Boolean)
+    .join("\n");
+  const html = `
+    <p><strong>Name:</strong> ${escapeHtml(fullName)}</p>
+    <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+    ${
+      phoneNumber
+        ? `<p><strong>Phone:</strong> ${escapeHtml(phoneNumber)}</p>`
+        : ""
+    }
+    <p><strong>Message:</strong></p>
+    <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
+  `;
+
+  const { failed } = await sendBulkViaSendgrid({
+    recipients: [ORG_CONTACT.email],
+    subject,
+    text,
+    html,
+    replyTo: email,
+  });
+
+  if (failed.length > 0) {
+    return NextResponse.json(failed[0].error, { status: 502 });
+  }
+
+  return NextResponse.json({ message: "Message sent successfully." });
 }
