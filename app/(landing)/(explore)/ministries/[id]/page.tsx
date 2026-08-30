@@ -10,7 +10,9 @@ const DynamicMinistryPage = dynamic(
 ) as any;
 
 export const metadata: Metadata = {
-  title: "Project | Soower",
+  title: "Ministry",
+  description:
+    "A ministry partnering with SOOWER Widows and Missions Foundation to support widows, orphans and missionaries in Nigeria.",
 };
 
 export default function Minstry({ params }: { params: { id: string } }) {

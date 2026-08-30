@@ -353,6 +353,18 @@ const programs: Programs = {
         alt: "Missionaries filling out training materials at a Mission Congress breakout session",
         text: "Breakout sessions equipping missionaries for the field",
       },
+      {
+        key: "4",
+        img: sitePhotos.missionaryHeightCheck,
+        alt: "A missionary's height measured at the SOOWER-sponsored medical outreach",
+        text: "Full health checks for missionaries and their families",
+      },
+      {
+        key: "5",
+        img: sitePhotos.congressDiscussion,
+        alt: "A missionary contributing to an open floor discussion at the Mission Congress",
+        text: "Open floor discussions on the challenges missionaries face",
+      },
     ],
     // testimonials: [
     //   {

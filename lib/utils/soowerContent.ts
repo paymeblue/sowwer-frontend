@@ -210,11 +210,13 @@ export const sitePhotos = {
   screeningWidow: `${GALLERY_BASE}/fwc-medical-outreach/g-01.jpg`,
   bloodScreening: `${GALLERY_BASE}/fwc-medical-outreach/g-03.jpg`,
   missionaryScreening: `${GALLERY_BASE}/fwc-medical-outreach/g-02.jpg`,
+  missionaryHeightCheck: `${GALLERY_BASE}/fwc-medical-outreach/g-04.jpg`,
 
   // Missions training — Mission Congress, March 2026
   congressGroup: `${GALLERY_BASE}/mission-congress/g-01.jpg`,
   congressSession: `${GALLERY_BASE}/mission-congress/g-06.jpg`,
   congressMaterials: `${GALLERY_BASE}/mission-congress/g-04.jpg`,
+  congressDiscussion: `${GALLERY_BASE}/mission-congress/g-08.jpg`,
   congressWide: `${GALLERY_BASE}/mission-congress/hero.jpg`,
 
   // Relief — Christmas Without Tears, Durumi IDP Camp, Dec 2025

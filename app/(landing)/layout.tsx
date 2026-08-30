@@ -3,6 +3,7 @@ import {
   KEYWORDS,
   SITE_DESCRIPTION,
   SITE_NAME,
+  SITE_OG_IMAGE,
   SITE_SHORT_NAME,
   SITE_TAGLINE,
   SITE_URL,
@@ -35,11 +36,13 @@ export const metadata: Metadata = {
     title: `${SITE_SHORT_NAME} — ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
     locale: "en_NG",
+    images: [SITE_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE_SHORT_NAME} — ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
+    images: [SITE_OG_IMAGE.url],
   },
   robots: {
     index: true,

@@ -8,10 +8,7 @@ import SectionContainer from "@components/sections/SectionContainer";
 import LogoMaskedPhoto from "@components/shared/LogoMaskedPhoto";
 import Logo from "@components/shared/Logo";
 import { footerWatermarkPhotos } from "@lib/soowerContent";
-import Image from "next/image";
 import Link from "next/link";
-import appleStore from "public/images/appstore.png";
-import playStore from "public/images/playstore.png";
 import { Calling, Message } from "react-iconly";
 
 interface Props {
@@ -47,7 +44,7 @@ const Footer = ({ variant = "default" }: Props) => {
   return (
     <footer className="mt-auto w-full overflow-hidden bg-[#0A0C18] pt-16">
       <SectionContainer className="max-w-[1440px] px-4 sm:px-6 md:px-8">
-        <div className="grid w-full grid-cols-1 gap-12 border-b border-white/10 pb-12 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid w-full grid-cols-1 gap-12 border-b border-white/10 pb-12 sm:grid-cols-2 lg:grid-cols-4">
           <div className="col-span-1 sm:col-span-2 lg:col-span-2">
             <Logo logoVariant="white" />
             <p className="mb-0 mt-3 max-w-sm font-baskervville text-sm italic text-white/80 sm:text-base">
@@ -182,32 +179,6 @@ const Footer = ({ variant = "default" }: Props) => {
                 </Link>
               </li>
             </ul>
-          </div>
-
-          <div className="col-span-1">
-            <h5 className="eyebrow mb-4 block text-white/50">Get the app</h5>
-            <div className="flex flex-col items-start gap-3">
-              <Link href="#" target="_blank">
-                <Image
-                  src={appleStore}
-                  width={148.53}
-                  height={49.51}
-                  placeholder="blur"
-                  className="h-auto w-[130px] object-contain"
-                  alt="Download app on iOS devices from Apple Store"
-                />
-              </Link>
-              <Link href="#" target="_blank">
-                <Image
-                  src={playStore}
-                  width={148.53}
-                  height={49.51}
-                  placeholder="blur"
-                  className="h-auto w-[130px] object-contain"
-                  alt="Download app on android devices from Google Play Store"
-                />
-              </Link>
-            </div>
           </div>
         </div>
 
