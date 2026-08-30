@@ -3,7 +3,9 @@ import dynamic from "next/dynamic";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ministries | Soower",
+  title: "Ministries",
+  description:
+    "Explore ministries partnering with SOOWER Widows and Missions Foundation to reach widows, orphans and missionaries across Nigeria.",
 };
 
 const DynamicExploreMinistriesPage = dynamic(

@@ -1,26 +1,22 @@
 import { TickIcon } from "@components/assets/icons";
+import JsonLd from "@components/shared/JsonLd";
+import { BackgroundGradient } from "@components/ui/background-gradient";
 import { Button } from "@components/ui/button";
+import { MovingBorderButton } from "@components/ui/moving-border";
 import { Project, WidowCareProgram } from "@components/website/programs/id";
 import { formatText } from "@lib/functions";
-import { ArrowRight } from "lucide-react";
+import {
+  dadProjectPhotos,
+  programDecks,
+  sitePhotos,
+  widowGallery,
+} from "@lib/soowerContent";
+import { SITE_URL, breadcrumbJsonLd } from "@lib/siteMeta";
+import { ArrowRight, Quote } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import frame1 from "public/images/frame-1.png";
-import frame2 from "public/images/frame-2.png";
-import frame3 from "public/images/frame-3.png";
-import frame4 from "public/images/frame-4.png";
-import widowCareImg from "public/images/img-19.png";
-import img1 from "public/images/img-23.png";
-import img2 from "public/images/img-24.png";
-import img3 from "public/images/img-25.png";
-import img4 from "public/images/img-26.png";
-// import img5 from "public/images/img-27.png";
-// import img6 from "public/images/img-28.png";
-import missionCareImg from "public/images/img-29.png";
-import dadImg from "public/images/img-30.png";
-import partnershipsImg from "public/images/img-31.png";
-import testifier from "public/images/testifier.png";
+import { notFound } from "next/navigation";
 
 const ProgramPage = dynamic(() => import("@components/website/programs/id"));
 
@@ -34,8 +30,30 @@ export const generateMetadata = async (
   parent: ResolvingMetadata
 ): Promise<Metadata> => {
   const { id } = await params;
+  const program = programs[id];
+  if (!program) return { title: `${formatText(id)} - Program` };
 
-  return { title: `${formatText(id)} - Program` };
+  const path = `/programs/${id}`;
+  const image = program.hero_deck[0];
+
+  return {
+    title: `${program.pillText} — ${program.hero_title}`,
+    description: program.hero_subtitle,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "website",
+      url: `${SITE_URL}${path}`,
+      title: `${program.pillText} — ${program.hero_title}`,
+      description: program.hero_subtitle,
+      images: [{ url: image.src, alt: image.alt }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${program.pillText} — ${program.hero_title}`,
+      description: program.hero_subtitle,
+      images: [image.src],
+    },
+  };
 };
 type Programs = Record<Project, WidowCareProgram & { donateRoute: string }>;
 const programs: Programs = {
@@ -47,7 +65,7 @@ const programs: Programs = {
     hero_title: "Helping widows rebuild their lives",
     hero_subtitle:
       "Losing a spouse can leave a woman vulnerable, but no widow should have to struggle alone. Our WidowCare program provides financial relief, vocational training, and emotional support to help women regain stability and rebuild their lives with dignity.",
-    hero_img: widowCareImg,
+    hero_deck: programDecks["widow-care"],
     yellowSection: (
       <div className="px-4 md:px-6 lg:px-0">
         <p className="text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[48px] lg:text-[32px]">
@@ -64,20 +82,12 @@ const programs: Programs = {
     impact_title: "Discover our impact through WidowCare",
     impact_subtitle:
       "Explore some of our past projects that have empowered widows with financial support, vocational training, and community care. Each initiative reflects our commitment to restoring dignity, hope, and independence, one widow at a time.",
-    impact_items: [
-      {
-        key: "1",
-        img: img1,
-        alt: "images",
-        text: "Monthly stipends for 100+ widows across Nigeria",
-      },
-      {
-        key: "2",
-        img: img2,
-        alt: "images",
-        text: "Supporting widows at the Family Worship Centre Mission Week",
-      },
-    ],
+    impact_items: widowGallery.map((photo) => ({
+      key: photo.key,
+      img: photo.src,
+      alt: photo.alt,
+      text: photo.text,
+    })),
     testimonials: [
       {
         key: "1",
@@ -87,14 +97,14 @@ const programs: Programs = {
       },
       {
         key: "2",
-        img: testifier,
         testimonial:
           "I am one of the beneficiaries of SOOWER's support and I am thankful for the foundation for supporting my family.",
         author: "Mrs. Mary Fatima Egbe",
       },
     ],
-    joinus_img: frame1,
-    joinus_alt: "happy gogo",
+    joinus_img: sitePhotos.widowsWide,
+    joinus_alt:
+      "Widows gathered with SOOWER welfare parcels at the Jos Widows & Youth Conference",
   },
   "dad-project": {
     pillColor: "#FAB80F",
@@ -104,7 +114,7 @@ const programs: Programs = {
     hero_title: "Giving orphans a future through educational sponsorships",
     hero_subtitle:
       "Every child deserves the opportunity to learn, grow, and dream. The Donate A Dream (DAD) Project is dedicated to providing full or partial educational sponsorships for orphans, ensuring they have access to quality education and the chance for a brighter future. Whether through full adoption or pooled donations, every contribution helps shape a child's destiny.",
-    hero_img: dadImg,
+    hero_deck: programDecks["dad-project"],
     yellowSection: (
       <div className="space-y-8 px-4 md:space-y-16 md:px-6 lg:px-0">
         <div className="space-y-3">
@@ -118,7 +128,10 @@ const programs: Programs = {
           </p> */}
         </div>
         <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-4">
-          <div className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8">
+          <BackgroundGradient
+            containerClassName="w-full md:w-auto"
+            className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8"
+          >
             <div className="mb-3">
               <h5 className="font-aeonik text-xl font-medium leading-tight text-black md:text-2xl md:leading-[27.6px]">
                 Full Sponsorship
@@ -157,18 +170,18 @@ const programs: Programs = {
               </li>
             </ul>
             <Link href="/donate/dad-project">
-              <Button
-                variant="outline"
-                className="w-full gap-2 border-input font-montreal text-black md:w-auto"
-              >
+              <MovingBorderButton className="w-full md:w-auto">
                 <span>Donate now</span>
                 <span>
                   <ArrowRight size={16} />
                 </span>
-              </Button>
+              </MovingBorderButton>
             </Link>
-          </div>
-          <div className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8">
+          </BackgroundGradient>
+          <BackgroundGradient
+            containerClassName="w-full md:w-auto"
+            className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8"
+          >
             <div className="mb-3">
               <h5 className="font-aeonik text-xl font-medium leading-tight text-black md:text-2xl md:leading-[27.6px]">
                 Partial Sponsorship
@@ -210,31 +223,26 @@ const programs: Programs = {
               </li>
             </ul>
             <Link href="/donate/dad-project">
-              <Button
-                variant="outline"
-                className="w-full gap-2 border-input font-montreal text-black md:w-auto"
-              >
+              <MovingBorderButton className="w-full md:w-auto">
                 <span>Donate now</span>
                 <span>
                   <ArrowRight size={16} />
                 </span>
-              </Button>
+              </MovingBorderButton>
             </Link>
-          </div>
+          </BackgroundGradient>
         </div>
       </div>
     ),
     impact_title: "Discover our impact through the DAD Project",
     impact_subtitle:
-      "Through the DAD Project (Donate a Dream), we have transformed the lives of orphaned children by providing access to education, mentorship, and opportunities for a brighter future. Here are some of the initiatives that have made a lasting impact:",
-    impact_items: [
-      {
-        key: "1",
-        img: img3,
-        alt: "images",
-        text: "Partnering with the Regy&Henry Foundation to help orphans",
-      },
-    ],
+      "Through the DAD Project (Donate a Dream), we have transformed the lives of orphaned children by providing access to education, mentorship, and opportunities for a brighter future. Real moments from the Slum-to-School 5th Year Celebration with Regy & Henry Amazing Grace Foundation:",
+    impact_items: dadProjectPhotos.map((photo) => ({
+      key: photo.key,
+      img: photo.src,
+      alt: photo.title,
+      text: photo.title,
+    })),
     // testimonials: [
     //   {
     //     key: "1",
@@ -250,8 +258,9 @@ const programs: Programs = {
     //     author: "Mrs. Mary Fatima Egbe",
     //   },
     // ],
-    joinus_img: frame2,
-    joinus_alt: "happy children",
+    joinus_img: sitePhotos.schoolWide,
+    joinus_alt:
+      "Pupils gathered at the Slum-to-School fifth-year celebration in Mabushi, Abuja",
   },
   "mission-care": {
     pillColor: "#3466FF",
@@ -261,16 +270,65 @@ const programs: Programs = {
     hero_title: "Supporting missionaries to spread the gospel",
     hero_subtitle:
       "Through MissionCare, we equip and sustain missionaries who dedicate their lives to spreading the Gospel in underserved communities. We provide them with financial aid, essential supplies, and spiritual encouragement, ensuring they can continue their mission with strength and purpose.",
-    hero_img: missionCareImg,
+    hero_deck: programDecks["mission-care"],
     yellowSection: (
-      <div className="px-4 md:px-6 lg:px-0">
-        <p className="mx-auto w-full max-w-[1150px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[52px] lg:text-[32px]">
-          We recognize the selfless sacrifices of missionaries who carry the
-          message of hope and faith into underserved and often forgotten
-          communities. Through MissionCare, we partner with churches and
-          individuals to provide practical support to those serving on the
-          frontlines of ministry.
-        </p>
+      <div className="w-full px-4 md:px-6 lg:px-0">
+        <div className="mx-auto w-full max-w-[1150px] space-y-3">
+          <span className="eyebrow block text-center">MissionCare</span>
+          <p className="mx-auto text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[1.3] lg:text-[2rem]">
+            We recognize the selfless sacrifices of missionaries who carry the
+            message of hope and faith into underserved and often forgotten
+            communities. Through MissionCare, we partner with churches and
+            individuals to provide practical support to those serving on the
+            frontlines of ministry.
+          </p>
+        </div>
+
+        <div className="mx-auto mt-10 grid w-full max-w-[1150px] gap-6 md:mt-14 md:grid-cols-[1.2fr_1fr] md:gap-8">
+          <blockquote className="relative flex flex-col justify-between gap-6 rounded-[1.75rem] border border-black/10 bg-white p-6 shadow-[0_2px_18px_-6px_rgba(3,6,33,0.1)] sm:p-8">
+            <span className="bg-primary/15 relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+              <Quote className="text-primary" size={18} />
+            </span>
+            <p className="font-baskervville text-lg italic leading-relaxed text-body-1 sm:text-xl">
+              Compassion is the engine of commission. They challenged the
+              paradox of full churches and few labourers, urging missionaries to
+              truly see individuals as Jesus does.
+            </p>
+            <footer className="border-t border-black/[0.08] pt-4 font-montreal text-sm text-body-2">
+              <span className="block font-aeonik text-base font-medium text-black">
+                Rev. Sam Tukura &amp; Pst. Daniel Daku Wumani
+              </span>
+              Army of God Gospel Outreach
+              <span className="mt-0.5 block text-xs uppercase tracking-[0.1em] text-primary">
+                Mission Congress, March 2026
+              </span>
+            </footer>
+          </blockquote>
+
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
+            {[
+              {
+                value: "45",
+                label: "Missionaries trained in trauma-informed care",
+              },
+              { value: "120+", label: "Given free health screening at FWC" },
+              { value: "188", label: "At the March 2026 Mission Congress" },
+              { value: "40", label: "Housed for a 5-day missions training" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-2xl border border-black/10 bg-white p-5 text-center shadow-[0_2px_18px_-6px_rgba(3,6,33,0.1)] sm:text-left"
+              >
+                <p className="font-aeonik text-2xl font-medium text-primary sm:text-3xl">
+                  {stat.value}
+                </p>
+                <p className="mt-1 font-montreal text-xs leading-snug text-body-2">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     ),
     impact_title: "Discover our impact through MissionCare",
@@ -279,16 +337,34 @@ const programs: Programs = {
     impact_items: [
       {
         key: "1",
-        img: img4,
-        alt: "images",
-        text: "Supporting missionaries at the Family Worship Centre Mission Week",
+        img: sitePhotos.bloodScreening,
+        alt: "Blood samples taken for cholesterol screening at the SOOWER medical outreach",
+        text: "Free HPV and cholesterol screening for 120+ missionaries and widows",
       },
-      // {
-      //   key: "2",
-      //   img: img4,
-      //   alt: "images",
-      //   text: "This will be a header talking about the Tearfund training",
-      // },
+      {
+        key: "2",
+        img: sitePhotos.congressGroup,
+        alt: "Missionaries gathered for a group photograph at the Mission Congress",
+        text: "Accommodation and materials for missionaries in training",
+      },
+      {
+        key: "3",
+        img: sitePhotos.congressMaterials,
+        alt: "Missionaries filling out training materials at a Mission Congress breakout session",
+        text: "Breakout sessions equipping missionaries for the field",
+      },
+      {
+        key: "4",
+        img: sitePhotos.missionaryHeightCheck,
+        alt: "A missionary's height measured at the SOOWER-sponsored medical outreach",
+        text: "Full health checks for missionaries and their families",
+      },
+      {
+        key: "5",
+        img: sitePhotos.congressDiscussion,
+        alt: "A missionary contributing to an open floor discussion at the Mission Congress",
+        text: "Open floor discussions on the challenges missionaries face",
+      },
     ],
     // testimonials: [
     //   {
@@ -298,8 +374,9 @@ const programs: Programs = {
     //     author: "Mr. John Doe",
     //   },
     // ],
-    joinus_img: frame3,
-    joinus_alt: "happy community",
+    joinus_img: sitePhotos.congressWide,
+    joinus_alt:
+      "Missionaries gathered at the Army of God Gospel Outreach Mission Congress",
   },
   partnerships: {
     pillColor: "#1AA551",
@@ -310,7 +387,7 @@ const programs: Programs = {
       "Collaborating with other ministries to support their projects.",
     hero_subtitle:
       "At Soower, we believe in the power of collaboration to create lasting change. Through our Partnerships Program, we work alongside ministries that are making a difference—helping them secure the resources they need to continue their mission.",
-    hero_img: partnershipsImg,
+    hero_deck: programDecks.partnerships,
     yellowSection: (
       <div className="px-4 md:px-6 lg:px-0">
         <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:gap-20">
@@ -402,14 +479,46 @@ const programs: Programs = {
     //     author: "Light Walk and Work Mission International",
     //   },
     // ],
-    joinus_img: frame4,
-    joinus_alt: "nurturing hands",
+    joinus_img: sitePhotos.vocationalWide,
+    joinus_alt:
+      "Participants at the literacy and vocational support intervention in Galadimawa, Abuja",
   },
 };
 
 const Program = ({ params }: { params: { id: Project } }) => {
   const { id } = params;
-  return <ProgramPage data={programs[id]} />;
+  const program = programs[id];
+  if (!program) notFound();
+
+  const path = `/programs/${id}`;
+
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "@id": `${SITE_URL}${path}#program`,
+          name: program.pillText,
+          serviceType: "Charitable programme",
+          description: program.hero_subtitle,
+          url: `${SITE_URL}${path}`,
+          image: program.hero_deck[0].src,
+          provider: { "@id": `${SITE_URL}/#organization` },
+          areaServed: { "@type": "Country", name: "Nigeria" },
+          isRelatedTo: `${SITE_URL}/donate${program.donateRoute}`,
+        }}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Our Programs", path: "/programs/widow-care" },
+          { name: program.pillText, path },
+        ])}
+      />
+      <ProgramPage data={program} />
+    </>
+  );
 };
 
 export default Program;

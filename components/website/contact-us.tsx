@@ -153,7 +153,7 @@ const ContactUs = () => {
                 <Link
                   target="_blank"
                   className="rounded-full bg-[#75808A] p-4"
-                  href="https://www.linkedin.com/company/soower"
+                  href="https://www.linkedin.com/company/soower-foundation/"
                 >
                   <LinkedinIcon />
                 </Link>

@@ -9,13 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@components/ui/navigation-menu";
+  Menu as HoverMenu,
+  MenuItem,
+  ProductItem,
+} from "@components/ui/navbar-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@components/ui/sheet";
 import ForgotPassword from "@components/website/dialogs/forgot-password";
 import SignIn from "@components/website/dialogs/sign-in";
@@ -23,7 +20,9 @@ import SignUp from "@components/website/dialogs/sign-up";
 import Success from "@components/website/dialogs/success";
 import useUserAuth from "@hooks/auth/useUserAuth";
 import { cn } from "@lib/cn";
-import { Menu } from "lucide-react";
+import { programDecks } from "@lib/soowerContent";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { Menu as MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -33,25 +32,35 @@ import {
   useSelectedLayoutSegment,
 } from "next/navigation";
 import logo from "public/images/logo.png";
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, Logout, Setting } from "react-iconly";
+
+const COLLAPSE_SCROLL_THRESHOLD = 80;
 
 const subMenu = [
   {
     text: "WidowCare",
     href: "/programs/widow-care",
+    description: "Financial aid and welfare support for widows.",
+    thumbnail: programDecks["widow-care"][0].src,
   },
   {
     text: "The DAD Project",
     href: "/programs/dad-project",
+    description: "Educational sponsorships for orphans.",
+    thumbnail: programDecks["dad-project"][0].src,
   },
   {
     text: "MissionCare",
     href: "/programs/mission-care",
+    description: "Welfare and training for missionaries.",
+    thumbnail: programDecks["mission-care"][0].src,
   },
   {
     text: "Partnerships",
     href: "/programs/partnerships",
+    description: "Working alongside churches and NGOs.",
+    thumbnail: programDecks.partnerships[0].src,
   },
 ];
 const Navbar = () => {
@@ -61,6 +70,7 @@ const Navbar = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState<string | ReactNode>("");
   const [open, setOpen] = useState(false);
+  const [activeNav, setActiveNav] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSubMenuOpen, setMobileSubMenuOpen] = useState(false);
   const [openSignUpModal, setOpenSignUpModal] = useState(false);
@@ -70,6 +80,27 @@ const Navbar = () => {
   const query = useSearchParams();
   const login = query.get("login") === "true";
   const { isAuthenticated: isAuth, user, logout } = useUserAuth();
+
+  const [expanded, setExpanded] = useState(true);
+  const { scrollY } = useScroll();
+  const lastScrollY = useRef(0);
+  const collapsedAtY = useRef(0);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) return;
+    const previous = lastScrollY.current;
+    if (expanded && latest > previous && latest > 160) {
+      setExpanded(false);
+      collapsedAtY.current = latest;
+    } else if (
+      !expanded &&
+      latest < previous &&
+      collapsedAtY.current - latest > COLLAPSE_SCROLL_THRESHOLD
+    ) {
+      setExpanded(true);
+    }
+    lastScrollY.current = latest;
+  });
 
   useEffect(() => {
     if (login) {
@@ -112,8 +143,31 @@ const Navbar = () => {
           setSuccessModal={setSuccessModal}
         />
       ) : null}
-      <header className="fixed left-1/2 top-6 z-[20] mx-auto w-[95%] max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-4 pr-2 text-body-1 shadow-navbar md:w-4/5 md:pl-6">
-        <nav className="flex items-center justify-between md:grid md:grid-cols-6 md:gap-4">
+      <motion.header
+        onClick={() => {
+          if (!expanded) setExpanded(true);
+        }}
+        initial={false}
+        animate={{
+          width: expanded ? "95%" : "3.75rem",
+        }}
+        transition={{ type: "spring", damping: 22, stiffness: 260 }}
+        className={cn(
+          "fixed left-1/2 top-6 z-[100] mx-auto max-w-[1300px] -translate-x-1/2 rounded-full bg-white py-1 pl-4 pr-2 text-body-1 shadow-navbar md:max-w-[1300px] md:pl-6",
+          !expanded && "cursor-pointer overflow-hidden"
+        )}
+      >
+        {!expanded && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <MenuIcon className="h-5 w-5 text-black" />
+          </div>
+        )}
+        <nav
+          className={cn(
+            "flex items-center justify-between md:grid md:grid-cols-6 md:gap-4",
+            !expanded && "opacity-0"
+          )}
+        >
           <div className="flex-shrink-0 md:col-span-1">
             <Link href="/">
               <Image
@@ -127,7 +181,12 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <ul className="hidden items-center justify-center gap-6 md:col-span-4 md:flex">
+          <ul
+            className={cn(
+              "hidden items-center justify-center gap-6 md:col-span-4 md:flex",
+              !expanded && "md:pointer-events-none md:opacity-0"
+            )}
+          >
             <li>
               <Link
                 href="/about-us"
@@ -139,37 +198,42 @@ const Navbar = () => {
                 About Us
               </Link>
             </li>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem className="relative">
-                  <NavigationMenuTrigger
-                    className={cn(
-                      "font-montreal text-sm font-normal leading-4",
-                      pathname.includes("programs") && "font-medium text-black"
-                    )}
-                  >
-                    Our Programs
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="z-[100]">
-                    <ul className="w-[150px] space-y-3 p-4">
-                      {subMenu.map((menu) => (
-                        <li key={menu.href}>
-                          <NavigationMenuLink
-                            asChild
-                            className={cn(
-                              "font-montreal text-sm font-normal leading-4 hover:text-primary",
-                              pathname === menu.href && "font-medium text-black"
-                            )}
-                          >
-                            <Link href={menu.href}>{menu.text}</Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            <li>
+              <HoverMenu setActive={setActiveNav}>
+                <MenuItem
+                  setActive={setActiveNav}
+                  active={activeNav}
+                  item="Our Programs"
+                  itemClassName={cn(
+                    "font-montreal text-sm font-normal leading-4 hover:text-primary",
+                    pathname.includes("programs") && "font-medium text-black"
+                  )}
+                >
+                  <div className="flex flex-col gap-4 text-sm">
+                    {subMenu.map((menu) => (
+                      <ProductItem
+                        key={menu.href}
+                        title={menu.text}
+                        href={menu.href}
+                        src={menu.thumbnail}
+                        description={menu.description}
+                      />
+                    ))}
+                  </div>
+                </MenuItem>
+              </HoverMenu>
+            </li>
+            <li>
+              <Link
+                href="/#moments"
+                className={cn(
+                  "font-montreal text-sm font-normal leading-4 hover:text-primary",
+                  segment === "moments" && "font-medium text-black"
+                )}
+              >
+                Our Impact
+              </Link>
+            </li>
             <li>
               <Link
                 href="/registry/widow"
@@ -207,7 +271,12 @@ const Navbar = () => {
 
           {/* Desktop Auth Buttons */}
           {isAuth ? (
-            <div className="hidden md:col-span-1 md:block">
+            <div
+              className={cn(
+                "hidden md:col-span-1 md:block",
+                !expanded && "md:pointer-events-none md:opacity-0"
+              )}
+            >
               <DropdownMenu open={open} onOpenChange={setOpen}>
                 <DropdownMenuTrigger asChild className="cursor-pointer">
                   <div className="flex items-center justify-center gap-2">
@@ -247,7 +316,12 @@ const Navbar = () => {
               </DropdownMenu>
             </div>
           ) : (
-            <ul className="hidden shrink-0 items-center justify-center gap-2 justify-self-end md:col-span-1 md:flex">
+            <ul
+              className={cn(
+                "hidden shrink-0 items-center justify-center gap-2 justify-self-end md:col-span-1 md:flex",
+                !expanded && "md:pointer-events-none md:opacity-0"
+              )}
+            >
               <Button
                 variant="outline"
                 size="md"
@@ -271,7 +345,7 @@ const Navbar = () => {
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="p-1">
-                  <Menu className="h-6 w-6" />
+                  <MenuIcon className="h-6 w-6" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
@@ -344,6 +418,18 @@ const Navbar = () => {
                             ))}
                           </ul>
                         )}
+                      </li>
+                      <li>
+                        <Link
+                          href="/#moments"
+                          className={cn(
+                            "block py-2 font-montreal text-base font-normal hover:text-primary",
+                            segment === "moments" && "font-medium text-black"
+                          )}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Our Impact
+                        </Link>
                       </li>
                       <li>
                         <Link
@@ -452,7 +538,7 @@ const Navbar = () => {
             </Sheet>
           </div>
         </nav>
-      </header>
+      </motion.header>
     </Fragment>
   );
 };

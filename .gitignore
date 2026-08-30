@@ -36,3 +36,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw source photo/video dumps — processed + hosted on S3, never committed
+public/assets/images/Army Of God Gospel Outreach Pictures - March 2025/
+public/assets/images/FWC Mid Year Missions Conference Medical Outreach 2025/
+public/assets/images/Late Pastor's Wives Conference, Jos - Sept 2025/
+public/assets/images/Regy & Henry's Literacy through Vocational and Psycho-social Support Intervention - April 2026/
+public/assets/images/Regy and Henry Amazing Grace Foundation Pictures - September 2025/
+public/assets/images/team/
+public/assets/images/WhatsApp Image*.jpeg

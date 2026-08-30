@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@components/ui/button";
+import { MovingBorderButton } from "@components/ui/moving-border";
 import JoinUs from "@shared/JoinUs";
+import PhotoDeck, { DeckPhoto } from "./PhotoDeck";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 // import brand1 from "public/images/brand-1.png";
@@ -22,7 +23,7 @@ export type Project =
   | "partnerships";
 type ImpactItem = {
   key: string;
-  img: StaticImageData;
+  img: StaticImageData | string;
   alt: string;
   text: string;
 };
@@ -31,7 +32,7 @@ type Testimonial = {
   key: string;
   testimonial: string;
   author: string;
-  img?: StaticImageData;
+  img?: StaticImageData | string;
 };
 
 export type WidowCareProgram = {
@@ -40,13 +41,13 @@ export type WidowCareProgram = {
   pillText: string;
   hero_title: string;
   hero_subtitle: string;
-  hero_img: StaticImageData;
+  hero_deck: readonly DeckPhoto[];
   yellowSection?: ReactNode;
   impact_title?: string;
   impact_subtitle?: string;
   impact_items?: ImpactItem[];
   testimonials?: Testimonial[];
-  joinus_img: StaticImageData;
+  joinus_img: StaticImageData | string;
   joinus_alt: string;
 };
 type Props = { data: WidowCareProgram & { donateRoute: string } };
@@ -118,24 +119,17 @@ const Program = ({ data }: Props) => {
               </p>
             </div>
             <Link href={`/donate${data.donateRoute}`}>
-              <Button className="w-full gap-2 border-input font-montreal text-black sm:w-auto">
+              <MovingBorderButton className="w-full sm:w-auto">
                 <span>
                   <Heart2 set="bold" size={19} />
                 </span>
                 <span>Donate now</span>
-              </Button>
+              </MovingBorderButton>
             </Link>
           </div>
         </div>
         <div className="flex w-full justify-center md:w-auto">
-          <Image
-            src={data.hero_img}
-            width={495}
-            height={321}
-            alt="hero image"
-            placeholder="blur"
-            className="aspect-auto h-auto max-w-full object-contain md:max-w-[400px] lg:max-w-[495px]"
-          />
+          <PhotoDeck photos={data.hero_deck} />
         </div>
       </section>
       {data.yellowSection && (
@@ -153,23 +147,58 @@ const Program = ({ data }: Props) => {
               {data.impact_subtitle}
             </p>
           </div>
-          {data?.impact_items && (
+          {data?.impact_items && data.impact_items.length === 1 && (
             <div className="my-8 flex flex-col items-center gap-6 md:my-16 md:flex-row md:gap-4">
-              {data.impact_items.map((item) => (
-                <div key={item.key} className="relative w-full md:w-auto">
-                  <Image
-                    src={item.img}
-                    alt={item.alt}
-                    className="h-auto w-full object-contain"
-                    width={585}
-                    height={515}
-                    placeholder="blur"
-                  />
-                  <p className="absolute bottom-4 left-4 w-full max-w-[300px] font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl md:bottom-8 md:left-8 md:max-w-[450px] md:text-3xl md:leading-7 lg:text-[30px]">
-                    {item.text}
-                  </p>
-                </div>
-              ))}
+              {data.impact_items.map((item) => {
+                const isRemote = typeof item.img === "string";
+                return (
+                  <div key={item.key} className="relative w-full md:w-auto">
+                    <Image
+                      src={item.img}
+                      alt={item.alt}
+                      className={
+                        isRemote
+                          ? "photo-real h-auto w-full object-cover"
+                          : "h-auto w-full object-contain"
+                      }
+                      width={585}
+                      height={515}
+                      placeholder={isRemote ? "empty" : "blur"}
+                    />
+                    <p className="absolute bottom-4 left-4 w-full max-w-[300px] font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl md:bottom-8 md:left-8 md:max-w-[450px] md:text-3xl md:leading-7 lg:text-[30px]">
+                      {item.text}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {data?.impact_items && data.impact_items.length > 1 && (
+            <div className="scrollbar-none my-8 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4 md:my-16">
+              {data.impact_items.map((item) => {
+                const isRemote = typeof item.img === "string";
+                return (
+                  <div
+                    key={item.key}
+                    className="impact-tile relative h-[24rem] w-[17rem] shrink-0 snap-start overflow-hidden rounded-3xl bg-grey sm:h-[30rem] sm:w-[22rem] lg:h-[34rem] lg:w-[25rem]"
+                  >
+                    <Image
+                      src={item.img}
+                      alt={item.alt}
+                      fill
+                      sizes="(max-width: 640px) 272px, (max-width: 1024px) 352px, 400px"
+                      className={
+                        isRemote ? "photo-real object-cover" : "object-cover"
+                      }
+                      placeholder={isRemote ? "empty" : "blur"}
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                    <p className="absolute bottom-6 left-6 right-6 font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl">
+                      {item.text}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           )}
           <Slider data={data.testimonials} />
