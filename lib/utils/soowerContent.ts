@@ -168,7 +168,7 @@ export const impactStats = [
   },
   {
     key: "widows",
-    value: 156,
+    value: 172,
     prefix: "",
     suffix: "",
     label: "Widows & missionaries on monthly support",
