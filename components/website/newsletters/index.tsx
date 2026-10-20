@@ -25,6 +25,11 @@ const NewsLetterPage = () => {
       link: "/assets/newsletters/SOOWER Newsletter Vol 2 Issue 1 (March 2026).pdf",
     },
     {
+      title: "Volume 2, Issue 2",
+      date: "June 2026",
+      link: "/assets/newsletters/SOOWER Newsletter Vol 2 Issue 2 (June 2026).pdf",
+    },
+    {
       title: "Volume 2, Issue 3",
       date: "September 2026",
       link: "/assets/newsletters/SOOWER Newsletter Vol 2 Issue 3 (September 2026).pdf",
