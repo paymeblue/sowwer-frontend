@@ -24,19 +24,7 @@ interface EmailOption {
   label: string;
 }
 
-// Recipients are saved here so they persist across visits.
-const STORAGE_KEY = "soower.bulkEmail.recipients";
-
-const readSavedRecipients = (): string[] => {
-  if (typeof window === "undefined") return [];
-  try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    const parsed = saved ? JSON.parse(saved) : null;
-    return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
-  } catch {
-    return [];
-  }
-};
+// Recipients are loaded from the database on mount.
 
 const selectStyles: StylesConfig<EmailOption, true> = {
   control: (base) => ({
@@ -76,22 +64,23 @@ const BulkEmailComp = () => {
   const [pdfUrl, setPdfUrl] = useState("");
   // Upload progress, or null when no upload is in flight.
   const [uploadPct, setUploadPct] = useState<number | null>(null);
-  // Lazy init from storage (component is client-only) so the load never races
-  // with the save effect below.
-  const [recipients, setRecipients] = useState<string[]>(readSavedRecipients);
+  const [recipients, setRecipients] = useState<string[]>([]);
+  const [loadingRecipients, setLoadingRecipients] = useState(true);
   const [inputValue, setInputValue] = useState("");
   const [subject, setSubject] = useState(DEFAULT_EMAIL_SUBJECT);
   const [message, setMessage] = useState(DEFAULT_EMAIL_MESSAGE);
   const [sending, setSending] = useState(false);
 
-  // Persist recipients whenever they change.
+  // Load recipients from the database on mount.
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(recipients));
-    } catch {
-      // ignore quota / serialization errors
-    }
-  }, [recipients]);
+    fetch("/api/newsletter-recipients")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data.emails)) setRecipients(data.emails);
+      })
+      .catch(() => {})
+      .finally(() => setLoadingRecipients(false));
+  }, []);
 
   // The PDF goes straight from the browser to Cloudinary — never through our
   // API route, which Netlify caps at ~4.4MB. What comes back is a public URL,
@@ -265,8 +254,8 @@ const BulkEmailComp = () => {
     <ContentWrapper title="Upload">
       <div className="mt-6 flex w-full max-w-[760px] flex-col gap-6">
         <p className="text-[.85rem] text-body-2">
-          Send a PDF to many recipients at once. Your recipient list is saved,
-          so you don&apos;t have to re-enter it next time.
+          Send a PDF to many recipients at once. Recipients are loaded from the
+          database automatically.
         </p>
 
         {/* Step 1 — PDF, either attached or linked */}
@@ -424,7 +413,9 @@ const BulkEmailComp = () => {
             />
           </div>
           <p className="mt-2 text-[.7rem] text-body-2">
-            Saved automatically on this device.
+            {loadingRecipients
+              ? "Loading recipients from database..."
+              : `Loaded ${recipients.length} recipients from database.`}
           </p>
         </section>
 
