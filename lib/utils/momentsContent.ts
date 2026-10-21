@@ -42,6 +42,7 @@ export type Moment = {
   partners: string[];
   gallery: { src: string; alt: string }[];
   quote: { text: string; source: string } | null;
+  video?: { src: string; poster: string; caption: string };
 };
 
 export const moments: Moment[] = [
@@ -438,6 +439,53 @@ export const moments: Moment[] = [
     quote: {
       text: "Our goal is not only to do more, but to do better — ensuring every program delivers measurable and meaningful change.",
       source: "SOOWER 2026 Strategy, Pillar 4",
+    },
+  },
+  {
+    slug: "dad-scholarship-award",
+    date: "September 2026",
+    dateISO: "2026-09-01",
+    year: "2026",
+    location: "Abuja",
+    title: "DAD Scholarship Award & Induction",
+    kicker: "Education",
+    theme: "Giving a Child a Dream, Giving a Future a Chance",
+    blurb:
+      "The first cohort of DAD scholars was awarded and inducted at the Donate a Dream Scholarship ceremony.",
+    hero: heroFor("dad-scholarship-award"),
+    heroAlt:
+      "Two pioneer DAD scholars in Knosk School uniform holding the ceremony programme",
+    intro:
+      "The DAD Project's first scholarship cohort: children who will now go through school with SOOWER behind them.",
+    body: [
+      "In September 2026, SOOWER held the Pioneer Scholars Award & Induction Ceremony for the DAD Scholarship 2026 (Donate a Dream) in Abuja.",
+      "The scholars came in their Knosk School uniforms and sat in the front rows. Speakers from the foundation and its supporters took the podium in turn, and each child was called forward to receive a certificate and a SOOWER backpack.",
+      "The scholarship is the DAD Project's way of making education support last longer than one event. The children inducted here are its first cohort.",
+    ],
+    facts: [
+      { value: "Pioneer", label: "First DAD Scholarship cohort" },
+      { value: "2026", label: "DAD Scholarship year" },
+      { value: "DAD", label: "Donate a Dream Project" },
+    ],
+    partners: ["Knosk School"],
+    gallery: gallery("dad-scholarship-award", [
+      "Two pioneer scholars holding the ceremony programme",
+      "A speaker addressing the scholars from the podium",
+      "A SOOWER host greeting the scholars in their seats",
+      "Scholars following the programme from the front row",
+      "Scholars in Knosk School uniform listening to a speaker",
+      "A scholar listening during the ceremony",
+      "Scholars and guests seated during the ceremony",
+      "A speaker addressing the room beside the DAD Scholarship banner",
+      "A speaker at the podium in front of the Donate a Dream banner",
+      "A guest speaker addressing the scholars",
+      "An elder addressing the pioneer scholars",
+    ]),
+    quote: null,
+    video: {
+      src: `${GALLERY_BASE}/dad-scholarship-award/video.mp4`,
+      poster: `${GALLERY_BASE}/dad-scholarship-award/video-poster.jpg`,
+      caption: "Scholars receiving their awards at the induction ceremony",
     },
   },
 ];

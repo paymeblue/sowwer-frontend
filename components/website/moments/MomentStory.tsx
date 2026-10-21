@@ -334,6 +334,27 @@ const MomentStory = ({ moment, prev, next }: Props) => {
         </SectionContainer>
       </section>
 
+      {/* ------------------------------------------------ video */}
+      {moment.video ? (
+        <section className="bg-white pb-16 md:pb-24">
+          <SectionContainer>
+            <figure className="fx-up">
+              <video
+                src={moment.video.src}
+                poster={moment.video.poster}
+                controls
+                playsInline
+                preload="none"
+                className="aspect-video w-full rounded-3xl bg-secondary-black object-cover"
+              />
+              <figcaption className="mt-4 font-montreal text-sm text-body-2">
+                {moment.video.caption}
+              </figcaption>
+            </figure>
+          </SectionContainer>
+        </section>
+      ) : null}
+
       {/* ------------------------------------------------ quote */}
       {moment.quote ? (
         <section className="bg-secondary-black py-20 md:py-28">
