@@ -2,7 +2,7 @@
 //
 // Every figure, date, theme and partner name below is taken from the four
 // SOOWER newsletters in public/assets/newsletters (Vol 1 Issues 1-3 and
-// Vol 2 Issue 1). Photography is the foundation's own, processed out of the
+// Vol 2 Issues 1 and 3). Photography is the foundation's own, processed out of the
 // raw drive dumps and hosted on S3 alongside the rest of the landing media.
 //
 // Foundation Launch, EMOG Zaria and the Trauma Care Training were originally
@@ -443,49 +443,63 @@ export const moments: Moment[] = [
   },
   {
     slug: "dad-scholarship-award",
-    date: "September 2026",
-    dateISO: "2026-09-01",
+    date: "September 28, 2026",
+    dateISO: "2026-09-28",
     year: "2026",
     location: "Abuja",
-    title: "DAD Scholarship Award & Induction",
+    title: "DAD Pioneer Scholars Induction",
     kicker: "Education",
     theme: "Giving a Child a Dream, Giving a Future a Chance",
     blurb:
-      "The first cohort of DAD scholars was awarded and inducted at the Donate a Dream Scholarship ceremony.",
+      "Seven orphans became the first Donate A Dream scholars, beginning JSS 1 at KNOSK 100 Naira-A-Day School with SOOWER covering their education.",
     hero: heroFor("dad-scholarship-award"),
     heroAlt:
-      "Two pioneer DAD scholars in Knosk School uniform holding the ceremony programme",
+      "Two of the seven Pioneer DAD Scholars in KNOSK school uniform holding the ceremony programme",
     intro:
-      "The DAD Project's first scholarship cohort: children who will now go through school with SOOWER behind them.",
+      "Seven children who had met the requirements for secondary school, but had no one to pay for it, began JSS 1 as the first Donate A Dream scholars.",
     body: [
-      "In September 2026, SOOWER held the Pioneer Scholars Award & Induction Ceremony for the DAD Scholarship 2026 (Donate a Dream) in Abuja.",
-      "The scholars came in their Knosk School uniforms and sat in the front rows. Speakers from the foundation and its supporters took the podium in turn, and each child was called forward to receive a certificate and a SOOWER backpack.",
-      "The scholarship is the DAD Project's way of making education support last longer than one event. The children inducted here are its first cohort.",
+      "On September 28, 2026, SOOWER held the DAD 2026 Pioneer Scholarship Award and Induction Ceremony. The seven scholars, orphans selected from Christ Foundation Orphanage and Widows Outreach, have started secondary school as JSS 1 students at KNOSK 100 Naira-A-Day School, with SOOWER sponsoring their education.",
+      "They were chosen through a screening and assessment process that weighed academic performance and vulnerability, with orphanhood as a key criterion. The scholarship covers tuition, uniforms, textbooks, stationery, meals four times a week, and sanitary care for the female scholars, at an estimated ₦1,350,000 per scholar each year.",
+      "In her welcome address, Executive Director Prof. Imelda Udoh told the scholars that a scholarship carries responsibility as well as opportunity. Head of Programs Ms. Ogba Abah introduced the project, and Guest Speaker Mrs. Etima Umeh gave the Pioneer Seven ten lessons for the road ahead: your circumstances today do not have to determine your tomorrow.",
+      "One by one, the scholars stepped forward to receive their DAD Scholarship Awards and Scholar Starter Packs. Destiny Bawa thanked SOOWER and its partners on behalf of the seven, and the children took the DAD Scholars' Pledge. Board Chair Engr. Jonathan Agwunobi reaffirmed that SOOWER will support them through their secondary education.",
+      "SOOWER will follow each scholar through termly academic reports, performance tracking, review meetings, welfare check-ins and annual assessments, working with the school and the orphanage to keep all seven in school until they finish.",
     ],
     facts: [
-      { value: "Pioneer", label: "First DAD Scholarship cohort" },
-      { value: "2026", label: "DAD Scholarship year" },
-      { value: "DAD", label: "Donate a Dream Project" },
+      { value: "7", label: "Pioneer DAD Scholars inducted" },
+      { value: "₦1.35m", label: "Estimated annual sponsorship per scholar" },
+      { value: "6 years", label: "Intended secondary education support" },
     ],
-    partners: ["Knosk School"],
+    partners: [
+      "KNOSK 100 Naira-A-Day School",
+      "Christ Foundation Orphanage and Widows Outreach",
+      "Federal Ministry of Women Affairs and Social Development",
+      "Regy & Henry Amazing Grace Foundation",
+      "Army of God Gospel Outreach",
+      "KAFTAN TV",
+      "Betharbel Foundation",
+      "TRT Arredo",
+    ],
     gallery: gallery("dad-scholarship-award", [
-      "Two pioneer scholars holding the ceremony programme",
-      "A speaker addressing the scholars from the podium",
-      "A SOOWER host greeting the scholars in their seats",
+      "Two Pioneer DAD Scholars holding the ceremony programme",
+      "A speaker addressing the ceremony from the podium",
+      "A speaker greeting the scholars in their seats",
       "Scholars following the programme from the front row",
-      "Scholars in Knosk School uniform listening to a speaker",
-      "A scholar listening during the ceremony",
+      "Scholars in KNOSK school uniform during the ceremony",
+      "A Pioneer DAD Scholar listening to the speakers",
       "Scholars and guests seated during the ceremony",
-      "A speaker addressing the room beside the DAD Scholarship banner",
-      "A speaker at the podium in front of the Donate a Dream banner",
-      "A guest speaker addressing the scholars",
-      "An elder addressing the pioneer scholars",
+      "A speaker addressing the room beside the Donate A Dream banner",
+      "A speaker at the podium in front of the Donate A Dream banner",
+      "A speaker addressing the Pioneer Seven",
+      "A speaker addressing the scholars from the podium",
     ]),
-    quote: null,
+    quote: {
+      text: "Today, you are receiving. Tomorrow, you should be giving.",
+      source: "Prof. Imelda Udoh, Executive Director, SOOWER Foundation",
+    },
     video: {
       src: `${GALLERY_BASE}/dad-scholarship-award/video.mp4`,
       poster: `${GALLERY_BASE}/dad-scholarship-award/video-poster.jpg`,
-      caption: "Scholars receiving their awards at the induction ceremony",
+      caption: "The Pioneer Seven receive their DAD Scholarship Awards",
     },
   },
 ];
