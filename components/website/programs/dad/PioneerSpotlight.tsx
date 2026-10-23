@@ -29,16 +29,55 @@ const STORY = [
   "Board Chair and Co-Founder Engr. Jonathan Agwunobi reaffirmed SOOWER's commitment to support the scholars throughout their secondary education, and thanked the partners who made it possible.",
 ];
 
-const HOW = [
+// Selection, follow-up and the lessons SOOWER published openly about this
+// first cycle, set out as one report-style list.
+const PROCESS = [
   {
-    title: "How the seven were chosen",
+    label: "Selection",
     body: "Head of Programs Ms. Ogba Abah explained that scholars were selected through a screening and assessment process that weighed academic performance and vulnerability, with orphanhood as a key criterion. Each had qualified for secondary school but had no sponsor.",
   },
   {
-    title: "How progress is followed",
+    label: "Follow-up",
     body: "SOOWER works with the school and caregivers to track each scholar's academic performance, attendance, class progression, personal development and wellbeing, through termly reports, review meetings, welfare check-ins and annual assessments.",
   },
+  {
+    label: "The challenge",
+    body: "The candidates first identified did not meet the school's admission requirements, and no reserve candidates had been lined up.",
+  },
+  {
+    label: "What we learned",
+    body: "Scholarship selection needs to start earlier, leaving time for screening, school assessments and admission.",
+  },
+  {
+    label: "Next cycle",
+    body: "SOOWER will identify and screen candidates ahead of admission periods and keep a pool of eligible reserve candidates.",
+  },
 ];
+
+const VOICES = [
+  {
+    quote: "Today, you are receiving. Tomorrow, you should be giving.",
+    name: "Prof. Imelda Udoh",
+    role: "Executive Director, SOOWER Foundation",
+    context:
+      "From her welcome address. She told the scholars that a scholarship brings responsibility as well as opportunity, and urged them to study diligently, embrace discipline and stay resilient.",
+  },
+  {
+    quote: "Your circumstances today do not have to determine your tomorrow.",
+    name: "Mrs. Etima Umeh",
+    role: "Guest Speaker",
+    context:
+      "The message of her charge to the Pioneer Seven: ten lessons on gratitude, resilience, discipline and the value of education.",
+  },
+];
+
+const initials = (name: string) =>
+  name
+    .replace(/^(Prof|Mrs|Mr|Ms|Engr|Pst)\.\s*/, "")
+    .split(" ")
+    .map((word) => word[0])
+    .slice(0, 2)
+    .join("");
 
 const PARTNERS = [
   "KNOSK 100 Naira-A-Day School",
@@ -70,7 +109,14 @@ const PioneerSpotlight = () => {
         stagger: 0.07,
         y: 24,
       });
-      revealOnScroll(".ps-card", { trigger: ".ps-cards", stagger: 0.12 });
+      scope.current
+        ?.querySelectorAll<HTMLElement>(".ps-cards")
+        .forEach((group) =>
+          revealOnScroll(group.querySelectorAll(".ps-card"), {
+            trigger: group,
+            stagger: 0.1,
+          })
+        );
     },
     { scope }
   );
@@ -89,12 +135,10 @@ const PioneerSpotlight = () => {
           </span>
           <h2
             id="pioneer-seven"
-            className="mt-5 font-aeonik text-[2.4rem] font-medium leading-[1.02] tracking-[-0.035em] text-black md:text-[4rem]"
+            className="mt-5 font-aeonik text-[2.4rem] font-medium leading-[1.04] tracking-[-0.035em] text-black md:text-[3.75rem]"
           >
             Seven children.{" "}
-            <em className="font-baskervville font-normal italic text-[#C9960C]">
-              One shared dream.
-            </em>
+            <span className="text-black/[0.35]">One shared dream.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-[38rem] font-montreal text-base leading-relaxed text-body-2 md:text-lg">
             The DAD 2026 Pioneer Scholarship Award and Induction Ceremony, held
@@ -105,15 +149,15 @@ const PioneerSpotlight = () => {
         </div>
 
         {/* Story + photograph */}
-        <div className="ps-story mt-16 grid gap-12 md:mt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:gap-20">
-          <div className="space-y-6">
+        <div className="ps-story mt-16 grid items-start gap-12 md:mt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+          <div className="space-y-5">
             {STORY.map((para, i) => (
               <p
                 key={i}
-                className={`ps-para font-montreal text-[1.0625rem] leading-[1.8] text-body-1 ${
+                className={`ps-para font-montreal ${
                   i === 0
-                    ? "first-letter:float-left first-letter:mr-2 first-letter:mt-1.5 first-letter:font-baskervville first-letter:text-[4.2rem] first-letter:leading-[0.8] first-letter:text-[#C9960C]"
-                    : ""
+                    ? "font-aeonik text-xl font-medium leading-snug tracking-[-0.01em] text-black md:text-[1.4rem]"
+                    : "text-base leading-[1.75] text-body-1"
                 }`}
               >
                 {para}
@@ -121,17 +165,17 @@ const PioneerSpotlight = () => {
             ))}
           </div>
 
-          <figure className="ps-photo lg:sticky lg:top-28 lg:self-start">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-[#efe9dc] shadow-[0_30px_70px_-30px_rgba(3,6,33,0.45)]">
+          <figure className="ps-photo">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#efe9dc]">
               <SmartImage
                 src={`${GALLERY}/hero.jpg`}
                 alt="Two of the Pioneer DAD Scholars holding the induction ceremony programme"
                 fill
-                sizes="(max-width: 1024px) 92vw, 42vw"
-                className="photo-real object-cover"
+                sizes="(max-width: 1024px) 92vw, 46vw"
+                className="photo-real object-cover object-[50%_35%]"
               />
             </div>
-            <figcaption className="mt-4 font-montreal text-sm text-body-2">
+            <figcaption className="mt-3 font-montreal text-sm text-body-2">
               Two of the Pioneer Seven at the induction ceremony. They began JSS
               1 at KNOSK 100 Naira-A-Day School.
             </figcaption>
@@ -166,110 +210,107 @@ const PioneerSpotlight = () => {
         </div>
 
         {/* Voices */}
-        <div className="mt-20 grid gap-6 md:mt-28 md:grid-cols-2">
-          <blockquote className="ps-card rounded-[2rem] bg-[#FCF9F2] p-8 ring-1 ring-black/[0.05] md:p-10">
-            <p className="font-baskervville text-[1.75rem] italic leading-[1.25] text-black md:text-[2.1rem]">
-              &ldquo;Today, you are receiving. Tomorrow, you should be
-              giving.&rdquo;
-            </p>
-            <footer className="mt-6 font-montreal text-sm text-body-2">
-              <span className="font-medium text-black">Prof. Imelda Udoh</span>,
-              Executive Director, in her welcome address. She told the scholars
-              that a scholarship brings responsibility as well as opportunity,
-              and urged them to study diligently, embrace discipline and stay
-              resilient.
-            </footer>
-          </blockquote>
-          <blockquote className="ps-card rounded-[2rem] bg-[#FCF9F2] p-8 ring-1 ring-black/[0.05] md:p-10">
-            <p className="font-baskervville text-[1.75rem] italic leading-[1.25] text-black md:text-[2.1rem]">
-              &ldquo;Your circumstances today do not have to determine your
-              tomorrow.&rdquo;
-            </p>
-            <footer className="mt-6 font-montreal text-sm text-body-2">
-              The message of Guest Speaker{" "}
-              <span className="font-medium text-black">Mrs. Etima Umeh</span>,
-              who gave the Pioneer Seven ten lessons on gratitude, resilience,
-              discipline and the value of education.
-            </footer>
-          </blockquote>
-        </div>
-
-        {/* Selection + accountability */}
-        <div className="ps-cards mt-6 grid gap-6 md:grid-cols-2">
-          {HOW.map((item) => (
-            <div
-              key={item.title}
-              className="ps-card rounded-[2rem] p-8 ring-1 ring-black/[0.08] md:p-10"
+        <div className="ps-cards mt-20 grid divide-y divide-black/10 border-y border-black/10 md:mt-28 md:grid-cols-2 md:divide-x md:divide-y-0">
+          {VOICES.map((voice, i) => (
+            <figure
+              key={voice.name}
+              className={`ps-card flex flex-col py-10 md:py-12 ${
+                i === 0 ? "md:pr-12" : "md:pl-12"
+              }`}
             >
-              <h3 className="font-aeonik text-xl font-medium tracking-[-0.01em] text-black">
-                {item.title}
-              </h3>
-              <p className="mt-3 font-montreal text-[0.95rem] leading-relaxed text-body-2">
-                {item.body}
-              </p>
-            </div>
+              <span
+                aria-hidden
+                className="h-[3px] w-10 rounded-full bg-primary"
+              />
+              <blockquote className="mt-6 font-aeonik text-[1.5rem] font-medium leading-[1.3] tracking-[-0.02em] text-black md:text-[1.75rem]">
+                &ldquo;{voice.quote}&rdquo;
+              </blockquote>
+              <figcaption className="mt-8 flex items-start gap-4">
+                <span
+                  aria-hidden
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-secondary-black font-montreal text-sm font-semibold text-primary"
+                >
+                  {initials(voice.name)}
+                </span>
+                <span>
+                  <span className="block font-montreal text-sm font-semibold text-black">
+                    {voice.name}
+                  </span>
+                  <span className="block font-montreal text-sm text-body-2">
+                    {voice.role}
+                  </span>
+                  <span className="mt-3 block max-w-[30rem] font-montreal text-sm leading-relaxed text-body-2">
+                    {voice.context}
+                  </span>
+                </span>
+              </figcaption>
+            </figure>
           ))}
         </div>
 
-        {/* Lessons learned — published openly in the newsletter */}
-        <div className="ps-card mt-6 grid gap-8 rounded-[2rem] bg-[#FCF9F2] p-8 ring-1 ring-black/[0.05] md:grid-cols-3 md:p-10">
-          {[
-            {
-              label: "The challenge",
-              body: "The candidates first identified did not meet the school's admission requirements, and no reserve candidates had been lined up.",
-            },
-            {
-              label: "What we learned",
-              body: "Scholarship selection needs to start earlier, leaving time for screening, school assessments and admission.",
-            },
-            {
-              label: "What changes next cycle",
-              body: "SOOWER will identify and screen candidates ahead of admission periods and keep a pool of eligible reserve candidates.",
-            },
-          ].map((item) => (
-            <div key={item.label}>
-              <p className="font-montreal text-xs font-semibold uppercase tracking-[0.16em] text-[#A67C00]">
-                {item.label}
-              </p>
-              <p className="mt-3 font-montreal text-[0.95rem] leading-relaxed text-body-1">
-                {item.body}
-              </p>
-            </div>
-          ))}
+        {/* How the programme is run — selection, follow-up and lessons */}
+        <div className="mt-20 grid gap-10 md:mt-28 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-16">
+          <div>
+            <h3 className="font-aeonik text-[1.75rem] font-medium leading-tight tracking-[-0.02em] text-black md:text-[2.25rem]">
+              How the programme is run
+            </h3>
+            <p className="mt-4 max-w-[24rem] font-montreal text-base leading-relaxed text-body-2">
+              How the first scholars were chosen, how their progress is
+              followed, and what SOOWER is changing after this first cycle.
+            </p>
+          </div>
+          <dl className="ps-cards border-t border-black/10">
+            {PROCESS.map((row, i) => (
+              <div
+                key={row.label}
+                className="ps-card grid gap-2 border-b border-black/10 py-6 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-8"
+              >
+                <dt className="flex items-baseline gap-3 font-montreal text-sm font-semibold text-black">
+                  <span className="font-montreal text-xs tabular-nums text-black/[0.35]">
+                    0{i + 1}
+                  </span>
+                  {row.label}
+                </dt>
+                <dd className="font-montreal text-[0.95rem] leading-relaxed text-body-1">
+                  {row.body}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
         {/* Partners + actions */}
-        <div className="mt-16 flex flex-col gap-10 border-t border-black/10 pt-10 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-[46rem]">
-            <p className="font-montreal text-xs font-semibold uppercase tracking-[0.16em] text-body-2">
-              In the room
-            </p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {PARTNERS.map((partner) => (
-                <li
-                  key={partner}
-                  className="rounded-full bg-black/[0.04] px-3.5 py-1.5 font-montreal text-sm text-body-1"
-                >
-                  {partner}
-                </li>
-              ))}
-            </ul>
+        <div className="mt-20 grid gap-10 md:mt-28 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-16">
+          <div>
+            <h3 className="font-aeonik text-[1.75rem] font-medium leading-tight tracking-[-0.02em] text-black md:text-[2.25rem]">
+              Present at the ceremony
+            </h3>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/moments/dad-scholarship-award"
+                className="group inline-flex items-center gap-2 rounded-full bg-secondary-black px-6 py-3 font-montreal text-sm font-medium text-white transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                Read the full story
+                <ArrowUpRight size={16} />
+              </Link>
+              <Link
+                href="/donate/dad-project"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-montreal text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                Sponsor the next scholar
+              </Link>
+            </div>
           </div>
-          <div className="flex shrink-0 flex-wrap gap-3">
-            <Link
-              href="/moments/dad-scholarship-award"
-              className="group inline-flex items-center gap-2 rounded-full bg-secondary-black px-6 py-3 font-montreal text-sm font-medium text-white transition-transform duration-300 hover:-translate-y-0.5"
-            >
-              Read the full story
-              <ArrowUpRight size={16} />
-            </Link>
-            <Link
-              href="/donate/dad-project"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-montreal text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5"
-            >
-              Sponsor the next scholar
-            </Link>
-          </div>
+          <ul className="grid border-t border-black/10 sm:grid-cols-2 sm:gap-x-8">
+            {PARTNERS.map((partner) => (
+              <li
+                key={partner}
+                className="border-b border-black/10 py-4 font-montreal text-[0.95rem] text-body-1"
+              >
+                {partner}
+              </li>
+            ))}
+          </ul>
         </div>
       </SectionContainer>
     </section>
