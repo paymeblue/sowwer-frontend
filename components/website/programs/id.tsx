@@ -46,6 +46,7 @@ export type WidowCareProgram = {
   impact_title?: string;
   impact_subtitle?: string;
   impact_items?: ImpactItem[];
+  impact_video?: { src: string; poster: string; caption: string };
   testimonials?: Testimonial[];
   joinus_img: StaticImageData | string;
   joinus_alt: string;
@@ -147,6 +148,21 @@ const Program = ({ data }: Props) => {
               {data.impact_subtitle}
             </p>
           </div>
+          {data.impact_video && (
+            <figure className="mt-8 md:mt-16">
+              <video
+                src={data.impact_video.src}
+                poster={data.impact_video.poster}
+                controls
+                playsInline
+                preload="none"
+                className="aspect-video w-full rounded-3xl bg-secondary-black object-cover"
+              />
+              <figcaption className="mt-4 font-montreal text-sm text-body-2">
+                {data.impact_video.caption}
+              </figcaption>
+            </figure>
+          )}
           {data?.impact_items && data.impact_items.length === 1 && (
             <div className="my-8 flex flex-col items-center gap-6 md:my-16 md:flex-row md:gap-4">
               {data.impact_items.map((item) => {

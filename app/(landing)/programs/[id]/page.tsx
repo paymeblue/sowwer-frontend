@@ -5,6 +5,7 @@ import { Button } from "@components/ui/button";
 import { MovingBorderButton } from "@components/ui/moving-border";
 import { Project, WidowCareProgram } from "@components/website/programs/id";
 import { formatText } from "@lib/functions";
+import { momentBySlug } from "@lib/momentsContent";
 import {
   dadProjectPhotos,
   programDecks,
@@ -17,6 +18,8 @@ import { Metadata, ResolvingMetadata } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+const scholarshipAward = momentBySlug("dad-scholarship-award")!;
 
 const ProgramPage = dynamic(() => import("@components/website/programs/id"));
 
@@ -236,13 +239,22 @@ const programs: Programs = {
     ),
     impact_title: "Discover our impact through the DAD Project",
     impact_subtitle:
-      "Through the DAD Project (Donate a Dream), we have transformed the lives of orphaned children by providing access to education, mentorship, and opportunities for a brighter future. Real moments from the Slum-to-School 5th Year Celebration with Regy & Henry Amazing Grace Foundation:",
-    impact_items: dadProjectPhotos.map((photo) => ({
-      key: photo.key,
-      img: photo.src,
-      alt: photo.title,
-      text: photo.title,
-    })),
+      "Through the DAD Project (Donate a Dream), we have transformed the lives of orphaned children by providing access to education, mentorship, and opportunities for a brighter future. Real moments from the DAD Scholarship 2026 Pioneer Scholars Award & Induction Ceremony, and the Slum-to-School 5th Year Celebration with Regy & Henry Amazing Grace Foundation:",
+    impact_video: scholarshipAward.video,
+    impact_items: [
+      ...scholarshipAward.gallery.map((photo, i) => ({
+        key: `scholarship-${i + 1}`,
+        img: photo.src,
+        alt: photo.alt,
+        text: photo.alt,
+      })),
+      ...dadProjectPhotos.map((photo) => ({
+        key: photo.key,
+        img: photo.src,
+        alt: photo.title,
+        text: photo.title,
+      })),
+    ],
     // testimonials: [
     //   {
     //     key: "1",
