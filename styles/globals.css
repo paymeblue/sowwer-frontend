@@ -102,6 +102,35 @@ input[type="number"] {
   box-shadow: inset 0 0 0 999px rgba(255, 198, 41, 0.1);
 }
 
+/* Loading state for SmartImage: a slow warm sweep over the cream base while a
+   heavy photo is still in flight. Removed the moment the image decodes. */
+.smart-image-loading {
+  background: linear-gradient(
+      100deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 80%
+    ),
+    #efe9dc;
+  background-size: 220% 100%;
+  animation: smart-image-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes smart-image-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smart-image-loading {
+    animation: none;
+  }
+}
+
 .eyebrow {
   @apply font-montreal text-xs font-semibold uppercase tracking-[0.2em] text-primary;
 }

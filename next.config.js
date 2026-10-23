@@ -17,6 +17,13 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+    // AVIF first (roughly half the bytes of JPEG for these photos), WebP as
+    // the fallback. S3 originals never change in place — a new frame gets a
+    // new key — so optimised variants can be cached for a year.
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
+    deviceSizes: [480, 640, 828, 1080, 1280, 1600, 1920],
+    imageSizes: [64, 128, 256, 384],
     // loader: "custom",
     // loaderFile: "./imageLoader.ts",
   },
