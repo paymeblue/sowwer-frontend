@@ -211,7 +211,7 @@ const MomentStory = ({ moment, prev, next }: Props) => {
                   <a href="#gallery">
                     <Button
                       variant="outline"
-                      className="border-black/15 gap-2 bg-transparent font-montreal text-black hover:bg-black/[0.04]"
+                      className="gap-2 border-black/[0.15] bg-transparent font-montreal text-black hover:bg-black/[0.04]"
                     >
                       View the gallery
                     </Button>

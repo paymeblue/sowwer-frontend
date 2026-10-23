@@ -1,8 +1,7 @@
 "use client";
-import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import MinistryCard from "@components/cards/MinistryCard";
-import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
+import ExploreEmpty from "@components/tabs/landing/ExploreEmpty";
 import Pagination from "@components/shared/Pagination";
 import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
 import usePagination from "@hooks/general/usePagination";
@@ -21,20 +20,29 @@ const ExploreMinistriesTab = () => {
     query: category,
   });
   return (
-    <div className="mt-8 flex w-full flex-col items-center justify-center">
-      <h3 className="text_regular_body_sb text-center">Browse by category</h3>
-      <Tabs defaultValue="all-ministries" className="mt-4">
-        <TabsList className="flex items-center space-x-2">
+    <div className="flex w-full flex-col items-center justify-center">
+      <Tabs
+        aria-label="Browse by category"
+        defaultValue="all-ministries"
+        className="mt-4"
+      >
+        <TabsList className="flex h-auto items-center gap-1 rounded-full bg-black/[0.04] p-1.5">
           <TabsTrigger
+            className="rounded-full px-4 py-2 font-montreal text-sm text-body-2 data-[state=active]:bg-secondary-black data-[state=active]:text-white data-[state=active]:shadow-none lg:px-5"
             value="all-ministries"
             onClick={() => setCategory("all")}
           >
             All Ministries
           </TabsTrigger>
-          <TabsTrigger value="churches" onClick={() => setCategory("church")}>
+          <TabsTrigger
+            className="rounded-full px-4 py-2 font-montreal text-sm text-body-2 data-[state=active]:bg-secondary-black data-[state=active]:text-white data-[state=active]:shadow-none lg:px-5"
+            value="churches"
+            onClick={() => setCategory("church")}
+          >
             Churches
           </TabsTrigger>
           <TabsTrigger
+            className="rounded-full px-4 py-2 font-montreal text-sm text-body-2 data-[state=active]:bg-secondary-black data-[state=active]:text-white data-[state=active]:shadow-none lg:px-5"
             value="christian-organizations"
             onClick={() => setCategory("organisation")}
           >
@@ -50,7 +58,7 @@ const ExploreMinistriesTab = () => {
           initial="hidden"
           whileInView="visible"
           viewport={DEFAULT_VIEWPORT}
-          className="mx-auto mt-10 grid w-[90%] grid-cols-1 gap-6 lg:grid-cols-3"
+          className="mt-10 grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           {data?.data.length ? (
             data?.data.map((ministry) => {
@@ -66,10 +74,10 @@ const ExploreMinistriesTab = () => {
               );
             })
           ) : (
-            <div className="col-span-3">
-              <EmptyState
-                image={<EmptySpeaker />}
-                title={`No ministry in this category`}
+            <div className="col-span-full">
+              <ExploreEmpty
+                title="No ministries in this category yet"
+                desc="Try another category, or give directly to one of our programmes."
               />
             </div>
           )}

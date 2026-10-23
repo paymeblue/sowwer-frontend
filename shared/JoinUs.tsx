@@ -219,7 +219,7 @@ const JoinUs = ({ img, alt, caption = TEAM_CAPTION }: Props) => {
                   <dt className="font-aeonik text-[1.75rem] font-medium leading-none tracking-[-0.02em] text-white md:text-[2.25rem]">
                     {stat.value.toLocaleString("en-US")}
                   </dt>
-                  <dd className="text-white/45 mt-2.5 font-montreal text-[0.72rem] leading-snug md:text-xs">
+                  <dd className="mt-2.5 font-montreal text-[0.72rem] leading-snug text-white/[0.45] md:text-xs">
                     {stat.label}
                   </dd>
                 </div>
@@ -241,7 +241,7 @@ const JoinUs = ({ img, alt, caption = TEAM_CAPTION }: Props) => {
                   isRemote ? "photo-real" : ""
                 } object-cover transition-transform ease-out [transition-duration:1200ms] group-hover:scale-[1.04]`}
               />
-              <figcaption className="via-black/55 absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-6 pt-24">
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/[0.55] to-transparent p-6 pt-24">
                 <p className="font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
                   {caption.kicker}
                 </p>
@@ -288,7 +288,7 @@ const JoinUs = ({ img, alt, caption = TEAM_CAPTION }: Props) => {
                           {program.desc}
                         </span>
                       </span>
-                      <span className="ring-white/15 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ring-1 transition-all duration-300 group-hover:bg-primary group-hover:ring-primary">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full ring-1 ring-white/[0.15] transition-all duration-300 group-hover:bg-primary group-hover:ring-primary">
                         <ArrowUpRight
                           size={14}
                           className="text-white/70 transition-colors group-hover:text-black"

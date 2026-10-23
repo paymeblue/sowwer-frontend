@@ -95,7 +95,7 @@ const JoinCouncilForm = () => {
         className="h-[80vh]"
         action={
           <Link href="/">
-            <Button variant="secondary">Back to homepage</Button>
+            <Button>Back to homepage</Button>
           </Link>
         }
       />
@@ -248,7 +248,6 @@ const JoinCouncilForm = () => {
           />
         </div>
         <Button
-          variant="secondary"
           loading={isLoading}
           type="submit"
           className="ml-auto mt-10 w-fit space-x-2"

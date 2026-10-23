@@ -58,7 +58,7 @@ const VideoPlayer = ({ src, poster, caption, meta, className }: Props) => {
             />
             <span
               aria-hidden
-              className="via-black/15 absolute inset-0 bg-gradient-to-t from-black/70 to-black/10"
+              className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/[0.15] to-black/10"
             />
 
             <span className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
@@ -76,7 +76,7 @@ const VideoPlayer = ({ src, poster, caption, meta, className }: Props) => {
                 {caption}
               </span>
               {meta ? (
-                <span className="bg-white/15 shrink-0 rounded-full px-3 py-1 font-montreal text-xs text-white backdrop-blur-md">
+                <span className="shrink-0 rounded-full bg-white/[0.15] px-3 py-1 font-montreal text-xs text-white backdrop-blur-md">
                   {meta}
                 </span>
               ) : null}

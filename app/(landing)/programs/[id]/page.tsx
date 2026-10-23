@@ -298,7 +298,7 @@ const programs: Programs = {
 
         <div className="mx-auto mt-10 grid w-full max-w-[1150px] gap-6 md:mt-14 md:grid-cols-[1.2fr_1fr] md:gap-8">
           <blockquote className="relative flex flex-col justify-between gap-6 rounded-[1.75rem] border border-black/10 bg-white p-6 shadow-[0_2px_18px_-6px_rgba(3,6,33,0.1)] sm:p-8">
-            <span className="bg-primary/15 relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+            <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/[0.15]">
               <Quote className="text-primary" size={18} />
             </span>
             <p className="font-baskervville text-lg italic leading-relaxed text-body-1 sm:text-xl">

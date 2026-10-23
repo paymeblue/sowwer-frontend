@@ -1,35 +1,27 @@
 "use client";
 import SectionContainer from "@components/sections/SectionContainer";
 import NoSSRWrapper from "@components/shared/NoSSRWrapper";
+import PageHero from "@components/shared/PageHero";
 import ExploreProjectsTab from "@components/tabs/landing/ExploreProjectsTab";
-import { motion } from "framer-motion";
-import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 
 const ExploreProjects = () => {
   return (
-    <SectionContainer>
-      <motion.section
-        variants={defaultVariant({ delay: 0.1 })}
-        initial="hidden"
-        whileInView="visible"
-        viewport={DEFAULT_VIEWPORT}
-        className="safearea-top mb-20 w-full"
-      >
-        <div className="flex flex-col items-center space-y-2">
-          <h2 className="text_variant_h2 text-center text-[2rem] lg:text-[2.5rem]">
-            Explore Projects
-          </h2>
-          <p className="text_large_body_p w-full text-center lg:w-[60%]">
-            Explore different projects being organized by Churches and other
-            Christian Organizations on Soower. Make a kingdom investment by
-            donating to widows, orphans and missionaries across Nigeria.
-          </p>
-        </div>
-        <NoSSRWrapper>
-          <ExploreProjectsTab />
-        </NoSSRWrapper>
-      </motion.section>
-    </SectionContainer>
+    <main>
+      <PageHero
+        eyebrow="Explore projects"
+        title="Projects that put"
+        accent="faith"
+        titleEnd="to work"
+        lede="Projects organised by churches and Christian organisations on SOOWER. Make a kingdom investment by giving to widows, orphans and missionaries across Nigeria."
+      />
+      <section className="bg-white py-12 md:py-16">
+        <SectionContainer>
+          <NoSSRWrapper>
+            <ExploreProjectsTab />
+          </NoSSRWrapper>
+        </SectionContainer>
+      </section>
+    </main>
   );
 };
 

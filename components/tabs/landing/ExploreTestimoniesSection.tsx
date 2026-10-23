@@ -1,14 +1,13 @@
 "use client";
 
 import Loader from "@components/shared/Loader";
+import ExploreEmpty from "@components/tabs/landing/ExploreEmpty";
 import usePagination from "@hooks/general/usePagination";
 import { DEFAULT_VIEWPORT, defaultVariant } from "lib/variants";
 import { useGetTestimoniesQuery } from "services/testimonies";
 import { motion } from "framer-motion";
 import Pagination from "@components/shared/Pagination";
 import TestimonyCard from "@components/cards/TestimonyCard";
-import EmptyState from "@components/shared/EmptyState";
-import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 
 const ExploreTestimoniesSection = () => {
   const { pagination, handleNext, handlePrevious } = usePagination();
@@ -17,7 +16,7 @@ const ExploreTestimoniesSection = () => {
     limit: pagination.pageSize,
   });
   return (
-    <div className="mt-8 flex w-full flex-col items-center justify-center">
+    <div className="flex w-full flex-col items-center justify-center">
       {isLoading || isFetching ? (
         <Loader className="h-[50vh]" />
       ) : (
@@ -65,10 +64,10 @@ const ExploreTestimoniesSection = () => {
               );
             })
           ) : (
-            <div className="col-span-3">
-              <EmptyState
-                image={<EmptySpeaker />}
+            <div className="col-span-full">
+              <ExploreEmpty
                 title="No published testimonies yet"
+                desc="Stories from widows, orphans and missionaries will appear here as they are published. Meanwhile, see the outreach record for what your support has already done."
               />
             </div>
           )}

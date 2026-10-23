@@ -5,6 +5,8 @@ import {
   InstagramIcon,
   LinkedinIcon,
 } from "@components/assets/icons";
+import SectionContainer from "@components/sections/SectionContainer";
+import PageHero from "@components/shared/PageHero";
 import { Form } from "@components/ui/form";
 import FormButton from "@components/ui/formButton";
 import FormInput from "@components/ui/formInput";
@@ -12,6 +14,7 @@ import FormPhone from "@components/ui/formPhone";
 import FormTextArea from "@components/ui/formTextArea";
 import { useToast } from "@components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import Script from "next/script";
 import { Fragment, useEffect, useState } from "react";
@@ -27,6 +30,51 @@ declare global {
     onTurnstileError?: () => void;
   }
 }
+
+const CHANNELS = [
+  {
+    icon: Phone,
+    label: "Phone",
+    items: [
+      { text: "(+234) 905 555 3431", href: "tel:+2349055553431" },
+      { text: "(+234) 707 601 6055", href: "tel:+2347076016055" },
+    ],
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    items: [{ text: "info@soower.org", href: "mailto:info@soower.org" }],
+  },
+  {
+    icon: MapPin,
+    label: "Office",
+    // Address as printed in SOOWER Newsletter Vol 2 Issue 3.
+    items: [
+      {
+        text: "4th Floor, Kojo Motors Building, Shehu Yar'adua Way, Mabushi, Abuja, Nigeria",
+        href: "",
+      },
+    ],
+  },
+];
+
+const SOCIALS = [
+  {
+    label: "SOOWER on Instagram",
+    href: "https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1",
+    Icon: InstagramIcon,
+  },
+  {
+    label: "SOOWER on Facebook",
+    href: "https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL",
+    Icon: FacebookIcon,
+  },
+  {
+    label: "SOOWER on LinkedIn",
+    href: "https://www.linkedin.com/company/soower-foundation/",
+    Icon: LinkedinIcon,
+  },
+];
 
 const options = [
   {
@@ -146,144 +194,143 @@ const ContactUs = () => {
         async={true}
         defer={true}
       />
-      <section className="space-y-8 p-6 max-lg:mt-20 sm:space-y-12 sm:p-10 md:space-y-16 md:p-20 lg:p-40">
-        <div className="mx-auto w-full max-w-[739px] md:mx-0">
-          <div className="mb-4 sm:mb-8">
-            <p className="w-max rounded-full rounded-br-sm bg-[#FCF9F2] px-4 py-3 font-aeonik text-2xl font-bold leading-tight tracking-[-0.12px] text-black sm:px-6 sm:py-4 sm:text-3xl md:px-8 md:py-6 md:text-4xl md:leading-[61px] lg:text-[45px]">
-              Contact Us.
-            </p>
-            <p className="mt-4 font-montreal text-base leading-normal text-body-2 sm:mt-8 sm:text-lg sm:leading-[26px]">
-              Want to make an inquiry or give us some feedback? You can reach us
-              through any of our channels below or fill out the form, and we'll
-              be in touch within 24hours.
-            </p>
-          </div>
+      <PageHero
+        eyebrow="Contact us"
+        title="Let's"
+        accent="talk."
+        lede="Want to make an inquiry, partner with us or give feedback? Reach us through any channel below or send a message, and we'll be in touch within 24 hours."
+      />
 
-          <div className="flex w-full flex-col items-start justify-between gap-6 md:flex-row md:gap-4">
-            <div className="space-y-2">
-              <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
-                SOCIAL MEDIA
-              </h5>
-              <p className="font-montreal text-[15px] text-body-2">
-                Follow our social profiles:
-              </p>
-              <div className="flex gap-4">
-                <Link
-                  target="_blank"
-                  className="rounded-full bg-[#75808A] p-4"
-                  href="https://www.instagram.com/soo.wer?igsh=bXBldGV0dmNtNTc1"
-                >
-                  <InstagramIcon />
-                </Link>
-                <Link
-                  target="_blank"
-                  className="rounded-full bg-[#75808A] p-4"
-                  href="https://www.facebook.com/profile.php?id=61559724273051&mibextid=ZbWKwL"
-                >
-                  <FacebookIcon />
-                </Link>
-                <Link
-                  target="_blank"
-                  className="rounded-full bg-[#75808A] p-4"
-                  href="https://www.linkedin.com/company/soower-foundation/"
-                >
-                  <LinkedinIcon />
-                </Link>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
-                PHONE
-              </h5>
-              <p className="font-montreal text-[15px] text-body-2">
-                Dial our numbers:
-              </p>
-              <div className="flex flex-col gap-0">
-                <Link
-                  target="_blank"
-                  className="font-montreal text-[15px] font-medium text-accent"
-                  href="tel:(+234)9055553431"
-                >
-                  (+234) 905 555 3431
-                </Link>
-                <Link
-                  target="_blank"
-                  className="font-montreal text-[15px] font-medium text-accent"
-                  href="tel:(+234)7076016055"
-                >
-                  (+234) 707 601 6055
-                </Link>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <h5 className="text-[13px] font-bold uppercase leading-[23px] text-black">
-                EMAIL
-              </h5>
-              <p className="font-montreal text-[15px] text-body-2">
-                Leave us an email:
-              </p>
-              <div className="flex flex-col gap-0">
-                <Link
-                  target="_blank"
-                  className="font-montreal text-[15px] font-medium text-accent"
-                  href="mailto:info@soower.org"
-                >
-                  info@soower.org
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full rounded-lg bg-[#F7F8FA] p-4 sm:rounded-xl sm:p-8 md:rounded-[2rem] md:p-12 lg:p-20">
-          <div className="mx-auto w-full max-w-3xl rounded-xl bg-white px-4 py-4 shadow-[0px_4px_20px_0px_#0000000F] sm:px-6 sm:py-6 md:px-8">
-            <Form {...form}>
-              <form
-                className="space-y-4 sm:space-y-5"
-                onSubmit={handleSubmit(onSubmit)}
-              >
-                <FormInput name="name" label="Name" />
-                <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
-                  <FormInput
-                    name="email"
-                    label="Email Address"
-                    inputProps={{ type: "email" }}
-                  />
-                  <FormPhone
-                    name={{
-                      phone_code: "phone.phone_code",
-                      phone_number: "phone.phone_number",
-                    }}
-                    label="Phone Number"
-                    options={options}
-                  />
+      <section className="bg-white py-14 md:py-20">
+        <SectionContainer>
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-8">
+            {/* Channels */}
+            <aside className="relative overflow-hidden rounded-[2rem] bg-secondary-black p-8 text-white md:p-10">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(60% 50% at 100% 0%, rgba(255,198,41,0.22) 0%, transparent 70%)",
+                }}
+              />
+              <div className="relative">
+                <h2 className="font-aeonik text-2xl font-medium tracking-[-0.02em] md:text-3xl">
+                  Reach us directly
+                </h2>
+
+                <dl className="mt-10 space-y-8">
+                  {CHANNELS.map(({ icon: Icon, label, items }) => (
+                    <div key={label} className="flex gap-4">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/[0.08] ring-1 ring-inset ring-white/10">
+                        <Icon size={18} className="text-primary" />
+                      </span>
+                      <div>
+                        <dt className="font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/[0.45]">
+                          {label}
+                        </dt>
+                        {items.map((item) => (
+                          <dd key={item.text} className="mt-1.5">
+                            {item.href ? (
+                              <a
+                                href={item.href}
+                                className="font-montreal text-[0.95rem] text-white transition-colors hover:text-primary"
+                              >
+                                {item.text}
+                              </a>
+                            ) : (
+                              <span className="font-montreal text-[0.95rem] leading-relaxed text-white/[0.85]">
+                                {item.text}
+                              </span>
+                            )}
+                          </dd>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </dl>
+
+                <div className="mt-12 border-t border-white/10 pt-8">
+                  <p className="font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/[0.45]">
+                    Follow us
+                  </p>
+                  <div className="mt-4 flex gap-3">
+                    {SOCIALS.map(({ href, label, Icon }) => (
+                      <Link
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.08] ring-1 ring-inset ring-white/10 transition-colors hover:bg-primary"
+                      >
+                        <Icon />
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-                <FormTextArea label="Message" name="message" />
+              </div>
+            </aside>
 
-                <div
-                  className="cf-turnstile mt-4"
-                  data-theme="light"
-                  data-retry-interval={3000}
-                  data-refresh-expired="manual"
-                  data-callback="onTurnstileSuccess"
-                  data-expired-callback="onTurnstileExpired"
-                  data-error-callback="onTurnstileError"
-                  data-sitekey={
-                    process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
-                  }
-                />
+            {/* Form */}
+            <div className="rounded-[2rem] bg-[#FCF9F2] p-6 ring-1 ring-black/[0.05] sm:p-8 md:p-10">
+              <h2 className="font-aeonik text-2xl font-medium tracking-[-0.02em] text-black md:text-3xl">
+                Send a message
+              </h2>
+              <p className="mt-2 font-montreal text-sm text-body-2">
+                All fields are required.
+              </p>
+              <div className="mt-8">
+                <Form {...form}>
+                  <form
+                    className="space-y-4 sm:space-y-5"
+                    onSubmit={handleSubmit(onSubmit)}
+                  >
+                    <FormInput name="name" label="Name" />
+                    <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
+                      <FormInput
+                        name="email"
+                        label="Email Address"
+                        inputProps={{ type: "email" }}
+                      />
+                      <FormPhone
+                        name={{
+                          phone_code: "phone.phone_code",
+                          phone_number: "phone.phone_number",
+                        }}
+                        label="Phone Number"
+                        options={options}
+                      />
+                    </div>
+                    <FormTextArea label="Message" name="message" />
 
-                <div className="justify-self-end pt-4 sm:pt-6">
-                  <FormButton
-                    loading={isLoading}
-                    loadingText="Submitting..."
-                    text="Submit"
-                    disabled={!isDirty || !isValid || !turnstileToken}
-                  />
-                </div>
-              </form>
-            </Form>
+                    <div
+                      className="cf-turnstile mt-4"
+                      data-theme="light"
+                      data-retry-interval={3000}
+                      data-refresh-expired="manual"
+                      data-callback="onTurnstileSuccess"
+                      data-expired-callback="onTurnstileExpired"
+                      data-error-callback="onTurnstileError"
+                      data-sitekey={
+                        process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
+                      }
+                    />
+
+                    <div className="flex justify-end pt-4 sm:pt-6">
+                      <FormButton
+                        loading={isLoading}
+                        loadingText="Submitting..."
+                        text="Submit"
+                        disabled={!isDirty || !isValid || !turnstileToken}
+                      />
+                    </div>
+                  </form>
+                </Form>
+              </div>
+            </div>
           </div>
-        </div>
+        </SectionContainer>
       </section>
     </Fragment>
   );

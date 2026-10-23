@@ -1,8 +1,7 @@
 "use client";
-import EmptySpeaker from "@components/assets/svg/emptySpeaker";
 import ProjectCard from "@components/cards/ProjectCard";
-import EmptyState from "@components/shared/EmptyState";
 import Loader from "@components/shared/Loader";
+import ExploreEmpty from "@components/tabs/landing/ExploreEmpty";
 import Pagination from "@components/shared/Pagination";
 import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
 import usePagination from "@hooks/general/usePagination";
@@ -22,20 +21,39 @@ const ExploreProjectsTab = () => {
   });
 
   return (
-    <div className="mt-8 flex w-full flex-col items-center  justify-center">
-      <h3 className="text_regular_body_sb text-center">Browse by category</h3>
-      <Tabs defaultValue="all-projects" className="mt-4">
-        <TabsList className="flex items-center space-x-0 lg:space-x-2">
-          <TabsTrigger value="all-projects" onClick={() => setCategory("all")}>
+    <div className="flex w-full flex-col items-center justify-center">
+      <Tabs
+        aria-label="Browse by category"
+        defaultValue="all-projects"
+        className="mt-4"
+      >
+        <TabsList className="flex h-auto items-center gap-1 rounded-full bg-black/[0.04] p-1.5">
+          <TabsTrigger
+            className="rounded-full px-4 py-2 font-montreal text-sm text-body-2 data-[state=active]:bg-secondary-black data-[state=active]:text-white data-[state=active]:shadow-none lg:px-5"
+            value="all-projects"
+            onClick={() => setCategory("all")}
+          >
             All Projects
           </TabsTrigger>
-          <TabsTrigger value="widows" onClick={() => setCategory("widows")}>
+          <TabsTrigger
+            className="rounded-full px-4 py-2 font-montreal text-sm text-body-2 data-[state=active]:bg-secondary-black data-[state=active]:text-white data-[state=active]:shadow-none lg:px-5"
+            value="widows"
+            onClick={() => setCategory("widows")}
+          >
             Widows
           </TabsTrigger>
-          <TabsTrigger value="orphans" onClick={() => setCategory("orphans")}>
+          <TabsTrigger
+            className="rounded-full px-4 py-2 font-montreal text-sm text-body-2 data-[state=active]:bg-secondary-black data-[state=active]:text-white data-[state=active]:shadow-none lg:px-5"
+            value="orphans"
+            onClick={() => setCategory("orphans")}
+          >
             Orphans
           </TabsTrigger>
-          <TabsTrigger value="missions" onClick={() => setCategory("missions")}>
+          <TabsTrigger
+            className="rounded-full px-4 py-2 font-montreal text-sm text-body-2 data-[state=active]:bg-secondary-black data-[state=active]:text-white data-[state=active]:shadow-none lg:px-5"
+            value="missions"
+            onClick={() => setCategory("missions")}
+          >
             Missions
           </TabsTrigger>
         </TabsList>
@@ -57,14 +75,17 @@ const ExploreProjectsTab = () => {
               );
             })
           ) : (
-            <div className="col-span-3">
-              <EmptyState
-                image={<EmptySpeaker />}
-                title={
-                  category === "all"
-                    ? `No published projects yet`
-                    : `No published projects yet for this category`
-                }
+            <div className="col-span-full">
+              <ExploreEmpty
+                {...(category === "all"
+                  ? {
+                      title: "No published projects yet",
+                      desc: "Projects from the churches and organisations we work with will appear here. Meanwhile, you can follow what SOOWER has delivered so far, or give directly to a programme.",
+                    }
+                  : {
+                      title: "No published projects in this category yet",
+                      desc: "Try another category, or give directly to one of our programmes.",
+                    })}
               />
             </div>
           )}

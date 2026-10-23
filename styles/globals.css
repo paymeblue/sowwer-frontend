@@ -288,11 +288,11 @@ input[type="number"] {
 
   .step-active .circle::after {
     content: "";
-    @apply absolute left-1/2 top-1/2 z-[15] h-4 w-4 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-accent;
+    @apply absolute left-1/2 top-1/2 z-[15] h-4 w-4 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-primary;
   }
 
   .step-done .circle {
-    @apply z-20 bg-accent;
+    @apply z-20 bg-primary;
   }
 
   .step-inactive .circle {
@@ -312,7 +312,7 @@ input[type="number"] {
   }
 
   .step-done .line {
-    @apply border-accent;
+    @apply border-primary;
   }
 
   .step-inactive .line,

@@ -188,14 +188,14 @@ const Moments = () => {
                             <span className="block font-aeonik text-[2.75rem] font-medium leading-[0.95] text-white">
                               {moment.date.split(",")[0]}
                             </span>
-                            <span className="text-white/65 mt-2 block font-baskervville text-sm italic leading-snug">
+                            <span className="mt-2 block font-baskervville text-sm italic leading-snug text-white/[0.65]">
                               {moment.theme}
                             </span>
                           </div>
                         </div>
                       )}
                       {moment.hero ? (
-                        <span className="bg-black/45 absolute left-4 top-4 rounded-full px-2.5 py-1 font-montreal text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
+                        <span className="absolute left-4 top-4 rounded-full bg-black/[0.45] px-2.5 py-1 font-montreal text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
                           {moment.kicker}
                         </span>
                       ) : null}

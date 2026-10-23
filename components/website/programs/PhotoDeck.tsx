@@ -176,7 +176,7 @@ const PhotoDeck = ({ photos, travel = 1.6 }: Props) => {
         })}
 
         {count > 1 ? (
-          <span className="bg-black/45 absolute left-5 top-5 z-[60] rounded-full px-3 py-1 font-montreal text-xs tabular-nums tracking-[0.08em] text-white backdrop-blur-md">
+          <span className="absolute left-5 top-5 z-[60] rounded-full bg-black/[0.45] px-3 py-1 font-montreal text-xs tabular-nums tracking-[0.08em] text-white backdrop-blur-md">
             {pad(active + 1)}
             <span className="text-white/50"> / {pad(count)}</span>
           </span>
