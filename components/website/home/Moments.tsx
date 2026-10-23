@@ -1,11 +1,11 @@
 "use client";
 
 import SectionContainer from "@components/sections/SectionContainer";
+import SmartImage from "@components/shared/SmartImage";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
 import { moments } from "@lib/momentsContent";
 import { ArrowUpRight, MapPin } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 
@@ -169,12 +169,12 @@ const Moments = () => {
                     <div className="relative h-56 w-full shrink-0 overflow-hidden bg-secondary-black sm:h-auto sm:w-[15rem] lg:w-[19rem]">
                       {moment.hero ? (
                         <div className="moment-media absolute inset-[-8%]">
-                          <Image
+                          <SmartImage
                             src={moment.hero}
                             alt={moment.heroAlt}
                             fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 240px, 304px"
-                            className="photo-real object-cover transition-transform ease-out [transition-duration:900ms] group-hover:scale-[1.06]"
+                            className="photo-real object-cover group-hover:scale-[1.06]"
                           />
                         </div>
                       ) : (
@@ -223,6 +223,20 @@ const Moments = () => {
                         />
                       </span>
                     </div>
+
+                    {/* The event's headline figure fills the right edge on
+                        wide screens, where the copy alone left the card
+                        half empty. */}
+                    {moment.facts[0] ? (
+                      <div className="hidden w-[15rem] shrink-0 flex-col justify-center border-l border-black/[0.06] bg-[#FCF9F2]/70 p-8 transition-colors duration-500 group-hover:bg-[#FCF9F2] xl:flex">
+                        <span className="font-aeonik text-[2.75rem] font-medium leading-none tracking-[-0.02em] text-accent">
+                          {moment.facts[0].value}
+                        </span>
+                        <span className="mt-3 font-montreal text-sm leading-snug text-body-2">
+                          {moment.facts[0].label}
+                        </span>
+                      </div>
+                    ) : null}
                   </div>
                 </Link>
               </li>

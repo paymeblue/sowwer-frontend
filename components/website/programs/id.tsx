@@ -1,5 +1,7 @@
 "use client";
 
+import SmartImage from "@components/shared/SmartImage";
+import VideoPlayer from "@components/shared/VideoPlayer";
 import { MovingBorderButton } from "@components/ui/moving-border";
 import JoinUs from "@shared/JoinUs";
 import PhotoDeck, { DeckPhoto } from "./PhotoDeck";
@@ -149,19 +151,9 @@ const Program = ({ data }: Props) => {
             </p>
           </div>
           {data.impact_video && (
-            <figure className="mt-8 md:mt-16">
-              <video
-                src={data.impact_video.src}
-                poster={data.impact_video.poster}
-                controls
-                playsInline
-                preload="none"
-                className="aspect-video w-full rounded-3xl bg-secondary-black object-cover"
-              />
-              <figcaption className="mt-4 font-montreal text-sm text-body-2">
-                {data.impact_video.caption}
-              </figcaption>
-            </figure>
+            <div className="mt-10 md:mt-14">
+              <VideoPlayer {...data.impact_video} meta="Watch the film" />
+            </div>
           )}
           {data?.impact_items && data.impact_items.length === 1 && (
             <div className="my-8 flex flex-col items-center gap-6 md:my-16 md:flex-row md:gap-4">
@@ -196,20 +188,28 @@ const Program = ({ data }: Props) => {
                 return (
                   <div
                     key={item.key}
-                    className="impact-tile relative h-[24rem] w-[17rem] shrink-0 snap-start overflow-hidden rounded-3xl bg-grey sm:h-[30rem] sm:w-[22rem] lg:h-[34rem] lg:w-[25rem]"
+                    className="impact-tile group relative h-[24rem] w-[17rem] shrink-0 snap-start overflow-hidden rounded-3xl bg-grey sm:h-[30rem] sm:w-[22rem] lg:h-[34rem] lg:w-[25rem]"
                   >
-                    <Image
-                      src={item.img}
-                      alt={item.alt}
-                      fill
-                      sizes="(max-width: 640px) 272px, (max-width: 1024px) 352px, 400px"
-                      className={
-                        isRemote ? "photo-real object-cover" : "object-cover"
-                      }
-                      placeholder={isRemote ? "empty" : "blur"}
-                    />
+                    {isRemote ? (
+                      <SmartImage
+                        src={item.img}
+                        alt={item.alt}
+                        fill
+                        sizes="(max-width: 640px) 272px, (max-width: 1024px) 352px, 400px"
+                        className="photo-real object-cover group-hover:scale-[1.04]"
+                      />
+                    ) : (
+                      <Image
+                        src={item.img}
+                        alt={item.alt}
+                        fill
+                        sizes="(max-width: 640px) 272px, (max-width: 1024px) 352px, 400px"
+                        className="object-cover"
+                        placeholder="blur"
+                      />
+                    )}
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-                    <p className="absolute bottom-6 left-6 right-6 font-aeonik text-xl font-medium leading-tight text-white sm:text-2xl">
+                    <p className="absolute bottom-6 left-6 right-6 font-aeonik text-lg font-medium leading-snug text-white sm:text-xl">
                       {item.text}
                     </p>
                   </div>
@@ -238,7 +238,11 @@ const Program = ({ data }: Props) => {
         </div> */}
         </section>
       )}
-      <JoinUs img={data.joinus_img} alt={data.joinus_alt} />
+      <JoinUs
+        img={data.joinus_img}
+        alt={data.joinus_alt}
+        caption={{ kicker: "From the field", title: data.joinus_alt }}
+      />
     </main>
   );
 };

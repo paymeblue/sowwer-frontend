@@ -1,13 +1,14 @@
 "use client";
 
 import LogoMaskedPhoto from "@components/shared/LogoMaskedPhoto";
+import SmartImage from "@components/shared/SmartImage";
 import { Button } from "@components/ui/button";
 import { MovingBorderButton } from "@components/ui/moving-border";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
 import { ctaMosaic, impactStats } from "@lib/soowerContent";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import Link from "next/link";
 import { memo, useRef } from "react";
 import { Heart2 } from "react-iconly";
@@ -16,18 +17,41 @@ type Props = {
   /** Lead photograph — the largest cell in the bento. */
   img: StaticImageData | string;
   alt: string;
+  /** Overlay on the lead frame. Defaults to the homepage's team caption. */
+  caption?: { kicker: string; title: string };
 };
 
+// Descriptions match the programme cards in components/website/home/ProgramsGrid.tsx.
 const PROGRAM_LINKS = [
-  { label: "WidowCare", href: "/programs/widow-care" },
-  { label: "The DAD Project", href: "/programs/dad-project" },
-  { label: "MissionCare", href: "/programs/mission-care" },
-  { label: "Partnerships", href: "/programs/partnerships" },
+  {
+    label: "WidowCare",
+    desc: "Financial aid and welfare for widows",
+    href: "/programs/widow-care",
+  },
+  {
+    label: "The DAD Project",
+    desc: "Educational sponsorships for orphans",
+    href: "/programs/dad-project",
+  },
+  {
+    label: "MissionCare",
+    desc: "Welfare and healthcare for missionaries",
+    href: "/programs/mission-care",
+  },
+  {
+    label: "Partnerships",
+    desc: "Alongside churches and NGOs",
+    href: "/programs/partnerships",
+  },
 ];
 
-const JoinUs = ({ img, alt }: Props) => {
+const TEAM_CAPTION = {
+  kicker: "The team",
+  title: "On the ground and behind the scenes",
+};
+
+const JoinUs = ({ img, alt, caption = TEAM_CAPTION }: Props) => {
   const scope = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -40,23 +64,15 @@ const JoinUs = ({ img, alt }: Props) => {
         return;
       }
 
-      const cells = gsap.utils.toArray<HTMLElement>(".cta-cell");
-
-      // Cells assemble into the bento as the block enters the viewport, each
-      // rotating in from a slightly different angle so they don't all land
-      // on the same beat.
-      cells.forEach((cell, i) => {
-        const fromLeft = i % 2 === 0;
-        gsap.from(cell, {
-          y: 70,
-          opacity: 0,
-          scale: 0.88,
-          rotate: fromLeft ? -3 : 3,
-          duration: 0.9,
-          delay: i * 0.07,
-          ease: "power3.out",
-          scrollTrigger: { trigger: scope.current, start: "top 76%" },
-        });
+      // Cells rise into place in reading order. No per-cell scroll drift:
+      // the grid holds its gutters, which is what makes it read as composed.
+      gsap.from(".cta-cell", {
+        y: 36,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.08,
+        ease: "power3.out",
+        scrollTrigger: { trigger: scope.current, start: "top 75%" },
       });
 
       gsap.from(".cta-copy > *", {
@@ -94,7 +110,7 @@ const JoinUs = ({ img, alt }: Props) => {
           ".cta-ray-ambient",
           { opacity: 0, scale: 0.6, yPercent: 12 },
           {
-            opacity: 1,
+            opacity: 0.55,
             scale: 1.6,
             yPercent: -10,
             ease: "none",
@@ -106,7 +122,7 @@ const JoinUs = ({ img, alt }: Props) => {
           ".cta-ray-core",
           { opacity: 0, scale: 0.4, yPercent: 18 },
           {
-            opacity: 1,
+            opacity: 0.45,
             scale: 1.9,
             yPercent: -14,
             ease: "none",
@@ -114,57 +130,6 @@ const JoinUs = ({ img, alt }: Props) => {
           },
           0
         );
-
-      // Each cell drifts at its own rate, so the grid separates into layers
-      // as the section scrolls rather than moving as one flat block.
-      cells.forEach((cell) => {
-        const depth = Number(cell.dataset.depth || 1);
-        gsap.to(cell, {
-          yPercent: -6 * depth,
-          ease: "none",
-          scrollTrigger: {
-            trigger: scope.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 0.5,
-          },
-        });
-      });
-
-      // Cursor-driven parallax tilt on the whole grid, desktop pointer only —
-      // a small perspective shift that makes the bento feel handled rather
-      // than printed on the page.
-      const grid = gridRef.current;
-      if (
-        grid &&
-        window.matchMedia("(hover: hover) and (min-width: 1024px)").matches
-      ) {
-        const quickX = gsap.quickTo(grid, "rotateY", {
-          duration: 0.6,
-          ease: "power3.out",
-        });
-        const quickY = gsap.quickTo(grid, "rotateX", {
-          duration: 0.6,
-          ease: "power3.out",
-        });
-        const onMove = (e: PointerEvent) => {
-          const rect = grid.getBoundingClientRect();
-          const px = (e.clientX - rect.left) / rect.width - 0.5;
-          const py = (e.clientY - rect.top) / rect.height - 0.5;
-          quickX(px * 6);
-          quickY(py * -6);
-        };
-        const onLeave = () => {
-          quickX(0);
-          quickY(0);
-        };
-        grid.addEventListener("pointermove", onMove);
-        grid.addEventListener("pointerleave", onLeave);
-        return () => {
-          grid.removeEventListener("pointermove", onMove);
-          grid.removeEventListener("pointerleave", onLeave);
-        };
-      }
 
       return undefined;
     },
@@ -209,19 +174,23 @@ const JoinUs = ({ img, alt }: Props) => {
         }}
       />
       <div className="relative z-20 mx-auto w-full max-w-[1440px] px-6 lg:px-20">
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
-          <div className="cta-copy order-2 max-w-[34rem] lg:order-1">
+        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-20">
+          <div className="cta-copy max-w-[32rem]">
             <span className="eyebrow block">Get involved</span>
-            <h2 className="mt-4 font-aeonik text-[2.25rem] font-medium leading-[1.03] tracking-[-0.025em] text-white sm:text-5xl lg:text-[3.75rem]">
-              Be the light in someone&apos;s story
+            <h2 className="mt-5 font-aeonik text-[2.5rem] font-medium leading-[1.02] tracking-[-0.03em] text-white sm:text-[3.25rem] lg:text-[4rem]">
+              Be the{" "}
+              <em className="font-baskervville font-normal italic text-primary">
+                light
+              </em>{" "}
+              in someone&apos;s story
             </h2>
-            <p className="text-white/65 mt-5 font-montreal text-base leading-relaxed md:text-lg">
+            <p className="mt-6 font-montreal text-base leading-relaxed text-white/60 md:text-lg">
               A stipend, a school bag, a health screening. Every gift here is
               already spoken for — it goes to a widow, an orphan or a missionary
               we can name.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-10 flex flex-wrap items-center gap-3">
               <Link href="/donate/widow-care">
                 <MovingBorderButton>
                   <span>
@@ -233,7 +202,7 @@ const JoinUs = ({ img, alt }: Props) => {
               <Link href="/registry/join">
                 <Button
                   variant="outline"
-                  className="group gap-2 border-white/25 bg-transparent font-montreal text-white hover:bg-white/10 hover:text-white"
+                  className="group gap-2 border-white/20 bg-transparent font-montreal text-white hover:border-white/40 hover:bg-white/[0.06] hover:text-white"
                 >
                   <span>Partner with us</span>
                   <ArrowRight
@@ -244,13 +213,13 @@ const JoinUs = ({ img, alt }: Props) => {
               </Link>
             </div>
 
-            <dl className="cta-stats mt-10 grid grid-cols-3 gap-4 border-t border-white/10 pt-7">
+            <dl className="cta-stats mt-12 grid grid-cols-3 divide-x divide-white/10 border-y border-white/10">
               {impactStats.map((stat) => (
-                <div key={stat.key} className="cta-stat">
-                  <dt className="font-aeonik text-2xl font-medium leading-none text-primary md:text-3xl">
+                <div key={stat.key} className="cta-stat px-4 py-6 first:pl-0">
+                  <dt className="font-aeonik text-[1.75rem] font-medium leading-none tracking-[-0.02em] text-white md:text-[2.25rem]">
                     {stat.value.toLocaleString("en-US")}
                   </dt>
-                  <dd className="mt-2 font-montreal text-[0.7rem] leading-snug text-white/50 md:text-xs">
+                  <dd className="text-white/45 mt-2.5 font-montreal text-[0.72rem] leading-snug md:text-xs">
                     {stat.label}
                   </dd>
                 </div>
@@ -258,122 +227,91 @@ const JoinUs = ({ img, alt }: Props) => {
             </dl>
           </div>
 
-          {/* Bento: lead frame, four photo cells (two masked into the SOOWER
-              hexagon), the programme index, and the wordmark tile. */}
-          <div
-            ref={gridRef}
-            style={{ transformStyle: "preserve-3d", perspective: "1400px" }}
-            className="isolate order-1 grid auto-rows-[5rem] grid-cols-6 gap-3 sm:auto-rows-[6.5rem] lg:order-2 lg:auto-rows-[6.5rem] lg:gap-4"
-          >
-            <figure
-              data-depth="1"
-              className="cta-cell group relative col-span-3 row-span-3 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
-            >
-              <Image
+          {/* Bento on a fixed row rhythm: lead frame and a portrait on top,
+              the programme index with two smaller tiles beneath. Every cell
+              shares the same gutter and radius. */}
+          <div className="isolate grid auto-rows-[8.5rem] grid-cols-2 gap-3 sm:auto-rows-[9.5rem] sm:grid-cols-3 lg:gap-4">
+            <figure className="cta-cell group relative col-span-2 row-span-2 overflow-hidden rounded-[1.75rem] bg-white/5 ring-1 ring-inset ring-white/10">
+              <SmartImage
                 src={img}
                 alt={alt}
                 fill
-                sizes="(max-width: 1024px) 50vw, 26vw"
-                className={`object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${
+                sizes="(max-width: 640px) 92vw, (max-width: 1024px) 62vw, 36vw"
+                className={`${
                   isRemote ? "photo-real" : ""
-                }`}
+                } object-cover transition-transform ease-out [transition-duration:1200ms] group-hover:scale-[1.04]`}
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-14">
-                <p className="font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-primary">
-                  The team
+              <figcaption className="via-black/55 absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-6 pt-24">
+                <p className="font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-primary">
+                  {caption.kicker}
                 </p>
-                <p className="mt-1 font-aeonik text-base font-medium leading-tight text-white">
-                  On the ground and behind the scenes
+                <p className="mt-1.5 max-w-[34ch] font-aeonik text-lg font-medium leading-tight text-white">
+                  {caption.title}
                 </p>
-              </div>
+              </figcaption>
             </figure>
 
-            <figure
-              data-depth="2.4"
-              className="cta-cell group relative col-span-3 row-span-3 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
-            >
-              <Image
+            <figure className="cta-cell group relative row-span-2 hidden overflow-hidden rounded-[1.75rem] bg-white/5 ring-1 ring-inset ring-white/10 sm:block">
+              <SmartImage
                 src={ctaMosaic[0].src}
                 alt={ctaMosaic[0].alt}
                 fill
-                sizes="(max-width: 1024px) 60vw, 26vw"
-                loading="lazy"
-                className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              />
-            </figure>
-
-            <figure
-              data-depth="1.7"
-              className="cta-cell group relative col-span-2 row-span-2 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
-            >
-              <Image
-                src={ctaMosaic[2].src}
-                alt={ctaMosaic[2].alt}
-                fill
-                sizes="(max-width: 1024px) 40vw, 20vw"
-                loading="lazy"
-                className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                sizes="(max-width: 1024px) 31vw, 18vw"
+                className="photo-real object-cover transition-transform ease-out [transition-duration:1200ms] group-hover:scale-[1.04]"
               />
             </figure>
 
             {/* Programme index — the one cell that is type, not photography,
                 so the grid has somewhere for the eye to rest. */}
             <nav
-              data-depth="0.6"
               aria-label="Our programmes"
-              className="cta-cell col-span-4 row-span-2 flex flex-col justify-center gap-0.5 rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm"
+              className="cta-cell col-span-2 row-span-2 flex flex-col rounded-[1.75rem] bg-white/[0.04] p-6 ring-1 ring-inset ring-white/10 backdrop-blur-sm"
             >
-              <p className="mb-1 font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/40">
-                Give to
+              <p className="font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/40">
+                Choose where your gift goes
               </p>
-              {PROGRAM_LINKS.map((program) => (
-                <Link
-                  key={program.href}
-                  href={program.href}
-                  className="group flex items-center justify-between gap-2 border-b border-white/[0.07] py-1.5 font-montreal text-[0.8rem] text-white/75 transition-colors last:border-0 hover:text-primary"
-                >
-                  {program.label}
-                  <ArrowUpRight
-                    size={13}
-                    className="shrink-0 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
-                  />
-                </Link>
-              ))}
+              <ul className="mt-3 flex flex-1 flex-col justify-between">
+                {PROGRAM_LINKS.map((program, i) => (
+                  <li key={program.href}>
+                    <Link
+                      href={program.href}
+                      className="group flex items-center gap-4 border-b border-white/[0.07] py-2.5 transition-colors last:border-0"
+                    >
+                      <span className="w-6 shrink-0 font-montreal text-xs tabular-nums text-white/30">
+                        0{i + 1}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-aeonik text-[0.95rem] font-medium leading-tight text-white transition-colors group-hover:text-primary">
+                          {program.label}
+                        </span>
+                        <span className="mt-0.5 block truncate font-montreal text-xs text-white/40">
+                          {program.desc}
+                        </span>
+                      </span>
+                      <span className="ring-white/15 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ring-1 transition-all duration-300 group-hover:bg-primary group-hover:ring-primary">
+                        <ArrowUpRight
+                          size={14}
+                          className="text-white/70 transition-colors group-hover:text-black"
+                        />
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </nav>
 
-            <figure
-              data-depth="1.4"
-              className="cta-cell group relative col-span-2 row-span-2 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
-            >
-              <Image
-                src={ctaMosaic[3].src}
-                alt={ctaMosaic[3].alt}
+            <figure className="cta-cell group relative overflow-hidden rounded-[1.75rem] bg-white/5 ring-1 ring-inset ring-white/10">
+              <SmartImage
+                src={ctaMosaic[2].src}
+                alt={ctaMosaic[2].alt}
                 fill
-                sizes="(max-width: 1024px) 40vw, 20vw"
-                loading="lazy"
-                className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              />
-            </figure>
-
-            <figure
-              data-depth="2.1"
-              className="cta-cell group relative col-span-2 row-span-2 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"
-            >
-              <Image
-                src={ctaMosaic[4].src}
-                alt={ctaMosaic[4].alt}
-                fill
-                sizes="(max-width: 1024px) 40vw, 20vw"
-                loading="lazy"
-                className="photo-real object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                sizes="(max-width: 640px) 46vw, (max-width: 1024px) 31vw, 18vw"
+                className="photo-real object-cover transition-transform ease-out [transition-duration:1200ms] group-hover:scale-[1.04]"
               />
             </figure>
 
             {/* The wordmark itself, with a second face poured into it. */}
-            <div
-              data-depth="2.8"
-              className="cta-cell relative col-span-2 row-span-2 flex items-center gap-3 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4"
-            >
+            <div className="cta-cell relative flex items-center gap-3 overflow-hidden rounded-[1.75rem] bg-white/[0.04] p-4 ring-1 ring-inset ring-white/10">
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0"
@@ -384,9 +322,9 @@ const JoinUs = ({ img, alt }: Props) => {
               />
               <LogoMaskedPhoto
                 photos={[ctaMosaic[5]]}
-                className="relative h-full w-[46%] shrink-0"
+                className="relative h-full w-[42%] shrink-0"
               />
-              <p className="relative font-script text-xl leading-none text-white/80">
+              <p className="relative font-script text-lg leading-[1.15] text-white/80">
                 Perfectly positioned to lend a helping hand
               </p>
             </div>

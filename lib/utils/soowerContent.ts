@@ -264,6 +264,18 @@ export const programDecks = {
   ],
   "dad-project": [
     {
+      src: `${GALLERY_BASE}/dad-scholarship-award/g-06.jpg`,
+      alt: "A Pioneer DAD Scholar at the September 2026 induction ceremony",
+    },
+    {
+      src: `${GALLERY_BASE}/dad-scholarship-award/g-05.jpg`,
+      alt: "Pioneer DAD Scholars in their KNOSK school uniforms",
+    },
+    {
+      src: `${GALLERY_BASE}/dad-scholarship-award/g-04.jpg`,
+      alt: "Pioneer DAD Scholars following the ceremony programme",
+    },
+    {
       src: `${GALLERY_BASE}/slum-to-school/g-12.jpg`,
       alt: "SOOWER-branded backpacks staged for distribution beside the SOOWER banner",
     },

@@ -1,6 +1,7 @@
 "use client";
 
 import BrandPhoto from "@components/shared/BrandPhoto";
+import VideoPlayer from "@components/shared/VideoPlayer";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Button } from "@components/ui/button";
 import { ParallaxScroll } from "@components/ui/parallax-scroll";
@@ -124,8 +125,11 @@ const MomentStory = ({ moment, prev, next }: Props) => {
           ease: "power1.out",
           scrollTrigger: { trigger: el, start: "top 88%", once: true },
           onUpdate: () => {
+            const value = Math.round(counter.v);
+            // Only group digits when the source figure was written that way,
+            // so a year like "2026" never animates into "2,026".
             num.textContent =
-              Math.round(counter.v).toLocaleString("en-US") +
+              (num.dataset.grouped ? value.toLocaleString("en-US") : value) +
               (num.dataset.suffix || "");
           },
         });
@@ -277,6 +281,7 @@ const MomentStory = ({ moment, prev, next }: Props) => {
                         className="fx-fact-num"
                         data-count={numeric}
                         data-suffix={fact.value.includes("+") ? "+" : ""}
+                        data-grouped={fact.value.includes(",") || undefined}
                       >
                         {fact.value}
                       </span>
@@ -338,19 +343,9 @@ const MomentStory = ({ moment, prev, next }: Props) => {
       {moment.video ? (
         <section className="bg-white pb-16 md:pb-24">
           <SectionContainer>
-            <figure className="fx-up">
-              <video
-                src={moment.video.src}
-                poster={moment.video.poster}
-                controls
-                playsInline
-                preload="none"
-                className="aspect-video w-full rounded-3xl bg-secondary-black object-cover"
-              />
-              <figcaption className="mt-4 font-montreal text-sm text-body-2">
-                {moment.video.caption}
-              </figcaption>
-            </figure>
+            <div className="fx-up">
+              <VideoPlayer {...moment.video} meta="Watch the film" />
+            </div>
           </SectionContainer>
         </section>
       ) : null}

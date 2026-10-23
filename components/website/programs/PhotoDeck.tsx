@@ -1,9 +1,10 @@
 "use client";
 
+import SmartImage from "@components/shared/SmartImage";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
-import Image from "next/image";
-import { useRef, useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 export type DeckPhoto = { src: string; alt: string };
 
@@ -14,17 +15,22 @@ type Props = {
 };
 
 // Transform applied to each card by its distance from the front of the deck.
-// Anything past the third card sits in the third slot at zero opacity, so a
-// card leaving the front fades back into the stack rather than snapping.
-const slot = (depth: number) => {
+// Cards fan out up and to the right so a sliver of each photo stays visible —
+// the stack reads as real prints rather than blank sheets. Anything past the
+// third card sits in the third slot at zero opacity, so a card leaving the
+// front fades back into the stack rather than snapping.
+// `spread` narrows the fan on phones so the stack stays inside the viewport.
+const slot = (depth: number, spread: number) => {
   const clamped = Math.min(depth, 3);
   return {
-    transform: `translate3d(${clamped * 20}px, ${clamped * 15}px, 0) rotate(${
-      clamped * 2.6
-    }deg) scale(${1 - clamped * 0.045})`,
+    transform: `translate3d(${clamped * 26 * spread}px, ${
+      clamped * -14
+    }px, 0) rotate(${clamped * 3.2 * spread}deg) scale(${1 - clamped * 0.06})`,
     opacity: depth >= 3 ? 0 : 1,
   };
 };
+
+const pad = (n: number) => String(n).padStart(2, "0");
 
 const PhotoDeck = ({ photos, travel = 1.6 }: Props) => {
   const scope = useRef<HTMLDivElement>(null);
@@ -34,6 +40,15 @@ const PhotoDeck = ({ photos, travel = 1.6 }: Props) => {
   // the deck so it does not fight their choice.
   const manual = useRef(false);
   const count = photos.length;
+  const [spread, setSpread] = useState(1);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 640px)");
+    const update = () => setSpread(query.matches ? 0.35 : 1);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
 
   useGSAP(
     () => {
@@ -75,59 +90,139 @@ const PhotoDeck = ({ photos, travel = 1.6 }: Props) => {
     { scope, dependencies: [count, travel] }
   );
 
+  const go = (i: number) => {
+    manual.current = true;
+    setActive((i + count) % count);
+  };
+
   return (
-    <div ref={scope} className="w-full md:w-auto">
+    <div
+      ref={scope}
+      className="w-full md:w-auto"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Programme photographs"
+      onKeyDown={(e) => {
+        if (e.key === "ArrowRight") go(active + 1);
+        if (e.key === "ArrowLeft") go(active - 1);
+      }}
+    >
       <div
         ref={deckRef}
-        className="relative mx-auto aspect-[4/5] w-full max-w-[22rem] sm:max-w-[26rem] md:mx-0 md:w-[26rem] md:max-w-none lg:w-[32rem]"
+        className="relative mx-auto aspect-[4/5] w-full max-w-[21rem] sm:max-w-[25rem] md:mx-0 md:w-[25rem] md:max-w-none lg:w-[30rem]"
       >
+        {/* Soft gold bloom behind the stack so it sits in light, not on a
+            flat page. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-10 -z-10 rounded-full opacity-70 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(50% 50% at 60% 45%, rgba(255,198,41,0.28) 0%, transparent 70%)",
+          }}
+        />
+
         {photos.map((photo, i) => {
           const depth = (i - active + count) % count;
-          const { transform, opacity } = slot(depth);
+          const { transform, opacity } = slot(depth, spread);
           // Only the face-up card is worth blocking on. Everything stacked
           // behind it loads lazily at low priority so it never competes with
           // the LCP image.
           const isLead = i === 0;
+          const isFront = depth === 0;
           return (
-            <div
+            <figure
               key={photo.src}
-              aria-hidden={depth !== 0}
-              className="absolute inset-0 overflow-hidden rounded-[1.75rem] bg-grey shadow-[0_18px_50px_-18px_rgba(3,6,33,0.35)] transition-all duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+              aria-hidden={!isFront}
+              className="absolute inset-0 overflow-hidden rounded-[2rem] bg-[#efe9dc] shadow-[0_30px_60px_-24px_rgba(3,6,33,0.45)] ring-1 ring-black/[0.06] transition-all duration-700 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
               style={{ transform, opacity, zIndex: count - depth }}
             >
-              <Image
+              <SmartImage
                 src={photo.src}
-                alt={depth === 0 ? photo.alt : ""}
+                alt={isFront ? photo.alt : ""}
                 fill
-                sizes="(max-width: 768px) 92vw, 512px"
-                quality={isLead ? 88 : 72}
+                sizes="(max-width: 768px) 88vw, 480px"
+                quality={isLead ? 85 : 70}
                 priority={isLead}
-                loading={isLead ? undefined : "lazy"}
-                fetchPriority={isLead ? "high" : "low"}
                 className="photo-real object-cover"
               />
-            </div>
+
+              {/* Cards in the stack dim with depth so the front photo
+                  always reads first. */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-secondary-black transition-opacity duration-700"
+                style={{ opacity: isFront ? 0 : 0.28 + depth * 0.1 }}
+              />
+
+              <figcaption
+                className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent px-6 pb-6 pt-20 transition-all duration-500 ${
+                  isFront
+                    ? "translate-y-0 opacity-100 delay-200"
+                    : "translate-y-3 opacity-0"
+                }`}
+              >
+                <p className="max-w-[26ch] font-aeonik text-[1.05rem] font-medium leading-snug text-white">
+                  {photo.alt}
+                </p>
+              </figcaption>
+
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/20"
+              />
+            </figure>
           );
         })}
+
+        {count > 1 ? (
+          <span className="bg-black/45 absolute left-5 top-5 z-[60] rounded-full px-3 py-1 font-montreal text-xs tabular-nums tracking-[0.08em] text-white backdrop-blur-md">
+            {pad(active + 1)}
+            <span className="text-white/50"> / {pad(count)}</span>
+          </span>
+        ) : null}
       </div>
 
       {count > 1 ? (
-        <div className="mx-auto mt-7 flex w-full max-w-[22rem] items-center justify-center gap-2 sm:max-w-[26rem] md:mx-0 md:w-[26rem] md:max-w-none lg:w-[32rem]">
-          {photos.map((photo, i) => (
-            <button
-              key={photo.src}
-              type="button"
-              onClick={() => {
-                manual.current = true;
-                setActive(i);
-              }}
-              aria-label={`Show photograph ${i + 1} of ${count}`}
-              aria-current={i === active}
-              className={`h-2 rounded-full transition-all duration-300 hover:bg-primary ${
-                i === active ? "w-8 bg-primary" : "w-2 bg-black/20"
-              }`}
-            />
-          ))}
+        <div className="mx-auto mt-8 flex w-full max-w-[21rem] items-center gap-4 sm:max-w-[25rem] md:mx-0 md:w-[25rem] md:max-w-none lg:w-[30rem]">
+          <button
+            type="button"
+            onClick={() => go(active - 1)}
+            aria-label="Previous photograph"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black shadow-sm transition-all duration-300 hover:-translate-x-0.5 hover:border-black/20 hover:bg-primary"
+          >
+            <ArrowLeft size={17} />
+          </button>
+
+          <div className="flex flex-1 items-center gap-1.5">
+            {photos.map((photo, i) => (
+              <button
+                key={photo.src}
+                type="button"
+                onClick={() => go(i)}
+                aria-label={`Show photograph ${i + 1} of ${count}`}
+                aria-current={i === active}
+                className="group relative h-6 flex-1"
+              >
+                <span
+                  className={`absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full transition-colors duration-500 ${
+                    i <= active
+                      ? "bg-primary"
+                      : "bg-black/[0.12] group-hover:bg-black/25"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => go(active + 1)}
+            aria-label="Next photograph"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white text-black shadow-sm transition-all duration-300 hover:translate-x-0.5 hover:border-black/20 hover:bg-primary"
+          >
+            <ArrowRight size={17} />
+          </button>
         </div>
       ) : null}
     </div>
