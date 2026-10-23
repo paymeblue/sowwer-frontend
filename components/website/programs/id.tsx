@@ -2,11 +2,11 @@
 
 import SmartImage from "@components/shared/SmartImage";
 import VideoPlayer from "@components/shared/VideoPlayer";
-import { MovingBorderButton } from "@components/ui/moving-border";
 import JoinUs from "@shared/JoinUs";
-import PhotoDeck, { DeckPhoto } from "./PhotoDeck";
+import ImpactBento, { ImpactGroup } from "./ImpactBento";
+import { DeckPhoto } from "./PhotoDeck";
+import ProgramHero, { HeroStat } from "./ProgramHero";
 import Image, { StaticImageData } from "next/image";
-import Link from "next/link";
 // import brand1 from "public/images/brand-1.png";
 // import brand2 from "public/images/brand-2.png";
 // import brand3 from "public/images/brand-3.png";
@@ -14,7 +14,6 @@ import Link from "next/link";
 // import brand5 from "public/images/brand-5.png";
 // import brand6 from "public/images/brand-6.png";
 import { ReactNode } from "react";
-import { Heart2 } from "react-iconly";
 import Slider from "./slider";
 // import Slider from "./slider";
 
@@ -44,10 +43,17 @@ export type WidowCareProgram = {
   hero_title: string;
   hero_subtitle: string;
   hero_deck: readonly DeckPhoto[];
+  /** Word or phrase inside hero_title set in gold italic. */
+  hero_accent?: string;
+  hero_stats?: HeroStat[];
   yellowSection?: ReactNode;
+  /** Optional feature section between the giving options and the impact. */
+  spotlight?: ReactNode;
   impact_title?: string;
   impact_subtitle?: string;
   impact_items?: ImpactItem[];
+  /** Event-by-event bento; replaces the flat impact_items strip. */
+  impact_groups?: ImpactGroup[];
   impact_video?: { src: string; poster: string; caption: string };
   testimonials?: Testimonial[];
   joinus_img: StaticImageData | string;
@@ -95,66 +101,46 @@ type Props = { data: WidowCareProgram & { donateRoute: string } };
 
 const Program = ({ data }: Props) => {
   return (
-    <main className="max-lg:mt-24">
-      <section className="flex flex-col-reverse items-center justify-between gap-8 p-4 md:flex-row md:p-10 lg:p-20 xl:p-40">
-        <div className="w-full md:w-auto">
-          <div
-            className={`my-4 flex w-max items-center justify-center gap-2 rounded-full px-4 py-2 md:my-8 md:px-6 md:py-3 ${data.pillShadow}`}
-          >
-            <div
-              className="h-[6px] w-[6px] rounded-full"
-              style={{ background: data.pillColor }}
-            />
-            <h2
-              className="font-aeonik text-xs font-medium leading-tight md:text-sm md:leading-[16.1px]"
-              style={{ color: data.pillColor }}
-            >
-              {data.pillText}
-            </h2>
-          </div>
-          <div className="w-full max-w-[650px] md:space-y-8">
-            <div className="mb-4 space-y-2">
-              <h1 className="w-full max-w-[500px] font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl md:leading-tight lg:text-[45px] lg:leading-[48px]">
-                {data.hero_title}
-              </h1>
-              <p className="font-montreal text-base text-body-2 md:text-lg">
-                {data.hero_subtitle}
-              </p>
-            </div>
-            <Link href={`/donate${data.donateRoute}`}>
-              <MovingBorderButton className="w-full sm:w-auto">
-                <span>
-                  <Heart2 set="bold" size={19} />
-                </span>
-                <span>Donate now</span>
-              </MovingBorderButton>
-            </Link>
-          </div>
-        </div>
-        <div className="flex w-full justify-center md:w-auto">
-          <PhotoDeck photos={data.hero_deck} />
-        </div>
-      </section>
+    <main>
+      <ProgramHero
+        pillText={data.pillText}
+        pillColor={data.pillColor}
+        title={data.hero_title}
+        accent={data.hero_accent}
+        subtitle={data.hero_subtitle}
+        donateRoute={data.donateRoute}
+        deck={data.hero_deck}
+        stats={data.hero_stats}
+      />
       {data.yellowSection && (
-        <section className="flex items-center justify-center gap-4 bg-[#FCF9F2] p-6 sm:p-10 md:p-16 lg:p-20 xl:p-40">
+        <section className="flex items-center justify-center gap-4 border-t border-black/[0.05] bg-[#FCF9F2] px-4 py-20 md:px-10 md:py-28 lg:px-20">
           {data.yellowSection}
         </section>
       )}
-      {(data?.testimonials || data?.impact_items) && (
-        <section className="p-4 sm:p-8 md:p-12 lg:p-20">
-          <div className="w-full max-w-[1037px]">
-            <h3 className="font-aeonik text-2xl font-medium leading-tight text-black sm:text-3xl md:text-4xl md:leading-tight lg:text-[40px] lg:leading-[48px]">
+      {data.spotlight}
+      {(data?.testimonials || data?.impact_items || data?.impact_groups) && (
+        <section className="bg-white px-4 py-20 sm:px-8 md:px-12 md:py-28 lg:px-20">
+          <div className="mx-auto w-full max-w-[52rem] text-center">
+            <span className="block font-montreal text-xs font-semibold uppercase tracking-[0.2em] text-[#A67C00]">
+              Our impact
+            </span>
+            <h2 className="mt-4 font-aeonik text-[2.1rem] font-medium leading-[1.05] tracking-[-0.03em] text-black md:text-5xl">
               {data.impact_title}
-            </h3>
-            <p className="mt-2 font-montreal text-base text-body-2 md:text-lg">
+            </h2>
+            <p className="mx-auto mt-5 max-w-[40rem] font-montreal text-base leading-relaxed text-body-2 md:text-lg">
               {data.impact_subtitle}
             </p>
           </div>
           {data.impact_video && (
-            <div className="mt-10 md:mt-14">
+            <div className="mt-12 md:mt-16">
               <VideoPlayer {...data.impact_video} meta="Watch the film" />
             </div>
           )}
+          {data.impact_groups?.length ? (
+            <div className="mx-auto mt-20 max-w-[1280px] md:mt-28">
+              <ImpactBento groups={data.impact_groups} />
+            </div>
+          ) : null}
           {data?.impact_items && data.impact_items.length === 1 && (
             <div className="my-8 flex flex-col items-center gap-6 md:my-16 md:flex-row md:gap-4">
               {data.impact_items.map((item) => {

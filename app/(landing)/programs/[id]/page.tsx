@@ -1,17 +1,12 @@
 import { TickIcon } from "@components/assets/icons";
 import JsonLd from "@components/shared/JsonLd";
-import { BackgroundGradient } from "@components/ui/background-gradient";
 import { Button } from "@components/ui/button";
-import { MovingBorderButton } from "@components/ui/moving-border";
+import PioneerSpotlight from "@components/website/programs/dad/PioneerSpotlight";
+import SponsorshipOptions from "@components/website/programs/dad/SponsorshipOptions";
 import { Project, WidowCareProgram } from "@components/website/programs/id";
 import { formatText } from "@lib/functions";
 import { momentBySlug } from "@lib/momentsContent";
-import {
-  dadProjectPhotos,
-  programDecks,
-  sitePhotos,
-  widowGallery,
-} from "@lib/soowerContent";
+import { programDecks, sitePhotos, widowGallery } from "@lib/soowerContent";
 import { SITE_URL, breadcrumbJsonLd } from "@lib/siteMeta";
 import { ArrowRight, Quote } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
@@ -20,6 +15,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 const scholarshipAward = momentBySlug("dad-scholarship-award")!;
+const slumToSchool = momentBySlug("slum-to-school")!;
 
 const ProgramPage = dynamic(() => import("@components/website/programs/id"));
 
@@ -115,145 +111,41 @@ const programs: Programs = {
     donateRoute: "/dad-project",
     pillText: "The DAD Project",
     hero_title: "Giving orphans a future through educational sponsorships",
+    hero_accent: "future",
+    // Figures from SOOWER Newsletter Vol 2 Issue 3 (September 2026).
+    hero_stats: [
+      { value: "7", label: "Pioneer DAD Scholars inducted in 2026" },
+      { value: "JSS 1", label: "Where the Pioneer Seven began" },
+      { value: "6 yrs", label: "Intended secondary support per scholar" },
+    ],
     hero_subtitle:
       "Every child deserves the opportunity to learn, grow, and dream. The Donate A Dream (DAD) Project is dedicated to providing full or partial educational sponsorships for orphans, ensuring they have access to quality education and the chance for a brighter future. Whether through full adoption or pooled donations, every contribution helps shape a child's destiny.",
     hero_deck: programDecks["dad-project"],
-    yellowSection: (
-      <div className="space-y-8 px-4 md:space-y-16 md:px-6 lg:px-0">
-        <div className="space-y-3">
-          <p className="mx-auto w-full max-w-[1200px] text-center font-aeonik text-xl leading-tight text-black sm:text-2xl md:text-3xl md:leading-[42px] lg:text-[32px]">
-            Support orphans in a way that works best for you by choosing a
-            sponsorship type that aligns with your giving goals.
-          </p>
-          {/* <p className="mx-auto w-full max-w-[587px] text-center font-montreal text-base leading-normal text-body-1 md:text-[20px] md:leading-[28px]">
-            Support orphans in a way that works best for you by choosing a
-            sponsorship type that aligns with your giving goals.
-          </p> */}
-        </div>
-        <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-4">
-          <BackgroundGradient
-            containerClassName="w-full md:w-auto"
-            className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8"
-          >
-            <div className="mb-3">
-              <h5 className="font-aeonik text-xl font-medium leading-tight text-black md:text-2xl md:leading-[27.6px]">
-                Full Sponsorship
-              </h5>
-              <p className="font-montreal text-sm leading-normal text-body-2 md:text-base md:leading-[21px]">
-                Commit to changing a child's future by covering their education
-                completely.
-              </p>
-            </div>
-            <ul className="my-6 space-y-2 md:my-8">
-              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
-                <span className="mt-0.5 flex-shrink-0 md:mt-0">
-                  <TickIcon />
-                </span>
-                <span>
-                  <b className="font-medium">Fully fund</b> a child&apos;s
-                  school fees for a term or an entire school year.
-                </span>
-              </li>
-              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
-                <span className="mt-0.5 flex-shrink-0 md:mt-0">
-                  <TickIcon />
-                </span>
-                <span>
-                  Receive <b className="font-medium">periodic updates</b> about
-                  the child&apos;s academic progress and well-being.
-                </span>
-              </li>
-              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
-                <span className="mt-0.5 flex-shrink-0 md:mt-0">
-                  <TickIcon />
-                </span>
-                <span>
-                  Options: Pay per term, per session, or set up auto-renewal.
-                </span>
-              </li>
-            </ul>
-            <Link href="/donate/dad-project">
-              <MovingBorderButton className="w-full md:w-auto">
-                <span>Donate now</span>
-                <span>
-                  <ArrowRight size={16} />
-                </span>
-              </MovingBorderButton>
-            </Link>
-          </BackgroundGradient>
-          <BackgroundGradient
-            containerClassName="w-full md:w-auto"
-            className="w-full rounded-3xl bg-white p-4 sm:p-6 md:w-auto md:p-8"
-          >
-            <div className="mb-3">
-              <h5 className="font-aeonik text-xl font-medium leading-tight text-black md:text-2xl md:leading-[27.6px]">
-                Partial Sponsorship
-              </h5>
-              <p className="font-montreal text-sm leading-normal text-body-2 md:text-base md:leading-[21px]">
-                Contribute any amount to our general education fund for orphans.
-              </p>
-            </div>
-            <ul className="my-6 space-y-2 md:my-8">
-              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
-                <span className="mt-0.5 flex-shrink-0 md:mt-0">
-                  <TickIcon />
-                </span>
-                <span>
-                  Your
-                  <b className="font-medium">&nbsp;donation is pooled&nbsp;</b>
-                  with others to support multiple children in need.
-                </span>
-              </li>
-              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
-                <span className="mt-0.5 flex-shrink-0 md:mt-0">
-                  <TickIcon />
-                </span>
-                <span>
-                  Helps cover tuition, uniforms, school supplies, and other
-                  essential costs.
-                </span>
-              </li>
-              <li className="flex items-start gap-2 font-montreal text-sm leading-tight text-body-1 md:items-center md:text-[15px] md:leading-[20px]">
-                <span className="mt-0.5 flex-shrink-0 md:mt-0">
-                  <TickIcon />
-                </span>
-                <span>
-                  No fixed amount
-                  <b className="font-medium">
-                    —give what you can, when you can.
-                  </b>
-                </span>
-              </li>
-            </ul>
-            <Link href="/donate/dad-project">
-              <MovingBorderButton className="w-full md:w-auto">
-                <span>Donate now</span>
-                <span>
-                  <ArrowRight size={16} />
-                </span>
-              </MovingBorderButton>
-            </Link>
-          </BackgroundGradient>
-        </div>
-      </div>
-    ),
+    yellowSection: <SponsorshipOptions />,
+    spotlight: <PioneerSpotlight />,
     impact_title: "Discover our impact through the DAD Project",
     impact_subtitle:
-      "Through the DAD Project (Donate a Dream), we have transformed the lives of orphaned children by providing access to education, mentorship, and opportunities for a brighter future. Real moments from the DAD Scholarship 2026 Pioneer Scholars Award & Induction Ceremony, and the Slum-to-School 5th Year Celebration with Regy & Henry Amazing Grace Foundation:",
+      "Real moments from the classrooms and ceremonies the DAD Project has reached, from the Pioneer Scholars' induction to five years of Slum-to-School.",
     impact_video: scholarshipAward.video,
-    impact_items: [
-      ...scholarshipAward.gallery.map((photo, i) => ({
-        key: `scholarship-${i + 1}`,
-        img: photo.src,
-        alt: photo.alt,
-        text: photo.alt,
-      })),
-      ...dadProjectPhotos.map((photo) => ({
-        key: photo.key,
-        img: photo.src,
-        alt: photo.title,
-        text: photo.title,
-      })),
+    impact_groups: [
+      {
+        key: "dad-scholarship-award",
+        title: scholarshipAward.title,
+        date: scholarshipAward.date,
+        location: scholarshipAward.location,
+        href: `/moments/${scholarshipAward.slug}`,
+        // The ceremony hero is already on this page in the spotlight, so the
+        // bento leads with a different frame.
+        photos: scholarshipAward.gallery.slice(1),
+      },
+      {
+        key: "slum-to-school",
+        title: slumToSchool.title,
+        date: slumToSchool.date,
+        location: slumToSchool.location,
+        href: `/moments/${slumToSchool.slug}`,
+        photos: slumToSchool.gallery,
+      },
     ],
     // testimonials: [
     //   {
