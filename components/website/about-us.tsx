@@ -10,22 +10,13 @@ import {
   programDecks,
   sitePhotos,
 } from "@lib/soowerContent";
+import { boardAnchor, boardMembers } from "@lib/board";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@lib/gsap";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
-import dir1 from "public/images/dir-1.png";
-import dir10 from "public/images/dir-10.png";
-import dir2 from "public/images/dir-2.png";
-import dir3 from "public/images/dir-3.png";
-import dir4 from "public/images/dir-4.png";
-import dir5 from "public/images/dir-5.png";
-import dir6 from "public/images/dir-6.png";
-import dir7 from "public/images/dir-7.png";
-import dir8 from "public/images/dir-8.png";
-import dir9 from "public/images/dir-9.png";
+import { useEffect, useRef, useState } from "react";
 
 // Each cell cycles through its programme's full photo deck (the same pool
 // used on the program pages) rather than showing one static frame.
@@ -104,68 +95,6 @@ const cards = [
     span: "md:col-span-2",
   },
 ];
-const directors = [
-  {
-    key: "1",
-    img: dir1,
-    name: "Jonathan Agwunobi",
-    position: "Chairman & Co-Founder",
-  },
-  {
-    key: "2",
-    img: dir2,
-    name: "Lucy Agwunobi",
-    position: "Co-Founder",
-  },
-  {
-    key: "3",
-    img: dir3,
-    name: "Tobenna Nwokike",
-    position: "Co-Founder",
-  },
-  {
-    key: "4",
-    img: dir4,
-    name: "Pastor Regina Nuhu",
-    position: "Board Member",
-  },
-  {
-    key: "5",
-    img: dir5,
-    name: "Engr. Segun Toluhi",
-    position: "Board Member",
-  },
-  {
-    key: "6",
-    img: dir6,
-    name: "Pastor Nkwor Sunday",
-    position: "Board Member",
-  },
-  {
-    key: "7",
-    img: dir7,
-    name: "Major Gen. Charles Ofoche",
-    position: "Board Member",
-  },
-  {
-    key: "8",
-    img: dir8,
-    name: "Ogola Lois Kange",
-    position: "Board Member",
-  },
-  {
-    key: "9",
-    img: dir9,
-    name: "Prof. Imelda Udoh",
-    position: "Executive Director",
-  },
-  {
-    key: "10",
-    img: dir10,
-    name: "Chris A. Umar (SAN)",
-    position: "Legal Adviser",
-  },
-];
 // One bento cell's photo stack — crossfades through its programme's deck as
 // `step` advances, driven by the page's scroll position (see AboutPage).
 const IntroBentoPhoto = ({
@@ -198,6 +127,35 @@ const IntroBentoPhoto = ({
 const AboutPage = () => {
   const bentoRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
+  const [focused, setFocused] = useState<string | null>(null);
+  const [dimOthers, setDimOthers] = useState(false);
+
+  // A name linked from a story (see LinkedNames) lands here as
+  // #board-<slug>: bring that director's card into view and pick it out.
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const focusFromHash = () => {
+      const id = window.location.hash.slice(1);
+      if (!boardMembers.some((member) => boardAnchor(member.slug) === id))
+        return;
+      setFocused(id);
+      setDimOthers(true);
+      requestAnimationFrame(() =>
+        document.getElementById(id)?.scrollIntoView({
+          behavior: prefersReducedMotion() ? "auto" : "smooth",
+          block: "center",
+        })
+      );
+      clearTimeout(timer);
+      timer = setTimeout(() => setDimOthers(false), 3200);
+    };
+    focusFromHash();
+    window.addEventListener("hashchange", focusFromHash);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("hashchange", focusFromHash);
+    };
+  }, []);
 
   useGSAP(() => {
     if (prefersReducedMotion() || !bentoRef.current) return;
@@ -453,29 +411,44 @@ const AboutPage = () => {
         </div>
         <div className="mx-auto w-full py-8 md:py-16">
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-8 md:gap-y-16">
-            {directors.map((director) => (
-              <div
-                key={director.key}
-                className="flex w-full flex-col gap-4 rounded-xl bg-white p-4 sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]"
-              >
-                <Image
-                  src={director.img}
-                  width={270}
-                  height={295}
-                  placeholder="blur"
-                  alt={director.name}
-                  className="h-auto w-full"
-                />
-                <div className="flex flex-col items-start gap-1">
-                  <span className="font-aeonik text-base font-medium leading-tight text-black sm:text-lg md:text-[20px] md:leading-[23px]">
-                    {director.name}
-                  </span>
-                  <span className="font-montreal text-xs leading-tight text-body-2 sm:text-sm md:text-[14px] md:leading-[16.7px]">
-                    {director.position}
-                  </span>
+            {boardMembers.map((director) => {
+              const anchor = boardAnchor(director.slug);
+              const isFocused = focused === anchor;
+              return (
+                <div
+                  key={director.slug}
+                  id={anchor}
+                  className={cn(
+                    "relative flex w-full scroll-mt-32 flex-col gap-4 rounded-xl bg-white p-4 transition-all duration-700 sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]",
+                    isFocused &&
+                      "z-10 -translate-y-1 shadow-[0_24px_60px_-24px_rgba(3,6,33,0.45)] ring-2 ring-primary",
+                    !isFocused && focused && dimOthers && "opacity-40"
+                  )}
+                >
+                  {isFocused ? (
+                    <span className="absolute left-6 top-6 z-10 rounded-full bg-primary px-3 py-1 font-montreal text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-black">
+                      {director.position}
+                    </span>
+                  ) : null}
+                  <Image
+                    src={director.img}
+                    width={270}
+                    height={295}
+                    placeholder="blur"
+                    alt={director.name}
+                    className="h-auto w-full"
+                  />
+                  <div className="flex flex-col items-start gap-1">
+                    <span className="font-aeonik text-base font-medium leading-tight text-black sm:text-lg md:text-[20px] md:leading-[23px]">
+                      {director.name}
+                    </span>
+                    <span className="font-montreal text-xs leading-tight text-body-2 sm:text-sm md:text-[14px] md:leading-[16.7px]">
+                      {director.position}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

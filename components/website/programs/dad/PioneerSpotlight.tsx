@@ -1,7 +1,9 @@
 "use client";
 
 import SectionContainer from "@components/sections/SectionContainer";
+import LinkedNames from "@components/shared/LinkedNames";
 import SmartImage from "@components/shared/SmartImage";
+import ProcessTimeline from "./ProcessTimeline";
 import { useGSAP } from "@gsap/react";
 import { revealOnScroll } from "@lib/gsap";
 import { ArrowUpRight } from "lucide-react";
@@ -34,22 +36,27 @@ const STORY = [
 const PROCESS = [
   {
     label: "Selection",
+    kind: "Process",
     body: "Head of Programs Ms. Ogba Abah explained that scholars were selected through a screening and assessment process that weighed academic performance and vulnerability, with orphanhood as a key criterion. Each had qualified for secondary school but had no sponsor.",
   },
   {
     label: "Follow-up",
+    kind: "Process",
     body: "SOOWER works with the school and caregivers to track each scholar's academic performance, attendance, class progression, personal development and wellbeing, through termly reports, review meetings, welfare check-ins and annual assessments.",
   },
   {
     label: "The challenge",
+    kind: "Challenge",
     body: "The candidates first identified did not meet the school's admission requirements, and no reserve candidates had been lined up.",
   },
   {
     label: "What we learned",
+    kind: "Lesson",
     body: "Scholarship selection needs to start earlier, leaving time for screening, school assessments and admission.",
   },
   {
     label: "Next cycle",
+    kind: "Change",
     body: "SOOWER will identify and screen candidates ahead of admission periods and keep a pool of eligible reserve candidates.",
   },
 ];
@@ -160,7 +167,7 @@ const PioneerSpotlight = () => {
                     : "text-base leading-[1.75] text-body-1"
                 }`}
               >
-                {para}
+                <LinkedNames text={para} />
               </p>
             ))}
           </div>
@@ -234,7 +241,7 @@ const PioneerSpotlight = () => {
                 </span>
                 <span>
                   <span className="block font-montreal text-sm font-semibold text-black">
-                    {voice.name}
+                    <LinkedNames text={voice.name} />
                   </span>
                   <span className="block font-montreal text-sm text-body-2">
                     {voice.role}
@@ -249,34 +256,8 @@ const PioneerSpotlight = () => {
         </div>
 
         {/* How the programme is run — selection, follow-up and lessons */}
-        <div className="mt-20 grid gap-10 md:mt-28 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-16">
-          <div>
-            <h3 className="font-aeonik text-[1.75rem] font-medium leading-tight tracking-[-0.02em] text-black md:text-[2.25rem]">
-              How the programme is run
-            </h3>
-            <p className="mt-4 max-w-[24rem] font-montreal text-base leading-relaxed text-body-2">
-              How the first scholars were chosen, how their progress is
-              followed, and what SOOWER is changing after this first cycle.
-            </p>
-          </div>
-          <dl className="ps-cards border-t border-black/10">
-            {PROCESS.map((row, i) => (
-              <div
-                key={row.label}
-                className="ps-card grid gap-2 border-b border-black/10 py-6 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-8"
-              >
-                <dt className="flex items-baseline gap-3 font-montreal text-sm font-semibold text-black">
-                  <span className="font-montreal text-xs tabular-nums text-black/[0.35]">
-                    0{i + 1}
-                  </span>
-                  {row.label}
-                </dt>
-                <dd className="font-montreal text-[0.95rem] leading-relaxed text-body-1">
-                  {row.body}
-                </dd>
-              </div>
-            ))}
-          </dl>
+        <div className="mt-20 md:mt-28">
+          <ProcessTimeline steps={PROCESS} />
         </div>
 
         {/* Partners + actions */}

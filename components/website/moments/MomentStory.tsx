@@ -1,6 +1,7 @@
 "use client";
 
 import BrandPhoto from "@components/shared/BrandPhoto";
+import LinkedNames from "@components/shared/LinkedNames";
 import VideoPlayer from "@components/shared/VideoPlayer";
 import SectionContainer from "@components/sections/SectionContainer";
 import { Button } from "@components/ui/button";
@@ -309,7 +310,7 @@ const MomentStory = ({ moment, prev, next }: Props) => {
                   key={i}
                   className="fx-para font-montreal text-base leading-[1.75] text-body-1 md:text-[1.0625rem]"
                 >
-                  {para}
+                  <LinkedNames text={para} />
                 </p>
               ))}
             </div>
@@ -359,7 +360,10 @@ const MomentStory = ({ moment, prev, next }: Props) => {
                 &ldquo;{moment.quote.text}&rdquo;
               </blockquote>
               <figcaption className="mt-7 font-montreal text-sm text-white/75">
-                {moment.quote.source}
+                <LinkedNames
+                  text={moment.quote.source}
+                  className="underline decoration-primary underline-offset-4 hover:text-white"
+                />
               </figcaption>
             </figure>
           </SectionContainer>
