@@ -12,7 +12,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "soower-landing-media.s3.amazonaws.com",
+        hostname: "soower-landing-media-2.s3.amazonaws.com",
         port: "",
         pathname: "/**",
       },

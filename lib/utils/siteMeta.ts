@@ -30,7 +30,7 @@ export const SOCIAL_PROFILES = [
 // Real documentary photo, not a design asset — used as the fallback social
 // share card wherever a page doesn't set its own openGraph/twitter image.
 export const SITE_OG_IMAGE = {
-  url: "https://soower-landing-media.s3.amazonaws.com/events-2025-2026/gallery/jos-widows-conference/hero.jpg",
+  url: "https://soower-landing-media-2.s3.amazonaws.com/events-2025-2026/gallery/jos-widows-conference/hero.jpg",
   width: 1300,
   height: 731,
   alt: "Widows holding SOOWER-branded welfare parcels at the Jos Widows & Youth Conference",
