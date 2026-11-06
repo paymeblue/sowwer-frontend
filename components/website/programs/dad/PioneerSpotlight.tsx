@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRef } from "react";
 
 const GALLERY =
-  "https://soower-landing-media.s3.amazonaws.com/events-2025-2026/gallery/dad-scholarship-award";
+  "https://soower-landing-media-2.s3.amazonaws.com/events-2025-2026/gallery/dad-scholarship-award";
 
 // Everything in this section is taken from SOOWER Newsletter Vol 2 Issue 3
 // (September 2026), pages 6-11: "Spotlight of the Quarter".

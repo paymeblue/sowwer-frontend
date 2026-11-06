@@ -1,10 +1,10 @@
 const IMAGE_BASE =
-  "https://soower-landing-media.s3.amazonaws.com/jos-2025/images";
+  "https://soower-landing-media-2.s3.amazonaws.com/jos-2025/images";
 const VIDEO_BASE =
-  "https://soower-landing-media.s3.amazonaws.com/jos-2025/videos";
+  "https://soower-landing-media-2.s3.amazonaws.com/jos-2025/videos";
 const EVENTS_BASE =
-  "https://soower-landing-media.s3.amazonaws.com/events-2025-2026";
-const ABOUT_BASE = "https://soower-landing-media.s3.amazonaws.com/about";
+  "https://soower-landing-media-2.s3.amazonaws.com/events-2025-2026";
+const ABOUT_BASE = "https://soower-landing-media-2.s3.amazonaws.com/about";
 
 // Extracted directly from the newsletter PDFs (embedded image streams, not
 // page screenshots) — see lib/utils/momentsContent.ts for how the same

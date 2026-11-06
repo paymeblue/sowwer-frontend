@@ -12,7 +12,7 @@
 // and reprocessed here.
 
 const GALLERY_BASE =
-  "https://soower-landing-media.s3.amazonaws.com/events-2025-2026/gallery";
+  "https://soower-landing-media-2.s3.amazonaws.com/events-2025-2026/gallery";
 
 const gallery = (slug: string, alts: string[]) =>
   alts.map((alt, i) => ({

@@ -6,7 +6,7 @@ import SmartImage from "@components/shared/SmartImage";
 import { ArrowUpRight, Download } from "lucide-react";
 
 const COVER_BASE =
-  "https://soower-landing-media.s3.amazonaws.com/newsletters/covers";
+  "https://soower-landing-media-2.s3.amazonaws.com/newsletters/covers";
 
 // Themes and page counts are read off each PDF's cover page.
 const newsletters = [
